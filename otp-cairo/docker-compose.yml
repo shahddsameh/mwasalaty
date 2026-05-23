@@ -1,0 +1,12 @@
+services:
+  otp:
+    image: docker.io/opentripplanner/opentripplanner:2.6.0
+    container_name: otp-cairo
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data/cairo:/var/opentripplanner
+    command: ["--build", "--save", "--serve"]
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xmx4G"
+    restart: unless-stopped

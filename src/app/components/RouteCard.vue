@@ -1,83 +1,144 @@
 <template>
   <div
-    :class="[
-      'bg-card rounded-xl p-3.5 md:p-4 lg:p-5 border-2 cursor-pointer hover:shadow-md transition-all duration-200',
-      recommended ? 'border-primary shadow-lg' : 'border-border',
-    ]"
-    @click="$emit('select')"
+    class="bg-card border-2 border-border rounded-xl p-5 hover:border-primary transition-all"
+    :class="{
+      'cursor-pointer': !isComfortable,
+    }"
+    @click="handleCardClick"
   >
-    <div v-if="recommended" class="inline-block px-3 py-1 bg-primary text-primary-foreground text-xs md:text-sm rounded-full mb-3">
-      Recommended
+    <!-- Badges -->
+    <div class="flex gap-2 mb-4">
+      <span
+        v-if="isFastest"
+        class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold"
+      >
+        ⚡ Fastest
+      </span>
+
+      <span
+        v-if="isCheapest"
+        class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold"
+      >
+        💰 Cheapest
+      </span>
+      <span
+        v-if="isComfortable"
+        class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold"
+      >
+        🛋️ Most Comfortable
+      </span>
     </div>
-    <div class="flex items-start justify-between mb-4 gap-3">
-      <div class="flex gap-2 flex-wrap">
-        <span
-          v-for="mode in modes"
-          :key="mode"
-          class="inline-flex items-center justify-center w-8 h-8 rounded-lg"
-          :style="{ backgroundColor: modeInfo(mode).soft }"
-        >
-          <component :is="modeInfo(mode).icon" class="w-4 h-4" :style="{ color: modeInfo(mode).color }" />
-        </span>
-      </div>
-      <div class="text-right flex-shrink-0">
-        <div class="text-lg md:text-xl lg:text-2xl font-display text-foreground leading-tight">{{ duration }}</div>
-        <div class="text-xs md:text-sm text-muted-foreground">Total time</div>
-      </div>
-    </div>
-    <div :class="['grid gap-3 mb-4', walkingDistance ? 'grid-cols-3' : 'grid-cols-2']">
-      <div class="flex items-start gap-1.5">
-        <DollarSign class="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
-        <div class="min-w-0">
-          <div class="text-xs text-muted-foreground">Cost</div>
-          <div class="font-display text-sm text-foreground truncate">{{ cost }}</div>
+    <!-- Transport Steps -->
+    <div class="flex flex-wrap items-center gap-2 mb-5">
+      <template v-for="(step, index) in route.steps" :key="index">
+        <div class="flex items-center gap-1">
+          <component :is="getIcon(step.type)" class="w-5 h-5 text-primary" />
+
+          <span class="text-sm font-medium text-foreground">
+            {{ step.label }}
+          </span>
         </div>
+
+        <ChevronRight
+          v-if="index < route.steps.length - 1"
+          class="w-4 h-4 text-muted-foreground"
+        />
+      </template>
+    </div>
+
+    <!-- Route Stats -->
+    <div class="grid grid-cols-4 gap-4 mb-5">
+      <div>
+        <p class="text-xs text-muted-foreground">Total Duration</p>
+        <p class="font-semibold text-lg">
+          {{ route.duration }}
+        </p>
       </div>
-      <div class="flex items-start gap-1.5">
-        <MapPin class="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
-        <div>
-          <div class="text-xs text-muted-foreground">Transfers</div>
-          <div class="font-display text-sm text-foreground">{{ transfers }}</div>
-        </div>
+
+      <div>
+        <p class="text-xs text-muted-foreground">Total Cost</p>
+        <p class="font-semibold text-lg">
+          {{ route.cost }}
+        </p>
       </div>
-      <div v-if="walkingDistance" class="flex items-start gap-1.5">
-        <TrendingUp class="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
-        <div class="min-w-0">
-          <div class="text-xs text-muted-foreground">Walking</div>
-          <div class="font-display text-sm text-foreground truncate">{{ walkingDistance }}</div>
-        </div>
+      <div>
+        <p class="text-xs text-muted-foreground">Transfers</p>
+        <p class="font-semibold">{{ route.transfers }}</p>
+      </div>
+      <div>
+        <p class="text-xs text-muted-foreground">Walking</p>
+        <p class="font-semibold">{{ route.walkingDistance }}</p>
       </div>
     </div>
-    <div v-if="comfort" class="flex items-center gap-2 text-sm text-muted-foreground">
-      Comfort: <span class="text-foreground">{{ comfort }}</span>
-    </div>
+
+    <a
+      v-if="isComfortable"
+      href="https://m.uber.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      @click.stop
+      class="w-full flex items-center justify-center py-3 rounded-lg bg-black text-white font-medium hover:opacity-90 transition"
+    >
+      Book Uber
+    </a>
+    <!-- View Details -->
+    <AppButton
+      v-else
+      variant="primary"
+      class="w-full"
+      @click.stop="$emit('select')"
+    >
+      View Details
+    </AppButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Bus, Car, DollarSign, Footprints, MapPin, Train, TrendingUp, Users } from '@lucide/vue'
+import {
+  Train,
+  Bus,
+  Car,
+  CarFront,
+  PersonStanding,
+  ChevronRight,
+} from "@lucide/vue";
+import AppButton from "./AppButton.vue";
 
-defineProps<{
-  duration: string
-  cost: string
-  modes: string[]
-  transfers: number
-  walkingDistance?: string
-  comfort?: string
-  recommended?: boolean
-}>()
+const emit = defineEmits(["select"]);
 
-defineEmits<{ select: [] }>()
+const props = defineProps({
+  route: {
+    type: Object,
+    required: true,
+  },
+  isFastest: Boolean,
+  isCheapest: Boolean,
+  isComfortable: Boolean,
+});
 
-const modeMap = {
-  metro: { icon: Train, color: 'var(--transport-metro)', soft: 'var(--transport-metro-soft)' },
-  bus: { icon: Bus, color: 'var(--transport-bus)', soft: 'var(--transport-bus-soft)' },
-  microbus: { icon: Users, color: 'var(--transport-microbus)', soft: 'var(--transport-microbus-soft)' },
-  walking: { icon: Footprints, color: 'var(--transport-walking)', soft: 'var(--transport-walking-soft)' },
-  'ride-hailing': { icon: Car, color: 'var(--transport-ride)', soft: 'var(--transport-ride-soft)' },
+function handleCardClick() {
+  if (!props.isComfortable) {
+    emit("select");
+  }
 }
 
-function modeInfo(mode: string) {
-  return modeMap[mode.toLowerCase() as keyof typeof modeMap] ?? { icon: Car, color: 'var(--transport-metro)', soft: 'var(--transport-metro-soft)' }
+function getIcon(type: string) {
+  switch (type) {
+    case "metro":
+      return Train;
+
+    case "microbus":
+    case "bus":
+      return Bus;
+
+    case "walking":
+      return PersonStanding;
+
+    case "ride-hailing":
+      return Car;
+
+    default:
+      return Bus;
+  }
 }
 </script>

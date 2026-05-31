@@ -3,7 +3,7 @@
     <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-4 md:py-8">
       <button
         class="flex items-center gap-2 text-foreground hover:text-primary mb-6 transition-colors"
-        @click="router.back()"
+        @click="router.push('/')"
       >
         <ArrowLeft class="w-5 h-5" /> Back to Search
       </button>
@@ -48,7 +48,10 @@
           <RouteCard
             v-for="route in sortedRoutes"
             :key="route.id"
-            v-bind="route"
+            :route="route"
+            :is-fastest="route.id === fastestRouteId"
+            :is-cheapest="route.id === cheapestRouteId"
+            :is-comfortable="route.id === comfortableRouteId"
             @select="selectRoute(route)"
           />
         </div>
@@ -86,9 +89,11 @@ import RouteCard from "../components/RouteCard.vue";
 import { routeOptions, type RouteOption } from "../data";
 
 const router = useRouter();
+
 const state = history.state ?? {};
 const start = state.start ?? "Tahrir Square";
 const destination = state.destination ?? "Cairo Airport";
+
 const sortBy = ref<"fastest" | "cheapest" | "comfortable">(
   state.filter ?? "fastest",
 );
@@ -99,25 +104,53 @@ const tabs = [
   { value: "comfortable" as const, label: "Comfortable" },
 ];
 
-const routes = computed(() =>
-  routeOptions.map((route) => ({
-    ...route,
-    recommended: recommendation(route),
-  })),
-);
+const routes = computed(() => routeOptions);
 
-const sortedRoutes = computed(() =>
-  [...routes.value].sort((a, b) => {
-    if (sortBy.value === "fastest")
-      return parseInt(a.duration) - parseInt(b.duration);
-    if (sortBy.value === "cheapest") return parseInt(a.cost) - parseInt(b.cost);
-    const order = { "Very High": 1, High: 2, Medium: 3, Low: 4 };
-    return (
-      order[a.comfort as keyof typeof order] -
-      order[b.comfort as keyof typeof order]
+const getDuration = (duration: string | number) => parseInt(String(duration));
+
+const getCost = (cost: string | number) => parseInt(String(cost));
+
+const fastestRouteId = computed(() => {
+  return routes.value.reduce((min, route) =>
+    getDuration(route.duration) < getDuration(min.duration) ? route : min,
+  ).id;
+});
+
+const cheapestRouteId = computed(() => {
+  return routes.value.reduce((min, route) =>
+    getCost(route.cost) < getCost(min.cost) ? route : min,
+  ).id;
+});
+
+const comfortableRouteId = computed(() => {
+  return routes.value.reduce((max, route) =>
+    getCost(route.cost) > getCost(max.cost) ? route : max,
+  ).id;
+});
+
+const sortedRoutes = computed(() => {
+  const routesCopy = [...routes.value];
+
+  if (sortBy.value === "fastest") {
+    return routesCopy.sort(
+      (a, b) => parseInt(String(a.duration)) - parseInt(String(b.duration)),
     );
-  }),
-);
+  }
+
+  if (sortBy.value === "cheapest") {
+    return routesCopy.sort(
+      (a, b) => parseInt(String(a.cost)) - parseInt(String(b.cost)),
+    );
+  }
+
+  if (sortBy.value === "comfortable") {
+    return routesCopy.sort(
+      (a, b) => parseInt(String(b.cost)) - parseInt(String(a.cost)),
+    );
+  }
+
+  return routesCopy;
+});
 
 const Stat = defineComponent({
   props: { label: String, value: String },
@@ -134,14 +167,6 @@ const Stat = defineComponent({
   },
 });
 
-function recommendation(route: RouteOption) {
-  return (
-    (sortBy.value === "fastest" && route.id === 3) ||
-    (sortBy.value === "cheapest" && route.id === 2) ||
-    (sortBy.value === "comfortable" && route.id === 3)
-  );
-}
-
 function tabClass(value: string) {
   return [
     "px-4 md:px-6 py-2.5 md:py-3 rounded-lg transition-all text-sm whitespace-nowrap flex-shrink-0",
@@ -152,6 +177,9 @@ function tabClass(value: string) {
 }
 
 function selectRoute(route: RouteOption) {
-  router.push({ path: "/route-details", state: { route, start, destination } });
+  router.push({
+    path: "/route-details",
+    state: { route, start, destination },
+  });
 }
 </script>

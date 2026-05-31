@@ -67,9 +67,12 @@
                     {{ item.time }}
                   </div>
                   <div
-                    class="w-12 h-12 rounded-lg bg-background flex items-center justify-center text-xs text-center px-1"
+                    class="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center"
                   >
-                    {{ item.icon }}
+                    <component
+                      :is="getActivityIcon(item.icon)"
+                      class="w-6 h-6 text-primary"
+                    />
                   </div>
                   <div
                     v-if="index < day.items.length - 1"
@@ -147,13 +150,19 @@
 <script setup lang="ts">
 import { computed, defineComponent, h, ref } from "vue";
 import {
-  BookmarkPlus,
-  Clock,
-  DollarSign,
-  Download,
+  Building2,
+  ShoppingBag,
+  Utensils,
+  Landmark,
+  Trees,
+  Coffee,
+  Camera,
+  Train,
+  Bus,
   MapPin,
+  BookmarkPlus,
+  Download,
   Share2,
-  Sparkles,
 } from "@lucide/vue";
 import AppButton from "../components/AppButton.vue";
 import { aiDaySchedule } from "../data";
@@ -179,4 +188,31 @@ const Cost = defineComponent({
       h("span", { class: "font-display text-foreground" }, p.value),
     ]),
 });
+function getActivityIcon(type: string) {
+  switch (type) {
+    case "Museum":
+      return Landmark;
+
+    case "Shopping":
+      return ShoppingBag;
+
+    case "Food":
+      return Utensils;
+
+    case "Cafe":
+      return Coffee;
+
+    case "Nature":
+      return Trees;
+
+    case "Photo":
+      return Camera;
+
+    case "Transport":
+      return Bus;
+
+    default:
+      return MapPin;
+  }
+}
 </script>

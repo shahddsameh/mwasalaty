@@ -66,10 +66,10 @@
               >
                 <div class="flex flex-col items-center">
                   <div
-                    class="w-10 h-10 rounded-full flex items-center justify-center text-primary-foreground text-sm font-semibold"
-                    :style="{ backgroundColor: step.color }"
+                    class="w-10 h-10 rounded-full flex items-center justify-center"
+                    :class="getStepColor(step.type)"
                   >
-                    {{ modeLabel(step.type) }}
+                    <component :is="getStepIcon(step.type)" class="w-5 h-5" />
                   </div>
                   <div
                     v-if="index < steps.length - 1"
@@ -226,6 +226,10 @@ import {
   Navigation,
   Sparkles,
   TrendingUp,
+  Train,
+  Bus,
+  Car,
+  PersonStanding,
 } from "@lucide/vue";
 import AppButton from "../components/AppButton.vue";
 import Modal from "../components/Modal.vue";
@@ -259,8 +263,36 @@ const Summary = defineComponent({
       ]);
   },
 });
-
-function modeLabel(type: string) {
-  return type === "walking" ? "Walk" : type === "metro" ? "Metro" : "Bus";
+function getStepIcon(type: string) {
+  switch (type) {
+    case "metro":
+      return Train;
+    case "bus":
+      return Bus;
+    case "microbus":
+    case "ride-hailing":
+      return Car;
+    case "walking":
+    case "walk":
+      return PersonStanding;
+    default:
+      return Bus;
+  }
+}
+function getStepColor(type: string) {
+  switch (type) {
+    case "metro":
+      return "bg-transport-metro-soft , text-transport-metro";
+    case "bus":
+      return "bg-transport-bus-soft , text-transport-bus";
+    case "microbus":
+      return "bg-transport-microbus-soft, text-transport-microbus-soft";
+    case "walking":
+      return "bg-transport-walking-soft , text-transport-walking";
+    case "ride-hailing":
+      return "bg-transport-ride-soft, text-transport-ride";
+    default:
+      return "bg-primary-soft";
+  }
 }
 </script>

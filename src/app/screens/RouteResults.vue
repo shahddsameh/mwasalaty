@@ -45,15 +45,27 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         <div class="lg:col-span-2 space-y-4">
-          <RouteCard
-            v-for="route in sortedRoutes"
-            :key="route.id"
-            :route="route"
-            :is-fastest="route.id === fastestRouteId"
-            :is-cheapest="route.id === cheapestRouteId"
-            :is-comfortable="route.id === comfortableRouteId"
-            @select="selectRoute(route)"
-          />
+          <div
+            v-if="loading"
+            class="flex items-center justify-center gap-3 py-12 text-muted-foreground"
+          >
+            <svg class="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+            Planning your route…
+          </div>
+          <template v-else>
+            <RouteCard
+              v-for="route in sortedRoutes"
+              :key="route.id"
+              :route="route"
+              :is-fastest="route.id === fastestRouteId"
+              :is-cheapest="route.id === cheapestRouteId"
+              :is-comfortable="route.id === comfortableRouteId"
+              @select="selectRoute(route)"
+            />
+          </template>
         </div>
 
         <aside class="hidden lg:block lg:sticky lg:top-8 h-fit">
@@ -82,11 +94,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, ref } from "vue";
+import { computed, defineComponent, h, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { ArrowLeft, MapPin, SlidersHorizontal } from "@lucide/vue";
 import RouteCard from "../components/RouteCard.vue";
 import { routeOptions, type RouteOption } from "../data";
+import { planRoute, type ApiRouteOption } from "../api";
 
 const router = useRouter();
 
@@ -104,7 +117,18 @@ const tabs = [
   { value: "comfortable" as const, label: "Comfortable" },
 ];
 
-const routes = computed(() => routeOptions);
+const loading = ref(false);
+const apiRoutes = ref<ApiRouteOption[]>([]);
+
+onMounted(async () => {
+  loading.value = true;
+  apiRoutes.value = await planRoute(start, destination, sortBy.value);
+  loading.value = false;
+});
+
+const routes = computed<RouteOption[]>(() =>
+  apiRoutes.value.length ? apiRoutes.value : routeOptions,
+);
 
 const getDuration = (duration: string | number) => parseInt(String(duration));
 
@@ -123,8 +147,8 @@ const cheapestRouteId = computed(() => {
 });
 
 const comfortableRouteId = computed(() => {
-  return routes.value.reduce((max, route) =>
-    getCost(route.cost) > getCost(max.cost) ? route : max,
+  return routes.value.reduce((min, route) =>
+    route.transfers < min.transfers ? route : min,
   ).id;
 });
 
@@ -144,9 +168,7 @@ const sortedRoutes = computed(() => {
   }
 
   if (sortBy.value === "comfortable") {
-    return routesCopy.sort(
-      (a, b) => parseInt(String(b.cost)) - parseInt(String(a.cost)),
-    );
+    return routesCopy.sort((a, b) => a.transfers - b.transfers);
   }
 
   return routesCopy;
@@ -177,9 +199,10 @@ function tabClass(value: string) {
 }
 
 function selectRoute(route: RouteOption) {
+  const detailSteps = "detailSteps" in route ? (route as ApiRouteOption).detailSteps : undefined;
   router.push({
     path: "/route-details",
-    state: { route, start, destination },
+    state: { route, start, destination, steps: detailSteps },
   });
 }
 </script>

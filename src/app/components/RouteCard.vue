@@ -10,22 +10,25 @@
     <div class="flex gap-2 mb-4">
       <span
         v-if="isFastest"
-        class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold"
+        class="flex items-center gap-2 px-5 py-3 rounded-full bg-red-200 text-red-900 text-xs font-semibold"
       >
-        ⚡ Fastest
+        <Zap class="w-4 h-4" />
+        Fastest
       </span>
 
       <span
         v-if="isCheapest"
-        class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold"
+        class="flex items-center gap-2 px-5 py-3 rounded-full bg-green-200 text-green-900 text-xs font-semibold"
       >
-        💰 Cheapest
+        <Wallet class="w-4 h-4" />
+        Cheapest
       </span>
       <span
         v-if="isComfortable"
-        class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold"
+        class="flex items-center gap-2 px-5 py-3 rounded-full bg-blue-200 text-blue-900 text-xs font-semibold"
       >
-        🛋️ Most Comfortable
+        <Sofa class="w-4 h-4" />
+        Most Comfortable
       </span>
     </div>
     <!-- Transport Steps -->
@@ -101,6 +104,9 @@ import {
   CarFront,
   PersonStanding,
   ChevronRight,
+  Zap,
+  Wallet,
+  Sofa,
 } from "@lucide/vue";
 import AppButton from "./AppButton.vue";
 

@@ -74,7 +74,7 @@
       </div>
     </div>
 
-    <a
+    <!-- <a
       v-if="isComfortable"
       href="https://m.uber.com"
       target="_blank"
@@ -83,10 +83,9 @@
       class="w-full flex items-center justify-center py-3 rounded-lg bg-black text-white font-medium hover:opacity-90 transition"
     >
       Book Uber
-    </a>
+    </a> -->
     <!-- View Details -->
     <AppButton
-      v-else
       variant="primary"
       class="w-full"
       @click.stop="$emit('select')"

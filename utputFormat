@@ -1,9 +1,0 @@
-HTTP/1.1 400 Bad Request
-Vary: Accept, Accept-Encoding, Accept-Language
-Access-Control-Allow-Credentials: false
-Content-Type: text/plain
-Connection: close
-Content-Length: 185
-
-Unexpected character ('\' (code 92)): was expecting double-quote to start field name
- at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 2]

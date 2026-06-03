@@ -1,10 +1,12 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 // import planRouter from './src/routes/plan.js';
 import ticketRouter from './src/routes/ticket.js';
 
 const app = express();
+
+dotenv.config();
 
 app.use(cors());
 app.use(express.json());

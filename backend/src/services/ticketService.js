@@ -20,6 +20,18 @@ function getSubwayTier(stationCount) {
   return METRO_TIERS.find(t => count >= t.min && count <= t.max) ?? METRO_TIERS[0];
 }
 
+function resolveTicketStatus(ticket) {
+  const legs = ticket.legs;
+  if (legs.length === 0) return 'active';
+  const allUsed     = legs.every(l => l.status === 'used');
+  const allRefunded = legs.every(l => l.status === 'refunded');
+  const hasRefunded = legs.some(l => l.status === 'refunded');
+  if (allUsed)     return 'used';
+  if (allRefunded) return 'refunded';
+  if (hasRefunded) return 'partially_refunded';
+  return 'active';
+}
+
 function validateCreateBody(body) {
   const errors = [];
   if (!body?.planId) errors.push('planId is required');
@@ -72,6 +84,7 @@ export function createTicket(body) {
       from: leg.from,
       to: leg.to,
       subway,
+      fareAmount: typeof leg.fareAmount === 'number' ? leg.fareAmount : 0,
       status: 'unused',
       validatedAt: null,
       validatedBy: null,
@@ -137,6 +150,10 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
     throw { code: ErrorCodes.LEG_NOT_FOUND, message: `Leg '${ticketLegId}' not found on ticket '${ticketId}'`, details: { ticketId, ticketLegId } };
   }
 
+  if (leg.status === 'refunded') {
+    throw { code: ErrorCodes.LEG_ALREADY_REFUNDED, message: 'This ticket leg has been refunded', details: { ticketId, ticketLegId, refundedAt: leg.refundedAt } };
+  }
+
   if (leg.status === 'used') {
     throw { code: ErrorCodes.LEG_ALREADY_USED, message: 'This ticket leg has already been used', details: { ticketId, ticketLegId, validatedAt: leg.validatedAt } };
   }
@@ -156,6 +173,7 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
   leg.validatedAt = resolvedAt;
   leg.validatedBy = { operatorId, deviceId };
 
+  ticket.status = resolveTicketStatus(ticket);
   updateTicket(ticket);
 
   return {
@@ -243,8 +261,16 @@ export function scanValidate(qrPayload, scannerProfileId) {
   const unusedLegs = matchingLegs.filter(l => l.status === 'unused');
 
   if (unusedLegs.length === 0) {
-    const used = matchingLegs[0];
+    const refunded = matchingLegs.find(l => l.status === 'refunded');
+    if (refunded) {
+      throw {
+        code: ErrorCodes.LEG_ALREADY_REFUNDED,
+        message: 'All matching legs on this ticket have been refunded',
+        details: { ticketId: ticket.ticketId, ticketLegId: refunded.ticketLegId, refundedAt: refunded.refundedAt },
+      };
+    }
 
+    const used = matchingLegs[0];
     throw {
       code: ErrorCodes.LEG_ALREADY_USED,
       message: 'All matching legs on this ticket have already been used',
@@ -279,7 +305,8 @@ export function scanValidate(qrPayload, scannerProfileId) {
     deviceId: profile.deviceId,
   };
 
-  updateTicket(ticket.ticketId, ticket);
+  ticket.status = resolveTicketStatus(ticket);
+  updateTicket(ticket);
 
   return {
     ticketId: ticket.ticketId,
@@ -290,5 +317,96 @@ export function scanValidate(qrPayload, scannerProfileId) {
     message: 'Leg validated successfully',
     remainingLegs: ticket.legs.filter(l => l.status === 'unused').length,
     passenger: ticket.passenger,
+  };
+}
+
+export function refundTicket(ticketId, legIds) {
+  const ticket = getTicket(ticketId);
+  if (!ticket) {
+    throw { code: ErrorCodes.TICKET_NOT_FOUND, message: `Ticket '${ticketId}' not found`, details: { ticketId } };
+  }
+
+  const now = new Date();
+  const expiresAt = new Date(ticket.expiresAt);
+  const graceExpiry = new Date(expiresAt.getTime() + 24 * 60 * 60 * 1000);
+
+  if (now > expiresAt && now > graceExpiry) {
+    throw {
+      code: ErrorCodes.REFUND_WINDOW_EXPIRED,
+      message: 'Refund window has closed — ticket expired more than 24 hours ago',
+      details: { ticketId, expiresAt: ticket.expiresAt, graceExpiry: graceExpiry.toISOString() },
+    };
+  }
+
+  let refundableLegs;
+  if (Array.isArray(legIds) && legIds.length > 0) {
+    const candidateLegs = legIds.map(id => {
+      const leg = ticket.legs.find(l => l.ticketLegId === id);
+      if (!leg) {
+        throw { code: ErrorCodes.LEG_NOT_FOUND, message: `Leg '${id}' not found on ticket '${ticketId}'`, details: { ticketId, ticketLegId: id } };
+      }
+      return leg;
+    });
+
+    const refundedLegIds = candidateLegs.filter(l => l.status === 'refunded').map(l => l.ticketLegId);
+    if (refundedLegIds.length > 0) {
+      throw {
+        code: ErrorCodes.LEG_ALREADY_REFUNDED,
+        message: 'Selected legs have already been refunded',
+        details: { ticketId, refundedLegIds },
+      };
+    }
+
+    const usedLegIds = candidateLegs.filter(l => l.status === 'used').map(l => l.ticketLegId);
+    if (usedLegIds.length > 0) {
+      throw {
+        code: ErrorCodes.LEG_ALREADY_USED,
+        message: 'Used legs cannot be refunded',
+        details: { ticketId, usedLegIds },
+      };
+    }
+
+    refundableLegs = candidateLegs;
+  } else {
+    refundableLegs = ticket.legs.filter(l => l.status === 'unused');
+    if (refundableLegs.length === 0) {
+      throw {
+        code: ErrorCodes.NO_REFUNDABLE_LEGS,
+        message: 'No unused legs available to refund on this ticket',
+        details: { ticketId },
+      };
+    }
+  }
+
+  const refundedAt = now.toISOString();
+  refundableLegs.forEach(leg => {
+    leg.status = 'refunded';
+    leg.refundedAt = refundedAt;
+  });
+
+  const refundAmount = Math.round(refundableLegs.reduce((sum, l) => sum + l.fareAmount, 0) * 100) / 100;
+
+  ticket.payment.refundedAmount = Math.round(((ticket.payment.refundedAmount ?? 0) + refundAmount) * 100) / 100;
+  ticket.payment.refundedAt = refundedAt;
+
+  ticket.status = resolveTicketStatus(ticket);
+  if (ticket.status === 'refunded' || ticket.status === 'partially_refunded') {
+    ticket.payment.status = ticket.status;
+  }
+
+  updateTicket(ticket);
+
+  return {
+    ticketId,
+    refundedLegs: refundableLegs.map(l => ({
+      ticketLegId: l.ticketLegId,
+      mode: l.mode,
+      fareAmount: l.fareAmount,
+      refundedAt: l.refundedAt,
+    })),
+    refundAmount,
+    currency: ticket.payment.currency,
+    remainingLegs: ticket.legs.filter(l => l.status === 'unused').length,
+    message: `${refundableLegs.length} leg(s) refunded successfully`,
   };
 }

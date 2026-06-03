@@ -1,4 +1,4 @@
-import { createTicket, getTicketById, validateLeg, scanValidate } from '../services/ticketService.js';
+import { createTicket, getTicketById, validateLeg, scanValidate, refundTicket } from '../services/ticketService.js';
 import { getAllProfiles } from '../stores/scannerProfileStore.js';
 import { makeError, ErrorCodes } from '../helpers/errors.js';
 
@@ -14,6 +14,9 @@ const STATUS_MAP = {
   [ErrorCodes.LEG_ALREADY_USED]:           409,
   [ErrorCodes.STATION_LIMIT_EXCEEDED]:     409,
   [ErrorCodes.AMBIGUOUS_LEG_MATCH]:        409,
+  [ErrorCodes.LEG_ALREADY_REFUNDED]:       409,
+  [ErrorCodes.NO_REFUNDABLE_LEGS]:         422,
+  [ErrorCodes.REFUND_WINDOW_EXPIRED]:      410,
 };
 
 function handleServiceError(res, err) {
@@ -57,6 +60,15 @@ export async function scanValidateHandler(req, res) {
   }
   try {
     const result = scanValidate(qrPayload, scannerProfileId);
+    return res.status(200).json(result);
+  } catch (err) {
+    return handleServiceError(res, err);
+  }
+}
+
+export async function refundTicketHandler(req, res) {
+  try {
+    const result = refundTicket(req.params.id, req.body?.legIds);
     return res.status(200).json(result);
   } catch (err) {
     return handleServiceError(res, err);

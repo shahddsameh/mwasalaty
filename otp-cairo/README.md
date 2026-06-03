@@ -86,9 +86,9 @@ OTP will:
 1. Detect the `.osm.pbf` and `.zip` files in `/var/opentripplanner` (= `./data/cairo`).
 2. Build a routing graph (`Graph.obj` + `streetGraph.obj`) — this takes **5–15 minutes**
    the first time depending on your machine.
-3. Start the REST + GraphQL API on **http://localhost:8080**.
+3. Start the REST + GraphQL API on **http://localhost:8081**.
 
-Open the debug UI at **http://localhost:8080** to verify routing is working.
+Open the debug UI at **http://localhost:8081** to verify routing is working.
 
 On subsequent starts the pre-built graph is loaded from disk (much faster).
 To force a rebuild, delete `data/cairo/Graph.obj` and re-run `docker compose up`.
@@ -120,4 +120,4 @@ otp-cairo/
 | OTP exits immediately | Not enough memory | Increase `-Xmx4G` in `docker-compose.yml` |
 | "No transit data" in planner | GTFS zip not found or still expired | Re-run `fix_gtfs_dates.py`; confirm zip is in `data/cairo/` |
 | Very slow graph build | Full Egypt PBF | Clip to Cairo bounding box (see Step 1 tip) |
-| Port 8080 already in use | Another service on 8080 | Change host port: `"8081:8080"` in `docker-compose.yml` |
+| Port 8081 already in use | Another service on 8081 | Change host port and update `backend/.env` to match |

@@ -11,7 +11,7 @@ app.use('/api', planRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  const otpUrl = process.env.OTP_GRAPHQL_URL || 'http://localhost:8080/otp/routers/default/index/graphql';
+  const otpUrl = process.env.OTP_GRAPHQL_URL || 'http://localhost:8081/otp/routers/default/index/graphql';
   console.log(`Backend running on http://localhost:${PORT}`);
   console.log(`OTP GraphQL: ${otpUrl}`);
 });

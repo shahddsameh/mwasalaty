@@ -1,4 +1,4 @@
-const DEFAULT_OTP_URL = 'http://localhost:8080/otp/routers/default/index/graphql';
+const DEFAULT_OTP_URL = 'http://localhost:8081/otp/routers/default/index/graphql';
 
 function buildModesFragment(modes) {
   return (modes || ['WALK', 'BUS', 'SUBWAY'])

@@ -9,8 +9,17 @@ export type SelectedRoute = RouteSearch & {
   steps?: unknown;
 };
 
+export type RecentRouteSearch = {
+  from: string;
+  to: string;
+  filter: RouteSearch["filter"];
+  searchedAt: number;
+};
+
 const STORAGE_KEY = "mwasalaty:last-route-search";
 const SELECTED_ROUTE_KEY = "mwasalaty:selected-route";
+const RECENT_SEARCHES_KEY = "mwasalaty:recent-route-searches";
+const RECENT_SEARCH_LIMIT = 8;
 const DEFAULT_ROUTE_SEARCH: RouteSearch = {
   start: "",
   destination: "",
@@ -19,6 +28,7 @@ const DEFAULT_ROUTE_SEARCH: RouteSearch = {
 
 let currentRouteSearch: Partial<RouteSearch> = {};
 let currentSelectedRoute: Partial<SelectedRoute> = {};
+let currentRecentSearches: RecentRouteSearch[] = [];
 
 export function saveRouteSearch(search: Partial<RouteSearch>) {
   const start = search.start?.trim();
@@ -74,10 +84,73 @@ export function getSelectedRoute(): Partial<SelectedRoute> {
   return currentSelectedRoute;
 }
 
+export function saveRecentRouteSearch(search: Partial<RouteSearch>) {
+  const start = search.start?.trim();
+  const destination = search.destination?.trim();
+
+  if (
+    !start ||
+    !destination ||
+    start === "Unknown start" ||
+    destination === "Unknown destination"
+  ) {
+    return;
+  }
+
+  const normalizedFrom = normalizePlaceKey(start);
+  const normalizedTo = normalizePlaceKey(destination);
+  const existingSearches = getRecentRouteSearches();
+  const alreadyExists = existingSearches.some(
+    (recent) =>
+      normalizePlaceKey(recent.from) === normalizedFrom &&
+      normalizePlaceKey(recent.to) === normalizedTo,
+  );
+
+  if (alreadyExists) return;
+
+  currentRecentSearches = [
+    {
+      from: start,
+      to: destination,
+      filter: normalizeFilter(search.filter),
+      searchedAt: Date.now(),
+    },
+    ...existingSearches,
+  ].slice(0, RECENT_SEARCH_LIMIT);
+
+  saveLocalValue(RECENT_SEARCHES_KEY, currentRecentSearches);
+}
+
+export function getRecentRouteSearches(): RecentRouteSearch[] {
+  if (currentRecentSearches.length) return currentRecentSearches;
+
+  currentRecentSearches = readLocalValue<RecentRouteSearch[]>(
+    RECENT_SEARCHES_KEY,
+    [],
+  )
+    .filter(isRecentRouteSearch)
+    .slice(0, RECENT_SEARCH_LIMIT);
+
+  return currentRecentSearches;
+}
+
 export function normalizeFilter(value: unknown): RouteSearch["filter"] {
   return value === "cheapest" || value === "comfortable" || value === "fastest"
     ? value
     : DEFAULT_ROUTE_SEARCH.filter;
+}
+
+function normalizePlaceKey(value: string) {
+  return value.trim().toLowerCase().replace(/[-_]+/g, " ").replace(/\s+/g, " ");
+}
+
+function isRecentRouteSearch(value: unknown): value is RecentRouteSearch {
+  const recent = value as Partial<RecentRouteSearch>;
+  return (
+    typeof recent?.from === "string" &&
+    typeof recent.to === "string" &&
+    typeof recent.searchedAt === "number"
+  );
 }
 
 function saveSessionValue(key: string, value: unknown) {
@@ -94,5 +167,22 @@ function readSessionValue<T>(key: string): Partial<T> {
     return saved ? (JSON.parse(saved) as Partial<T>) : {};
   } catch {
     return {};
+  }
+}
+
+function saveLocalValue(key: string, value: unknown) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // The in-memory copy still covers this page session.
+  }
+}
+
+function readLocalValue<T>(key: string, fallback: T): T {
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? (JSON.parse(saved) as T) : fallback;
+  } catch {
+    return fallback;
   }
 }

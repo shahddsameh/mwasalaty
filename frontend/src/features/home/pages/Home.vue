@@ -17,13 +17,14 @@
           >
             <div class="space-y-5 mb-6">
               <div>
-                <AppInput
+                <PlaceAutocomplete
                   v-model="start"
                   placeholder="Starting point"
                   :error="startError"
+                  :suggestions="placeSuggestions"
                 >
                   <template #icon><MapPin class="w-5 h-5" /></template>
-                </AppInput>
+                </PlaceAutocomplete>
                 <button
                   class="mt-2 text-sm text-primary hover:text-primary-hover transition-colors flex items-center gap-1.5"
                   @click="start = 'Current Location'"
@@ -32,13 +33,14 @@
                 </button>
               </div>
 
-              <AppInput
+              <PlaceAutocomplete
                 v-model="destination"
                 placeholder="Where to?"
                 :error="destinationError"
+                :suggestions="placeSuggestions"
               >
                 <template #icon><Target class="w-5 h-5" /></template>
-              </AppInput>
+              </PlaceAutocomplete>
             </div>
 
             <div class="grid grid-cols-3 gap-2 md:gap-3 mb-6">
@@ -74,9 +76,15 @@
           </div>
 
           <Panel title="Recent Searches" :icon="Clock">
+            <p
+              v-if="recentSearches.length === 0"
+              class="text-sm text-muted-foreground"
+            >
+              Your recent routes will appear here.
+            </p>
             <button
               v-for="search in recentSearches"
-              :key="`${search.from}-${search.to}`"
+              :key="`${search.from}-${search.to}-${search.searchedAt}`"
               class="w-full p-3 rounded-lg border border-border hover:border-primary hover:bg-secondary transition-all text-left"
               @click="useSearch(search)"
             >
@@ -86,7 +94,7 @@
                     {{ search.from }} -> {{ search.to }}
                   </div>
                   <div class="text-xs text-muted-foreground mt-0.5">
-                    {{ search.time }}
+                    {{ formatRecentTime(search.searchedAt) }}
                   </div>
                 </div>
                 <TrendingUp class="w-4 h-4 text-muted-foreground" />
@@ -180,8 +188,14 @@ import {
   TrendingUp,
 } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
-import AppInput from "@/components/ui/AppInput.vue";
-import { saveRouteSearch } from "@/features/trip-planner/services/routeSearch";
+import PlaceAutocomplete from "@/features/home/components/PlaceAutocomplete.vue";
+import { placeSuggestions } from "@/features/home/services/placeSuggestions";
+import {
+  getRecentRouteSearches,
+  saveRecentRouteSearch,
+  saveRouteSearch,
+  type RecentRouteSearch,
+} from "@/features/trip-planner/services/routeSearch";
 
 const router = useRouter();
 const start = ref("");
@@ -196,11 +210,7 @@ const filters = [
   { value: "comfortable" as const, label: "Comfortable", icon: Star },
 ];
 
-const recentSearches = [
-  { from: "Tahrir Square", to: "Cairo Airport", time: "2 hours ago" },
-  { from: "Giza Station", to: "New Cairo", time: "5 hours ago" },
-  { from: "Maadi", to: "Zamalek", time: "Yesterday" },
-];
+const recentSearches = ref<RecentRouteSearch[]>(getRecentRouteSearches());
 
 const savedPlaces = [
   {
@@ -310,11 +320,29 @@ function filterClass(value: string) {
   ];
 }
 
-function useSearch(search: { from: string; to: string }) {
+function useSearch(search: RecentRouteSearch) {
   start.value = search.from;
   destination.value = search.to;
+  filter.value = search.filter;
   startError.value = "";
   destinationError.value = "";
+}
+
+function formatRecentTime(searchedAt: number) {
+  const elapsedMinutes = Math.max(0, Math.floor((Date.now() - searchedAt) / 60000));
+
+  if (elapsedMinutes < 1) return "Just now";
+  if (elapsedMinutes < 60) {
+    return `${elapsedMinutes} min${elapsedMinutes === 1 ? "" : "s"} ago`;
+  }
+
+  const elapsedHours = Math.floor(elapsedMinutes / 60);
+  if (elapsedHours < 24) {
+    return `${elapsedHours} hour${elapsedHours === 1 ? "" : "s"} ago`;
+  }
+
+  const elapsedDays = Math.floor(elapsedHours / 24);
+  return `${elapsedDays} day${elapsedDays === 1 ? "" : "s"} ago`;
 }
 
 function searchRoutes() {
@@ -336,6 +364,12 @@ function searchRoutes() {
     destination: trimmedDestination,
     filter: filter.value,
   });
+  saveRecentRouteSearch({
+    start: trimmedStart,
+    destination: trimmedDestination,
+    filter: filter.value,
+  });
+  recentSearches.value = getRecentRouteSearches();
   router.push({
     path: "/route-results",
     query: {

@@ -3,3 +3,5 @@ dist/
 .vite/
 backend/
 otp-cairo/
+generated-reports/
+.DS_Store

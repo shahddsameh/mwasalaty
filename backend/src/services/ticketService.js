@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import { saveTicket, getTicket, updateTicket } from '../stores/ticketStore.js';
+import { getProfileById } from '../stores/scannerProfileStore.js';
 import { ErrorCodes } from '../helpers/errors.js';
 
 const TRANSIT_MODES = new Set(['BUS', 'METRO', 'SUBWAY', 'TRAM', 'RAIL', 'MICROBUS']);
@@ -164,5 +165,130 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
     validatedAt: resolvedAt,
     validatedBy: { operatorId, deviceId },
     message: 'Leg validated successfully',
+  };
+}
+
+export function scanValidate(qrPayload, scannerProfileId) {
+  if (qrPayload?.type !== 'MWASALATY_MVP_TICKET') {
+    throw {
+      code: ErrorCodes.INVALID_QR_PAYLOAD,
+      message: 'Invalid QR payload type — expected MWASALATY_MVP_TICKET',
+      details: { type: qrPayload?.type ?? null },
+    };
+  }
+
+  const ticket = getTicket(qrPayload.ticketId);
+
+  if (!ticket) {
+    throw {
+      code: ErrorCodes.TICKET_NOT_FOUND,
+      message: `Ticket '${qrPayload.ticketId}' not found`,
+      details: { ticketId: qrPayload.ticketId },
+    };
+  }
+
+  if (qrPayload.signature !== ticket.qrPayload?.signature) {
+    throw {
+      code: ErrorCodes.INVALID_QR_PAYLOAD,
+      message: 'Invalid QR payload signature',
+      details: { ticketId: qrPayload.ticketId },
+    };
+  }
+
+  const profile = getProfileById(scannerProfileId);
+
+  if (!profile) {
+    throw {
+      code: ErrorCodes.SCANNER_PROFILE_NOT_FOUND,
+      message: `Scanner profile '${scannerProfileId}' not found`,
+      details: { scannerProfileId },
+    };
+  }
+
+  if (new Date() > new Date(ticket.expiresAt)) {
+    throw {
+      code: ErrorCodes.TICKET_EXPIRED,
+      message: 'This ticket has expired',
+      details: {
+        ticketId: ticket.ticketId,
+        expiresAt: ticket.expiresAt,
+      },
+    };
+  }
+
+  const matchingLegs = ticket.legs.filter(leg => {
+    const legRouteShortName =
+      typeof leg.route === 'string'
+        ? leg.route
+        : leg.route?.shortName;
+
+    if (leg.mode !== profile.mode) return false;
+    if (profile.routeShortName && legRouteShortName !== profile.routeShortName) return false;
+
+    return true;
+  });
+
+  if (matchingLegs.length === 0) {
+    throw {
+      code: ErrorCodes.NO_MATCHING_LEG,
+      message: 'No legs on this ticket match the scanner profile',
+      details: {
+        scannerProfileId,
+        mode: profile.mode,
+        routeShortName: profile.routeShortName ?? null,
+      },
+    };
+  }
+
+  const unusedLegs = matchingLegs.filter(l => l.status === 'unused');
+
+  if (unusedLegs.length === 0) {
+    const used = matchingLegs[0];
+
+    throw {
+      code: ErrorCodes.LEG_ALREADY_USED,
+      message: 'All matching legs on this ticket have already been used',
+      details: {
+        ticketId: ticket.ticketId,
+        ticketLegId: used.ticketLegId,
+        validatedAt: used.validatedAt,
+      },
+    };
+  }
+
+  if (unusedLegs.length > 1) {
+    throw {
+      code: ErrorCodes.AMBIGUOUS_LEG_MATCH,
+      message: 'Multiple unused legs match this scanner profile',
+      details: {
+        scannerProfileId,
+        matchingLegIds: unusedLegs.map(l => l.ticketLegId),
+      },
+    };
+  }
+
+  const leg = unusedLegs[0];
+  const resolvedAt = new Date().toISOString();
+
+  leg.status = 'used';
+  leg.validatedAt = resolvedAt;
+  leg.validatedBy = {
+    scannerProfileId: profile.scannerProfileId,
+    label: profile.label,
+    operatorId: profile.operatorId,
+    deviceId: profile.deviceId,
+  };
+
+  updateTicket(ticket.ticketId, ticket);
+
+  return {
+    ticketId: ticket.ticketId,
+    ticketLegId: leg.ticketLegId,
+    status: 'used',
+    validatedAt: resolvedAt,
+    validatedBy: leg.validatedBy,
+    message: 'Leg validated successfully',
+    remainingLegs: ticket.legs.filter(l => l.status === 'unused').length,
+    passenger: ticket.passenger,
   };
 }

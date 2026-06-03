@@ -1,14 +1,19 @@
-import { createTicket, getTicketById, validateLeg } from '../services/ticketService.js';
+import { createTicket, getTicketById, validateLeg, scanValidate } from '../services/ticketService.js';
+import { getAllProfiles } from '../stores/scannerProfileStore.js';
 import { makeError, ErrorCodes } from '../helpers/errors.js';
 
 const STATUS_MAP = {
-  [ErrorCodes.VALIDATION_ERROR]:       400,
-  [ErrorCodes.NO_TICKETABLE_LEGS]:     400,
-  [ErrorCodes.TICKET_NOT_FOUND]:       404,
-  [ErrorCodes.LEG_NOT_FOUND]:          404,
-  [ErrorCodes.TICKET_EXPIRED]:         410,
-  [ErrorCodes.LEG_ALREADY_USED]:       409,
-  [ErrorCodes.STATION_LIMIT_EXCEEDED]: 409,
+  [ErrorCodes.VALIDATION_ERROR]:           400,
+  [ErrorCodes.NO_TICKETABLE_LEGS]:         400,
+  [ErrorCodes.INVALID_QR_PAYLOAD]:         400,
+  [ErrorCodes.TICKET_NOT_FOUND]:           404,
+  [ErrorCodes.LEG_NOT_FOUND]:              404,
+  [ErrorCodes.SCANNER_PROFILE_NOT_FOUND]:  404,
+  [ErrorCodes.NO_MATCHING_LEG]:            404,
+  [ErrorCodes.TICKET_EXPIRED]:             410,
+  [ErrorCodes.LEG_ALREADY_USED]:           409,
+  [ErrorCodes.STATION_LIMIT_EXCEEDED]:     409,
+  [ErrorCodes.AMBIGUOUS_LEG_MATCH]:        409,
 };
 
 function handleServiceError(res, err) {
@@ -33,6 +38,26 @@ export async function getTicketHandler(req, res) {
   try {
     const ticket = getTicketById(req.params.id);
     return res.status(200).json(ticket);
+  } catch (err) {
+    return handleServiceError(res, err);
+  }
+}
+
+export async function getScannerProfilesHandler(_req, res) {
+  return res.status(200).json({ profiles: getAllProfiles() });
+}
+
+export async function scanValidateHandler(req, res) {
+  const { qrPayload, scannerProfileId } = req.body ?? {};
+  const fieldErrors = [];
+  if (!qrPayload) fieldErrors.push('qrPayload is required');
+  if (!scannerProfileId) fieldErrors.push('scannerProfileId is required');
+  if (fieldErrors.length > 0) {
+    return res.status(400).json(makeError(ErrorCodes.VALIDATION_ERROR, 'Request validation failed', { fields: fieldErrors }));
+  }
+  try {
+    const result = scanValidate(qrPayload, scannerProfileId);
+    return res.status(200).json(result);
   } catch (err) {
     return handleServiceError(res, err);
   }

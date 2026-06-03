@@ -55,6 +55,25 @@
             </svg>
             Planning your route…
           </div>
+          <div
+            v-else-if="errorMessage"
+            class="bg-card border-2 border-border rounded-xl p-6 text-muted-foreground"
+          >
+            <h2 class="font-display text-xl text-foreground mb-2">
+              No dynamic routes found
+            </h2>
+            <p>{{ errorMessage }}</p>
+            <p class="mt-2 text-sm">
+              Make sure the backend and OpenTripPlanner are running, then try
+              the search again.
+            </p>
+          </div>
+          <div
+            v-else-if="!routes.length"
+            class="bg-card border-2 border-border rounded-xl p-6 text-muted-foreground"
+          >
+            No dynamic routes found for this search.
+          </div>
           <template v-else>
             <RouteCard
               v-for="route in sortedRoutes"
@@ -95,20 +114,35 @@
 
 <script setup lang="ts">
 import { computed, defineComponent, h, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ArrowLeft, MapPin, SlidersHorizontal } from "@lucide/vue";
 import RouteCard from "../components/RouteCard.vue";
-import { routeOptions, type RouteOption } from "../data";
 import { planRoute, type ApiRouteOption } from "../api";
+import {
+  getSavedRouteSearch,
+  normalizeFilter,
+  saveRouteSearch,
+  saveSelectedRoute,
+} from "../routeSearch";
 
 const router = useRouter();
+const currentRoute = useRoute();
 
 const state = history.state ?? {};
-const start = state.start ?? "Tahrir Square";
-const destination = state.destination ?? "Cairo Airport";
+const queryString = (value: unknown) =>
+  Array.isArray(value) ? value[0] : typeof value === "string" ? value : undefined;
+const savedSearch = getSavedRouteSearch();
+const queryFilter = queryString(currentRoute.query.filter);
+const start =
+  queryString(currentRoute.query.start) ?? state.start ?? savedSearch.start ?? "Tahrir Square";
+const destination =
+  queryString(currentRoute.query.destination) ??
+  state.destination ??
+  savedSearch.destination ??
+  "Cairo Airport";
 
 const sortBy = ref<"fastest" | "cheapest" | "comfortable">(
-  state.filter ?? "fastest",
+  normalizeFilter(queryFilter ?? state.filter ?? savedSearch.filter),
 );
 
 const tabs = [
@@ -118,35 +152,50 @@ const tabs = [
 ];
 
 const loading = ref(false);
+const errorMessage = ref("");
 const apiRoutes = ref<ApiRouteOption[]>([]);
 
 onMounted(async () => {
+  saveRouteSearch({ start, destination, filter: sortBy.value });
   loading.value = true;
-  apiRoutes.value = await planRoute(start, destination, sortBy.value);
-  loading.value = false;
+  errorMessage.value = "";
+
+  try {
+    apiRoutes.value = await planRoute(start, destination, sortBy.value);
+  } catch (error) {
+    apiRoutes.value = [];
+    errorMessage.value =
+      error instanceof Error ? error.message : "Could not plan this route.";
+  } finally {
+    loading.value = false;
+  }
 });
 
-const routes = computed<RouteOption[]>(() =>
-  apiRoutes.value.length ? apiRoutes.value : routeOptions,
-);
+const routes = computed<ApiRouteOption[]>(() => apiRoutes.value);
 
 const getDuration = (duration: string | number) => parseInt(String(duration));
 
 const getCost = (cost: string | number) => parseInt(String(cost));
 
 const fastestRouteId = computed(() => {
+  if (!routes.value.length) return null;
+
   return routes.value.reduce((min, route) =>
     getDuration(route.duration) < getDuration(min.duration) ? route : min,
   ).id;
 });
 
 const cheapestRouteId = computed(() => {
+  if (!routes.value.length) return null;
+
   return routes.value.reduce((min, route) =>
     getCost(route.cost) < getCost(min.cost) ? route : min,
   ).id;
 });
 
 const comfortableRouteId = computed(() => {
+  if (!routes.value.length) return null;
+
   return routes.value.reduce((min, route) =>
     route.transfers < min.transfers ? route : min,
   ).id;
@@ -198,11 +247,18 @@ function tabClass(value: string) {
   ];
 }
 
-function selectRoute(route: RouteOption) {
-  const detailSteps = "detailSteps" in route ? (route as ApiRouteOption).detailSteps : undefined;
+function selectRoute(route: ApiRouteOption) {
+  saveSelectedRoute({
+    route,
+    start,
+    destination,
+    filter: sortBy.value,
+    steps: route.detailSteps,
+  });
   router.push({
     path: "/route-details",
-    state: { route, start, destination, steps: detailSteps },
+    query: { start, destination, filter: sortBy.value },
+    state: { route, start, destination, filter: sortBy.value, steps: route.detailSteps },
   });
 }
 </script>

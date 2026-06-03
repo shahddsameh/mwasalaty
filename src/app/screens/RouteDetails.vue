@@ -3,7 +3,7 @@
     <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">
       <button
         class="flex items-center gap-2 text-foreground hover:text-primary mb-6 transition-colors"
-        @click="router.push('/route-results')"
+        @click="backToResults"
       >
         <ArrowLeft class="w-5 h-5" /> Back to Results
       </button>
@@ -30,11 +30,7 @@
                 AI Route Explanation
               </h3>
               <p class="text-sm md:text-base text-foreground">
-                Start by walking to Sadat Metro Station. Take Metro Line 1
-                (Helwan – New El Marg) and transfer at Sadat to reach Nasser
-                Station. From there, walk to the Airport Bus Stop and board Bus
-                356 heading to Cairo International Airport. The route concludes
-                at Terminal 3.
+                {{ routeExplanation }}
               </p>
             </div>
           </div>
@@ -51,7 +47,11 @@
               label="Transfers"
               :value="String(route.transfers)"
             />
-            <Summary :icon="TrendingUp" label="Walking" value="600m" />
+            <Summary
+              :icon="TrendingUp"
+              label="Walking"
+              :value="route.walkingDistance"
+            />
           </div>
 
           <section class="bg-card rounded-xl p-4 md:p-6 border-2 border-border">
@@ -103,7 +103,8 @@
               @click="
                 router.push({
                   path: '/live-navigation',
-                  state: { route, steps, start, destination },
+                  query: { start, destination, filter },
+                  state: { route, steps, start, destination, filter },
                 })
               "
             >
@@ -215,8 +216,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, h, ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed, defineComponent, h, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import {
   ArrowLeft,
   BookmarkPlus,
@@ -233,16 +234,79 @@ import {
 } from "@lucide/vue";
 import AppButton from "../components/AppButton.vue";
 import Modal from "../components/Modal.vue";
-import { defaultSteps, routeOptions } from "../data";
+import type { ApiRouteOption, RouteDetailStep } from "../api";
+import {
+  getSavedRouteSearch,
+  getSelectedRoute,
+  normalizeFilter,
+  saveRouteSearch,
+} from "../routeSearch";
 
 const router = useRouter();
+const currentRoute = useRoute();
 const state = history.state ?? {};
-const route = state.route ?? routeOptions[0];
-const start = state.start ?? "Tahrir Square";
-const destination = state.destination ?? "Cairo Airport";
-const steps = state.steps ?? defaultSteps;
+const queryString = (value: unknown) =>
+  Array.isArray(value) ? value[0] : typeof value === "string" ? value : undefined;
+const savedSearch = getSavedRouteSearch();
+const selectedRoute = getSelectedRoute();
+const route = (selectedRoute.route ?? state.route ?? {
+  itineraryId: "",
+  id: "",
+  durationMinutes: 0,
+  totalDistanceMeters: 0,
+  duration: "N/A",
+  cost: "N/A",
+  totalFare: { amount: 0, currency: "EGP" },
+  transfers: 0,
+  walkingDistance: "N/A",
+  summary: "",
+  legs: [],
+  steps: [],
+  detailSteps: [],
+}) as ApiRouteOption;
+const start =
+  queryString(currentRoute.query.start) ??
+  state.start ??
+  selectedRoute.start ??
+  savedSearch.start ??
+  "Unknown start";
+const destination =
+  queryString(currentRoute.query.destination) ??
+  state.destination ??
+  selectedRoute.destination ??
+  savedSearch.destination ??
+  "Unknown destination";
+const filter = normalizeFilter(
+  queryString(currentRoute.query.filter) ??
+    state.filter ??
+    selectedRoute.filter ??
+    savedSearch.filter,
+);
+const steps = (state.steps ?? selectedRoute.steps ?? route.detailSteps) as RouteDetailStep[];
 const saveModalOpen = ref(false);
 const savePlaceModalOpen = ref(false);
+
+saveRouteSearch({ start, destination, filter });
+
+const routeExplanation = computed(() => {
+  const instructions = steps
+    .map((step: { instruction?: string }) => step.instruction)
+    .filter(Boolean);
+
+  if (!instructions.length) {
+    return `This route takes you from ${start} to ${destination}.`;
+  }
+
+  return `This route takes you from ${start} to ${destination}: ${instructions.join(", ")}.`;
+});
+
+function backToResults() {
+  router.push({
+    path: "/route-results",
+    query: { start, destination, filter },
+    state: { start, destination, filter },
+  });
+}
 
 const Summary = defineComponent({
   props: {

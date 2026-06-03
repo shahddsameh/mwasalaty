@@ -188,7 +188,8 @@
             @click="
               router.push({
                 path: '/route-details',
-                state: { route, start, destination },
+                query: { start, destination, filter },
+                state: { route, steps, start, destination, filter },
               })
             "
           >
@@ -266,24 +267,59 @@ import {
 } from "@lucide/vue";
 import AppButton from "../components/AppButton.vue";
 import Modal from "../components/Modal.vue";
-import { defaultSteps, routeOptions, ticketData } from "../data";
+import { ticketData } from "../data";
+import type { ApiRouteOption, RouteDetailStep } from "../api";
+import {
+  getSavedRouteSearch,
+  getSelectedRoute,
+  normalizeFilter,
+  saveRouteSearch,
+} from "../routeSearch";
 
 const router = useRouter();
 const state = history.state ?? {};
-const route = state.route ?? routeOptions[0];
-const steps = state.steps ?? defaultSteps;
-const start = state.start ?? "Tahrir Square";
-const destination = state.destination ?? "Cairo Airport";
+const savedSearch = getSavedRouteSearch();
+const selectedRoute = getSelectedRoute();
+const route = (state.route ?? selectedRoute.route ?? {
+  itineraryId: "",
+  id: "",
+  durationMinutes: 0,
+  totalDistanceMeters: 0,
+  duration: "N/A",
+  cost: "N/A",
+  totalFare: { amount: 0, currency: "EGP" },
+  transfers: 0,
+  walkingDistance: "N/A",
+  summary: "",
+  legs: [],
+  steps: [],
+  detailSteps: [],
+}) as ApiRouteOption;
+const fallbackStep: RouteDetailStep = {
+  type: "walking",
+  instruction: "No navigation steps available.",
+  duration: "N/A",
+  color: "var(--transport-walking)",
+  softColor: "var(--transport-walking-soft)",
+};
+const steps = (state.steps ?? selectedRoute.steps ?? route.detailSteps ?? [
+  fallbackStep,
+]) as RouteDetailStep[];
+const start = state.start ?? savedSearch.start ?? "Unknown start";
+const destination = state.destination ?? savedSearch.destination ?? "Unknown destination";
+const filter = normalizeFilter(state.filter ?? savedSearch.filter);
 const isOnline = ref(true);
 const currentStepIndex = ref(0);
 const endModalOpen = ref(false);
 const feedbackModalOpen = ref(false);
 const ticketModalOpen = ref(false);
-const currentStep = computed(() => steps[currentStepIndex.value] ?? steps[0]);
+const currentStep = computed(() => steps[currentStepIndex.value] ?? fallbackStep);
 const nextStep = computed(() => steps[currentStepIndex.value + 1]);
 const progress = computed(
-  () => ((currentStepIndex.value + 1) / steps.length) * 100,
+  () => ((currentStepIndex.value + 1) / Math.max(steps.length, 1)) * 100,
 );
+
+saveRouteSearch({ start, destination, filter });
 
 const MiniStat = defineComponent({
   props: { label: String, value: String },

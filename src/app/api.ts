@@ -1,7 +1,3 @@
-import { routeOptions, type RouteOption } from './data';
-
-const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search';
-
 const COLOR_MAP: Record<string, { color: string; softColor: string }> = {
   walking: { color: 'var(--transport-walking)', softColor: 'var(--transport-walking-soft)' },
   metro:   { color: 'var(--transport-metro)',   softColor: 'var(--transport-metro-soft)' },
@@ -16,6 +12,48 @@ const OTP_MODE_TO_TYPE: Record<string, string> = {
   TRAM:   'bus',
 };
 
+export type ApiFare = {
+  amount: number;
+  currency: string;
+};
+
+export type ApiLeg = {
+  legId: string;
+  mode: string;
+  from: { name: string };
+  to: { name: string };
+  distanceMeters: number;
+  durationMinutes: number;
+  startTime: string;
+  endTime: string;
+  route: null | { shortName?: string; longName?: string };
+  instruction: string;
+  fare: ApiFare;
+};
+
+export type ApiItinerary = {
+  itineraryId: string;
+  durationMinutes: number;
+  totalDistanceMeters: number;
+  transfers: number;
+  totalFare: ApiFare;
+  summary: string;
+  legs: ApiLeg[];
+};
+
+export type ApiPlanResponse = {
+  planId: string;
+  source: string;
+  optimizedFor: string;
+  from: { lat: number; lng: number; label: string | null };
+  to: { lat: number; lng: number; label: string | null };
+  itineraries: ApiItinerary[];
+  reliabilityNote?: string;
+  highlights?: Record<string, unknown>;
+};
+
+export type RouteStep = { type: string; label: string };
+
 export type RouteDetailStep = {
   type: string;
   instruction: string;
@@ -28,24 +66,16 @@ export type RouteDetailStep = {
   softColor: string;
 };
 
-export type ApiRouteOption = RouteOption & { detailSteps: RouteDetailStep[] };
+export type ApiRouteOption = ApiItinerary & {
+  id: string;
+  duration: string;
+  cost: string;
+  walkingDistance: string;
+  steps: RouteStep[];
+  detailSteps: RouteDetailStep[];
+};
 
-async function geocode(place: string): Promise<{ lat: number; lng: number } | null> {
-  try {
-    const q = encodeURIComponent(`${place}, Cairo, Egypt`);
-    const res = await fetch(`${NOMINATIM_URL}?q=${q}&format=json&limit=1`, {
-      headers: { 'Accept-Language': 'en', 'User-Agent': 'Mwasalaty/1.0' },
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (!data.length) return null;
-    return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-  } catch {
-    return null;
-  }
-}
-
-function legToStep(leg: any): RouteDetailStep {
+function legToStep(leg: ApiLeg): RouteDetailStep {
   const type = OTP_MODE_TO_TYPE[leg.mode] ?? 'bus';
   const colors = COLOR_MAP[type] ?? COLOR_MAP.bus;
   return {
@@ -60,20 +90,20 @@ function legToStep(leg: any): RouteDetailStep {
   };
 }
 
-function mapItinerary(itin: any, index: number): ApiRouteOption {
-  const walkLegs = itin.legs.filter((l: any) => l.mode === 'WALK');
-  const totalWalkM = walkLegs.reduce((sum: number, l: any) => sum + l.distanceMeters, 0);
+function mapItinerary(itin: ApiItinerary): ApiRouteOption {
+  const walkLegs = itin.legs.filter((leg) => leg.mode === 'WALK');
+  const totalWalkM = walkLegs.reduce((sum, leg) => sum + leg.distanceMeters, 0);
   const walkingDistance = totalWalkM >= 1000
     ? `${(totalWalkM / 1000).toFixed(1)} km`
     : `${Math.round(totalWalkM)} m`;
 
   return {
-    id: index + 1,
+    ...itin,
+    id: itin.itineraryId,
     duration: `${itin.durationMinutes} min`,
     cost: `${itin.totalFare.amount} EGP`,
-    transfers: itin.transfers,
     walkingDistance,
-    steps: itin.legs.map((leg: any) => ({
+    steps: itin.legs.map((leg) => ({
       type: OTP_MODE_TO_TYPE[leg.mode] ?? 'bus',
       label: leg.route?.shortName
         ? `${OTP_MODE_TO_TYPE[leg.mode] === 'metro' ? 'Metro' : 'Bus'} ${leg.route.shortName}`
@@ -94,35 +124,31 @@ export async function planRoute(
   toLabel: string,
   filter: 'fastest' | 'cheapest' | 'comfortable' = 'fastest',
 ): Promise<ApiRouteOption[]> {
-  const [from, to] = await Promise.all([geocode(fromLabel), geocode(toLabel)]);
-  if (!from || !to) return [];
-
   const now = new Date();
   const date = now.toISOString().slice(0, 10);
   const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-  try {
-    const res = await fetch('/api/plan', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from: { ...from, label: fromLabel },
-        to: { ...to, label: toLabel },
-        date,
-        time,
-        preferences: {
-          modes: ['WALK', 'BUS', 'SUBWAY'],
-          optimizeFor: FILTER_TO_OPTIMIZE[filter] ?? 'quickest',
-        },
-      }),
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    if (!data.itineraries?.length) return [];
-    return data.itineraries.map(mapItinerary);
-  } catch {
-    return [];
+  const res = await fetch('/api/plan', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: { label: fromLabel },
+      to: { label: toLabel },
+      date,
+      time,
+      preferences: {
+        modes: ['WALK', 'BUS', 'SUBWAY'],
+        optimizeFor: FILTER_TO_OPTIMIZE[filter] ?? 'quickest',
+      },
+    }),
+  });
+  if (!res.ok) {
+    const error = await res.json().catch(() => null);
+    throw new Error(error?.error?.message ?? error?.message ?? 'Could not plan this route.');
   }
+  const data = (await res.json()) as ApiPlanResponse;
+  if (!data.itineraries?.length) {
+    throw new Error('No routes were returned for this search.');
+  }
+  return data.itineraries.map(mapItinerary);
 }
-
-export { routeOptions };

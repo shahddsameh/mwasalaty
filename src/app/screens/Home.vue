@@ -17,7 +17,11 @@
           >
             <div class="space-y-5 mb-6">
               <div>
-                <AppInput v-model="start" placeholder="Starting point">
+                <AppInput
+                  v-model="start"
+                  placeholder="Starting point"
+                  :error="startError"
+                >
                   <template #icon><MapPin class="w-5 h-5" /></template>
                 </AppInput>
                 <button
@@ -28,7 +32,11 @@
                 </button>
               </div>
 
-              <AppInput v-model="destination" placeholder="Where to?">
+              <AppInput
+                v-model="destination"
+                placeholder="Where to?"
+                :error="destinationError"
+              >
                 <template #icon><Target class="w-5 h-5" /></template>
               </AppInput>
             </div>
@@ -173,10 +181,13 @@ import {
 } from "@lucide/vue";
 import AppButton from "../components/AppButton.vue";
 import AppInput from "../components/AppInput.vue";
+import { saveRouteSearch } from "../routeSearch";
 
 const router = useRouter();
 const start = ref("");
 const destination = ref("");
+const startError = ref("");
+const destinationError = ref("");
 const filter = ref<"fastest" | "cheapest" | "comfortable">("fastest");
 
 const filters = [
@@ -302,15 +313,39 @@ function filterClass(value: string) {
 function useSearch(search: { from: string; to: string }) {
   start.value = search.from;
   destination.value = search.to;
+  startError.value = "";
+  destinationError.value = "";
 }
 
 function searchRoutes() {
-  if (!start.value || !destination.value) return;
+  const trimmedStart = start.value.trim();
+  const trimmedDestination = destination.value.trim();
+
+  startError.value = trimmedStart ? "" : "Please enter a starting point.";
+  destinationError.value = trimmedDestination
+    ? ""
+    : "Please enter a destination.";
+
+  if (!trimmedStart || !trimmedDestination) {
+    alert("Please enter both the starting point and destination.");
+    return;
+  }
+
+  saveRouteSearch({
+    start: trimmedStart,
+    destination: trimmedDestination,
+    filter: filter.value,
+  });
   router.push({
     path: "/route-results",
+    query: {
+      start: trimmedStart,
+      destination: trimmedDestination,
+      filter: filter.value,
+    },
     state: {
-      start: start.value,
-      destination: destination.value,
+      start: trimmedStart,
+      destination: trimmedDestination,
       filter: filter.value,
     },
   });

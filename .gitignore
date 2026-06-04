@@ -1,8 +1,13 @@
 ﻿node_modules/
 dist/
 .vite/
-backend/
 otp-cairo/
 generated-reports/
 .DS_Store
-CLAUDE.md/
+
+.env
+backend/.env
+backend/node_modules/
+backend/dist/
+
+CLAUDE.md

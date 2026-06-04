@@ -9,6 +9,8 @@ import AITripPlanner from "../features/ai/pages/AITripPlanner.vue";
 import AIPlan from "../features/ai/pages/AIPlan.vue";
 import Booking from "../features/tickets/pages/Booking.vue";
 import Ticket from "../features/tickets/pages/Ticket.vue";
+import PaymentSuccess from "../features/tickets/pages/PaymentSuccess.vue";
+import PaymentCancelled from "../features/tickets/pages/PaymentCancelled.vue";
 import Auth from "../features/auth/pages/Auth.vue";
 import Login from "../features/auth/pages/Login.vue";
 import SignUp from "../features/auth/pages/SignUp.vue";
@@ -38,7 +40,17 @@ const router = createRouter({
     },
     { path: "/ai-plan", name: "ai-plan", component: AIPlan },
     { path: "/booking", name: "booking", component: Booking },
-    { path: "/ticket", name: "ticket", component: Ticket },
+    {
+      path: "/payment/success",
+      name: "payment-success",
+      component: PaymentSuccess,
+    },
+    {
+      path: "/payment/cancelled",
+      name: "payment-cancelled",
+      component: PaymentCancelled,
+    },
+    { path: "/ticket/:id?", name: "ticket", component: Ticket },
     { path: "/all-tickets", name: "all-tickets", component: AllTickets },
     { path: "/auth", name: "auth", component: Auth },
     { path: "/login", name: "login", component: Login },

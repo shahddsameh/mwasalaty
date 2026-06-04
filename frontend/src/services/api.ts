@@ -152,3 +152,111 @@ export async function planRoute(
   }
   return data.itineraries.map(mapItinerary);
 }
+
+/* ------------------------------------------------------------------ *
+ * Payments + Ticketing (PayMob test checkout)
+ * ------------------------------------------------------------------ */
+
+export type TicketQrPayload = {
+  type: string;
+  ticketId: string;
+  signature: string;
+};
+
+export type TicketLegStatus = 'unused' | 'used' | 'refunded';
+
+export type TicketLeg = {
+  ticketLegId: string;
+  mode: string;
+  route?: { shortName?: string; longName?: string } | null;
+  from?: { name?: string };
+  to?: { name?: string };
+  fareAmount: number;
+  currency?: string;
+  status: TicketLegStatus;
+};
+
+export type Ticket = {
+  ticketId: string;
+  status: 'active' | 'used' | 'refunded' | 'partially_refunded';
+  createdAt?: string;
+  expiresAt?: string;
+  passenger?: { userId?: string; name?: string | null };
+  payment: {
+    paymentId?: string;
+    method: string;
+    status: string;
+    amount: number;
+    currency: string;
+    paymobOrderId?: string | number;
+    paymobTransactionId?: string | number;
+  };
+  qrPayload: TicketQrPayload;
+  legs: TicketLeg[];
+};
+
+export type CheckoutSessionResponse = {
+  sessionId: string;
+  checkoutUrl: string;
+};
+
+export type CheckoutLeg = {
+  legId: string;
+  mode: string;
+  route: { shortName?: string; longName?: string };
+  from: { name: string };
+  to: { name: string };
+  fareAmount: number;
+  currency: string;
+};
+
+export type CreateCheckoutPayload = {
+  planId: string;
+  itineraryId: string;
+  passenger: { userId: string; name: string; email?: string; phone?: string };
+  paymentBreakdown: {
+    fareAmount: number;
+    serviceFee: number;
+    totalAmount: number;
+    operatorReceivable: number;
+    platformCommission: number;
+    monetizationMode: string;
+    currency: string;
+  };
+  itinerary: { itineraryId: string; legs: CheckoutLeg[] };
+};
+
+async function readApiError(res: Response): Promise<string> {
+  const body = await res.json().catch(() => null);
+  return body?.error?.message ?? body?.message ?? `Request failed (${res.status}).`;
+}
+
+export async function createCheckoutSession(
+  payload: CreateCheckoutPayload,
+): Promise<CheckoutSessionResponse> {
+  const res = await fetch('/api/payments/checkout-session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return (await res.json()) as CheckoutSessionResponse;
+}
+
+export type CheckoutResult =
+  | { status: 'pending' }
+  | { status: 'ready'; ticket: Ticket };
+
+export async function getCheckoutSessionResult(sessionId: string): Promise<CheckoutResult> {
+  const res = await fetch(`/api/payments/checkout-session/${encodeURIComponent(sessionId)}/result`);
+  if (res.status === 202) return { status: 'pending' };
+  if (!res.ok) throw new Error(await readApiError(res));
+  const data = (await res.json()) as { ticket: Ticket };
+  return { status: 'ready', ticket: data.ticket };
+}
+
+export async function getTicket(ticketId: string): Promise<Ticket> {
+  const res = await fetch(`/api/tickets/${encodeURIComponent(ticketId)}`);
+  if (!res.ok) throw new Error(await readApiError(res));
+  return (await res.json()) as Ticket;
+}

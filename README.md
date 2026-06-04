@@ -1,11 +1,13 @@
+# Mwasalaty
 
-  # mwaslaty final verson
+This is a code bundle for the Mwasalaty Cairo public-transport PWA. The original frontend design is available at https://www.figma.com/design/xrIBn7o6xvlqa0FJKseLak/mwaslaty-final-verson.
 
-  This is a code bundle for mwaslaty final verson. The original project is available at https://www.figma.com/design/xrIBn7o6xvlqa0FJKseLak/mwaslaty-final-verson.
+## Running the code
 
-  ## Running the code
+### Frontend (`frontend/`)
 
-  Run `npm i` to install the dependencies.
+Run `pnpm install` to install the dependencies, then `pnpm dev` to start the development server (port 5173).
 
-  Run `npm run dev` to start the development server.
-  
+### Backend (`backend/`)
+
+Run `npm install` to install the dependencies, then `npm start` to start the API server (port 3000). Copy `backend/.env.example` to `backend/.env` and fill in your values first.

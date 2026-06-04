@@ -10,105 +10,103 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         <section class="lg:col-span-2 space-y-6">
           <Card title="Route Summary">
-            <InfoRow label="From" value="Tahrir Square" />
-            <InfoRow label="To" value="Cairo Airport" />
-            <InfoRow label="Duration" value="45 min" />
-            <div class="flex gap-2 mt-3">
+            <InfoRow label="From" :value="fromLabel" />
+            <InfoRow label="To" :value="toLabel" />
+            <InfoRow label="Trip" :value="`${ticketableLegs.length} leg(s)`" />
+            <div class="flex flex-wrap gap-2 mt-3">
               <span
-                v-for="mode in ['metro', 'bus']"
-                :key="mode"
+                v-for="(leg, i) in ticketableLegs"
+                :key="leg.legId ?? i"
                 class="px-3 py-1 bg-secondary rounded-full text-sm text-foreground"
               >
-                {{ mode }}
+                {{ modeLabel(leg) }}
               </span>
             </div>
           </Card>
 
-          <Card title="Passenger Information">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <AppInput label="Full Name" placeholder="Enter your full name" />
-              <AppInput
-                label="Phone Number"
-                placeholder="+20 XXX XXX XXXX"
-                type="tel"
-              />
-              <AppInput
-                label="Email (Optional)"
-                placeholder="your@email.com"
-                type="email"
-              />
+          <Card title="Legs">
+            <div class="space-y-3">
+              <div
+                v-for="(leg, i) in ticketableLegs"
+                :key="leg.legId ?? i"
+                class="flex items-center justify-between gap-3 p-3 bg-secondary rounded-lg"
+              >
+                <div class="min-w-0">
+                  <div class="font-display text-foreground">{{ modeLabel(leg) }}</div>
+                  <div class="text-sm text-muted-foreground truncate">
+                    {{ leg.from?.name }} -> {{ leg.to?.name }}
+                  </div>
+                </div>
+                <div class="font-display text-foreground whitespace-nowrap">
+                  {{ leg.fare?.amount ?? 0 }} {{ currency }}
+                </div>
+              </div>
             </div>
           </Card>
 
+          <Card title="Passenger Information">
+            <AppInput
+              v-model="passengerName"
+              label="Full Name"
+              placeholder="Enter your full name"
+            />
+          </Card>
+
           <Card title="Payment Method">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              <button
-                v-for="method in methods"
-                :key="method.value"
-                :class="methodClass(method.value)"
-                @click="paymentMethod = method.value"
-              >
-                <component
-                  :is="method.icon"
-                  class="w-6 h-6 text-primary mb-2"
-                />
-                <div class="font-display text-foreground">
-                  {{ method.label }}
-                </div>
-              </button>
-            </div>
-            <div v-if="paymentMethod === 'card'" class="space-y-4">
-              <AppInput label="Card Number" placeholder="XXXX XXXX XXXX XXXX" />
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <AppInput label="Expiry Date" placeholder="MM/YY" />
-                <AppInput label="CVV" placeholder="XXX" type="password" />
+            <div class="p-4 border-2 border-primary bg-secondary rounded-lg flex items-start gap-3">
+              <CreditCard class="w-6 h-6 text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <div class="font-display text-foreground">PayMob Secure Checkout</div>
+                <p class="text-sm text-muted-foreground mt-1">
+                  You'll be redirected to PayMob to complete your payment securely.
+                </p>
+                <span
+                  class="inline-block mt-2 px-2.5 py-1 rounded-full bg-warning-soft text-xs text-foreground"
+                >
+                  Test / Sandbox payment — MVP
+                </span>
               </div>
             </div>
-            <div
-              v-if="paymentMethod === 'instapay'"
-              class="p-4 bg-secondary rounded-lg text-sm text-muted-foreground"
-            >
-              You'll be redirected to InstaPay to complete your payment
-              securely.
-            </div>
           </Card>
+
+          <p
+            v-if="errorMessage"
+            class="p-3 bg-destructive/10 text-destructive rounded-lg text-sm"
+          >
+            {{ errorMessage }}
+          </p>
 
           <AppButton
             size="lg"
             class="w-full flex items-center justify-center gap-2"
-            :disabled="paymentSuccess"
+            :disabled="processing"
             @click="proceed"
           >
-            <Check v-if="paymentSuccess" class="w-5 h-5" />
-            <CreditCard v-else class="w-5 h-5" />
-            {{
-              paymentSuccess
-                ? "Payment Successful!"
-                : "Confirm Payment - 25 EGP"
-            }}
+            <Loader2 v-if="processing" class="w-5 h-5 animate-spin" />
+            <ShieldCheck v-else class="w-5 h-5" />
+            {{ processing ? "Preparing secure checkout…" : `Pay securely - ${total} ${currency}` }}
           </AppButton>
         </section>
 
         <aside class="space-y-6">
           <Card title="Fare Breakdown" sticky>
             <InfoRow
-              v-for="item in fareBreakdown"
-              :key="item.service"
-              :label="item.service"
-              :value="`${item.cost} EGP`"
+              v-for="leg in ticketableLegs"
+              :key="leg.legId"
+              :label="modeLabel(leg)"
+              :value="`${leg.fare?.amount ?? 0} ${currency}`"
               small
             />
             <div
               class="pt-4 border-t-2 border-border mt-4 flex items-center justify-between"
             >
               <span class="font-display text-lg">Total</span>
-              <span class="font-display text-3xl text-primary">25 EGP</span>
+              <span class="font-display text-3xl text-primary">{{ total }} {{ currency }}</span>
             </div>
             <div
               class="mt-4 p-3 bg-secondary rounded-lg text-sm text-muted-foreground"
             >
-              Includes all transport fees<br />Valid for 24 hours<br />Digital
-              QR ticket
+              Includes all transport fees<br />Valid for 24 hours<br />Digital QR ticket
             </div>
           </Card>
         </aside>
@@ -125,9 +123,7 @@
           You need to log in or create an account to book and save your tickets.
         </p>
         <div class="flex gap-3">
-          <AppButton class="flex-1" @click="router.push('/login')"
-            >Login</AppButton
-          >
+          <AppButton class="flex-1" @click="router.push('/login')">Login</AppButton>
           <AppButton
             variant="outline"
             class="flex-1"
@@ -144,31 +140,154 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, h, ref } from "vue";
+import { computed, defineComponent, h, ref } from "vue";
 import { useRouter } from "vue-router";
-import { Check, CreditCard, Smartphone, Wallet } from "@lucide/vue";
+import { CreditCard, Loader2, ShieldCheck } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import AppInput from "@/components/ui/AppInput.vue";
 import Modal from "@/components/ui/Modal.vue";
+import type { ApiRouteOption, ApiLeg } from "@/services/api";
+import { createCheckoutSession } from "@/services/api";
+import { getSelectedRoute } from "@/features/trip-planner/services/routeSearch";
 
 const router = useRouter();
-const paymentMethod = ref<"instapay" | "card" | "apple" | "cash">("instapay");
-const loginModalOpen = ref(false);
-const paymentSuccess = ref(false);
 const isLoggedIn = false;
 
-const fareBreakdown = [
-  { service: "Metro (Sadat -> Nasser)", cost: 8 },
-  { service: "Bus 356 (Nasser -> Airport)", cost: 15 },
-  { service: "Service Fee", cost: 2 },
-];
+const CHECKOUT_SESSION_KEY = "mwasalaty:checkout-session-id";
 
-const methods = [
-  { value: "instapay" as const, label: "InstaPay", icon: Smartphone },
-  { value: "card" as const, label: "Credit Card", icon: CreditCard },
-  { value: "apple" as const, label: "Apple Pay", icon: Smartphone },
-  { value: "cash" as const, label: "Pay on Board", icon: Wallet },
-];
+// A demo itinerary so /booking always works even without a planned route.
+const DEMO_ROUTE: ApiRouteOption = {
+  itineraryId: "itin_demo_001",
+  id: "itin_demo_001",
+  durationMinutes: 45,
+  totalDistanceMeters: 0,
+  transfers: 1,
+  totalFare: { amount: 30, currency: "EGP" },
+  summary: "Demo trip",
+  legs: [
+    {
+      legId: "leg_bus_14",
+      mode: "BUS",
+      from: { name: "Greek Hospital" },
+      to: { name: "Khedr Al Touny - Al Tayaran" },
+      distanceMeters: 0,
+      durationMinutes: 20,
+      startTime: "",
+      endTime: "",
+      route: { shortName: "14", longName: "First Settlement-Abou Al Reesh" },
+      instruction: "Take Bus 14",
+      fare: { amount: 15, currency: "EGP" },
+    },
+    {
+      legId: "leg_metro_line_2",
+      mode: "METRO",
+      from: { name: "Sadat" },
+      to: { name: "Cairo University" },
+      distanceMeters: 0,
+      durationMinutes: 25,
+      startTime: "",
+      endTime: "",
+      route: { shortName: "Line 2", longName: "Shubra El Kheima - El Mounib" },
+      instruction: "Take Metro Line 2",
+      fare: { amount: 15, currency: "EGP" },
+    },
+  ],
+  duration: "45 min",
+  cost: "30 EGP",
+  walkingDistance: "0 m",
+  steps: [],
+  detailSteps: [],
+};
+
+const selection = getSelectedRoute();
+const route = (selection.route as ApiRouteOption) ?? DEMO_ROUTE;
+const fromLabel =
+  (selection.start as string) ?? route.legs?.[0]?.from?.name ?? "Start";
+const toLabel =
+  (selection.destination as string) ??
+  route.legs?.[route.legs.length - 1]?.to?.name ??
+  "Destination";
+
+const ticketableLegs = computed<ApiLeg[]>(() =>
+  (route.legs ?? []).filter((l) => l.mode !== "WALK"),
+);
+const currency = computed(() => route.totalFare?.currency ?? "EGP");
+const total = computed(
+  () =>
+    route.totalFare?.amount ??
+    ticketableLegs.value.reduce((sum, l) => sum + (l.fare?.amount ?? 0), 0),
+);
+
+const passengerName = ref("");
+const processing = ref(false);
+const errorMessage = ref("");
+const loginModalOpen = ref(false);
+
+function modeLabel(leg: ApiLeg) {
+  const name = leg.route?.shortName ?? leg.route?.longName;
+  const mode = leg.mode.charAt(0) + leg.mode.slice(1).toLowerCase();
+  return name ? `${mode} ${name}` : mode;
+}
+
+async function startCheckout() {
+  errorMessage.value = "";
+  if (!passengerName.value.trim()) {
+    errorMessage.value = "Please enter the passenger's full name.";
+    return;
+  }
+  processing.value = true;
+  try {
+    const res = await createCheckoutSession({
+      planId: `plan_${route.itineraryId}`,
+      itineraryId: route.itineraryId,
+      passenger: { userId: "guest", name: passengerName.value.trim() },
+      paymentBreakdown: {
+        fareAmount: total.value,
+        serviceFee: 0,
+        totalAmount: total.value,
+        operatorReceivable: total.value,
+        platformCommission: 0,
+        monetizationMode: "ADOPTION_FREE",
+        currency: currency.value,
+      },
+      itinerary: {
+        itineraryId: route.itineraryId,
+        legs: ticketableLegs.value.map((l) => ({
+          legId: l.legId,
+          mode: l.mode,
+          route: l.route ?? { shortName: l.mode, longName: l.mode },
+          from: { name: l.from?.name ?? "" },
+          to: { name: l.to?.name ?? "" },
+          fareAmount: l.fare?.amount ?? 0,
+          currency: l.fare?.currency ?? currency.value,
+        })),
+      },
+    });
+    try {
+      sessionStorage.setItem(CHECKOUT_SESSION_KEY, res.sessionId);
+    } catch {
+      // sessionStorage may be unavailable; success page falls back to the URL param.
+    }
+    window.location.href = res.checkoutUrl;
+  } catch (err) {
+    errorMessage.value =
+      err instanceof Error ? err.message : "Could not start checkout. Please try again.";
+    processing.value = false;
+  }
+}
+
+function proceed() {
+  if (isLoggedIn) {
+    startCheckout();
+  } else {
+    loginModalOpen.value = true;
+  }
+}
+
+function payAsGuest() {
+  loginModalOpen.value = false;
+  startCheckout();
+}
 
 const Card = defineComponent({
   props: { title: String, sticky: Boolean },
@@ -210,29 +329,4 @@ const InfoRow = defineComponent({
       h("span", { class: "font-display text-foreground text-right" }, p.value),
     ]),
 });
-
-function methodClass(value: string) {
-  return [
-    "p-4 min-h-[110px] flex flex-col items-start justify-center rounded-lg border-2 transition-all",
-    paymentMethod.value === value
-      ? "border-primary bg-secondary"
-      : "border-border hover:border-primary",
-  ];
-}
-
-function handlePayment() {
-  setTimeout(() => {
-    paymentSuccess.value = true;
-    setTimeout(() => router.push("/ticket"), 900);
-  }, 700);
-}
-
-function proceed() {
-  isLoggedIn ? handlePayment() : (loginModalOpen.value = true);
-}
-
-function payAsGuest() {
-  loginModalOpen.value = false;
-  handlePayment();
-}
 </script>

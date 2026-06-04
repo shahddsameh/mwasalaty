@@ -3,3 +3,11 @@ node_modules
 dist
 build
 .vite
+otp-cairo/
+generated-reports/
+.DS_Store
+
+.env
+backend/.env
+backend/node_modules/
+backend/dist/

@@ -11,6 +11,6 @@ import { RouterView, useRoute } from "vue-router";
 import Header from "../components/layout/Header.vue";
 
 const route = useRoute();
-const headerlessRoutes = new Set(["live-navigation", "ticket"]);
+const headerlessRoutes = new Set(["live-navigation", "ticket", "payment-success"]);
 const showHeader = computed(() => !headerlessRoutes.has(String(route.name)));
 </script>

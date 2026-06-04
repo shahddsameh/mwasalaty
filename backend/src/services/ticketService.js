@@ -109,11 +109,14 @@ export function createTicket(body) {
       name: passenger.name ?? null,
     },
     payment: {
-      paymentId: `pay_sim_${shortUUID()}`,
-      method: 'SIMULATED',
+      paymentId: `pay_${shortUUID()}`,
+      method: payment.method,
       status: 'paid',
       amount: payment.amount,
       currency: payment.currency,
+      ...(payment.stripeCheckoutSessionId && { stripeCheckoutSessionId: payment.stripeCheckoutSessionId }),
+      ...(payment.stripePaymentIntentId   && { stripePaymentIntentId:   payment.stripePaymentIntentId }),
+      ...(payment.paymentBreakdown        && { paymentBreakdown:        payment.paymentBreakdown }),
     },
     qrPayload: {
       ticketId,
@@ -320,7 +323,7 @@ export function scanValidate(qrPayload, scannerProfileId) {
   };
 }
 
-export function refundTicket(ticketId, legIds) {
+export function refundTicket(ticketId, legIds, refundMeta = {}) {
   const ticket = getTicket(ticketId);
   if (!ticket) {
     throw { code: ErrorCodes.TICKET_NOT_FOUND, message: `Ticket '${ticketId}' not found`, details: { ticketId } };
@@ -379,9 +382,11 @@ export function refundTicket(ticketId, legIds) {
   }
 
   const refundedAt = now.toISOString();
+  const hasMeta = Object.keys(refundMeta).length > 0;
   refundableLegs.forEach(leg => {
     leg.status = 'refunded';
     leg.refundedAt = refundedAt;
+    if (hasMeta) Object.assign(leg, refundMeta);
   });
 
   const refundAmount = Math.round(refundableLegs.reduce((sum, l) => sum + l.fareAmount, 0) * 100) / 100;
@@ -403,6 +408,7 @@ export function refundTicket(ticketId, legIds) {
       mode: l.mode,
       fareAmount: l.fareAmount,
       refundedAt: l.refundedAt,
+      ...(l.stripeRefundId && { stripeRefundId: l.stripeRefundId }),
     })),
     refundAmount,
     currency: ticket.payment.currency,

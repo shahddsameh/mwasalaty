@@ -1,17 +1,22 @@
 import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
-// import planRouter from './src/routes/plan.js';
 import ticketRouter from './src/routes/ticket.js';
+import paymentRouter from './src/routes/payment.js';
+import { webhookHandler } from './src/controllers/paymentController.js';
 
 const app = express();
 
-dotenv.config();
-
 app.use(cors());
+
+// Stripe webhook must receive raw body — mount BEFORE express.json()
+app.post('/api/payments/stripe-webhook', express.raw({ type: 'application/json' }), webhookHandler);
+
 app.use(express.json());
-// app.use('/api', planRouter);
 app.use('/api', ticketRouter);
+app.use('/api', paymentRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

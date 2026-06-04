@@ -128,25 +128,37 @@ export async function planRoute(
   const date = now.toISOString().slice(0, 10);
   const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
+  const payload = {
+    from: { label: fromLabel },
+    to: { label: toLabel },
+    date,
+    time,
+    preferences: {
+      modes: ['WALK', 'BUS', 'SUBWAY'],
+      optimizeFor: FILTER_TO_OPTIMIZE[filter] ?? 'quickest',
+    },
+  };
+
+  if (import.meta.env.DEV) {
+    console.log('PLAN PAYLOAD SENT TO BACKEND:', payload);
+  }
+
   const res = await fetch('/api/plan', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      from: { label: fromLabel },
-      to: { label: toLabel },
-      date,
-      time,
-      preferences: {
-        modes: ['WALK', 'BUS', 'SUBWAY'],
-        optimizeFor: FILTER_TO_OPTIMIZE[filter] ?? 'quickest',
-      },
-    }),
+    body: JSON.stringify(payload),
   });
   if (!res.ok) {
     const error = await res.json().catch(() => null);
     throw new Error(error?.error?.message ?? error?.message ?? 'Could not plan this route.');
   }
   const data = (await res.json()) as ApiPlanResponse;
+
+  if (import.meta.env.DEV) {
+    console.log('PLAN RESPONSE FROM BACKEND:', data);
+    console.log('RESPONSE ITINERARIES:', data?.itineraries);
+  }
+
   if (!data.itineraries?.length) {
     throw new Error('No routes were returned for this search.');
   }

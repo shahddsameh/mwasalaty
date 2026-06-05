@@ -48,7 +48,7 @@ Client → POST/GET /api/*
 Both stores are **in-memory Maps** — data is lost on restart. There is no database.
 
 - `ticketStore.js` — `saveTicket / getTicket / updateTicket`
-- `scannerProfileStore.js` — three hardcoded demo profiles (Bus 14, Bus 108, Metro Line 2); `getAllProfiles / getProfileById`
+- `scannerProfileStore.js` — hardcoded demo profiles; `getAllProfiles / getProfileById`. Each profile is **single-mode** (`scanValidate` matches `leg.mode === profile.mode`). Generic scanners: `scanner_bus_001` (BUS), `scanner_subway_001` (SUBWAY); plus route-specific demos `scanner_bus_14`, `scanner_bus_108`, `scanner_subway_m2`. Only **BUS** and **SUBWAY** exist in the graph data (METRO is treated as SUBWAY; no TRAM/RAIL/MICROBUS). WALK legs are never validated.
 
 ### Ticket & leg lifecycle
 
@@ -85,7 +85,7 @@ Paid tickets store `payment.method = 'PAYMOB_TEST'`, `payment.status = 'paid'`, 
 
 ### Transit modes
 
-`TRANSIT_MODES = { BUS, METRO, SUBWAY, TRAM, RAIL, MICROBUS }`. Only these modes produce ticketable legs; `WALK` legs are filtered out at creation time. SUBWAY legs carry tier-based station limits (Tier 1: 1–9, Tier 2: 10–16, Tier 3: 17+).
+`TRANSIT_MODES = { BUS, METRO, SUBWAY, TRAM, RAIL, MICROBUS }` is the permissive allowlist for ticketable legs; `WALK` legs are filtered out at creation time. SUBWAY legs carry tier-based station limits (Tier 1: 1–9, Tier 2: 10–16, Tier 3: 17+). **In practice the live OSM+GTFS graph only contains `BUS` and `SUBWAY`** (metro). `METRO` is treated as `SUBWAY` (the GTFS term); the app standardizes on `SUBWAY`. Local geocoding (`geocodingService.js` `LOCAL_PLACES`) and the frontend `placeSuggestions` are derived from the graph's covered stops so every suggestion can be routed.
 
 ### Environment variables (`.env` in `backend/`)
 

@@ -130,6 +130,7 @@ import { ArrowLeft, MapPin, SlidersHorizontal } from "@lucide/vue";
 import RouteCard from "@/components/route/RouteCard.vue";
 import { planRoute, type ApiRouteOption } from "@/services/api";
 import {
+  getPlaceCoords,
   getSavedRouteSearch,
   normalizeFilter,
   saveRouteSearch,
@@ -179,7 +180,10 @@ onMounted(async () => {
   errorMessage.value = "";
 
   try {
-    apiRoutes.value = await planRoute(start, destination, sortBy.value);
+    apiRoutes.value = await planRoute(start, destination, sortBy.value, {
+      fromCoords: getPlaceCoords(start),
+      toCoords: getPlaceCoords(destination),
+    });
   } catch (error) {
     apiRoutes.value = [];
     errorMessage.value =

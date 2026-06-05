@@ -19,6 +19,7 @@ export type RecentRouteSearch = {
 const STORAGE_KEY = "mwasalaty:last-route-search";
 const SELECTED_ROUTE_KEY = "mwasalaty:selected-route";
 const RECENT_SEARCHES_KEY = "mwasalaty:recent-route-searches";
+const PLACE_COORDS_KEY = "mwasalaty:place-coords";
 const RECENT_SEARCH_LIMIT = 8;
 const DEFAULT_ROUTE_SEARCH: RouteSearch = {
   start: "",
@@ -132,6 +133,34 @@ export function getRecentRouteSearches(): RecentRouteSearch[] {
     .slice(0, RECENT_SEARCH_LIMIT);
 
   return currentRecentSearches;
+}
+
+export type PlaceCoords = { lat: number; lng: number };
+
+// Coordinates for picked places (currently used by "Use current location").
+// Keyed by the lowercased label so plan calls can attach lat/lng when available.
+export function setPlaceCoords(label: string, coords: PlaceCoords) {
+  const key = label.trim().toLowerCase();
+  if (!key) return;
+  const map = readSessionValue<Record<string, PlaceCoords>>(PLACE_COORDS_KEY) as Record<
+    string,
+    PlaceCoords
+  >;
+  map[key] = coords;
+  saveSessionValue(PLACE_COORDS_KEY, map);
+}
+
+export function getPlaceCoords(label: string | undefined): PlaceCoords | undefined {
+  if (!label) return undefined;
+  const key = label.trim().toLowerCase();
+  const map = readSessionValue<Record<string, PlaceCoords>>(PLACE_COORDS_KEY) as Record<
+    string,
+    PlaceCoords
+  >;
+  const coords = map?.[key];
+  return coords && typeof coords.lat === "number" && typeof coords.lng === "number"
+    ? coords
+    : undefined;
 }
 
 export function normalizeFilter(value: unknown): RouteSearch["filter"] {

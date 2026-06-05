@@ -26,10 +26,12 @@
                   <template #icon><MapPin class="w-5 h-5" /></template>
                 </PlaceAutocomplete>
                 <button
-                  class="mt-2 text-sm text-primary hover:text-primary-hover transition-colors flex items-center gap-1.5"
-                  @click="start = 'Current Location'"
+                  class="mt-2 text-sm text-primary hover:text-primary-hover transition-colors flex items-center gap-1.5 disabled:opacity-60"
+                  :disabled="locating"
+                  @click="useCurrentLocation"
                 >
-                  <MapPinned class="w-4 h-4" /> Use current location
+                  <MapPinned class="w-4 h-4" />
+                  {{ locating ? "Getting your location…" : "Use current location" }}
                 </button>
               </div>
 
@@ -194,6 +196,7 @@ import {
   getRecentRouteSearches,
   saveRecentRouteSearch,
   saveRouteSearch,
+  setPlaceCoords,
   type RecentRouteSearch,
 } from "@/features/trip-planner/services/routeSearch";
 
@@ -202,7 +205,34 @@ const start = ref("");
 const destination = ref("");
 const startError = ref("");
 const destinationError = ref("");
+const locating = ref(false);
 const filter = ref<"fastest" | "cheapest" | "comfortable">("fastest");
+
+function useCurrentLocation() {
+  if (!("geolocation" in navigator)) {
+    startError.value = "Location isn't available on this device.";
+    return;
+  }
+  locating.value = true;
+  startError.value = "";
+  // The browser shows its own permission prompt here.
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const { latitude, longitude } = position.coords;
+      setPlaceCoords("Current Location", { lat: latitude, lng: longitude });
+      start.value = "Current Location";
+      locating.value = false;
+    },
+    (error) => {
+      locating.value = false;
+      startError.value =
+        error.code === error.PERMISSION_DENIED
+          ? "Location permission denied. Enter a starting point instead."
+          : "Couldn't get your location. Enter a starting point instead.";
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
+  );
+}
 
 const filters = [
   { value: "fastest" as const, label: "Fastest", icon: Clock },

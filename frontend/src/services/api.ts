@@ -119,18 +119,30 @@ const FILTER_TO_OPTIMIZE: Record<string, string> = {
   comfortable: 'most_comfortable',
 };
 
+export type PlaceCoords = { lat: number; lng: number };
+
 export async function planRoute(
   fromLabel: string,
   toLabel: string,
   filter: 'fastest' | 'cheapest' | 'comfortable' = 'fastest',
+  coords: { fromCoords?: PlaceCoords; toCoords?: PlaceCoords } = {},
 ): Promise<ApiRouteOption[]> {
   const now = new Date();
   const date = now.toISOString().slice(0, 10);
   const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
+  // Send lat/lng when we have them (e.g. current location); the backend accepts
+  // either coordinates or a label it geocodes server-side.
+  const from = coords.fromCoords
+    ? { lat: coords.fromCoords.lat, lng: coords.fromCoords.lng, label: fromLabel }
+    : { label: fromLabel };
+  const to = coords.toCoords
+    ? { lat: coords.toCoords.lat, lng: coords.toCoords.lng, label: toLabel }
+    : { label: toLabel };
+
   const payload = {
-    from: { label: fromLabel },
-    to: { label: toLabel },
+    from,
+    to,
     date,
     time,
     preferences: {

@@ -84,24 +84,32 @@
             >
               Your recent routes will appear here.
             </p>
-            <button
+            <div
               v-for="search in recentSearches"
               :key="`${search.from}-${search.to}-${search.searchedAt}`"
-              class="w-full p-3 rounded-lg border border-border hover:border-primary hover:bg-secondary transition-all text-left"
-              @click="useSearch(search)"
+              class="flex items-center rounded-lg border border-border hover:border-primary hover:bg-secondary transition-all"
             >
-              <div class="flex items-center justify-between">
-                <div>
-                  <div class="text-foreground text-sm">
-                    {{ search.from }} -> {{ search.to }}
-                  </div>
-                  <div class="text-xs text-muted-foreground mt-0.5">
-                    {{ formatRecentTime(search.searchedAt) }}
-                  </div>
+              <button
+                type="button"
+                class="min-w-0 flex-1 p-3 text-left"
+                @click="useSearch(search)"
+              >
+                <div class="text-foreground text-sm truncate">
+                  {{ search.from }} -> {{ search.to }}
                 </div>
-                <TrendingUp class="w-4 h-4 text-muted-foreground" />
-              </div>
-            </button>
+                <div class="text-xs text-muted-foreground mt-0.5">
+                  {{ formatRecentTime(search.searchedAt) }}
+                </div>
+              </button>
+              <button
+                type="button"
+                class="mr-2 shrink-0 p-2 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                aria-label="Delete recent search"
+                @click="deleteSearch(search)"
+              >
+                <Trash2 class="w-4 h-4" />
+              </button>
+            </div>
           </Panel>
         </div>
 
@@ -186,13 +194,14 @@ import {
   Sparkles,
   Star,
   Target,
+  Trash2,
   Triangle,
-  TrendingUp,
 } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import PlaceAutocomplete from "@/features/home/components/PlaceAutocomplete.vue";
 import { placeSuggestions } from "@/features/home/services/placeSuggestions";
 import {
+  deleteRecentRouteSearch,
   getRecentRouteSearches,
   saveRecentRouteSearch,
   saveRouteSearch,
@@ -356,6 +365,11 @@ function useSearch(search: RecentRouteSearch) {
   filter.value = search.filter;
   startError.value = "";
   destinationError.value = "";
+}
+
+function deleteSearch(search: RecentRouteSearch) {
+  deleteRecentRouteSearch(search);
+  recentSearches.value = getRecentRouteSearches();
 }
 
 function formatRecentTime(searchedAt: number) {

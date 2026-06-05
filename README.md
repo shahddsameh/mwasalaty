@@ -1,1 +1,1 @@
-﻿# Mwasalatyy
+﻿# Mwasalaty

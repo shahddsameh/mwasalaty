@@ -5,7 +5,7 @@
     :headline="$t('result.valid.headline')"
     :support="support"
     :primary-action="{ label: $t('common.nextScan') }"
-    :auto-advance-ms="2500"
+    :auto-advance-ms="4000"
     @primary="goNext"
     @auto-advance="goNext"
   />

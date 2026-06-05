@@ -15,7 +15,7 @@
           <button
             v-for="leg in candidates"
             :key="leg.ticketLegId"
-            class="tap-target rounded-lg border border-white/20 bg-white p-4 text-start text-foreground shadow-lg transition hover:border-primary hover:bg-primary-soft focus-ring"
+            class="tap-target rounded-lg border border-white/20 bg-card p-4 text-start text-card-foreground shadow-lg transition hover:border-primary hover:bg-primary-soft focus-ring"
             :disabled="validating === leg.ticketLegId"
             @click="chooseLeg(leg.ticketLegId)"
           >

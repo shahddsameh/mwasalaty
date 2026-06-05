@@ -1,6 +1,7 @@
 <template>
-  <main class="app-shell bg-surface-dark text-white">
-    <section class="mx-auto flex min-h-[calc(100dvh-2rem)] w-full max-w-5xl flex-col gap-4">
+  <main class="app-shell bottom-nav-offset bg-surface-dark text-white">
+    <AppNav />
+    <section class="mx-auto flex w-full max-w-5xl flex-col gap-4">
       <header class="flex items-center justify-between gap-3">
         <div>
           <p class="text-sm font-bold text-primary">{{ $t("scanner.title") }}</p>
@@ -38,7 +39,7 @@
           </div>
         </div>
 
-        <div v-if="processing" class="absolute inset-x-5 bottom-5 rounded-lg bg-white px-4 py-3 text-center text-lg font-black text-foreground shadow-lg">
+        <div v-if="processing" class="absolute inset-x-5 bottom-5 rounded-lg bg-card px-4 py-3 text-center text-lg font-black text-card-foreground shadow-lg">
           {{ $t("scanner.processing") }}
         </div>
 
@@ -46,12 +47,6 @@
           {{ flash }}
         </div>
       </section>
-
-      <footer class="grid grid-cols-3 gap-2 text-center text-sm">
-        <RouterLink to="/history" class="tap-target rounded-lg bg-white/10 px-3 py-3 font-bold focus-ring">{{ $t("common.history") }}</RouterLink>
-        <RouterLink to="/sync" class="tap-target rounded-lg bg-white/10 px-3 py-3 font-bold focus-ring">{{ $t("common.sync") }}</RouterLink>
-        <RouterLink to="/account" class="tap-target rounded-lg bg-white/10 px-3 py-3 font-bold focus-ring">{{ $t("common.account") }}</RouterLink>
-      </footer>
     </section>
   </main>
 </template>
@@ -61,6 +56,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import AppButton from "@/components/ui/AppButton.vue";
+import AppNav from "@/components/shared/AppNav.vue";
 import { useCamera } from "@/features/scanner/composables/useCamera";
 import { decodeFromVideo } from "@/features/scanner/services/scanFrame";
 import { handleDecodedText } from "@/features/scanner/services/scanOrchestrator";

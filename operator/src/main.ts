@@ -1,11 +1,13 @@
 import { createApp } from "vue";
 import App from "@/app/App.vue";
 import { router } from "@/app/router";
-import { i18n, setLocale } from "@/i18n";
+import { getStoredLocale, i18n, setLocale } from "@/i18n";
 import { installSyncOnReconnect } from "@/services/sync";
+import { getStoredTheme, setTheme } from "@/services/theme";
 import "@/styles/index.css";
 
-setLocale("ar");
+setLocale(getStoredLocale());
+setTheme(getStoredTheme());
 installSyncOnReconnect();
 
 createApp(App).use(router).use(i18n).mount("#app");

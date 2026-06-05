@@ -1,11 +1,11 @@
 <template>
-  <main class="app-shell">
+  <main class="app-shell bottom-nav-offset">
     <AppNav />
     <section class="mx-auto grid w-full max-w-5xl gap-4">
       <header class="field-panel p-5">
         <p class="text-sm font-bold text-muted-foreground">{{ $t("ticket.title") }}</p>
         <h1 class="mt-2 break-all text-3xl font-black">{{ ticket?.ticketId ?? ticketId ?? $t("common.dash") }}</h1>
-        <p v-if="!isOnline" class="mt-3 rounded-lg bg-slate-100 p-3 text-sm font-semibold text-slate-700">
+        <p v-if="!isOnline" class="mt-3 rounded-lg bg-muted p-3 text-sm font-semibold text-muted-foreground">
           {{ $t("ticket.offline") }}
         </p>
       </header>

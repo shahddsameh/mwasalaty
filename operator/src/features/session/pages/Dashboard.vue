@@ -1,5 +1,5 @@
 <template>
-  <main class="app-shell">
+  <main class="app-shell bottom-nav-offset">
     <AppNav />
     <section class="mx-auto grid w-full max-w-5xl gap-4">
       <header class="rounded-lg bg-surface-dark p-5 text-white shadow-lg">

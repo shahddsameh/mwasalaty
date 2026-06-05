@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="!isOnline"
-    class="sticky top-0 z-40 mb-4 rounded-lg border border-slate-300 bg-slate-700 px-4 py-3 text-white shadow-lg"
+    class="sticky top-0 z-40 mb-4 rounded-lg border border-surface-dark-border bg-surface-dark-muted px-4 py-3 text-white shadow-lg"
     aria-live="polite"
   >
     <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3">

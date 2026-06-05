@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: light;
   --font-size: 16px;
   --background: #f8fafc;
   --foreground: #0f172a;
@@ -46,6 +47,32 @@
   --outcome-neutral: #0f172a;
   --outcome-slate: #475569;
   --radius: 0.5rem;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --card: #1e293b;
+  --card-foreground: #f1f5f9;
+  --primary-soft: #422006;
+  --secondary: #1e293b;
+  --secondary-foreground: #f1f5f9;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent-foreground: #f1f5f9;
+  --success-soft: #052e25;
+  --warning-soft: #3a2008;
+  --danger-soft: #3a0d0d;
+  --border: #334155;
+  --border-strong: #475569;
+  --surface-hover: #334155;
+  --surface-pressed: #475569;
+  --surface-dark: #1e293b;
+  --surface-dark-muted: #334155;
+  --surface-dark-border: #475569;
+  --outcome-neutral: #f1f5f9;
+  --outcome-slate: #cbd5e1;
 }
 
 @theme inline {
@@ -108,7 +135,6 @@
     @apply bg-background text-foreground;
     min-width: 320px;
     margin: 0;
-    color-scheme: light;
     font-family: Tahoma, "Segoe UI", system-ui, sans-serif;
   }
 
@@ -133,6 +159,24 @@
 
   .field-panel {
     @apply rounded-lg border border-border bg-card shadow-sm;
+  }
+
+  .bottom-nav-offset {
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+  }
+
+  .bottom-nav-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  @media (min-width: 768px) {
+    .bottom-nav-offset {
+      padding-bottom: 0;
+    }
+
+    .bottom-nav-safe {
+      padding-bottom: 0;
+    }
   }
 
   .focus-ring {

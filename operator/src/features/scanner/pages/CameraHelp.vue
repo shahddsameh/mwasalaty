@@ -1,5 +1,5 @@
 <template>
-  <main class="app-shell">
+  <main class="app-shell bottom-nav-offset">
     <AppNav />
     <section class="mx-auto grid w-full max-w-3xl gap-4">
       <header class="field-panel p-5">
@@ -13,7 +13,7 @@
         <li class="field-panel p-4 font-bold">{{ $t("cameraHelp.step3") }}</li>
       </ol>
 
-      <p v-if="!isOnline" class="rounded-lg border border-slate-300 bg-slate-100 p-4 font-semibold text-slate-700">
+      <p v-if="!isOnline" class="rounded-lg border border-border bg-muted p-4 font-semibold text-muted-foreground">
         {{ $t("cameraHelp.offline") }}
       </p>
 

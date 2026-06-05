@@ -18,7 +18,7 @@
           {{ $t("profile.partial") }}
         </div>
 
-        <div v-if="!isOnline" class="mb-4 rounded-lg border border-slate-300 bg-slate-100 p-3 text-sm font-semibold text-slate-700">
+        <div v-if="!isOnline" class="mb-4 rounded-lg border border-border bg-muted p-3 text-sm font-semibold text-muted-foreground">
           {{ $t("profile.offline") }}
         </div>
 

@@ -1,11 +1,11 @@
 <template>
-  <main class="app-shell">
+  <main class="app-shell bottom-nav-offset">
     <AppNav />
     <section class="mx-auto grid w-full max-w-5xl gap-4">
       <header class="field-panel p-5">
         <p class="text-sm font-bold text-muted-foreground">{{ $t("syncQueue.title") }}</p>
         <h1 class="mt-2 text-3xl font-black">{{ scans.length }}</h1>
-        <p v-if="!isOnline" class="mt-3 rounded-lg bg-slate-100 p-3 text-sm font-semibold text-slate-700">
+        <p v-if="!isOnline" class="mt-3 rounded-lg bg-muted p-3 text-sm font-semibold text-muted-foreground">
           {{ $t("syncQueue.offline") }}
         </p>
       </header>
@@ -110,7 +110,7 @@ function statusTone(scan: QueuedScan) {
   if (scan.discrepancy) return "bg-warning-soft text-warning";
   if (scan.syncState === "synced") return "bg-success-soft text-success";
   if (scan.syncState === "failed") return "bg-danger-soft text-destructive";
-  return "bg-slate-100 text-slate-700";
+  return "bg-muted text-muted-foreground";
 }
 
 onMounted(() => {

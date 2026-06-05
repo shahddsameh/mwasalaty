@@ -87,6 +87,18 @@ Paid tickets store `payment.method = 'PAYMOB_TEST'`, `payment.status = 'paid'`, 
 
 `TRANSIT_MODES = { BUS, METRO, SUBWAY, TRAM, RAIL, MICROBUS }` is the permissive allowlist for ticketable legs; `WALK` legs are filtered out at creation time. SUBWAY legs carry tier-based station limits (Tier 1: 1–9, Tier 2: 10–16, Tier 3: 17+). **In practice the live OSM+GTFS graph only contains `BUS` and `SUBWAY`** (metro). `METRO` is treated as `SUBWAY` (the GTFS term); the app standardizes on `SUBWAY`. Local geocoding (`geocodingService.js` `LOCAL_PLACES`) and the frontend `placeSuggestions` are derived from the graph's covered stops so every suggestion can be routed.
 
+## Operator app
+
+`operator/` is a separate Vue 3 + TypeScript + Tailwind PWA for bus and subway operators.
+It consumes the existing scanner endpoints only: `GET /api/scanner-profiles`,
+`POST /api/tickets/scan/validate`, `POST /api/tickets/:id/legs/:legId/validate`, and
+`GET /api/tickets/:id`. It does not require backend changes.
+
+The app stores the selected scanner profile and shift tally in `localStorage`, and stores
+offline scanned ticket payloads in IndexedDB via `idb-keyval`. Offline scans are never
+shown as green admit decisions; they are queued as `unverified` and reconciled when the
+browser returns online. Run it with `pnpm --filter operator dev` on port 5174.
+
 ### Environment variables (`.env` in `backend/`)
 
 | Variable | Default | Purpose |
@@ -100,3 +112,12 @@ Paid tickets store `payment.method = 'PAYMOB_TEST'`, `payment.status = 'paid'`, 
 | `PAYMOB_HMAC_SECRET` | — | Verifies webhook callbacks (HMAC-SHA512) |
 | `PAYMOB_API_KEY` | — | Only needed for refunds (legacy auth token) |
 | `OTP_GRAPHQL_URL` | `http://localhost:8080/otp/…` | OpenTripPlanner endpoint (plan router, currently commented out) |
+
+<!-- SPECKIT START -->
+## Active Spec Kit plan
+
+- **001-operator-scanner-pwa** — Operator Ticket-Scanner PWA (a new `operator/` PWA on the
+  Vue 3 + TS + Tailwind stack; consumes existing backend endpoints, no backend changes).
+  Plan: `specs/001-operator-scanner-pwa/plan.md`
+<!-- SPECKIT END -->
+

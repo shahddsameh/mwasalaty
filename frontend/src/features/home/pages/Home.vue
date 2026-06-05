@@ -115,9 +115,71 @@
 
         <div class="space-y-6">
           <Panel title="Saved Places" :icon="Star">
+            <div class="flex gap-2">
+              <button
+                type="button"
+                class="flex-1 rounded-lg border border-border px-3 py-2 text-sm text-foreground hover:border-primary hover:bg-secondary transition-all"
+                @click="openSavePlace('destination')"
+              >
+                Save destination
+              </button>
+              <button
+                type="button"
+                class="rounded-lg border border-border p-2 text-muted-foreground hover:border-primary hover:text-primary transition-all"
+                aria-label="Save starting point"
+                @click="openSavePlace('start')"
+              >
+                <Plus class="w-4 h-4" />
+              </button>
+            </div>
+            <div
+              v-if="savingPlace"
+              class="rounded-lg border border-border bg-muted p-3 space-y-3"
+            >
+              <input
+                v-model="newPlaceName"
+                class="w-full px-3 py-2 bg-card border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                placeholder="Place name"
+              />
+              <PlaceAutocomplete
+                v-model="newPlaceAddress"
+                placeholder="Address or location"
+                :suggestions="placeSuggestions"
+              />
+              <div class="grid grid-cols-4 gap-2">
+                <button
+                  v-for="type in placeTypes"
+                  :key="type.value"
+                  type="button"
+                  :class="placeTypeClass(type.value)"
+                  @click="newPlaceType = type.value"
+                >
+                  {{ type.label }}
+                </button>
+              </div>
+              <p v-if="savePlaceError" class="text-sm text-destructive">
+                {{ savePlaceError }}
+              </p>
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  class="flex-1 rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground hover:bg-primary-hover transition-colors"
+                  @click="addSavedPlace"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  class="flex-1 rounded-lg border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  @click="closeSavePlace"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
             <button
               v-for="place in savedPlaces"
-              :key="place.name"
+              :key="place.id"
               class="w-full p-3 rounded-lg border border-border hover:border-primary hover:bg-secondary transition-all text-left"
               @click="destination = place.address"
             >
@@ -127,7 +189,7 @@
                   :style="{ backgroundColor: place.softColor }"
                 >
                   <component
-                    :is="place.icon"
+                    :is="savedPlaceIcon(place.iconKey)"
                     class="w-4 h-4"
                     :style="{ color: place.color }"
                   />
@@ -190,16 +252,24 @@ import {
   MapPin,
   MapPinned,
   Plane,
+  Plus,
   ShoppingBag,
   Sparkles,
   Star,
   Target,
   Trash2,
+  Train,
   Triangle,
 } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import PlaceAutocomplete from "@/features/home/components/PlaceAutocomplete.vue";
 import { placeSuggestions } from "@/features/home/services/placeSuggestions";
+import {
+  getSavedPlaces,
+  savePlace,
+  type SavedPlaceIconKey,
+  type SavedPlaceType,
+} from "@/features/home/services/savedPlaces";
 import {
   deleteRecentRouteSearch,
   getRecentRouteSearches,
@@ -216,6 +286,11 @@ const startError = ref("");
 const destinationError = ref("");
 const locating = ref(false);
 const filter = ref<"fastest" | "cheapest" | "comfortable">("fastest");
+const savingPlace = ref(false);
+const newPlaceName = ref("");
+const newPlaceAddress = ref("");
+const newPlaceType = ref<SavedPlaceType>("other");
+const savePlaceError = ref("");
 
 function useCurrentLocation() {
   if (!("geolocation" in navigator)) {
@@ -250,29 +325,13 @@ const filters = [
 ];
 
 const recentSearches = ref<RecentRouteSearch[]>(getRecentRouteSearches());
+const savedPlaces = ref(getSavedPlaces());
 
-const savedPlaces = [
-  {
-    name: "Home",
-    address: "Nasr City, Cairo",
-    icon: HomeIcon,
-    color: "var(--place-home)",
-    softColor: "var(--place-home-soft)",
-  },
-  {
-    name: "Work",
-    address: "Downtown Cairo",
-    icon: Briefcase,
-    color: "var(--place-work)",
-    softColor: "var(--place-work-soft)",
-  },
-  {
-    name: "Gym",
-    address: "Maadi, Cairo",
-    icon: Dumbbell,
-    color: "var(--place-gym)",
-    softColor: "var(--place-gym-soft)",
-  },
+const placeTypes = [
+  { value: "home" as const, label: "Home" },
+  { value: "work" as const, label: "Work" },
+  { value: "school" as const, label: "School" },
+  { value: "other" as const, label: "Other" },
 ];
 
 const popularDestinations = [
@@ -357,6 +416,58 @@ function filterClass(value: string) {
       ? "border-primary bg-secondary text-primary"
       : "border-border text-muted-foreground hover:border-primary",
   ];
+}
+
+function placeTypeClass(value: SavedPlaceType) {
+  return [
+    "flex min-h-9 items-center justify-center rounded-lg border px-1 py-2 text-center text-xs transition-all",
+    newPlaceType.value === value
+      ? "border-primary bg-secondary text-primary"
+      : "border-border text-muted-foreground hover:border-primary",
+  ];
+}
+
+function savedPlaceIcon(iconKey: SavedPlaceIconKey) {
+  if (iconKey === "home") return HomeIcon;
+  if (iconKey === "work") return Briefcase;
+  if (iconKey === "school") return Building2;
+  if (iconKey === "airport") return Plane;
+  if (iconKey === "shopping") return ShoppingBag;
+  if (iconKey === "landmark") return Landmark;
+  if (iconKey === "transit") return Train;
+  if (iconKey === "district") return Building2;
+  return MapPin;
+}
+
+function openSavePlace(source: "start" | "destination") {
+  newPlaceAddress.value =
+    source === "start" ? start.value.trim() : destination.value.trim();
+  newPlaceName.value = "";
+  newPlaceType.value = "other";
+  savePlaceError.value = "";
+  savingPlace.value = true;
+}
+
+function closeSavePlace() {
+  savingPlace.value = false;
+  savePlaceError.value = "";
+}
+
+function addSavedPlace() {
+  const address = newPlaceAddress.value.trim();
+  const name = newPlaceName.value.trim() || address;
+
+  if (!address) {
+    savePlaceError.value = "Enter a place address first.";
+    return;
+  }
+
+  savedPlaces.value = savePlace({
+    name,
+    address,
+    type: newPlaceType.value,
+  });
+  closeSavePlace();
 }
 
 function useSearch(search: RecentRouteSearch) {

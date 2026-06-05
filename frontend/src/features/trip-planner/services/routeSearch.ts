@@ -135,7 +135,6 @@ export function getRecentRouteSearches(): RecentRouteSearch[] {
   return currentRecentSearches;
 }
 
-<<<<<<< HEAD
 export type PlaceCoords = { lat: number; lng: number };
 
 // Coordinates for picked places (currently used by "Use current location").
@@ -162,7 +161,8 @@ export function getPlaceCoords(label: string | undefined): PlaceCoords | undefin
   return coords && typeof coords.lat === "number" && typeof coords.lng === "number"
     ? coords
     : undefined;
-=======
+}
+
 export function deleteRecentRouteSearch(search: RecentRouteSearch) {
   const normalizedFrom = normalizePlaceKey(search.from);
   const normalizedTo = normalizePlaceKey(search.to);
@@ -176,7 +176,6 @@ export function deleteRecentRouteSearch(search: RecentRouteSearch) {
   );
 
   saveLocalValue(RECENT_SEARCHES_KEY, currentRecentSearches);
->>>>>>> 0128adb (recent searches are able to be delete)
 }
 
 export function normalizeFilter(value: unknown): RouteSearch["filter"] {

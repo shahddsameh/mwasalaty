@@ -16,8 +16,13 @@ app.use('/api', ticketRouter);
 app.use('/api', paymentRouter);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  const otpUrl = process.env.OTP_GRAPHQL_URL || 'http://localhost:8080/otp/routers/default/index/graphql';
+const server = app.listen(PORT, () => {
+  const otpUrl = process.env.OTP_GRAPHQL_URL || 'http://localhost:8081/otp/routers/default/index/graphql';
   console.log(`Backend running on http://localhost:${PORT}`);
   console.log(`OTP GraphQL: ${otpUrl}`);
+});
+
+server.on('error', (err) => {
+  console.error('Backend failed to start:', err);
+  process.exit(1);
 });

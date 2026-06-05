@@ -37,9 +37,13 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <SavedCard
             v-for="place in savedPlaces"
-            :key="place.name"
+            :key="place.id"
             :title="place.name"
             :subtitle="place.address"
+            :icon-key="place.iconKey"
+            :color="place.color"
+            :soft-color="place.softColor"
+            @delete="removeSavedPlace(place.id)"
           />
         </div>
       </section>
@@ -104,29 +108,36 @@
       <div class="space-y-4">
         <div class="grid grid-cols-2 gap-2">
           <button
-            v-for="type in ['Home', 'Work', 'School', 'Other']"
-            :key="type"
-            class="p-4 border-2 border-border rounded-lg hover:border-primary"
+            v-for="type in placeTypes"
+            :key="type.value"
+            type="button"
+            :class="placeTypeClass(type.value)"
+            @click="newPlaceType = type.value"
           >
-            {{ type }}
+            {{ type.label }}
           </button>
         </div>
         <input
+          v-model="newPlaceName"
           class="w-full px-4 py-2.5 bg-card border border-border rounded-lg"
           placeholder="Place name"
         />
-        <input
-          class="w-full px-4 py-2.5 bg-card border border-border rounded-lg"
+        <PlaceAutocomplete
+          v-model="newPlaceAddress"
           placeholder="Address or location"
+          :suggestions="placeSuggestions"
         />
+        <p v-if="placeError" class="text-sm text-destructive">
+          {{ placeError }}
+        </p>
         <div class="flex gap-3">
-          <AppButton class="flex-1" @click="addPlaceModalOpen = false"
+          <AppButton class="flex-1" @click="addNewPlace"
             >Save Place</AppButton
           >
           <AppButton
             variant="outline"
             class="flex-1"
-            @click="addPlaceModalOpen = false"
+            @click="closeAddPlaceModal"
           >
             Cancel
           </AppButton>
@@ -139,17 +150,41 @@
 <script setup lang="ts">
 import { defineComponent, h, ref } from "vue";
 import { useRouter } from "vue-router";
-import { BookmarkCheck, MapPin, Trash2 } from "@lucide/vue";
+import {
+  BookmarkCheck,
+  Briefcase,
+  Building2,
+  Home as HomeIcon,
+  Landmark,
+  MapPin,
+  Plane,
+  ShoppingBag,
+  Train,
+  Trash2,
+} from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
 import PageTitle from "@/components/shared/PageTitle.vue";
-import { savedPlaces } from "@/constants/data";
+import PlaceAutocomplete from "@/features/home/components/PlaceAutocomplete.vue";
+import { placeSuggestions } from "@/features/home/services/placeSuggestions";
+import {
+  deleteSavedPlace,
+  getSavedPlaces,
+  savePlace,
+  type SavedPlaceIconKey,
+  type SavedPlaceType,
+} from "@/features/home/services/savedPlaces";
 
 const router = useRouter();
 const activeTab = ref<"places" | "routes" | "history" | "ai" | "offline">(
   "places",
 );
 const addPlaceModalOpen = ref(false);
+const savedPlaces = ref(getSavedPlaces());
+const newPlaceName = ref("");
+const newPlaceAddress = ref("");
+const newPlaceType = ref<SavedPlaceType>("other");
+const placeError = ref("");
 
 const tabs = [
   { value: "places" as const, label: "Saved Places" },
@@ -157,6 +192,13 @@ const tabs = [
   { value: "history" as const, label: "Recent Trips" },
   { value: "ai" as const, label: "AI Plans" },
   { value: "offline" as const, label: "Offline Routes" },
+];
+
+const placeTypes = [
+  { value: "home" as const, label: "Home" },
+  { value: "work" as const, label: "Work" },
+  { value: "school" as const, label: "School" },
+  { value: "other" as const, label: "Other" },
 ];
 
 const savedRoutes = [
@@ -214,8 +256,15 @@ const offlineRoutes = [
 ];
 
 const SavedCard = defineComponent({
-  props: { title: String, subtitle: String, meta: String },
-  emits: ["click"],
+  props: {
+    title: String,
+    subtitle: String,
+    meta: String,
+    iconKey: { type: String, default: "place" },
+    color: String,
+    softColor: String,
+  },
+  emits: ["click", "delete"],
   setup:
     (p, { emit }) =>
     () =>
@@ -232,15 +281,26 @@ const SavedCard = defineComponent({
               "div",
               {
                 class:
-                  "w-12 h-12 rounded-lg bg-primary-soft flex items-center justify-center",
+                  "w-12 h-12 rounded-lg flex items-center justify-center",
+                style: { backgroundColor: p.softColor || "var(--primary-soft)" },
               },
-              [h(MapPin, { class: "w-6 h-6 text-primary" })],
+              [
+                h(savedPlaceIcon(p.iconKey as SavedPlaceIconKey), {
+                  class: "w-6 h-6",
+                  style: { color: p.color || "var(--primary)" },
+                }),
+              ],
             ),
             h(
               "button",
               {
                 class:
                   "p-2 hover:bg-danger-soft rounded-lg opacity-0 group-hover:opacity-100",
+                "aria-label": "Delete saved place",
+                onClick: (event: MouseEvent) => {
+                  event.stopPropagation();
+                  emit("delete");
+                },
               },
               [h(Trash2, { class: "w-5 h-5 text-destructive" })],
             ),
@@ -291,5 +351,55 @@ function tabClass(value: string) {
       ? "bg-primary text-primary-foreground"
       : "bg-card border-2 border-border text-muted-foreground hover:border-primary",
   ];
+}
+
+function placeTypeClass(value: SavedPlaceType) {
+  return [
+    "flex min-h-14 items-center justify-center p-3 text-center border-2 rounded-lg transition-all",
+    newPlaceType.value === value
+      ? "border-primary bg-secondary text-primary"
+      : "border-border hover:border-primary",
+  ];
+}
+
+function savedPlaceIcon(iconKey: SavedPlaceIconKey) {
+  if (iconKey === "home") return HomeIcon;
+  if (iconKey === "work") return Briefcase;
+  if (iconKey === "school") return Building2;
+  if (iconKey === "airport") return Plane;
+  if (iconKey === "shopping") return ShoppingBag;
+  if (iconKey === "landmark") return Landmark;
+  if (iconKey === "transit") return Train;
+  if (iconKey === "district") return Building2;
+  return MapPin;
+}
+
+function closeAddPlaceModal() {
+  addPlaceModalOpen.value = false;
+  placeError.value = "";
+}
+
+function addNewPlace() {
+  const address = newPlaceAddress.value.trim();
+  const name = newPlaceName.value.trim() || address;
+
+  if (!address) {
+    placeError.value = "Enter a place address first.";
+    return;
+  }
+
+  savedPlaces.value = savePlace({
+    name,
+    address,
+    type: newPlaceType.value,
+  });
+  newPlaceName.value = "";
+  newPlaceAddress.value = "";
+  newPlaceType.value = "other";
+  closeAddPlaceModal();
+}
+
+function removeSavedPlace(placeId: string) {
+  savedPlaces.value = deleteSavedPlace(placeId);
 }
 </script>

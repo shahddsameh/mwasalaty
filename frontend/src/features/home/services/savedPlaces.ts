@@ -90,12 +90,13 @@ export function normalizeSavedPlaceType(value: string): SavedPlaceType {
 
 function createPlace(name: string, address: string, type: SavedPlaceType): SavedPlace {
   const styles = PLACE_STYLES[type];
+  const displayName = formatDefaultPlaceName(name);
   return {
-    id: `${normalize(name)}-${normalize(address)}`,
-    name,
+    id: `${normalize(displayName)}-${normalize(address)}`,
+    name: displayName,
     address,
     type,
-    iconKey: inferIconKey(name, address, type),
+    iconKey: inferIconKey(displayName, address, type),
     color: styles.color,
     softColor: styles.softColor,
   };
@@ -111,6 +112,15 @@ function placeKey(place: Pick<SavedPlace, "name" | "address">) {
 
 function normalize(value: string) {
   return value.trim().toLowerCase().replace(/[-_]+/g, " ").replace(/\s+/g, " ");
+}
+
+function formatDefaultPlaceName(value: string) {
+  const normalized = normalize(value);
+  if (normalized === "home") return "Home";
+  if (normalized === "work") return "Work";
+  if (normalized === "school") return "School";
+  if (normalized === "other") return "Other";
+  return value;
 }
 
 function inferIconKey(

@@ -85,28 +85,65 @@
             <article
               v-for="ticket in bookingHistory"
               :key="ticket.id"
-              class="bg-card rounded-xl p-5 border-2 border-border"
+              class="bg-card rounded-xl border-2 border-border overflow-hidden"
             >
-              <div class="flex flex-col sm:flex-row justify-between gap-4">
-                <div>
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="font-mono text-sm text-muted-foreground">{{
-                      ticket.id
-                    }}</span>
-                    <span :class="statusClass(ticket.status)">{{
-                      ticket.status
-                    }}</span>
+              <div
+                class="grid grid-cols-1 gap-4 p-4 md:p-5 lg:grid-cols-[minmax(190px,0.9fr)_minmax(260px,1.4fr)_minmax(180px,0.8fr)_auto] lg:items-center"
+              >
+                <div class="min-w-0">
+                  <div class="mb-2 flex items-center gap-2">
+                    <div
+                      class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted"
+                    >
+                      <Ticket class="w-4 h-4 text-primary" />
+                    </div>
+                    <span :class="statusClass(ticket.status)">
+                      {{ ticket.status }}
+                    </span>
                   </div>
-                  <div class="font-display text-lg text-foreground mb-2">
-                    {{ ticket.route.from }} -> {{ ticket.route.to }}
-                  </div>
-                  <div class="text-sm text-muted-foreground">
-                    {{ ticket.cost }} - {{ ticket.bookingTime }}
+                  <div class="font-mono text-sm text-muted-foreground truncate">
+                    {{ ticket.id }}
                   </div>
                 </div>
+
+                <div class="min-w-0">
+                  <div class="text-xs uppercase text-muted-foreground mb-1">
+                    Route
+                  </div>
+                  <div
+                    class="flex flex-wrap items-center gap-2 font-display text-lg text-foreground"
+                  >
+                    <span class="truncate">{{ ticket.route.from }}</span>
+                    <ArrowRight class="w-4 h-4 shrink-0 text-muted-foreground" />
+                    <span class="truncate">{{ ticket.route.to }}</span>
+                  </div>
+                </div>
+
+                <div
+                  class="grid grid-cols-2 gap-3 border-t border-border pt-4 lg:block lg:border-t-0 lg:pt-0"
+                >
+                  <div>
+                    <div class="text-xs uppercase text-muted-foreground mb-1">
+                      Cost
+                    </div>
+                    <div class="font-display text-foreground">
+                      {{ ticket.cost }}
+                    </div>
+                  </div>
+                  <div class="lg:mt-2">
+                    <div class="text-xs uppercase text-muted-foreground mb-1">
+                      Booked
+                    </div>
+                    <div class="text-sm text-muted-foreground">
+                      {{ ticket.bookingTime }}
+                    </div>
+                  </div>
+                </div>
+
                 <AppButton
                   variant="outline"
                   size="sm"
+                  class="w-full justify-center lg:w-auto"
                   @click="
                     router.push({
                       path: '/route-results',
@@ -131,7 +168,7 @@
 <script setup lang="ts">
 import { defineComponent, h } from "vue";
 import { useRouter } from "vue-router";
-import { Check, MapPin, Ticket } from "@lucide/vue";
+import { ArrowRight, Check, MapPin, Ticket } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import PageTitle from "@/components/shared/PageTitle.vue";
 

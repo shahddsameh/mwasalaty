@@ -1,0 +1,6 @@
+/*
+  Design token entry point.
+  No Tailwind config was pasted in the request, so this file exposes the
+  existing project tokens used by Tailwind v4 in theme.css.
+*/
+@import './theme.css';

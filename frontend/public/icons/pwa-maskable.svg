@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Mwasalaty maskable icon">
+  <rect width="512" height="512" fill="#fdbb20"/>
+  <circle cx="256" cy="256" r="184" fill="#031133"/>
+  <path fill="#ffffff" d="M170 176h172c24 0 44 20 44 44v92c0 22-17 41-38 43l24 34h-45l-22-32h-98l-22 32h-45l24-34c-22-2-38-21-38-43v-92c0-24 20-44 44-44Zm22 50v54h128v-54H192Zm-4 104a22 22 0 1 0 0-44 22 22 0 0 0 0 44Zm136 0a22 22 0 1 0 0-44 22 22 0 0 0 0 44Z"/>
+</svg>

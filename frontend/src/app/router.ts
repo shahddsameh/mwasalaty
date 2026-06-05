@@ -19,12 +19,15 @@ import Profile from "../features/account/pages/Profile.vue";
 import Settings from "../features/account/pages/Settings.vue";
 import Support from "../features/account/pages/Support.vue";
 import AllTickets from "../features/tickets/pages/AllTickets.vue";
+import OperatorScan from "../features/operator/pages/OperatorScan.vue";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: "/", name: "home", component: Home },
+    { path: "/plan", name: "plan", component: RouteResults },
     { path: "/route-results", name: "route-results", component: RouteResults },
+    { path: "/route/:id", name: "route-detail", component: RouteDetails },
     { path: "/route-details", name: "route-details", component: RouteDetails },
     {
       path: "/live-navigation",
@@ -52,6 +55,12 @@ const router = createRouter({
     },
     { path: "/ticket/:id?", name: "ticket", component: Ticket },
     { path: "/all-tickets", name: "all-tickets", component: AllTickets },
+    {
+      path: "/operator/scan",
+      name: "operator-scan",
+      component: OperatorScan,
+      meta: { requiresOperator: true },
+    },
     { path: "/auth", name: "auth", component: Auth },
     { path: "/login", name: "login", component: Login },
     { path: "/signup", name: "signup", component: SignUp },
@@ -64,6 +73,18 @@ const router = createRouter({
     { path: "/settings", name: "settings", component: Settings },
     { path: "/support", name: "support", component: Support },
   ],
+});
+
+router.beforeEach((to) => {
+  if (!to.meta.requiresOperator) return true;
+
+  const operatorSession = localStorage.getItem("mwasalaty:operator-session");
+  if (operatorSession) return true;
+
+  return {
+    path: "/login",
+    query: { redirect: to.fullPath },
+  };
 });
 
 export default router;

@@ -18,6 +18,15 @@
           >
         </RouterLink>
 
+        <RouterLink
+          to="/settings"
+          class="block lg:hidden"
+          :class="iconClass('/settings')"
+          title="Settings"
+        >
+          <Settings class="w-5 h-5" />
+        </RouterLink>
+
         <nav class="hidden lg:flex items-center gap-2">
           <RouterLink
             v-for="item in desktopLinks"
@@ -30,23 +39,26 @@
           </RouterLink>
           <div class="w-px h-6 bg-sidebar-border mx-1" />
           <RouterLink
-            to="/profile"
-            :class="iconClass('/profile')"
-            title="Profile"
-            ><User class="w-5 h-5"
-          /></RouterLink>
+            :to="isAuthenticated ? '/profile' : '/auth'"
+            :class="
+              isAuthenticated
+                ? iconClass('/profile')
+                : [
+                    'ml-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary-hover transition-colors flex items-center gap-2 text-sm font-medium',
+                  ]
+            "
+            :title="isAuthenticated ? 'Profile' : 'Login'"
+          >
+            <User v-if="isAuthenticated" class="w-5 h-5" />
+            <LogIn v-else class="w-4 h-4" />
+            <span v-if="!isAuthenticated">Login</span>
+          </RouterLink>
           <RouterLink
             to="/settings"
             :class="iconClass('/settings')"
             title="Settings"
-            ><Settings class="w-5 h-5"
-          /></RouterLink>
-          <RouterLink
-            to="/auth"
-            class="ml-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary-hover transition-colors flex items-center gap-2 text-sm font-medium"
           >
-            <LogIn class="w-4 h-4" />
-            Login
+            <Settings class="w-5 h-5" />
           </RouterLink>
         </nav>
       </div>
@@ -82,8 +94,10 @@ import {
   Ticket,
   User,
 } from "@lucide/vue";
+import { useAuthState } from "@/services/authState";
 
 const route = useRoute();
+const { isAuthenticated } = useAuthState();
 const currentPath = computed(() => route.path);
 const active = (path: string) => currentPath.value === path;
 
@@ -94,13 +108,15 @@ const desktopLinks = [
   { to: "/all-tickets", label: "All Tickets", icon: Ticket },
 ];
 
-const mobileLinks = [
+const mobileLinks = computed(() => [
   { to: "/", label: "Routes", icon: MapPin },
   { to: "/ai-trip-planner", label: "AI Trip", icon: Brain },
   { to: "/saved", label: "Saved", icon: BookmarkCheck },
   { to: "/all-tickets", label: "Tickets", icon: Ticket },
-  { to: "/profile", label: "Profile", icon: User },
-];
+  isAuthenticated.value
+    ? { to: "/profile", label: "Profile", icon: User }
+    : { to: "/auth", label: "Login", icon: LogIn },
+]);
 
 function desktopClass(path: string) {
   return [

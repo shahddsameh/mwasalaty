@@ -1,14 +1,18 @@
 <template>
   <main class="min-h-screen pb-20 bg-background">
     <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-5 md:py-12">
-      <h1 class="font-display text-2xl md:text-3xl text-foreground mb-2 md:mb-3">
+      <h1
+        class="font-display text-2xl md:text-3xl text-foreground mb-2 md:mb-3"
+      >
         Settings
       </h1>
       <p class="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">
         Manage your app preferences and account
       </p>
 
-      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-5 md:gap-8">
+      <div
+        class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-5 md:gap-8"
+      >
         <section class="space-y-5 md:space-y-6">
           <Card title="Preferences">
             <SettingRow
@@ -90,7 +94,7 @@
         </section>
 
         <aside class="space-y-5 md:space-y-6 lg:sticky lg:top-8 h-fit">
-          <Card title="Account">
+          <!-- <Card title="Account">
             <MenuButton
               label="Profile Settings"
               description="Edit personal details and payment methods"
@@ -102,10 +106,16 @@
               description="Sign out from this device"
               @click="logoutModalOpen = true"
             />
-          </Card>
+          </Card> -->
           <Card title="Privacy & Legal">
-            <MenuButton label="Privacy Policy" description="How your data is used" />
-            <MenuButton label="Terms of Service" description="App usage rules" />
+            <MenuButton
+              label="Privacy Policy"
+              description="How your data is used"
+            />
+            <MenuButton
+              label="Terms of Service"
+              description="App usage rules"
+            />
           </Card>
           <Card title="Help & Support">
             <MenuButton
@@ -125,30 +135,6 @@
         </aside>
       </div>
     </div>
-
-    <Modal
-      :open="logoutModalOpen"
-      title="Logout"
-      @close="logoutModalOpen = false"
-    >
-      <div class="space-y-4">
-        <p class="text-muted-foreground">Are you sure you want to logout?</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <AppButton
-            variant="danger"
-            class="w-full"
-            @click="router.push('/auth')"
-            >Logout</AppButton
-          >
-          <AppButton
-            variant="outline"
-            class="w-full"
-            @click="logoutModalOpen = false"
-            >Cancel</AppButton
-          >
-        </div>
-      </div>
-    </Modal>
   </main>
 </template>
 
@@ -156,15 +142,12 @@
 import { defineComponent, h, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { Bell, ChevronRight, Globe, Moon, Trash2 } from "@lucide/vue";
-import AppButton from "@/components/ui/AppButton.vue";
-import Modal from "@/components/ui/Modal.vue";
 import { applyTheme, getSavedTheme, type AppTheme } from "@/services/theme";
 
 const router = useRouter();
 const language = ref<"en" | "ar">("en");
 const theme = ref<AppTheme>(getSavedTheme());
 const notifications = ref(true);
-const logoutModalOpen = ref(false);
 
 watch(
   theme,
@@ -179,14 +162,21 @@ const Card = defineComponent({
   setup:
     (p, { slots }) =>
     () =>
-      h("section", { class: "bg-card rounded-xl p-4 md:p-6 border-2 border-border" }, [
-        h(
-          "h2",
-          { class: "font-display text-lg md:text-2xl text-foreground mb-4 md:mb-5" },
-          p.title,
-        ),
-        h("div", { class: "space-y-3 md:space-y-4" }, slots.default?.()),
-      ]),
+      h(
+        "section",
+        { class: "bg-card rounded-xl p-4 md:p-6 border-2 border-border" },
+        [
+          h(
+            "h2",
+            {
+              class:
+                "font-display text-lg md:text-2xl text-foreground mb-4 md:mb-5",
+            },
+            p.title,
+          ),
+          h("div", { class: "space-y-3 md:space-y-4" }, slots.default?.()),
+        ],
+      ),
 });
 
 const SettingRow = defineComponent({
@@ -198,23 +188,34 @@ const SettingRow = defineComponent({
   setup:
     (p, { slots }) =>
     () =>
-      h("div", { class: "grid gap-3 rounded-lg border border-border p-3 md:gap-4 md:p-4 md:grid-cols-[minmax(0,1fr)_minmax(240px,320px)] md:items-center" }, [
-        h("div", { class: "flex gap-3" }, [
-          h(
-            "div",
-            {
-              class:
-                "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-soft",
-            },
-            [h(p.icon as any, { class: "w-5 h-5 text-primary" })],
-          ),
-          h("div", { class: "min-w-0" }, [
-            h("div", { class: "font-display text-foreground" }, p.label),
-            h("div", { class: "text-sm leading-snug text-muted-foreground" }, p.description),
+      h(
+        "div",
+        {
+          class:
+            "grid gap-3 rounded-lg border border-border p-3 md:gap-4 md:p-4 md:grid-cols-[minmax(0,1fr)_minmax(240px,320px)] md:items-center",
+        },
+        [
+          h("div", { class: "flex gap-3" }, [
+            h(
+              "div",
+              {
+                class:
+                  "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-soft",
+              },
+              [h(p.icon as any, { class: "w-5 h-5 text-primary" })],
+            ),
+            h("div", { class: "min-w-0" }, [
+              h("div", { class: "font-display text-foreground" }, p.label),
+              h(
+                "div",
+                { class: "text-sm leading-snug text-muted-foreground" },
+                p.description,
+              ),
+            ]),
           ]),
-        ]),
-        h("div", { class: "grid grid-cols-2 gap-2" }, slots.default?.()),
-      ]),
+          h("div", { class: "grid grid-cols-2 gap-2" }, slots.default?.()),
+        ],
+      ),
 });
 
 const Choice = defineComponent({
@@ -234,7 +235,13 @@ const Choice = defineComponent({
           ],
           onClick: () => emit("update:modelValue", p.value),
         },
-        [h("div", { class: "font-display text-sm md:text-base text-foreground" }, p.label)],
+        [
+          h(
+            "div",
+            { class: "font-display text-sm md:text-base text-foreground" },
+            p.label,
+          ),
+        ],
       ),
 });
 

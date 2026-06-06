@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@lucide/vue": "^1.17.0",
+    "@supabase/supabase-js": "^2.107.0",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vueuse/rxjs": "^14.3.0",
     "dexie": "^4.4.3",

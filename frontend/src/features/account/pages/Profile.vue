@@ -40,19 +40,41 @@
             <p class="text-sm text-foreground">{{ userInfo.phone }}</p>
           </section>
 
-          <section
-            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary rounded-xl p-6 border-2 border-primary"
-          >
-            <h3 class="font-display text-xl text-foreground mb-4">
-              Your Stats
-            </h3>
-            <div class="flex justify-between mb-3">
-              <span>Total Trips</span
-              ><strong class="text-3xl">{{ userInfo.totalTrips }}</strong>
-            </div>
-            <div class="flex justify-between">
-              <span>Saved Routes</span
-              ><strong class="text-3xl">{{ userInfo.savedRoutes }}</strong>
+          <section class="bg-card rounded-xl p-4 md:p-6 border-2 border-border">
+            <h2
+              class="font-display text-lg md:text-2xl text-foreground mb-4 md:mb-5"
+            >
+              Account
+            </h2>
+
+            <div class="space-y-3 md:space-y-4">
+              <button
+                class="w-full min-h-14 flex items-center justify-between gap-3 p-3 rounded-lg hover:bg-muted text-left transition-colors text-foreground"
+                @click="router.push('/profile')"
+              >
+                <span class="min-w-0">
+                  <span class="block font-display">Profile Settings</span>
+                  <span class="block text-sm text-muted-foreground">
+                    Edit personal details and payment methods
+                  </span>
+                </span>
+
+                <ChevronRight class="w-5 h-5 shrink-0 text-muted-foreground" />
+              </button>
+
+              <button
+                class="w-full min-h-14 flex items-center justify-between gap-3 p-3 rounded-lg hover:bg-muted text-left transition-colors text-destructive"
+                @click="logoutModalOpen = true"
+              >
+                <span class="min-w-0">
+                  <span class="block font-display">Logout</span>
+                  <span class="block text-sm text-muted-foreground">
+                    Sign out from this device
+                  </span>
+                </span>
+
+                <ChevronRight class="w-5 h-5 shrink-0 text-muted-foreground" />
+              </button>
             </div>
           </section>
         </aside>
@@ -129,15 +151,54 @@
         </section>
       </div>
     </div>
+    <Modal
+      :open="logoutModalOpen"
+      title="Logout"
+      @close="logoutModalOpen = false"
+    >
+      <div class="space-y-4">
+        <p class="text-muted-foreground">Are you sure you want to logout?</p>
+        <p
+          v-if="logoutError"
+          class="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+        >
+          {{ logoutError }}
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <AppButton
+            variant="danger"
+            class="w-full"
+            :disabled="loggingOut"
+            @click="handleLogout"
+          >
+            {{ loggingOut ? "Logging Out..." : "Logout" }}
+          </AppButton>
+          <AppButton
+            variant="outline"
+            class="w-full"
+            :disabled="loggingOut"
+            @click="logoutModalOpen = false"
+            >Cancel</AppButton
+          >
+        </div>
+      </div>
+    </Modal>
   </main>
 </template>
 
 <script setup lang="ts">
-import { defineComponent, h, ref } from "vue";
+import { defineComponent, h, onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import { CreditCard, Edit, Settings, User } from "@lucide/vue";
+import { CreditCard, Edit, Settings, User, ChevronRight } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
+import { getCurrentUser } from "@/services/supabaseAuth";
+import Modal from "@/components/ui/Modal.vue";
+import { signOut } from "@/services/supabaseAuth";
+import { clearAuthState } from "@/services/authState";
 
+const logoutModalOpen = ref(false);
+const loggingOut = ref(false);
+const logoutError = ref("");
 const router = useRouter();
 const activeTab = ref<"info" | "payments" | "transactions">("info");
 const tabs = [
@@ -145,14 +206,14 @@ const tabs = [
   { value: "payments" as const, label: "Payments" },
   { value: "transactions" as const, label: "Transactions" },
 ];
-const userInfo = {
+const userInfo = reactive({
   name: "Ahmed Hassan",
   email: "ahmed.hassan@email.com",
   phone: "+20 100 123 4567",
   joined: "December 2024",
   totalTrips: 42,
   savedRoutes: 8,
-};
+});
 const savedPayments = [
   { type: "InstaPay", last4: "****", primary: true },
   { type: "Visa", last4: "4242", primary: false },
@@ -199,6 +260,26 @@ const Info = defineComponent({
       h("div", { class: "text-foreground break-all" }, p.value),
     ]),
 });
+
+onMounted(async () => {
+  const user = await getCurrentUser();
+  if (!user) return;
+
+  userInfo.name =
+    (user.user_metadata.full_name as string | undefined) ??
+    (user.user_metadata.name as string | undefined) ??
+    user.email?.split("@")[0] ??
+    userInfo.name;
+  userInfo.email = user.email ?? userInfo.email;
+  userInfo.phone =
+    (user.user_metadata.phone as string | undefined) ?? userInfo.phone;
+  userInfo.joined = user.created_at
+    ? new Intl.DateTimeFormat("en", {
+        month: "long",
+        year: "numeric",
+      }).format(new Date(user.created_at))
+    : userInfo.joined;
+});
 function tabClass(value: string) {
   return [
     "px-6 py-3 rounded-lg whitespace-nowrap transition-all",
@@ -206,5 +287,26 @@ function tabClass(value: string) {
       ? "bg-primary text-primary-foreground"
       : "bg-card border-2 border-border text-muted-foreground hover:border-primary",
   ];
+}
+async function handleLogout() {
+  logoutError.value = "";
+  loggingOut.value = true;
+
+  try {
+    const result = await signOut();
+    if (result.error) {
+      logoutError.value = result.error;
+      return;
+    }
+
+    clearAuthState();
+    logoutModalOpen.value = false;
+    await router.push("/login");
+  } catch (error) {
+    logoutError.value =
+      error instanceof Error ? error.message : "Could not log out right now.";
+  } finally {
+    loggingOut.value = false;
+  }
 }
 </script>

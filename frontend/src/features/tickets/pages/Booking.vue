@@ -32,7 +32,9 @@
                 class="flex items-center justify-between gap-3 p-3 bg-secondary rounded-lg"
               >
                 <div class="min-w-0">
-                  <div class="font-display text-foreground">{{ modeLabel(leg) }}</div>
+                  <div class="font-display text-foreground">
+                    {{ modeLabel(leg) }}
+                  </div>
                   <div class="text-sm text-muted-foreground truncate">
                     {{ leg.from?.name }} -> {{ leg.to?.name }}
                   </div>
@@ -53,12 +55,17 @@
           </Card>
 
           <Card title="Payment Method">
-            <div class="p-4 border-2 border-primary bg-secondary rounded-lg flex items-start gap-3">
+            <div
+              class="p-4 border-2 border-primary bg-secondary rounded-lg flex items-start gap-3"
+            >
               <CreditCard class="w-6 h-6 text-primary flex-shrink-0 mt-0.5" />
               <div>
-                <div class="font-display text-foreground">PayMob Secure Checkout</div>
+                <div class="font-display text-foreground">
+                  PayMob Secure Checkout
+                </div>
                 <p class="text-sm text-muted-foreground mt-1">
-                  You'll be redirected to PayMob to complete your payment securely.
+                  You'll be redirected to PayMob to complete your payment
+                  securely.
                 </p>
                 <span
                   class="inline-block mt-2 px-2.5 py-1 rounded-full bg-warning-soft text-xs text-foreground"
@@ -84,7 +91,11 @@
           >
             <Loader2 v-if="processing" class="w-5 h-5 animate-spin" />
             <ShieldCheck v-else class="w-5 h-5" />
-            {{ processing ? "Preparing secure checkout…" : `Pay securely - ${total} ${currency}` }}
+            {{
+              processing
+                ? "Preparing secure checkout…"
+                : `Pay securely - ${total} ${currency}`
+            }}
           </AppButton>
         </section>
 
@@ -101,12 +112,15 @@
               class="pt-4 border-t-2 border-border mt-4 flex items-center justify-between"
             >
               <span class="font-display text-lg">Total</span>
-              <span class="font-display text-3xl text-primary">{{ total }} {{ currency }}</span>
+              <span class="font-display text-3xl text-primary"
+                >{{ total }} {{ currency }}</span
+              >
             </div>
             <div
               class="mt-4 p-3 bg-secondary rounded-lg text-sm text-muted-foreground"
             >
-              Includes all transport fees<br />Valid for 24 hours<br />Digital QR ticket
+              Includes all transport fees<br />Valid for 24 hours<br />Digital
+              QR ticket
             </div>
           </Card>
         </aside>
@@ -123,7 +137,9 @@
           You need to log in or create an account to book and save your tickets.
         </p>
         <div class="flex gap-3">
-          <AppButton class="flex-1" @click="router.push('/login')">Login</AppButton>
+          <AppButton class="flex-1" @click="router.push('/login')"
+            >Login</AppButton
+          >
           <AppButton
             variant="outline"
             class="flex-1"
@@ -140,7 +156,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, ref } from "vue";
+import { computed, defineComponent, h, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { CreditCard, Loader2, ShieldCheck } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
@@ -149,9 +165,10 @@ import Modal from "@/components/ui/Modal.vue";
 import type { ApiRouteOption, ApiLeg } from "@/services/api";
 import { createCheckoutSession } from "@/services/api";
 import { getSelectedRoute } from "@/features/trip-planner/services/routeSearch";
+import { useAuthState } from "@/services/authState";
 
 const router = useRouter();
-const isLoggedIn = false;
+const { user, isAuthenticated, ensureAuthInitialized } = useAuthState();
 
 const CHECKOUT_SESSION_KEY = "mwasalaty:checkout-session-id";
 
@@ -223,6 +240,12 @@ const processing = ref(false);
 const errorMessage = ref("");
 const loginModalOpen = ref(false);
 
+watch(isAuthenticated, (loggedIn) => {
+  if (loggedIn) {
+    loginModalOpen.value = false;
+  }
+});
+
 function modeLabel(leg: ApiLeg) {
   const name = leg.route?.shortName ?? leg.route?.longName;
   const mode = leg.mode.charAt(0) + leg.mode.slice(1).toLowerCase();
@@ -240,7 +263,10 @@ async function startCheckout() {
     const res = await createCheckoutSession({
       planId: `plan_${route.itineraryId}`,
       itineraryId: route.itineraryId,
-      passenger: { userId: "guest", name: passengerName.value.trim() },
+      passenger: {
+        userId: user.value?.id ?? "guest",
+        name: passengerName.value.trim(),
+      },
       paymentBreakdown: {
         fareAmount: total.value,
         serviceFee: 0,
@@ -271,22 +297,31 @@ async function startCheckout() {
     window.location.href = res.checkoutUrl;
   } catch (err) {
     errorMessage.value =
-      err instanceof Error ? err.message : "Could not start checkout. Please try again.";
+      err instanceof Error
+        ? err.message
+        : "Could not start checkout. Please try again.";
     processing.value = false;
   }
 }
 
 function proceed() {
-  if (isLoggedIn) {
-    startCheckout();
-  } else {
-    loginModalOpen.value = true;
-  }
+  void handleProceed();
 }
 
 function payAsGuest() {
   loginModalOpen.value = false;
   startCheckout();
+}
+
+async function handleProceed() {
+  await ensureAuthInitialized();
+
+  if (isAuthenticated.value) {
+    await startCheckout();
+    return;
+  }
+
+  loginModalOpen.value = true;
 }
 
 const Card = defineComponent({

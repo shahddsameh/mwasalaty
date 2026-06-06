@@ -1,12 +1,22 @@
-const DEFAULT_OTP_URL = 'http://localhost:8081/otp/routers/default/index/graphql';
+const DEFAULT_OTP_URL =
+  "http://localhost:8081/otp/routers/default/index/graphql";
 
 function buildModesFragment(modes) {
-  return (modes || ['WALK', 'BUS', 'SUBWAY'])
-    .map(m => `{ mode: ${m} }`)
-    .join(', ');
+  return (modes || ["WALK", "BUS", "SUBWAY"])
+    .map((m) => `{ mode: ${m} }`)
+    .join(", ");
 }
 
-export async function fetchOtpPlan({ fromLat, fromLng, toLat, toLng, date, time, modes, numItineraries = 5 }) {
+export async function fetchOtpPlan({
+  fromLat,
+  fromLng,
+  toLat,
+  toLng,
+  date,
+  time,
+  modes,
+  numItineraries = 5,
+}) {
   const url = process.env.OTP_GRAPHQL_URL || DEFAULT_OTP_URL;
 
   const query = `{
@@ -24,11 +34,12 @@ export async function fetchOtpPlan({ fromLat, fromLng, toLat, toLng, date, time,
           mode
           distance
           route { shortName longName }
-          from { name }
-          to { name }
+          from { name lat lon }
+          to { name lat lon }
           startTime
           endTime
           intermediateStops { name }
+          legGeometry { points }
         }
       }
     }
@@ -37,13 +48,13 @@ export async function fetchOtpPlan({ fromLat, fromLng, toLat, toLng, date, time,
   let response;
   try {
     response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query }),
     });
   } catch (networkErr) {
     const err = new Error(networkErr.message);
-    err.code = networkErr.code || 'ECONNREFUSED';
+    err.code = networkErr.code || "ECONNREFUSED";
     throw err;
   }
 

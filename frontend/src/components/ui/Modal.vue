@@ -1,6 +1,6 @@
 <template>
   <Teleport to="body">
-    <div v-if="open" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div v-if="open" class="fixed inset-0 z-[10000] flex items-center justify-center">
       <button class="absolute inset-0 bg-overlay backdrop-blur-sm" aria-label="Close modal" @click="$emit('close')" />
       <div :class="['relative bg-card rounded-xl shadow-2xl w-full mx-4 max-h-[90vh] overflow-auto', widths[size]]">
         <div v-if="title" class="flex items-center justify-between px-6 py-4 border-b border-border">

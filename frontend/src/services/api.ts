@@ -28,6 +28,7 @@ export type ApiLeg = {
   endTime: string;
   route: null | { shortName?: string; longName?: string };
   instruction: string;
+  geometry?: { lat: number; lng: number }[];
   fare: ApiFare;
 };
 
@@ -64,6 +65,7 @@ export type RouteDetailStep = {
   to?: string;
   color: string;
   softColor: string;
+  geometry?: { lat: number; lng: number }[];
 };
 
 export type ApiRouteOption = ApiItinerary & {
@@ -87,6 +89,7 @@ function legToStep(leg: ApiLeg): RouteDetailStep {
     to: leg.to?.name,
     color: colors.color,
     softColor: colors.softColor,
+    geometry: leg.geometry,
   };
 }
 
@@ -128,8 +131,14 @@ export async function planRoute(
   coords: { fromCoords?: PlaceCoords; toCoords?: PlaceCoords } = {},
 ): Promise<ApiRouteOption[]> {
   const now = new Date();
-  const date = now.toISOString().slice(0, 10);
-  const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  let date = now.toISOString().slice(0, 10);
+  let time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+  // TODO: remove test default before final production demo if needed.
+  if (import.meta.env.DEV) {
+    time = '10:00';
+    date = '2026-06-06';
+  }
 
   // Send lat/lng when we have them (e.g. current location); the backend accepts
   // either coordinates or a label it geocodes server-side.

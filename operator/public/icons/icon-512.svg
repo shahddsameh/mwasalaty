@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Mwasalaty Operator">
+  <rect width="512" height="512" rx="96" fill="#0f172a"/>
+  <path d="M116 154h280a32 32 0 0 1 32 32v148a32 32 0 0 1-32 32H116a32 32 0 0 1-32-32V186a32 32 0 0 1 32-32Z" fill="#f8fafc"/>
+  <path d="M144 218h228M144 279h139" stroke="#0f172a" stroke-width="32" stroke-linecap="round"/>
+  <path d="m309 302 42 42 80-104" fill="none" stroke="#059669" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="148" cy="388" r="26" fill="#f97316"/>
+  <circle cx="364" cy="388" r="26" fill="#f97316"/>
+</svg>

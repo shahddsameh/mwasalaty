@@ -145,43 +145,71 @@
     <Modal
       :open="addPlaceModalOpen"
       title="Add New Place"
+      size="lg"
       @close="addPlaceModalOpen = false"
     >
-      <div class="space-y-4">
-        <div class="grid grid-cols-2 gap-2">
-          <button
-            v-for="type in placeTypes"
-            :key="type.value"
-            type="button"
-            :class="placeTypeClass(type.value)"
-            @click="newPlaceType = type.value"
-          >
-            {{ type.label }}
-          </button>
+      <div class="space-y-5">
+        <p class="text-sm text-muted-foreground">
+          Save frequent destinations so they are always one tap away when planning routes.
+        </p>
+
+        <div class="flex flex-col gap-1.5">
+          <span class="text-sm text-foreground">Address or location</span>
+          <PlaceAutocomplete
+            v-model="newPlaceAddress"
+            placeholder="Search for station, area, or landmark..."
+            :suggestions="placeSuggestions"
+          />
+          <p class="text-xs text-muted-foreground">
+            Choose from suggested Cairo locations for better route results.
+          </p>
         </div>
-        <input
-          v-model="newPlaceName"
-          class="w-full px-4 py-2.5 bg-card border border-border rounded-lg"
-          placeholder="Place name"
-        />
-        <PlaceAutocomplete
-          v-model="newPlaceAddress"
-          placeholder="Address or location"
-          :suggestions="placeSuggestions"
-        />
+
+        <label class="flex flex-col gap-1.5">
+          <span class="text-sm text-foreground">Place name</span>
+          <input
+            v-model="newPlaceName"
+            class="w-full px-4 py-2.5 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+            placeholder="Home, Work, Gym..."
+          />
+        </label>
+
+        <div class="space-y-2">
+          <div class="text-sm text-foreground">Place type</div>
+          <div class="flex flex-wrap gap-2">
+            <button
+              v-for="type in placeTypes"
+              :key="type.value"
+              type="button"
+              :class="placeTypeClass(type.value)"
+              :aria-pressed="newPlaceType === type.value"
+              @click="selectPlaceType(type.value)"
+            >
+              {{ type.label }}
+            </button>
+          </div>
+        </div>
+
         <p v-if="placeError" class="text-sm text-destructive">
           {{ placeError }}
         </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <AppButton class="w-full" @click="addNewPlace"
-            >Save Place</AppButton
-          >
+
+        <div
+          class="flex flex-col-reverse gap-3 border-t border-border pt-4 sm:flex-row sm:justify-end"
+        >
           <AppButton
             variant="outline"
-            class="w-full"
+            class="w-full sm:w-auto"
             @click="closeAddPlaceModal"
           >
             Cancel
+          </AppButton>
+          <AppButton
+            class="w-full sm:w-auto"
+            :disabled="!canSavePlace"
+            @click="addNewPlace"
+          >
+            Save Place
           </AppButton>
         </div>
       </div>
@@ -230,6 +258,7 @@ const newPlaceAddress = ref("");
 const newPlaceType = ref<SavedPlaceType>("other");
 const placeError = ref("");
 const activePlaceMenuId = ref<string | null>(null);
+const canSavePlace = computed(() => newPlaceAddress.value.trim().length > 0);
 
 const tabs = computed(() => [
   { value: "places" as const, label: "Places", count: savedPlaces.value.length },
@@ -519,10 +548,10 @@ function tabCountClass(value: string) {
 
 function placeTypeClass(value: SavedPlaceType) {
   return [
-    "flex min-h-14 items-center justify-center p-3 text-center border-2 rounded-lg transition-all",
+    "flex min-h-10 items-center justify-center rounded-full border-2 px-4 py-2 text-sm text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
     newPlaceType.value === value
       ? "border-primary bg-secondary text-primary"
-      : "border-border hover:border-primary",
+      : "border-border text-foreground hover:border-primary hover:bg-muted",
   ];
 }
 
@@ -541,6 +570,13 @@ function savedPlaceIcon(iconKey: SavedPlaceIconKey) {
 function closeAddPlaceModal() {
   addPlaceModalOpen.value = false;
   placeError.value = "";
+}
+
+function selectPlaceType(type: SavedPlaceType) {
+  newPlaceType.value = type;
+  if (!newPlaceName.value.trim() && type !== "other") {
+    newPlaceName.value = type[0].toUpperCase() + type.slice(1);
+  }
 }
 
 function addNewPlace() {

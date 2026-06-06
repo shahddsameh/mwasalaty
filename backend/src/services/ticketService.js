@@ -11,6 +11,20 @@ const METRO_TIERS = [
   { tier: 3, min: 17, max: Infinity, label: '17+ stations' },
 ];
 
+function normalizeMode(mode) {
+  return mode === 'METRO' ? 'SUBWAY' : mode;
+}
+
+function normalizeRouteShortName(routeShortName) {
+  if (!routeShortName) return null;
+  const value = String(routeShortName).trim().toUpperCase().replace(/\s+/g, ' ');
+  const lineMatch = value.match(/^(?:METRO\s+)?LINE\s*(\d+)$/);
+  if (lineMatch) return `M${lineMatch[1]}`;
+  const spacedMetroMatch = value.match(/^M\s*(\d+)$/);
+  if (spacedMetroMatch) return `M${spacedMetroMatch[1]}`;
+  return value;
+}
+
 function shortUUID() {
   return randomUUID().replace(/-/g, '').slice(0, 12);
 }
@@ -64,7 +78,8 @@ export function createTicket(body) {
 
   const legs = transitLegs.map((leg, i) => {
     const ticketLegId = `ticket_leg_${String(i + 1).padStart(3, '0')}`;
-    const subway = leg.mode === 'SUBWAY'
+    const normalizedMode = normalizeMode(leg.mode);
+    const subway = normalizedMode === 'SUBWAY'
       ? (() => {
           const t = getSubwayTier(leg.stationCount);
           return {
@@ -79,7 +94,7 @@ export function createTicket(body) {
     return {
       ticketLegId,
       plannedLegId: leg.legId,
-      mode: leg.mode,
+      mode: normalizedMode,
       route: leg.route ?? null,
       from: leg.from,
       to: leg.to,
@@ -161,7 +176,7 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
     throw { code: ErrorCodes.LEG_ALREADY_USED, message: 'This ticket leg has already been used', details: { ticketId, ticketLegId, validatedAt: leg.validatedAt } };
   }
 
-  if (leg.mode === 'SUBWAY' && typeof stationsTraversed === 'number') {
+  if (normalizeMode(leg.mode) === 'SUBWAY' && leg.subway && typeof stationsTraversed === 'number') {
     if (stationsTraversed > leg.subway.maxStations) {
       throw {
         code: ErrorCodes.STATION_LIMIT_EXCEEDED,
@@ -243,8 +258,11 @@ export function scanValidate(qrPayload, scannerProfileId) {
         ? leg.route
         : leg.route?.shortName;
 
-    if (leg.mode !== profile.mode) return false;
-    if (profile.routeShortName && legRouteShortName !== profile.routeShortName) return false;
+    if (normalizeMode(leg.mode) !== normalizeMode(profile.mode)) return false;
+    if (
+      profile.routeShortName &&
+      normalizeRouteShortName(legRouteShortName) !== normalizeRouteShortName(profile.routeShortName)
+    ) return false;
 
     return true;
   });

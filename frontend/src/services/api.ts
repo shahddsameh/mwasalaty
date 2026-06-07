@@ -310,3 +310,18 @@ export async function getTicket(ticketId: string): Promise<Ticket> {
   if (!res.ok) throw new Error(await readApiError(res));
   return (await res.json()) as Ticket;
 }
+
+export type PublicPlace = {
+  name: string;
+  aliases: string[];
+  type: 'stop' | 'station';
+  location: { lat: number; lng: number };
+  line?: string;
+};
+
+export async function getPlaces(q?: string): Promise<PublicPlace[]> {
+  const query = q ? `?q=${encodeURIComponent(q)}` : '';
+  const res = await fetch(`/api/places${query}`);
+  if (!res.ok) throw new Error(await readApiError(res));
+  return ((await res.json()) as { places: PublicPlace[] }).places;
+}

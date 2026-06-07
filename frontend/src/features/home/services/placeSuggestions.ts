@@ -1,3 +1,6 @@
+import { reactive } from "vue";
+import { getPlaces } from "@/services/api";
+
 export type PlaceSuggestion = {
   label: string;
   area: string;
@@ -89,8 +92,8 @@ function suggestion(label: string, area: string, category: string): PlaceSuggest
 
 // Only places inside the OSM+GTFS graph coverage are suggested, so every pick
 // can actually be routed. Labels match the backend's local geocoding entries.
-export const placeSuggestions: PlaceSuggestion[] = [
-  suggestion("Current Location", "Nearby", "Quick pick"),
+const fallbackPlaceSuggestions: PlaceSuggestion[] = [
+  { label: "Current Location", area: "Nearby", category: "Quick pick" },
 
   // Downtown / central metro
   suggestion("Tahrir Square", "Downtown Cairo", "Landmark"),
@@ -138,3 +141,25 @@ export const placeSuggestions: PlaceSuggestion[] = [
   suggestion("Adly Mansour", "East Cairo", "Transit hub"),
   suggestion("New Cairo", "East Cairo", "District"),
 ];
+
+export const placeSuggestions = reactive<PlaceSuggestion[]>([...fallbackPlaceSuggestions]);
+
+export async function refreshPlaceSuggestions(): Promise<void> {
+  try {
+    const places = await getPlaces();
+    placeSuggestions.splice(0, placeSuggestions.length,
+      fallbackPlaceSuggestions[0],
+      ...places.map((place) => ({
+        label: place.name,
+        area: "",
+        category: place.type === "station"
+          ? `Metro station${place.line ? ` - ${place.line}` : ""}`
+          : "Stop",
+      })),
+    );
+  } catch {
+    placeSuggestions.splice(0, placeSuggestions.length, ...fallbackPlaceSuggestions);
+  }
+}
+
+void refreshPlaceSuggestions();

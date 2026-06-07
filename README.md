@@ -1,6 +1,6 @@
 # Mwasalaty
 
-This is a code bundle for the Mwasalaty Cairo public-transport PWA. The original frontend design is available at https://www.figma.com/design/xrIBn7o6xvlqa0FJKseLak/mwaslaty-final-verson.
+This is a code bundle for the Mwasalaty Cairo public-transport PWA.
 
 ## Running the code
 

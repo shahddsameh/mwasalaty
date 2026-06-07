@@ -32,11 +32,18 @@ export type OfflineTicket = Ticket & {
   savedAt: number;
 };
 
+export type AppSetting = {
+  key: string;
+  value: string;
+  updatedAt: number;
+};
+
 class MwasalatyDb extends Dexie {
   savedTrips!: Table<SavedTrip, string>;
   recentSearches!: Table<RecentSearchRecord, number>;
   favoritePlaces!: Table<FavoritePlace, string>;
   tickets!: Table<OfflineTicket, string>;
+  settings!: Table<AppSetting, string>;
 
   constructor() {
     super("mwasalaty-offline");
@@ -46,6 +53,14 @@ class MwasalatyDb extends Dexie {
       recentSearches: "++id, searchedAt, from, to",
       favoritePlaces: "id, name, address, createdAt",
       tickets: "ticketId, status, createdAt, expiresAt, savedAt",
+    });
+
+    this.version(2).stores({
+      savedTrips: "id, createdAt, start, destination",
+      recentSearches: "++id, searchedAt, from, to",
+      favoritePlaces: "id, name, address, createdAt",
+      tickets: "ticketId, status, createdAt, expiresAt, savedAt",
+      settings: "key, updatedAt",
     });
   }
 }

@@ -14,12 +14,14 @@ import PaymentCancelled from "../features/tickets/pages/PaymentCancelled.vue";
 import Auth from "../features/auth/pages/Auth.vue";
 import Login from "../features/auth/pages/Login.vue";
 import SignUp from "../features/auth/pages/SignUp.vue";
+import AuthCallback from "../features/auth/pages/AuthCallback.vue";
 import ForgotPassword from "../features/auth/pages/ForgotPassword.vue";
 import Profile from "../features/account/pages/Profile.vue";
 import Settings from "../features/account/pages/Settings.vue";
 import Support from "../features/account/pages/Support.vue";
 import AllTickets from "../features/tickets/pages/AllTickets.vue";
 import OperatorScan from "../features/operator/pages/OperatorScan.vue";
+import { ensureAuthInitialized, useAuthState } from "@/services/authState";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -64,18 +66,28 @@ const router = createRouter({
     { path: "/auth", name: "auth", component: Auth },
     { path: "/login", name: "login", component: Login },
     { path: "/signup", name: "signup", component: SignUp },
+    { path: "/auth/callback", name: "auth-callback", component: AuthCallback },
     {
       path: "/forgot-password",
       name: "forgot-password",
       component: ForgotPassword,
     },
-    { path: "/profile", name: "profile", component: Profile },
-    { path: "/settings", name: "settings", component: Settings },
+    {
+      path: "/profile",
+      name: "profile",
+      component: Profile,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/settings",
+      name: "settings",
+      component: Settings,
+    },
     { path: "/support", name: "support", component: Support },
   ],
 });
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   if (!to.meta.requiresOperator) return true;
 
   const operatorSession = localStorage.getItem("mwasalaty:operator-session");
@@ -85,6 +97,28 @@ router.beforeEach((to) => {
     path: "/login",
     query: { redirect: to.fullPath },
   };
+});
+
+router.beforeEach(async (to) => {
+  await ensureAuthInitialized();
+  const { isAuthenticated } = useAuthState();
+
+  if (to.meta.requiresAuth) {
+    if (!isAuthenticated.value) {
+      return {
+        path: "/login",
+        query: { redirect: to.fullPath },
+      };
+    }
+  }
+
+  if (["login", "signup", "auth"].includes(String(to.name))) {
+    if (isAuthenticated.value) {
+      return { path: "/profile" };
+    }
+  }
+
+  return true;
 });
 
 export default router;

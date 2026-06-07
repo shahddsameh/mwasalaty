@@ -5,7 +5,90 @@ export type PlaceSuggestion = {
   label: string;
   area: string;
   category: string;
+  labelAr?: string;
+  areaAr?: string;
+  categoryAr?: string;
 };
+
+const categoryAr: Record<string, string> = {
+  Landmark: "معلم",
+  "Metro station": "محطة مترو",
+  "Bus stop": "موقف أتوبيس",
+  "Quick pick": "اختيار سريع",
+  District: "منطقة",
+  Street: "شارع",
+  Mall: "مول",
+  Market: "سوق",
+  Museum: "متحف",
+  University: "جامعة",
+  "Transit hub": "مركز مواصلات",
+};
+
+const areaAr: Record<string, string> = {
+  Nearby: "بالقرب منك",
+  "Downtown Cairo": "وسط البلد",
+  "Central Cairo": "وسط القاهرة",
+  "Islamic Cairo": "القاهرة الإسلامية",
+  "Gezira Island": "جزيرة الزمالك",
+  Zamalek: "الزمالك",
+  Giza: "الجيزة",
+  "Old Cairo": "مصر القديمة",
+  "South Cairo": "جنوب القاهرة",
+  "North Cairo": "شمال القاهرة",
+  "Nasr City": "مدينة نصر",
+  "East Cairo": "شرق القاهرة",
+};
+
+const labelAr: Record<string, string> = {
+  "Current Location": "الموقع الحالي",
+  "Tahrir Square": "ميدان التحرير",
+  Sadat: "السادات",
+  Nasser: "ناصر",
+  "Mohamed Naguib": "محمد نجيب",
+  Attaba: "العتبة",
+  Ramses: "رمسيس",
+  "Al-Sayeda Zeinab": "السيدة زينب",
+  "Egyptian Museum": "المتحف المصري",
+  "Downtown Cairo": "وسط البلد",
+  "Khan el-Khalili": "خان الخليلي",
+  Opera: "الأوبرا",
+  Zamalek: "الزمالك",
+  "Cairo Tower": "برج القاهرة",
+  Dokki: "الدقي",
+  Bohooth: "البحوث",
+  "Cairo University": "جامعة القاهرة",
+  Faisal: "فيصل",
+  "El Giza": "الجيزة",
+  "El Mounib": "المنيب",
+  "Giza Pyramids": "أهرامات الجيزة",
+  "Grand Egyptian Museum": "المتحف المصري الكبير",
+  "Mar Girgis": "مار جرجس",
+  Maadi: "المعادي",
+  Helwan: "حلوان",
+  "Shubra El Kheima": "شبرا الخيمة",
+  "New El Marg": "المرج الجديدة",
+  Abbassiya: "العباسية",
+  "El Demerdash": "الدمرداش",
+  Ghamra: "غمرة",
+  "Cairo Stadium": "استاد القاهرة",
+  "Nasr City": "مدينة نصر",
+  "Makram Ebeid": "مكرم عبيد",
+  "City Stars Mall": "سيتي ستارز مول",
+  Heliopolis: "مصر الجديدة",
+  "Adly Mansour": "عدلي منصور",
+  "New Cairo": "القاهرة الجديدة",
+};
+
+function suggestion(label: string, area: string, category: string): PlaceSuggestion {
+  return {
+    label,
+    area,
+    category,
+    labelAr: labelAr[label],
+    areaAr: areaAr[area],
+    categoryAr: categoryAr[category],
+  };
+}
 
 // Only places inside the OSM+GTFS graph coverage are suggested, so every pick
 // can actually be routed. Labels match the backend's local geocoding entries.
@@ -13,50 +96,50 @@ const fallbackPlaceSuggestions: PlaceSuggestion[] = [
   { label: "Current Location", area: "Nearby", category: "Quick pick" },
 
   // Downtown / central metro
-  { label: "Tahrir Square", area: "Downtown Cairo", category: "Landmark" },
-  { label: "Sadat", area: "Downtown Cairo", category: "Metro station" },
-  { label: "Nasser", area: "Downtown Cairo", category: "Metro station" },
-  { label: "Mohamed Naguib", area: "Downtown Cairo", category: "Metro station" },
-  { label: "Attaba", area: "Central Cairo", category: "Metro station" },
-  { label: "Ramses", area: "Central Cairo", category: "Transit hub" },
-  { label: "Al-Sayeda Zeinab", area: "Central Cairo", category: "Metro station" },
-  { label: "Egyptian Museum", area: "Downtown Cairo", category: "Landmark" },
-  { label: "Downtown Cairo", area: "Central Cairo", category: "District" },
-  { label: "Khan el-Khalili", area: "Islamic Cairo", category: "Market" },
+  suggestion("Tahrir Square", "Downtown Cairo", "Landmark"),
+  suggestion("Sadat", "Downtown Cairo", "Metro station"),
+  suggestion("Nasser", "Downtown Cairo", "Metro station"),
+  suggestion("Mohamed Naguib", "Downtown Cairo", "Metro station"),
+  suggestion("Attaba", "Central Cairo", "Metro station"),
+  suggestion("Ramses", "Central Cairo", "Transit hub"),
+  suggestion("Al-Sayeda Zeinab", "Central Cairo", "Metro station"),
+  suggestion("Egyptian Museum", "Downtown Cairo", "Landmark"),
+  suggestion("Downtown Cairo", "Central Cairo", "District"),
+  suggestion("Khan el-Khalili", "Islamic Cairo", "Market"),
 
   // Gezira / Giza
-  { label: "Opera", area: "Gezira Island", category: "Metro station" },
-  { label: "Zamalek", area: "Gezira Island", category: "District" },
-  { label: "Cairo Tower", area: "Zamalek", category: "Landmark" },
-  { label: "Dokki", area: "Giza", category: "Metro station" },
-  { label: "Bohooth", area: "Giza", category: "Metro station" },
-  { label: "Cairo University", area: "Giza", category: "University" },
-  { label: "Faisal", area: "Giza", category: "Metro station" },
-  { label: "El Giza", area: "Giza", category: "Metro station" },
-  { label: "El Mounib", area: "Giza", category: "Metro station" },
-  { label: "Giza Pyramids", area: "Giza", category: "Landmark" },
-  { label: "Grand Egyptian Museum", area: "Giza", category: "Museum" },
+  suggestion("Opera", "Gezira Island", "Metro station"),
+  suggestion("Zamalek", "Gezira Island", "District"),
+  suggestion("Cairo Tower", "Zamalek", "Landmark"),
+  suggestion("Dokki", "Giza", "Metro station"),
+  suggestion("Bohooth", "Giza", "Metro station"),
+  suggestion("Cairo University", "Giza", "University"),
+  suggestion("Faisal", "Giza", "Metro station"),
+  suggestion("El Giza", "Giza", "Metro station"),
+  suggestion("El Mounib", "Giza", "Metro station"),
+  suggestion("Giza Pyramids", "Giza", "Landmark"),
+  suggestion("Grand Egyptian Museum", "Giza", "Museum"),
 
   // Old / South Cairo
-  { label: "Mar Girgis", area: "Old Cairo", category: "Metro station" },
-  { label: "Maadi", area: "South Cairo", category: "Metro station" },
-  { label: "Helwan", area: "South Cairo", category: "Metro station" },
+  suggestion("Mar Girgis", "Old Cairo", "Metro station"),
+  suggestion("Maadi", "South Cairo", "Metro station"),
+  suggestion("Helwan", "South Cairo", "Metro station"),
 
   // North Cairo
-  { label: "Shubra El Kheima", area: "North Cairo", category: "Metro station" },
-  { label: "New El Marg", area: "North Cairo", category: "Metro station" },
+  suggestion("Shubra El Kheima", "North Cairo", "Metro station"),
+  suggestion("New El Marg", "North Cairo", "Metro station"),
 
   // East Cairo / Nasr City
-  { label: "Abbassiya", area: "Central Cairo", category: "Metro station" },
-  { label: "El Demerdash", area: "Central Cairo", category: "Metro station" },
-  { label: "Ghamra", area: "Central Cairo", category: "Metro station" },
-  { label: "Cairo Stadium", area: "Nasr City", category: "Landmark" },
-  { label: "Nasr City", area: "East Cairo", category: "District" },
-  { label: "Makram Ebeid", area: "Nasr City", category: "Street" },
-  { label: "City Stars Mall", area: "Nasr City", category: "Mall" },
-  { label: "Heliopolis", area: "East Cairo", category: "District" },
-  { label: "Adly Mansour", area: "East Cairo", category: "Transit hub" },
-  { label: "New Cairo", area: "East Cairo", category: "District" },
+  suggestion("Abbassiya", "Central Cairo", "Metro station"),
+  suggestion("El Demerdash", "Central Cairo", "Metro station"),
+  suggestion("Ghamra", "Central Cairo", "Metro station"),
+  suggestion("Cairo Stadium", "Nasr City", "Landmark"),
+  suggestion("Nasr City", "East Cairo", "District"),
+  suggestion("Makram Ebeid", "Nasr City", "Street"),
+  suggestion("City Stars Mall", "Nasr City", "Mall"),
+  suggestion("Heliopolis", "East Cairo", "District"),
+  suggestion("Adly Mansour", "East Cairo", "Transit hub"),
+  suggestion("New Cairo", "East Cairo", "District"),
 ];
 
 export const placeSuggestions = reactive<PlaceSuggestion[]>([...fallbackPlaceSuggestions]);

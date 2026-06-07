@@ -2,8 +2,8 @@
   <main class="min-h-screen pb-20 bg-background">
     <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-12">
       <PageTitle
-        title="All Tickets"
-        subtitle="Your tickets and booking history"
+        :title="t('tickets.allTitle')"
+        :subtitle="t('tickets.allSubtitle')"
       >
         <template #icon><Ticket class="w-10 h-10 text-primary" /></template>
       </PageTitle>
@@ -11,7 +11,7 @@
       <section class="space-y-8">
         <div>
           <h2 class="font-display text-2xl text-foreground mb-6">
-            Active Tickets ({{ validTickets.length }})
+            {{ t("tickets.activeTickets", { count: validTickets.length }) }}
           </h2>
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <article
@@ -26,7 +26,7 @@
                   <Ticket class="w-6 h-6 text-foreground" />
                   <div>
                     <div class="font-display text-lg text-foreground">
-                      Digital Ticket
+                      {{ t("tickets.digitalTicket") }}
                     </div>
                     <div class="text-sm text-foreground font-mono">
                       {{ ticket.id }}
@@ -36,14 +36,14 @@
                 <span
                   class="px-3 py-1 rounded-full bg-success text-success-foreground flex items-center gap-1 text-sm"
                 >
-                  <Check class="w-4 h-4" /> Valid
+                  <Check class="w-4 h-4" /> {{ t("tickets.valid") }}
                 </span>
               </div>
               <div class="p-5">
                 <div
                   class="text-sm text-muted-foreground flex items-center gap-2 mb-2"
                 >
-                  <MapPin class="w-4 h-4" /> Route
+                  <MapPin class="w-4 h-4" /> {{ t("tickets.route") }}
                 </div>
                 <div class="font-display text-lg text-foreground mb-3">
                   {{ ticket.route.from }} -> {{ ticket.route.to }}
@@ -58,19 +58,19 @@
                   </span>
                 </div>
                 <div class="grid grid-cols-2 gap-3 mb-4">
-                  <SmallStat label="Cost" :value="ticket.cost" />
-                  <SmallStat label="Valid Until" :value="ticket.validUntil" />
+                  <SmallStat :label="t('tickets.cost')" :value="ticket.cost" />
+                  <SmallStat :label="t('tickets.validUntil')" :value="ticket.validUntil" />
                 </div>
                 <div
                   class="p-3 bg-secondary border border-primary/20 rounded-lg mb-4 text-foreground text-sm"
                 >
-                  Expires {{ ticket.expiry }}
+                  {{ t("tickets.expires", { date: ticket.expiry }) }}
                 </div>
                 <AppButton
                   class="w-full flex items-center justify-center gap-2"
                   @click="router.push('/ticket')"
                 >
-                  <Ticket class="w-5 h-5" /> View Ticket Details
+                  <Ticket class="w-5 h-5" /> {{ t("tickets.viewDetails") }}
                 </AppButton>
               </div>
             </article>
@@ -79,7 +79,7 @@
 
         <div>
           <h2 class="font-display text-2xl text-foreground mb-6">
-            Booking History ({{ bookingHistory.length }})
+            {{ t("tickets.bookingHistory", { count: bookingHistory.length }) }}
           </h2>
           <div class="space-y-4">
             <article
@@ -98,7 +98,7 @@
                       <Ticket class="w-4 h-4 text-primary" />
                     </div>
                     <span :class="statusClass(ticket.status)">
-                      {{ ticket.status }}
+                      {{ t(`ticket.status.${ticket.status}`) }}
                     </span>
                   </div>
                   <div class="font-mono text-sm text-muted-foreground truncate">
@@ -108,7 +108,7 @@
 
                 <div class="min-w-0">
                   <div class="text-xs uppercase text-muted-foreground mb-1">
-                    Route
+                    {{ t("tickets.route") }}
                   </div>
                   <div
                     class="flex flex-wrap items-center gap-2 font-display text-lg text-foreground"
@@ -124,7 +124,7 @@
                 >
                   <div>
                     <div class="text-xs uppercase text-muted-foreground mb-1">
-                      Cost
+                      {{ t("tickets.cost") }}
                     </div>
                     <div class="font-display text-foreground">
                       {{ ticket.cost }}
@@ -132,7 +132,7 @@
                   </div>
                   <div class="lg:mt-2">
                     <div class="text-xs uppercase text-muted-foreground mb-1">
-                      Booked
+                      {{ t("tickets.booked") }}
                     </div>
                     <div class="text-sm text-muted-foreground">
                       {{ ticket.bookingTime }}
@@ -154,7 +154,7 @@
                     })
                   "
                 >
-                  Book Again
+                  {{ t("tickets.bookAgain") }}
                 </AppButton>
               </div>
             </article>
@@ -167,12 +167,14 @@
 
 <script setup lang="ts">
 import { defineComponent, h } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { ArrowRight, Check, MapPin, Ticket } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import PageTitle from "@/components/shared/PageTitle.vue";
 
 const router = useRouter();
+const { t } = useI18n();
 const validTickets = [
   {
     id: "MWS-24122801-4K9L",

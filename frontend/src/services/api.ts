@@ -4,6 +4,13 @@ const COLOR_MAP: Record<string, { color: string; softColor: string }> = {
   bus:     { color: 'var(--transport-bus)',     softColor: 'var(--transport-bus-soft)' },
 };
 
+import {
+  localizeMode,
+  localizePlaceName,
+  localizeRouteInstruction,
+  resolveKnownPlace,
+} from "./placeLocalization";
+
 const OTP_MODE_TO_TYPE: Record<string, string> = {
   WALK:   'walking',
   SUBWAY: 'metro',
@@ -28,6 +35,7 @@ export type ApiLeg = {
   endTime: string;
   route: null | { shortName?: string; longName?: string };
   instruction: string;
+  geometry?: { lat: number; lng: number }[];
   fare: ApiFare;
 };
 
@@ -64,6 +72,7 @@ export type RouteDetailStep = {
   to?: string;
   color: string;
   softColor: string;
+  geometry?: { lat: number; lng: number }[];
 };
 
 export type ApiRouteOption = ApiItinerary & {
@@ -80,13 +89,14 @@ function legToStep(leg: ApiLeg): RouteDetailStep {
   const colors = COLOR_MAP[type] ?? COLOR_MAP.bus;
   return {
     type,
-    instruction: leg.instruction,
+    instruction: localizeRouteInstruction(leg.instruction),
     duration: `${leg.durationMinutes} min`,
     ...(leg.mode === 'WALK' ? { distance: `${Math.round(leg.distanceMeters)}m` } : {}),
-    from: leg.from?.name,
-    to: leg.to?.name,
+    from: localizePlaceName(leg.from?.name),
+    to: localizePlaceName(leg.to?.name),
     color: colors.color,
     softColor: colors.softColor,
+    geometry: leg.geometry,
   };
 }
 
@@ -106,8 +116,8 @@ function mapItinerary(itin: ApiItinerary): ApiRouteOption {
     steps: itin.legs.map((leg) => ({
       type: OTP_MODE_TO_TYPE[leg.mode] ?? 'bus',
       label: leg.route?.shortName
-        ? `${OTP_MODE_TO_TYPE[leg.mode] === 'metro' ? 'Metro' : 'Bus'} ${leg.route.shortName}`
-        : leg.instruction,
+        ? `${localizeMode(OTP_MODE_TO_TYPE[leg.mode] === 'metro' ? 'Metro' : 'Bus')} ${leg.route.shortName}`
+        : localizeRouteInstruction(leg.instruction),
     })),
     detailSteps: itin.legs.map(legToStep),
   };
@@ -128,17 +138,33 @@ export async function planRoute(
   coords: { fromCoords?: PlaceCoords; toCoords?: PlaceCoords } = {},
 ): Promise<ApiRouteOption[]> {
   const now = new Date();
-  const date = now.toISOString().slice(0, 10);
-  const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  let date = now.toISOString().slice(0, 10);
+  let time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-  // Send lat/lng when we have them (e.g. current location); the backend accepts
-  // either coordinates or a label it geocodes server-side.
-  const from = coords.fromCoords
-    ? { lat: coords.fromCoords.lat, lng: coords.fromCoords.lng, label: fromLabel }
-    : { label: fromLabel };
-  const to = coords.toCoords
-    ? { lat: coords.toCoords.lat, lng: coords.toCoords.lng, label: toLabel }
-    : { label: toLabel };
+  // TODO: remove test default before final production demo if needed.
+  if (import.meta.env.DEV) {
+    time = '10:00';
+    date = '2026-06-06';
+  }
+
+  const knownFrom = resolveKnownPlace(fromLabel);
+  const knownTo = resolveKnownPlace(toLabel);
+  const fromCoords = coords.fromCoords ?? (knownFrom ? { lat: knownFrom.lat, lng: knownFrom.lng } : undefined);
+  const toCoords = coords.toCoords ?? (knownTo ? { lat: knownTo.lat, lng: knownTo.lng } : undefined);
+
+  if (!fromCoords) throw new Error("place_not_found_from");
+  if (!toCoords) throw new Error("place_not_found_to");
+
+  const from = {
+    lat: fromCoords.lat,
+    lng: fromCoords.lng,
+    label: knownFrom?.label ?? fromLabel,
+  };
+  const to = {
+    lat: toCoords.lat,
+    lng: toCoords.lng,
+    label: knownTo?.label ?? toLabel,
+  };
 
   const payload = {
     from,

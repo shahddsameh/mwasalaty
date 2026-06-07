@@ -3,10 +3,10 @@
     <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">
       <section class="mb-8">
         <h1 class="font-display text-2xl md:text-3xl text-foreground mb-2">
-          Where are you going?
+          {{ t("home.title") }}
         </h1>
         <p class="text-sm md:text-base text-muted-foreground">
-          Plan your journey across Greater Cairo with multiple transport options
+          {{ t("home.subtitle") }}
         </p>
       </section>
 
@@ -19,7 +19,7 @@
               <div>
                 <PlaceAutocomplete
                   v-model="start"
-                  placeholder="Starting point"
+                  :placeholder="t('home.startingPoint')"
                   :error="startError"
                   :suggestions="placeSuggestions"
                 >
@@ -31,13 +31,13 @@
                   @click="useCurrentLocation"
                 >
                   <MapPinned class="w-4 h-4" />
-                  {{ locating ? "Getting your location…" : "Use current location" }}
+                  {{ locating ? t("home.gettingLocation") : t("home.useCurrentLocation") }}
                 </button>
               </div>
 
               <PlaceAutocomplete
                 v-model="destination"
-                placeholder="Where to?"
+                :placeholder="t('home.whereTo')"
                 :error="destinationError"
                 :suggestions="placeSuggestions"
               >
@@ -57,14 +57,14 @@
                   class="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1"
                 />
                 <div class="text-xs md:text-sm font-medium">
-                  {{ option.label }}
+                  {{ t(option.labelKey) }}
                 </div>
               </button>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
               <AppButton size="lg" class="w-full" @click="searchRoutes">
-                Search Routes
+                {{ t("home.searchRoutes") }}
               </AppButton>
               <AppButton
                 variant="outline"
@@ -72,17 +72,17 @@
                 class="w-full flex items-center justify-center gap-2"
                 @click="router.push('/ai-assistant')"
               >
-                <Sparkles class="w-5 h-5" /> Ask AI
+                <Sparkles class="w-5 h-5" /> {{ t("home.askAi") }}
               </AppButton>
             </div>
           </div>
 
-          <Panel title="Recent Searches" :icon="Clock">
+          <Panel :title="t('home.recentSearches')" :icon="Clock">
             <p
               v-if="recentSearches.length === 0"
               class="text-sm text-muted-foreground"
             >
-              Your recent routes will appear here.
+              {{ t("home.recentEmpty") }}
             </p>
             <div
               v-for="search in recentSearches"
@@ -91,7 +91,7 @@
             >
               <button
                 type="button"
-                class="min-w-0 flex-1 p-3 text-left"
+                class="min-w-0 flex-1 p-3 text-start"
                 @click="useSearch(search)"
               >
                 <div class="text-foreground text-sm truncate">
@@ -103,8 +103,8 @@
               </button>
               <button
                 type="button"
-                class="mr-2 shrink-0 p-2 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
-                aria-label="Delete recent search"
+                class="me-2 shrink-0 p-2 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                :aria-label="t('home.deleteRecentSearch')"
                 @click="deleteSearch(search)"
               >
                 <Trash2 class="w-4 h-4" />
@@ -114,19 +114,19 @@
         </div>
 
         <div class="space-y-6">
-          <Panel title="Saved Places" :icon="Star">
+          <Panel :title="t('home.savedPlaces')" :icon="Star">
             <div class="flex gap-2">
               <button
                 type="button"
                 class="flex-1 rounded-lg border border-border px-3 py-2 text-sm text-foreground hover:border-primary hover:bg-secondary transition-all"
                 @click="openSavePlace('destination')"
               >
-                Save destination
+                {{ t("home.saveDestination") }}
               </button>
               <button
                 type="button"
                 class="rounded-lg border border-border p-2 text-muted-foreground hover:border-primary hover:text-primary transition-all"
-                aria-label="Save starting point"
+                :aria-label="t('home.saveStartingPoint')"
                 @click="openSavePlace('start')"
               >
                 <Plus class="w-4 h-4" />
@@ -139,11 +139,11 @@
               <input
                 v-model="newPlaceName"
                 class="w-full px-3 py-2 bg-card border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="Place name"
+                :placeholder="t('home.placeName')"
               />
               <PlaceAutocomplete
                 v-model="newPlaceAddress"
-                placeholder="Address or location"
+                :placeholder="t('home.addressOrLocation')"
                 :suggestions="placeSuggestions"
               />
               <div class="grid grid-cols-4 gap-2">
@@ -154,7 +154,7 @@
                   :class="placeTypeClass(type.value)"
                   @click="newPlaceType = type.value"
                 >
-                  {{ type.label }}
+                  {{ t(type.labelKey) }}
                 </button>
               </div>
               <p v-if="savePlaceError" class="text-sm text-destructive">
@@ -166,21 +166,21 @@
                   class="flex-1 rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground hover:bg-primary-hover transition-colors"
                   @click="addSavedPlace"
                 >
-                  Save
+                  {{ t("home.save") }}
                 </button>
                 <button
                   type="button"
                   class="flex-1 rounded-lg border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                   @click="closeSavePlace"
                 >
-                  Cancel
+                  {{ t("home.cancel") }}
                 </button>
               </div>
             </div>
             <button
               v-for="place in savedPlaces"
               :key="place.id"
-              class="w-full p-3 rounded-lg border border-border hover:border-primary hover:bg-secondary transition-all text-left"
+              class="w-full p-3 rounded-lg border border-border hover:border-primary hover:bg-secondary transition-all text-start"
               @click="destination = place.address"
             >
               <div class="flex items-center gap-2.5">
@@ -196,7 +196,7 @@
                 </div>
                 <div>
                   <div class="text-foreground font-medium text-sm">
-                    {{ place.name }}
+                    {{ savedPlaceLabel(place) }}
                   </div>
                   <div class="text-xs text-muted-foreground">
                     {{ place.address }}
@@ -206,7 +206,7 @@
             </button>
           </Panel>
 
-          <Panel title="Popular Destinations">
+          <Panel :title="t('home.popularDestinations')">
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3">
               <button
                 v-for="dest in popularDestinations"
@@ -225,9 +225,9 @@
                   />
                 </div>
                 <div class="text-xs text-foreground font-medium leading-tight">
-                  {{ dest.name }}
+                  {{ t(dest.nameKey) }}
                 </div>
-                <div class="text-xs text-muted-foreground">{{ dest.area }}</div>
+                <div class="text-xs text-muted-foreground">{{ t(dest.areaKey) }}</div>
               </button>
             </div>
           </Panel>
@@ -239,6 +239,7 @@
 
 <script setup lang="ts">
 import { defineComponent, h, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import {
   Briefcase,
@@ -267,6 +268,7 @@ import { placeSuggestions } from "@/features/home/services/placeSuggestions";
 import {
   getSavedPlaces,
   savePlace,
+  type SavedPlace,
   type SavedPlaceIconKey,
   type SavedPlaceType,
 } from "@/features/home/services/savedPlaces";
@@ -280,6 +282,7 @@ import {
 } from "@/features/trip-planner/services/routeSearch";
 
 const router = useRouter();
+const { t } = useI18n();
 const start = ref("");
 const destination = ref("");
 const startError = ref("");
@@ -294,7 +297,7 @@ const savePlaceError = ref("");
 
 function useCurrentLocation() {
   if (!("geolocation" in navigator)) {
-    startError.value = "Location isn't available on this device.";
+    startError.value = t("home.validation.locationUnavailable");
     return;
   }
   locating.value = true;
@@ -303,76 +306,83 @@ function useCurrentLocation() {
   navigator.geolocation.getCurrentPosition(
     (position) => {
       const { latitude, longitude } = position.coords;
-      setPlaceCoords("Current Location", { lat: latitude, lng: longitude });
-      start.value = "Current Location";
+      const currentLocation = t("home.currentLocation");
+      setPlaceCoords(currentLocation, { lat: latitude, lng: longitude });
+      start.value = currentLocation;
       locating.value = false;
     },
     (error) => {
       locating.value = false;
       startError.value =
         error.code === error.PERMISSION_DENIED
-          ? "Location permission denied. Enter a starting point instead."
-          : "Couldn't get your location. Enter a starting point instead.";
+          ? t("home.validation.permissionDenied")
+          : t("home.validation.locationFailed");
     },
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
   );
 }
 
 const filters = [
-  { value: "fastest" as const, label: "Fastest", icon: Clock },
-  { value: "cheapest" as const, label: "Cheapest", icon: DollarSign },
-  { value: "comfortable" as const, label: "Comfortable", icon: Star },
+  { value: "fastest" as const, labelKey: "home.filters.fastest", icon: Clock },
+  { value: "cheapest" as const, labelKey: "home.filters.cheapest", icon: DollarSign },
+  { value: "comfortable" as const, labelKey: "home.filters.comfortable", icon: Star },
 ];
 
 const recentSearches = ref<RecentRouteSearch[]>(getRecentRouteSearches());
 const savedPlaces = ref(getSavedPlaces());
 
 const placeTypes = [
-  { value: "home" as const, label: "Home" },
-  { value: "work" as const, label: "Work" },
-  { value: "school" as const, label: "School" },
-  { value: "other" as const, label: "Other" },
+  { value: "home" as const, labelKey: "home.placeTypes.home" },
+  { value: "work" as const, labelKey: "home.placeTypes.work" },
+  { value: "school" as const, labelKey: "home.placeTypes.school" },
+  { value: "other" as const, labelKey: "home.placeTypes.other" },
 ];
 
 const popularDestinations = [
   {
     name: "Cairo Airport",
-    area: "Heliopolis",
+    nameKey: "home.popular.cairoAirport.name",
+    areaKey: "home.popular.cairoAirport.area",
     icon: Plane,
     color: "var(--transport-walking)",
     softColor: "var(--transport-walking-soft)",
   },
   {
     name: "Egyptian Museum",
-    area: "Downtown",
+    nameKey: "home.popular.egyptianMuseum.name",
+    areaKey: "home.popular.egyptianMuseum.area",
     icon: Landmark,
     color: "var(--transport-microbus)",
     softColor: "var(--transport-microbus-soft)",
   },
   {
     name: "City Stars Mall",
-    area: "Nasr City",
+    nameKey: "home.popular.cityStars.name",
+    areaKey: "home.popular.cityStars.area",
     icon: ShoppingBag,
     color: "var(--primary)",
     softColor: "var(--primary-soft)",
   },
   {
     name: "Cairo Tower",
-    area: "Zamalek",
+    nameKey: "home.popular.cairoTower.name",
+    areaKey: "home.popular.cairoTower.area",
     icon: Building2,
     color: "var(--success)",
     softColor: "var(--success-soft)",
   },
   {
     name: "Khan el-Khalili",
-    area: "Islamic Cairo",
+    nameKey: "home.popular.khanElKhalili.name",
+    areaKey: "home.popular.khanElKhalili.area",
     icon: CastleIcon,
     color: "var(--foreground)",
     softColor: "var(--muted)",
   },
   {
     name: "Giza Pyramids",
-    area: "Giza",
+    nameKey: "home.popular.gizaPyramids.name",
+    areaKey: "home.popular.gizaPyramids.area",
     icon: Triangle,
     color: "var(--transport-microbus)",
     softColor: "var(--transport-microbus-soft)",
@@ -439,6 +449,15 @@ function savedPlaceIcon(iconKey: SavedPlaceIconKey) {
   return MapPin;
 }
 
+function savedPlaceLabel(place: SavedPlace) {
+  const normalized = place.name.trim().toLowerCase();
+  if (normalized === "home") return t("home.placeTypes.home");
+  if (normalized === "work") return t("home.placeTypes.work");
+  if (normalized === "school") return t("home.placeTypes.school");
+  if (normalized === "gym" || place.type === "other") return t("home.placeTypes.gym");
+  return place.name;
+}
+
 function openSavePlace(source: "start" | "destination") {
   newPlaceAddress.value =
     source === "start" ? start.value.trim() : destination.value.trim();
@@ -458,7 +477,7 @@ function addSavedPlace() {
   const name = newPlaceName.value.trim() || address;
 
   if (!address) {
-    savePlaceError.value = "Enter a place address first.";
+    savePlaceError.value = t("home.validation.placeAddressRequired");
     return;
   }
 
@@ -486,31 +505,34 @@ function deleteSearch(search: RecentRouteSearch) {
 function formatRecentTime(searchedAt: number) {
   const elapsedMinutes = Math.max(0, Math.floor((Date.now() - searchedAt) / 60000));
 
-  if (elapsedMinutes < 1) return "Just now";
+  if (elapsedMinutes < 1) return t("home.time.justNow");
   if (elapsedMinutes < 60) {
-    return `${elapsedMinutes} min${elapsedMinutes === 1 ? "" : "s"} ago`;
+    const unit = elapsedMinutes === 1 ? t("home.time.minute") : t("home.time.minutes");
+    return `${elapsedMinutes} ${unit} ${t("home.time.ago")}`;
   }
 
   const elapsedHours = Math.floor(elapsedMinutes / 60);
   if (elapsedHours < 24) {
-    return `${elapsedHours} hour${elapsedHours === 1 ? "" : "s"} ago`;
+    const unit = elapsedHours === 1 ? t("home.time.hour") : t("home.time.hours");
+    return `${elapsedHours} ${unit} ${t("home.time.ago")}`;
   }
 
   const elapsedDays = Math.floor(elapsedHours / 24);
-  return `${elapsedDays} day${elapsedDays === 1 ? "" : "s"} ago`;
+  const unit = elapsedDays === 1 ? t("home.time.day") : t("home.time.days");
+  return `${elapsedDays} ${unit} ${t("home.time.ago")}`;
 }
 
 function searchRoutes() {
   const trimmedStart = start.value.trim();
   const trimmedDestination = destination.value.trim();
 
-  startError.value = trimmedStart ? "" : "Please enter a starting point.";
+  startError.value = trimmedStart ? "" : t("home.validation.startRequired");
   destinationError.value = trimmedDestination
     ? ""
-    : "Please enter a destination.";
+    : t("home.validation.destinationRequired");
 
   if (!trimmedStart || !trimmedDestination) {
-    alert("Please enter both the starting point and destination.");
+    alert(t("home.validation.bothRequired"));
     return;
   }
 

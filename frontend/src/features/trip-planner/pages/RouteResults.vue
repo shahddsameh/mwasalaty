@@ -5,24 +5,24 @@
         class="flex items-center gap-2 text-foreground hover:text-primary mb-6 transition-colors"
         @click="router.push('/')"
       >
-        <ArrowLeft class="w-5 h-5" /> Back to Search
+        <ArrowLeft class="w-5 h-5 rtl:rotate-180" /> {{ t("routeResults.backToSearch") }}
       </button>
 
       <section class="mb-6">
         <h1 class="font-display text-2xl md:text-3xl text-foreground mb-2">
-          Route Options
+          {{ t("routeResults.title") }}
         </h1>
         <div
           class="flex items-center gap-2 text-sm md:text-base text-muted-foreground"
         >
           <MapPin class="w-4 h-4 flex-shrink-0" />
-          <span class="truncate">{{ start }} -> {{ destination }}</span>
+          <span class="truncate">{{ displayStart }} -> {{ displayDestination }}</span>
         </div>
       </section>
 
       <div class="lg:hidden grid grid-cols-2 gap-3 mb-4">
-        <Stat label="Distance" value="~28 km" />
-        <Stat label="Routes Found" :value="`${routes.length} options`" />
+        <Stat :label="t('routeResults.distance')" value="~28 km" />
+        <Stat :label="t('routeResults.routesFound')" :value="t('routeResults.optionsCount', { count: routes.length })" />
       </div>
 
       <div class="mb-6 -mx-4 md:mx-0 px-4 md:px-0">
@@ -33,7 +33,7 @@
             :class="tabClass(tab.value)"
             @click="sortBy = tab.value"
           >
-            {{ tab.label }}
+            {{ t(tab.labelKey) }}
           </button>
           <button
             class="px-3 py-2.5 rounded-lg bg-card border-2 border-border text-muted-foreground hover:border-primary transition-all flex-shrink-0"
@@ -64,26 +64,25 @@
                 d="M4 12a8 8 0 018-8v8H4z"
               />
             </svg>
-            Planning your route…
+            {{ t("routeResults.planning") }}
           </div>
           <div
             v-else-if="errorMessage"
             class="bg-card border-2 border-border rounded-xl p-6 text-muted-foreground"
           >
             <h2 class="font-display text-xl text-foreground mb-2">
-              No dynamic routes found
+              {{ t("routeResults.noRoutesTitle") }}
             </h2>
             <p>{{ errorMessage }}</p>
             <p class="mt-2 text-sm">
-              Make sure the backend and OpenTripPlanner are running, then try
-              the search again.
+              {{ t("routeResults.backendHelp") }}
             </p>
           </div>
           <div
             v-else-if="!routes.length"
             class="bg-card border-2 border-border rounded-xl p-6 text-muted-foreground"
           >
-            No dynamic routes found for this search.
+            {{ t("routeResults.noRoutesForSearch") }}
           </div>
           <template v-else>
             <RouteCard
@@ -101,20 +100,20 @@
         <aside class="hidden lg:block lg:sticky lg:top-8 h-fit">
           <div class="bg-card rounded-xl p-6 border-2 border-border">
             <h3 class="font-display text-xl text-foreground mb-4">
-              Map Overview
+              {{ t("routeResults.mapOverview") }}
             </h3>
             <div
               class="aspect-square bg-gradient-to-br from-primary-soft to-warning-soft rounded-lg flex items-center justify-center border-2 border-border"
             >
               <div class="text-center">
                 <MapPin class="w-16 h-16 text-primary mx-auto mb-2" />
-                <p class="text-sm text-muted-foreground">Interactive map</p>
-                <p class="text-xs text-muted-foreground">showing all routes</p>
+                <p class="text-sm text-muted-foreground">{{ t("routeResults.interactiveMap") }}</p>
+                <p class="text-xs text-muted-foreground">{{ t("routeResults.showingAllRoutes") }}</p>
               </div>
             </div>
             <div class="mt-6 space-y-3">
-              <Stat label="Distance" value="~28 km" />
-              <Stat label="Routes Found" :value="`${routes.length} options`" />
+              <Stat :label="t('routeResults.distance')" value="~28 km" />
+              <Stat :label="t('routeResults.routesFound')" :value="t('routeResults.optionsCount', { count: routes.length })" />
             </div>
           </div>
         </aside>
@@ -125,10 +124,12 @@
 
 <script setup lang="ts">
 import { computed, defineComponent, h, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { ArrowLeft, MapPin, SlidersHorizontal } from "@lucide/vue";
 import RouteCard from "@/components/route/RouteCard.vue";
 import { planRoute, type ApiRouteOption } from "@/services/api";
+import { localizePlaceName } from "@/services/placeLocalization";
 import {
   getPlaceCoords,
   getSavedRouteSearch,
@@ -139,6 +140,7 @@ import {
 
 const router = useRouter();
 const currentRoute = useRoute();
+const { t } = useI18n();
 
 const state = history.state ?? {};
 const queryString = (value: unknown) =>
@@ -159,15 +161,17 @@ const destination =
   state.destination ??
   savedSearch.destination ??
   "Cairo Airport";
+const displayStart = computed(() => localizePlaceName(start));
+const displayDestination = computed(() => localizePlaceName(destination));
 
 const sortBy = ref<"fastest" | "cheapest" | "comfortable">(
   normalizeFilter(queryFilter ?? state.filter ?? savedSearch.filter),
 );
 
 const tabs = [
-  { value: "fastest" as const, label: "Fastest" },
-  { value: "cheapest" as const, label: "Cheapest" },
-  { value: "comfortable" as const, label: "Comfortable" },
+  { value: "fastest" as const, labelKey: "routeResults.fastest" },
+  { value: "cheapest" as const, labelKey: "routeResults.cheapest" },
+  { value: "comfortable" as const, labelKey: "routeResults.comfortable" },
 ];
 
 const loading = ref(false);
@@ -186,8 +190,7 @@ onMounted(async () => {
     });
   } catch (error) {
     apiRoutes.value = [];
-    errorMessage.value =
-      error instanceof Error ? error.message : "Could not plan this route.";
+    errorMessage.value = routeErrorMessage(error);
   } finally {
     loading.value = false;
   }
@@ -288,5 +291,16 @@ function selectRoute(route: ApiRouteOption) {
       steps: route.detailSteps,
     },
   });
+}
+
+function routeErrorMessage(error: unknown) {
+  if (!(error instanceof Error)) return t("routeResults.errors.planFailed");
+  if (error.message === "place_not_found_from") {
+    return t("routeResults.errors.placeNotFound", { place: start });
+  }
+  if (error.message === "place_not_found_to") {
+    return t("routeResults.errors.placeNotFound", { place: destination });
+  }
+  return error.message || t("routeResults.errors.planFailed");
 }
 </script>

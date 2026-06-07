@@ -2,48 +2,48 @@
   <main class="min-h-screen bg-background pb-20">
     <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-12">
       <PageTitle
-        title="AI Trip Planner"
-        subtitle="Let AI create a complete day itinerary with attractions, restaurants, and transport"
+        :title="t('aiTripPlanner.title')"
+        :subtitle="t('aiTripPlanner.subtitle')"
       />
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         <section class="lg:col-span-2 space-y-6">
           <div class="bg-card rounded-xl p-4 md:p-8 border-2 border-border">
             <h2 class="font-display text-2xl text-foreground mb-6">
-              Tell me about your trip
+              {{ t("aiTripPlanner.formTitle") }}
             </h2>
             <div class="space-y-6">
               <label class="block">
                 <span class="block text-sm text-foreground mb-2"
-                  >What kind of trip are you planning?</span
+                  >{{ t("aiTripPlanner.tripKind") }}</span
                 >
                 <textarea
                   v-model="tripType"
                   rows="4"
                   class="w-full px-4 py-3 bg-card border border-border  rounded-lg focus:outline-none focus:ring-2 focus:ring-ring resize-none"
-                  placeholder="E.g., A weekend cultural tour of Cairo..."
+                  :placeholder="t('aiTripPlanner.tripPlaceholder')"
                 />
               </label>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <AppInput
                   v-model="duration"
-                  label="Trip Duration"
+                  :label="t('aiTripPlanner.duration')"
                   type="number"
-                  placeholder="Number of days"
+                  :placeholder="t('aiTripPlanner.durationPlaceholder')"
                 >
                   <template #icon><Calendar class="w-5 h-5" /></template>
                 </AppInput>
                 <AppInput
                   v-model="budget"
-                  label="Total Budget (EGP)"
+                  :label="t('aiTripPlanner.budget')"
                   type="number"
-                  placeholder="Your budget"
+                  :placeholder="t('aiTripPlanner.budgetPlaceholder')"
                 >
                   <template #icon><DollarSign class="w-5 h-5" /></template>
                 </AppInput>
               </div>
               <div>
                 <label class="block text-sm text-foreground mb-3"
-                  >Select your interests</label
+                  >{{ t("aiTripPlanner.interests") }}</label
                 >
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
@@ -64,7 +64,7 @@
                         />
                       </div>
                       <span class="text-sm text-foreground font-medium">{{
-                        option.label
+                        t(option.labelKey)
                       }}</span>
                     </div>
                   </button>
@@ -76,20 +76,20 @@
                 :disabled="!tripType || !budget"
                 @click="generate"
               >
-                <Wand2 class="w-5 h-5" /> Generate My Trip Plan
+                <Wand2 class="w-5 h-5" /> {{ t("aiTripPlanner.generate") }}
               </AppButton>
             </div>
           </div>
 
           <section class="bg-card rounded-xl p-6 border-2 border-border">
             <h3 class="font-display text-xl text-foreground mb-4">
-              Popular Trip Ideas
+              {{ t("aiTripPlanner.popularIdeas") }}
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button
                 v-for="idea in ideas"
                 :key="idea.name"
-                class="p-4 text-left rounded-lg border border-border hover:border-primary hover:bg-primary-soft transition-all"
+                class="p-4 text-start rounded-lg border border-border hover:border-primary hover:bg-primary-soft transition-all"
                 @click="useIdea(idea)"
               >
                 <component
@@ -98,7 +98,7 @@
                   :style="{ color: idea.color }"
                 />
                 <div class="font-display text-foreground mb-1">
-                  {{ idea.name }}
+                  {{ t(idea.nameKey) }}
                 </div>
                 <div class="text-sm text-muted-foreground">
                   {{ idea.duration }} - {{ idea.budget }}
@@ -111,19 +111,19 @@
         <aside class="space-y-6">
           <section class="bg-card rounded-xl p-6 border-2 border-border">
             <h3 class="font-display text-xl text-foreground mb-4">
-              How it works
+              {{ t("aiTripPlanner.howItWorks") }}
             </h3>
             <Step
               n="1"
-              title="Tell us your preferences"
-              copy="Duration, budget, and interests"
+              :title="t('aiTripPlanner.steps.preferences.title')"
+              :copy="t('aiTripPlanner.steps.preferences.copy')"
             />
             <Step
               n="2"
-              title="AI creates your plan"
-              copy="Attractions, food, and transport"
+              :title="t('aiTripPlanner.steps.create.title')"
+              :copy="t('aiTripPlanner.steps.create.copy')"
             />
-            <Step n="3" title="Save your trip" copy="Access it anytime" />
+            <Step n="3" :title="t('aiTripPlanner.steps.save.title')" :copy="t('aiTripPlanner.steps.save.copy')" />
           </section>
 
           <section
@@ -131,13 +131,13 @@
           >
             <Sparkles class="w-8 h-8 text-foreground mb-3" />
             <h3 class="font-display text-xl text-foreground mb-2">
-              Included in your plan
+              {{ t("aiTripPlanner.included") }}
             </h3>
             <ul class="space-y-2 text-sm text-foreground">
-              <li>AI-generated daily itineraries</li>
-              <li>Personalized activity suggestions</li>
-              <li>Restaurant and cafe recommendations</li>
-              <li>Detailed cost breakdown</li>
+              <li>{{ t("aiTripPlanner.includedItems.itineraries") }}</li>
+              <li>{{ t("aiTripPlanner.includedItems.activities") }}</li>
+              <li>{{ t("aiTripPlanner.includedItems.restaurants") }}</li>
+              <li>{{ t("aiTripPlanner.includedItems.cost") }}</li>
             </ul>
           </section>
         </aside>
@@ -148,6 +148,7 @@
 
 <script setup lang="ts">
 import { defineComponent, h, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import {
   Building2,
@@ -167,6 +168,7 @@ import AppInput from "@/components/ui/AppInput.vue";
 import PageTitle from "@/components/shared/PageTitle.vue";
 
 const router = useRouter();
+const { t } = useI18n();
 const tripType = ref("");
 const duration = ref("1");
 const budget = ref("");
@@ -174,42 +176,42 @@ const interests = ref<string[]>([]);
 const interestOptions = [
   {
     id: "culture",
-    label: "Cultural Sites",
+    labelKey: "aiTripPlanner.interest.culture",
     icon: Landmark,
     color: "var(--primary)",
     softColor: "var(--primary-soft)",
   },
   {
     id: "food",
-    label: "Food & Dining",
+    labelKey: "aiTripPlanner.interest.food",
     icon: Utensils,
     color: "var(--transport-microbus)",
     softColor: "var(--transport-microbus-soft)",
   },
   {
     id: "shopping",
-    label: "Shopping",
+    labelKey: "aiTripPlanner.interest.shopping",
     icon: ShoppingBag,
     color: "var(--transport-walking)",
     softColor: "var(--transport-walking-soft)",
   },
   {
     id: "nature",
-    label: "Parks & Nature",
+    labelKey: "aiTripPlanner.interest.nature",
     icon: TreePine,
     color: "var(--success)",
     softColor: "var(--success-soft)",
   },
   {
     id: "history",
-    label: "Historical",
+    labelKey: "aiTripPlanner.interest.history",
     icon: ScrollText,
     color: "var(--foreground)",
     softColor: "var(--muted)",
   },
   {
     id: "modern",
-    label: "Modern Cairo",
+    labelKey: "aiTripPlanner.interest.modern",
     icon: Building2,
     color: "var(--muted-foreground)",
     softColor: "var(--muted)",
@@ -218,6 +220,7 @@ const interestOptions = [
 const ideas = [
   {
     name: "Ancient Cairo Explorer",
+    nameKey: "aiTripPlanner.ideas.ancient",
     duration: "1 day",
     budget: "500 EGP",
     icon: Landmark,
@@ -225,6 +228,7 @@ const ideas = [
   },
   {
     name: "Food Lover's Tour",
+    nameKey: "aiTripPlanner.ideas.food",
     duration: "1 day",
     budget: "800 EGP",
     icon: Utensils,
@@ -232,6 +236,7 @@ const ideas = [
   },
   {
     name: "Modern Cairo Experience",
+    nameKey: "aiTripPlanner.ideas.modern",
     duration: "2 days",
     budget: "1500 EGP",
     icon: Building2,
@@ -239,6 +244,7 @@ const ideas = [
   },
   {
     name: "Weekend Cultural Tour",
+    nameKey: "aiTripPlanner.ideas.weekend",
     duration: "3 days",
     budget: "2000 EGP",
     icon: Theater,
@@ -272,7 +278,7 @@ function toggleInterest(id: string) {
 
 function interestClass(id: string) {
   return [
-    "p-4 rounded-lg border-2 transition-all text-left",
+    "p-4 rounded-lg border-2 transition-all text-start",
     interests.value.includes(id)
       ? "border-primary bg-primary-soft"
       : "border-border hover:border-primary",

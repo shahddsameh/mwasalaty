@@ -4,7 +4,8 @@
     <div class="relative">
       <div
         v-if="$slots.icon"
-        class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+        class="absolute top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+        style="inset-inline-start: 0.75rem;"
       >
         <slot name="icon" />
       </div>
@@ -13,7 +14,7 @@
         :value="modelValue"
         :class="[
           'w-full px-4 py-2.5 bg-card border border-border bg-muted rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all',
-          $slots.icon ? 'pl-10' : '',
+          $slots.icon ? 'ps-10' : '',
         ]"
         role="combobox"
         autocomplete="off"
@@ -33,7 +34,8 @@
       <div
         v-if="showMenu"
         :id="listboxId"
-        class="absolute left-0 right-0 top-full z-30 mt-2 max-h-72 overflow-auto rounded-lg border border-border bg-card shadow-lg"
+        class="absolute top-full z-30 mt-2 max-h-72 overflow-auto rounded-lg border border-border bg-card shadow-lg"
+        style="inset-inline-start: 0; inset-inline-end: 0;"
         role="listbox"
       >
         <button
@@ -42,7 +44,7 @@
           :key="suggestion.label"
           type="button"
           :class="[
-            'w-full px-3 py-2.5 text-left transition-colors',
+            'w-full px-3 py-2.5 text-start transition-colors',
             index === activeIndex
               ? 'bg-secondary text-primary'
               : 'hover:bg-muted text-foreground',
@@ -51,9 +53,9 @@
           :aria-selected="index === activeIndex"
           @mousedown.prevent="selectSuggestion(suggestion)"
         >
-          <span class="block text-sm font-medium">{{ suggestion.label }}</span>
+          <span class="block text-sm font-medium">{{ displayLabel(suggestion) }}</span>
           <span class="block text-xs text-muted-foreground">
-            {{ suggestion.area }} · {{ suggestion.category }}
+            {{ displayArea(suggestion) }} · {{ displayCategory(suggestion) }}
           </span>
         </button>
       </div>
@@ -64,6 +66,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import type { PlaceSuggestion } from "../services/placeSuggestions";
 
 defineOptions({ inheritAttrs: false });
@@ -76,6 +79,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{ "update:modelValue": [value: string] }>();
+const { locale } = useI18n();
 
 const inputRef = ref<HTMLInputElement | null>(null);
 const isFocused = ref(false);
@@ -89,13 +93,11 @@ const filteredSuggestions = computed(() => {
   if (!query) return props.suggestions.slice(0, 8);
 
   const startsWithMatches = props.suggestions.filter((suggestion) =>
-    normalize(suggestion.label).startsWith(query),
+    searchableText(suggestion).startsWith(query),
   );
   const containsMatches = props.suggestions.filter((suggestion) => {
-    const text = normalize(
-      `${suggestion.label} ${suggestion.area} ${suggestion.category}`,
-    );
-    return !normalize(suggestion.label).startsWith(query) && text.includes(query);
+    const text = searchableText(suggestion);
+    return !text.startsWith(query) && text.includes(query);
   });
 
   return [...startsWithMatches, ...containsMatches].slice(0, 8);
@@ -114,7 +116,46 @@ watch(filteredSuggestions, () => {
 });
 
 function normalize(value: string) {
-  return value.trim().toLowerCase().replace(/[-_]+/g, " ").replace(/\s+/g, " ");
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[،,]/g, " ")
+    .replace(/[-_]+/g, " ")
+    .replace(/[\u064B-\u065F\u0670]/g, "")
+    .replace(/\s+/g, " ");
+}
+
+function isArabic() {
+  return locale.value === "ar";
+}
+
+function displayLabel(suggestion: PlaceSuggestion) {
+  return isArabic() ? suggestion.labelAr ?? suggestion.label : suggestion.label;
+}
+
+function displayArea(suggestion: PlaceSuggestion) {
+  return isArabic() ? suggestion.areaAr ?? suggestion.area : suggestion.area;
+}
+
+function displayCategory(suggestion: PlaceSuggestion) {
+  return isArabic()
+    ? suggestion.categoryAr ?? suggestion.category
+    : suggestion.category;
+}
+
+function searchableText(suggestion: PlaceSuggestion) {
+  return normalize(
+    [
+      suggestion.label,
+      suggestion.area,
+      suggestion.category,
+      suggestion.labelAr,
+      suggestion.areaAr,
+      suggestion.categoryAr,
+    ]
+      .filter(Boolean)
+      .join(" "),
+  );
 }
 
 function optionId(index: number) {
@@ -153,7 +194,7 @@ function selectActive() {
 }
 
 function selectSuggestion(suggestion: PlaceSuggestion) {
-  emit("update:modelValue", suggestion.label);
+  emit("update:modelValue", displayLabel(suggestion));
   isFocused.value = false;
   inputRef.value?.focus();
 }

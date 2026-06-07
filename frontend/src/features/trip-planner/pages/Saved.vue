@@ -2,8 +2,8 @@
   <main class="min-h-screen pb-20 bg-background">
     <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-12">
       <PageTitle
-        title="Saved & History"
-        subtitle="Your saved places, routes, and travel history"
+        :title="t('saved.title')"
+        :subtitle="t('saved.subtitle')"
       >
         <template #icon>
           <BookmarkCheck class="w-10 h-10 text-primary" />
@@ -19,7 +19,7 @@
           :class="tabClass(tab.value)"
           @click="activeTab = tab.value"
         >
-          <span>{{ tab.label }}</span>
+          <span>{{ t(tab.labelKey) }}</span>
           <span :class="tabCountClass(tab.value)">
             {{ tab.count }}
           </span>
@@ -30,17 +30,17 @@
         <div class="flex flex-col gap-3 mb-5 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 class="font-display text-xl md:text-2xl text-foreground">
-              Saved Places
+              {{ t("saved.places.title") }}
             </h2>
             <p class="text-sm text-muted-foreground">
-              Quick destinations you can reuse for route planning.
+              {{ t("saved.places.subtitle") }}
             </p>
           </div>
           <AppButton
             class="w-full md:w-auto flex items-center justify-center gap-2"
             @click="addPlaceModalOpen = true"
           >
-            <MapPin class="w-5 h-5" /> Add New Place
+            <MapPin class="w-5 h-5" /> {{ t("saved.places.addNewPlace") }}
           </AppButton>
         </div>
 
@@ -50,12 +50,12 @@
         >
           <MapPin class="w-10 h-10 text-primary mx-auto mb-3" />
           <h3 class="font-display text-lg text-foreground mb-1">
-            No saved places yet
+            {{ t("saved.places.emptyTitle") }}
           </h3>
           <p class="text-sm text-muted-foreground mb-4">
-            Add home, work, school, or frequent destinations for faster planning.
+            {{ t("saved.places.emptyCopy") }}
           </p>
-          <AppButton @click="addPlaceModalOpen = true">Add Place</AppButton>
+          <AppButton @click="addPlaceModalOpen = true">{{ t("saved.places.addPlace") }}</AppButton>
         </div>
 
         <div
@@ -65,7 +65,7 @@
           <SavedCard
             v-for="place in savedPlaces"
             :key="place.id"
-            :title="place.name"
+            :title="savedPlaceLabel(place)"
             :subtitle="place.address"
             :icon-key="place.iconKey"
             :color="place.color"
@@ -81,31 +81,31 @@
 
       <section v-else-if="activeTab === 'routes'" class="space-y-4">
         <SectionHeader
-          title="Saved Routes"
-          subtitle="Routes you marked for quick reuse."
+          :title="t('saved.routes.title')"
+          :subtitle="t('saved.routes.subtitle')"
         />
         <ListRow
           v-for="route in savedRoutes"
           :key="route.name"
           :title="route.name"
           :subtitle="`${route.from} -> ${route.to}`"
-          :meta="`${route.duration} - ${route.cost} - Last used ${route.lastUsed}`"
-          action="Use Route"
+          :meta="t('saved.routes.meta', { duration: route.duration, cost: route.cost, lastUsed: route.lastUsed })"
+          :action="t('saved.routes.useRoute')"
         />
       </section>
 
       <section v-else-if="activeTab === 'history'" class="space-y-4">
         <SectionHeader
-          title="Recent Trips"
-          subtitle="Past journeys you can repeat or review."
+          :title="t('saved.history.title')"
+          :subtitle="t('saved.history.subtitle')"
         />
         <ListRow
           v-for="trip in recentTrips"
           :key="trip.date"
           :title="`${trip.from} -> ${trip.to}`"
           :subtitle="`${trip.date} - ${trip.duration}`"
-          meta="Completed"
-          action="Repeat Trip"
+          :meta="t('saved.history.completed')"
+          :action="t('saved.history.repeatTrip')"
         />
       </section>
 
@@ -113,15 +113,15 @@
         v-else-if="activeTab === 'ai'"
         class="space-y-4"
       >
-        <SectionHeader title="AI Plans" subtitle="Saved itinerary ideas." />
+        <SectionHeader :title="t('saved.ai.title')" :subtitle="t('saved.ai.subtitle')" />
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           <SavedCard
             v-for="plan in aiPlans"
             :key="plan.name"
             :title="plan.name"
-            :subtitle="`Created ${plan.created}`"
-            :meta="`${plan.budget} - ${plan.destinations} destinations`"
-            action-label="Open Plan"
+            :subtitle="t('saved.ai.created', { date: plan.created })"
+            :meta="t('saved.ai.meta', { budget: plan.budget, count: plan.destinations })"
+            :action-label="t('saved.ai.openPlan')"
             @click="router.push('/ai-plan')"
           />
         </div>
@@ -129,53 +129,53 @@
 
       <section v-else class="space-y-4">
         <SectionHeader
-          title="Offline Routes"
-          subtitle="Downloaded routes available without internet."
+          :title="t('saved.offline.title')"
+          :subtitle="t('saved.offline.subtitle')"
         />
         <ListRow
           v-for="route in offlineRoutes"
           :key="route.name"
           :title="route.name"
-          :subtitle="`${route.size} - Downloaded ${route.downloaded}`"
-          action="Remove"
+          :subtitle="t('saved.offline.downloaded', { size: route.size, date: route.downloaded })"
+          :action="t('saved.offline.remove')"
         />
       </section>
     </div>
 
     <Modal
       :open="addPlaceModalOpen"
-      title="Add New Place"
+      :title="t('saved.places.addNewPlace')"
       size="lg"
       @close="addPlaceModalOpen = false"
     >
       <div class="space-y-5">
         <p class="text-sm text-muted-foreground">
-          Save frequent destinations so they are always one tap away when planning routes.
+          {{ t("saved.places.modalCopy") }}
         </p>
 
         <div class="flex flex-col gap-1.5">
-          <span class="text-sm text-foreground">Address or location</span>
+          <span class="text-sm text-foreground">{{ t("home.addressOrLocation") }}</span>
           <PlaceAutocomplete
             v-model="newPlaceAddress"
-            placeholder="Search for station, area, or landmark..."
+            :placeholder="t('saved.places.searchPlaceholder')"
             :suggestions="placeSuggestions"
           />
           <p class="text-xs text-muted-foreground">
-            Choose from suggested Cairo locations for better route results.
+            {{ t("saved.places.searchHelp") }}
           </p>
         </div>
 
         <label class="flex flex-col gap-1.5">
-          <span class="text-sm text-foreground">Place name</span>
+          <span class="text-sm text-foreground">{{ t("home.placeName") }}</span>
           <input
             v-model="newPlaceName"
             class="w-full px-4 py-2.5 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-            placeholder="Home, Work, Gym..."
+            :placeholder="t('saved.places.namePlaceholder')"
           />
         </label>
 
         <div class="space-y-2">
-          <div class="text-sm text-foreground">Place type</div>
+          <div class="text-sm text-foreground">{{ t("saved.places.placeType") }}</div>
           <div class="flex flex-wrap gap-2">
             <button
               v-for="type in placeTypes"
@@ -185,7 +185,7 @@
               :aria-pressed="newPlaceType === type.value"
               @click="selectPlaceType(type.value)"
             >
-              {{ type.label }}
+              {{ t(type.labelKey) }}
             </button>
           </div>
         </div>
@@ -202,14 +202,14 @@
             class="w-full sm:w-auto"
             @click="closeAddPlaceModal"
           >
-            Cancel
+            {{ t("home.cancel") }}
           </AppButton>
           <AppButton
             class="w-full sm:w-auto"
             :disabled="!canSavePlace"
             @click="addNewPlace"
           >
-            Save Place
+            {{ t("saved.places.savePlace") }}
           </AppButton>
         </div>
       </div>
@@ -219,6 +219,7 @@
 
 <script setup lang="ts">
 import { computed, defineComponent, h, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import {
   BookmarkCheck,
@@ -248,6 +249,7 @@ import {
 } from "@/features/home/services/savedPlaces";
 
 const router = useRouter();
+const { t } = useI18n();
 const activeTab = ref<"places" | "routes" | "history" | "ai" | "offline">(
   "places",
 );
@@ -261,18 +263,18 @@ const activePlaceMenuId = ref<string | null>(null);
 const canSavePlace = computed(() => newPlaceAddress.value.trim().length > 0);
 
 const tabs = computed(() => [
-  { value: "places" as const, label: "Places", count: savedPlaces.value.length },
-  { value: "routes" as const, label: "Routes", count: savedRoutes.length },
-  { value: "history" as const, label: "Trips", count: recentTrips.length },
-  { value: "ai" as const, label: "AI Plans", count: aiPlans.length },
-  { value: "offline" as const, label: "Offline", count: offlineRoutes.length },
+  { value: "places" as const, labelKey: "saved.tabs.places", count: savedPlaces.value.length },
+  { value: "routes" as const, labelKey: "saved.tabs.routes", count: savedRoutes.length },
+  { value: "history" as const, labelKey: "saved.tabs.trips", count: recentTrips.length },
+  { value: "ai" as const, labelKey: "saved.tabs.aiPlans", count: aiPlans.length },
+  { value: "offline" as const, labelKey: "saved.tabs.offline", count: offlineRoutes.length },
 ]);
 
 const placeTypes = [
-  { value: "home" as const, label: "Home" },
-  { value: "work" as const, label: "Work" },
-  { value: "school" as const, label: "School" },
-  { value: "other" as const, label: "Other" },
+  { value: "home" as const, labelKey: "home.placeTypes.home" },
+  { value: "work" as const, labelKey: "home.placeTypes.work" },
+  { value: "school" as const, labelKey: "home.placeTypes.school" },
+  { value: "other" as const, labelKey: "home.placeTypes.gym" },
 ];
 
 const savedRoutes = [
@@ -354,10 +356,12 @@ const SavedCard = defineComponent({
     softColor: String,
     removable: Boolean,
     menuOpen: Boolean,
-    actionLabel: { type: String, default: "Plan Route" },
+    actionLabel: { type: String, default: "" },
   },
   emits: ["click", "delete", "toggle-menu"],
   setup(p, { emit }) {
+    const { t } = useI18n();
+
     function activate(event?: Event) {
       event?.stopPropagation();
       emit("click");
@@ -430,14 +434,14 @@ const SavedCard = defineComponent({
                 ]),
               ],
             ),
-            h("div", { class: "flex shrink-0 items-center gap-1 self-center md:absolute md:right-3 md:top-3" }, [
+            h("div", { class: "flex shrink-0 items-center gap-1 self-center md:absolute md:end-3 md:top-3" }, [
               p.removable
                 ? h(
                     "button",
                     {
                       class:
                         "rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                      "aria-label": "Saved place actions",
+                      "aria-label": t("saved.places.actions"),
                       "aria-expanded": p.menuOpen,
                       onClick: toggleMenu,
                     },
@@ -459,7 +463,7 @@ const SavedCard = defineComponent({
                     },
                     p.meta,
                   )
-                : h("span", { class: "text-xs text-muted-foreground" }, "Quick route"),
+                : h("span", { class: "text-xs text-muted-foreground" }, t("saved.places.quickRoute")),
               h(
                 AppButton,
                 {
@@ -468,7 +472,7 @@ const SavedCard = defineComponent({
                   class: "shrink-0",
                   onClick: activate,
                 },
-                () => p.actionLabel,
+                () => p.actionLabel || t("saved.places.planRoute"),
               ),
             ]),
           ]),
@@ -477,7 +481,7 @@ const SavedCard = defineComponent({
                 "div",
                 {
                   class:
-                    "absolute right-3 top-12 z-20 w-44 rounded-lg border border-border bg-card p-1 shadow-lg",
+                    "absolute end-3 top-12 z-20 w-44 rounded-lg border border-border bg-card p-1 shadow-lg",
                   role: "menu",
                   onClick: (event: MouseEvent) => event.stopPropagation(),
                 },
@@ -486,13 +490,13 @@ const SavedCard = defineComponent({
                     "button",
                     {
                       class:
-                        "flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-destructive hover:bg-danger-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                        "flex w-full items-center gap-2 rounded-md px-3 py-2 text-start text-sm text-destructive hover:bg-danger-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       role: "menuitem",
                       onClick: deletePlace,
                     },
                     [
                       h(Trash2, { class: "w-4 h-4" }),
-                      "Delete Place",
+                      t("saved.places.deletePlace"),
                     ],
                   ),
                 ],
@@ -567,6 +571,15 @@ function savedPlaceIcon(iconKey: SavedPlaceIconKey) {
   return MapPin;
 }
 
+function savedPlaceLabel(place: { name: string; type?: SavedPlaceType }) {
+  const normalized = place.name.trim().toLowerCase();
+  if (normalized === "home") return t("home.placeTypes.home");
+  if (normalized === "work") return t("home.placeTypes.work");
+  if (normalized === "school") return t("home.placeTypes.school");
+  if (normalized === "gym") return t("home.placeTypes.gym");
+  return place.name;
+}
+
 function closeAddPlaceModal() {
   addPlaceModalOpen.value = false;
   placeError.value = "";
@@ -575,7 +588,7 @@ function closeAddPlaceModal() {
 function selectPlaceType(type: SavedPlaceType) {
   newPlaceType.value = type;
   if (!newPlaceName.value.trim() && type !== "other") {
-    newPlaceName.value = type[0].toUpperCase() + type.slice(1);
+    newPlaceName.value = t(`home.placeTypes.${type}`);
   }
 }
 
@@ -584,7 +597,7 @@ function addNewPlace() {
   const name = newPlaceName.value.trim() || address;
 
   if (!address) {
-    placeError.value = "Enter a place address first.";
+    placeError.value = t("home.validation.placeAddressRequired");
     return;
   }
 

@@ -17,7 +17,7 @@ npm start
 node server.js
 ```
 
-There are no tests configured (`npm test` is a placeholder).
+Backend business-logic tests run with `npm test` using Node's built-in test runner.
 
 ## Architecture
 
@@ -35,6 +35,11 @@ Client → POST/GET /api/*
 
 ### Key service functions (`ticketService.js`)
 
+The admin catalog follows the same request layering:
+`routes/admin.js` / `routes/places.js` -> `adminController.js` /
+`placesController.js` -> `catalogService.js` / `adminAuthService.js` ->
+`catalogStore.js` / `routeStore.js`.
+
 | Function | What it does |
 |---|---|
 | `createTicket(body)` | Filters transit legs, assigns 12-char IDs, 24 h expiry, stores per-leg `fareAmount` from `leg.fare` |
@@ -51,6 +56,10 @@ Both stores are **in-memory Maps** — data is lost on restart. There is no data
 - `scannerProfileStore.js` — hardcoded demo profiles; `getAllProfiles / getProfileById`. Each profile is **single-mode** (`scanValidate` matches `leg.mode === profile.mode`). Generic scanners: `scanner_bus_001` (BUS), `scanner_subway_001` (SUBWAY); plus route-specific demos `scanner_bus_14`, `scanner_bus_108`, `scanner_subway_m2`. Only **BUS** and **SUBWAY** exist in the graph data (METRO is treated as SUBWAY; no TRAM/RAIL/MICROBUS). WALK legs are never validated.
 
 ### Ticket & leg lifecycle
+
+The stop/station catalog is durable, file-backed runtime data at
+`backend/data/catalog.json`, seeded from `LOCAL_PLACES` on first run and read live by
+geocoding. `catalogStore.js` and `routeStore.js` own this data access.
 
 Leg statuses: `unused` → `used` (via validate) or `refunded` (via refund endpoint).
 
@@ -70,6 +79,9 @@ Ticket status is recomputed by `resolveTicketStatus(ticket)` after every leg mut
 `ticketService.js` throws plain objects `{ code, message, details }`.  
 `ticketController.js` maps `ErrorCodes` → HTTP status via `STATUS_MAP`, then calls `makeError()` from `helpers/errors.js`.  
 Add new error codes to **both** `ErrorCodes` in `errors.js` and `STATUS_MAP` in `ticketController.js`.
+
+The admin catalog adds `ADMIN_UNAUTHORIZED`, `PLACE_NOT_FOUND`, `ROUTE_NOT_FOUND`, and
+`CATALOG_PERSISTENCE_ERROR`; these are mapped in `adminController.js`.
 
 ### Payment
 
@@ -99,6 +111,13 @@ offline scanned ticket payloads in IndexedDB via `idb-keyval`. Offline scans are
 shown as green admit decisions; they are queued as `unverified` and reconciled when the
 browser returns online. Run it with `pnpm --filter operator dev` on port 5174.
 
+## Admin app
+
+`admin/` is a separate Vue 3 + TypeScript + Tailwind console on port 5175. It is
+online-only (no PWA/service worker), consumes protected `/api/admin/*` endpoints and
+the public `/api/places` catalog, and manages stops/stations plus the live dashboard.
+Run it with `pnpm --filter admin dev`.
+
 ### Environment variables (`.env` in `backend/`)
 
 | Variable | Default | Purpose |
@@ -113,9 +132,19 @@ browser returns online. Run it with `pnpm --filter operator dev` on port 5174.
 | `PAYMOB_API_KEY` | — | Only needed for refunds (legacy auth token) |
 | `OTP_GRAPHQL_URL` | `http://localhost:8080/otp/…` | OpenTripPlanner endpoint (plan router, currently commented out) |
 
+| `ADMIN_SECRET` | - | Shared admin console secret; login fails closed when unset |
+| `ADMIN_SESSION_TTL_HOURS` | `12` | Optional admin session lifetime |
+
 <!-- SPECKIT START -->
 ## Active Spec Kit plan
 
+- **002-admin-stops-stations-crud** — Admin Console for Stops & Stations (a new `admin/`
+  Vue 3 + TS + Tailwind SPA, no PWA, port 5175). Adds a backend catalog slice
+  (`routes/admin.js` + `routes/places.js` → `adminController`/`placesController` →
+  `catalogService`/`adminAuthService` → file-backed `catalogStore` + seeded `routeStore`),
+  makes `geocodingService` read the catalog live so rider suggestions/lookups reflect edits,
+  and gates the console with a shared `ADMIN_SECRET` → session token.
+  Plan: `specs/002-admin-stops-stations-crud/plan.md`
 - **001-operator-scanner-pwa** — Operator Ticket-Scanner PWA (a new `operator/` PWA on the
   Vue 3 + TS + Tailwind stack; consumes existing backend endpoints, no backend changes).
   Plan: `specs/001-operator-scanner-pwa/plan.md`

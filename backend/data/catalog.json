@@ -1,0 +1,1238 @@
+{
+  "version": 1,
+  "places": [
+    {
+      "id": "stn_47d720510efe",
+      "type": "station",
+      "name": "ain helwan",
+      "aliases": [],
+      "location": {
+        "lat": 29.86261,
+        "lng": 31.32507
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_6e2fc4d65b03",
+      "type": "station",
+      "name": "ain shams",
+      "aliases": [],
+      "location": {
+        "lat": 30.13102,
+        "lng": 31.31894
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_bd236e68cecd",
+      "type": "station",
+      "name": "al-ahram",
+      "aliases": [],
+      "location": {
+        "lat": 30.09126,
+        "lng": 31.32664
+      },
+      "routeIds": [
+        "route_metro_l3"
+      ],
+      "status": "active",
+      "line": "Line 3",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_0bdd967e1a3f",
+      "type": "station",
+      "name": "al-sayeda zeinab",
+      "aliases": [],
+      "location": {
+        "lat": 30.02903,
+        "lng": 31.2355
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_18d8c7da7ab6",
+      "type": "station",
+      "name": "al-shohadaa",
+      "aliases": [
+        "ramses"
+      ],
+      "location": {
+        "lat": 30.06163,
+        "lng": 31.24627
+      },
+      "routeIds": [
+        "route_metro_l1",
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_eaf6dbaf2479",
+      "type": "station",
+      "name": "attaba",
+      "aliases": [],
+      "location": {
+        "lat": 30.05333,
+        "lng": 31.24771
+      },
+      "routeIds": [
+        "route_metro_l2",
+        "route_metro_l3"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_f75664dbb6f2",
+      "type": "station",
+      "name": "bab el-shaaria",
+      "aliases": [],
+      "location": {
+        "lat": 30.05388,
+        "lng": 31.25618
+      },
+      "routeIds": [
+        "route_metro_l3"
+      ],
+      "status": "active",
+      "line": "Line 3",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_ae41ab0077b2",
+      "type": "station",
+      "name": "bohooth",
+      "aliases": [],
+      "location": {
+        "lat": 30.03575,
+        "lng": 31.20029
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_1db9b78db174",
+      "type": "station",
+      "name": "cairo university",
+      "aliases": [],
+      "location": {
+        "lat": 30.02625,
+        "lng": 31.20146
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_26d68eebd9b9",
+      "type": "station",
+      "name": "dar el-salam",
+      "aliases": [],
+      "location": {
+        "lat": 29.98211,
+        "lng": 31.24256
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_b50fe868d38c",
+      "type": "station",
+      "name": "dokki",
+      "aliases": [],
+      "location": {
+        "lat": 30.0384,
+        "lng": 31.2124
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_821a7570a4f3",
+      "type": "station",
+      "name": "el-demerdash",
+      "aliases": [],
+      "location": {
+        "lat": 30.07688,
+        "lng": 31.27774
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_bb69dc235984",
+      "type": "station",
+      "name": "el-geish",
+      "aliases": [],
+      "location": {
+        "lat": 30.06184,
+        "lng": 31.267
+      },
+      "routeIds": [
+        "route_metro_l3"
+      ],
+      "status": "active",
+      "line": "Line 3",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_b83ea1ba7739",
+      "type": "station",
+      "name": "el-giza",
+      "aliases": [
+        "giza",
+        "giza station"
+      ],
+      "location": {
+        "lat": 30.01059,
+        "lng": 31.2072
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_ab210d2cc25f",
+      "type": "station",
+      "name": "el-maasara",
+      "aliases": [],
+      "location": {
+        "lat": 29.90639,
+        "lng": 31.29966
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_bf81eb097435",
+      "type": "station",
+      "name": "el-malek el-saleh",
+      "aliases": [],
+      "location": {
+        "lat": 30.01766,
+        "lng": 31.23123
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_c354ae916a6f",
+      "type": "station",
+      "name": "el-marg",
+      "aliases": [],
+      "location": {
+        "lat": 30.15211,
+        "lng": 31.33548
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_38610e95d59a",
+      "type": "station",
+      "name": "el-matareyya",
+      "aliases": [],
+      "location": {
+        "lat": 30.12092,
+        "lng": 31.31379
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_2f977ae79bf4",
+      "type": "station",
+      "name": "el-mounib",
+      "aliases": [],
+      "location": {
+        "lat": 29.98164,
+        "lng": 31.21138
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_e26bd591d477",
+      "type": "station",
+      "name": "el-zahraa",
+      "aliases": [],
+      "location": {
+        "lat": 29.99556,
+        "lng": 31.23159
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_9fa2155ffb96",
+      "type": "station",
+      "name": "ezbet el-nakhl",
+      "aliases": [],
+      "location": {
+        "lat": 30.13932,
+        "lng": 31.32472
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_7ae9b772bea1",
+      "type": "station",
+      "name": "fair zone",
+      "aliases": [],
+      "location": {
+        "lat": 30.07312,
+        "lng": 31.30086
+      },
+      "routeIds": [
+        "route_metro_l3"
+      ],
+      "status": "active",
+      "line": "Line 3",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_71b65145db99",
+      "type": "station",
+      "name": "faisal",
+      "aliases": [],
+      "location": {
+        "lat": 30.01738,
+        "lng": 31.20359
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_385f2a354f38",
+      "type": "station",
+      "name": "ghamra",
+      "aliases": [],
+      "location": {
+        "lat": 30.0689,
+        "lng": 31.26484
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_0eb30c2162cc",
+      "type": "station",
+      "name": "hadayek el-maadi",
+      "aliases": [],
+      "location": {
+        "lat": 29.96989,
+        "lng": 31.251
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_019d80dff6d6",
+      "type": "station",
+      "name": "hadayek helwan",
+      "aliases": [],
+      "location": {
+        "lat": 29.8972,
+        "lng": 31.3041
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_63758f1d1fc4",
+      "type": "station",
+      "name": "hadayeq el-zaitoun",
+      "aliases": [],
+      "location": {
+        "lat": 30.10608,
+        "lng": 31.31034
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_f0b745074837",
+      "type": "station",
+      "name": "hammamat el-qobba",
+      "aliases": [],
+      "location": {
+        "lat": 30.09107,
+        "lng": 31.29863
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_ea03d61a14fb",
+      "type": "station",
+      "name": "helmeyet el-zaitoun",
+      "aliases": [],
+      "location": {
+        "lat": 30.11328,
+        "lng": 31.31388
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_79eb8e700c11",
+      "type": "station",
+      "name": "helwan",
+      "aliases": [],
+      "location": {
+        "lat": 29.84921,
+        "lng": 31.33443
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_9e79a343a779",
+      "type": "station",
+      "name": "helwan university",
+      "aliases": [],
+      "location": {
+        "lat": 29.86946,
+        "lng": 31.32009
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_3668a22934d3",
+      "type": "station",
+      "name": "khalafawy",
+      "aliases": [],
+      "location": {
+        "lat": 30.09792,
+        "lng": 31.24545
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_a3e7d7df937a",
+      "type": "station",
+      "name": "kobri el-qobba",
+      "aliases": [],
+      "location": {
+        "lat": 30.08702,
+        "lng": 31.29426
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_946dd7628309",
+      "type": "station",
+      "name": "koleyet el-banat",
+      "aliases": [],
+      "location": {
+        "lat": 30.08405,
+        "lng": 31.32912
+      },
+      "routeIds": [
+        "route_metro_l3"
+      ],
+      "status": "active",
+      "line": "Line 3",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_74d0d6f3b17a",
+      "type": "station",
+      "name": "kolleyyet el-zeraa",
+      "aliases": [],
+      "location": {
+        "lat": 30.11358,
+        "lng": 31.24907
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_35bb97532cf1",
+      "type": "station",
+      "name": "kozzika",
+      "aliases": [],
+      "location": {
+        "lat": 29.93656,
+        "lng": 31.28175
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_b0b8fe4308a3",
+      "type": "station",
+      "name": "maadi",
+      "aliases": [
+        "المعادي"
+      ],
+      "location": {
+        "lat": 29.96032,
+        "lng": 31.25781
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_7bcf5ae65aa5",
+      "type": "station",
+      "name": "manshiet el-sadr",
+      "aliases": [],
+      "location": {
+        "lat": 30.08216,
+        "lng": 31.28753
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_40a737935741",
+      "type": "station",
+      "name": "mar girgis",
+      "aliases": [],
+      "location": {
+        "lat": 30.00624,
+        "lng": 31.2297
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_885e8bbf3d1b",
+      "type": "station",
+      "name": "masarra",
+      "aliases": [],
+      "location": {
+        "lat": 30.07097,
+        "lng": 31.24503
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_e87ae879e0d2",
+      "type": "station",
+      "name": "mezallat",
+      "aliases": [],
+      "location": {
+        "lat": 30.10391,
+        "lng": 31.24601
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_c579c59f30bb",
+      "type": "station",
+      "name": "mohamed naguib",
+      "aliases": [],
+      "location": {
+        "lat": 30.04529,
+        "lng": 31.24423
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_cca6a194c109",
+      "type": "station",
+      "name": "nasser",
+      "aliases": [],
+      "location": {
+        "lat": 30.05333,
+        "lng": 31.23865
+      },
+      "routeIds": [
+        "route_metro_l1",
+        "route_metro_l3"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_3efbe5f7cb16",
+      "type": "station",
+      "name": "new el-marg",
+      "aliases": [],
+      "location": {
+        "lat": 30.16351,
+        "lng": 31.33838
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_ecf3a82b5457",
+      "type": "station",
+      "name": "omm el-misryeen",
+      "aliases": [],
+      "location": {
+        "lat": 30.00596,
+        "lng": 31.20777
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_2f2a45468ede",
+      "type": "station",
+      "name": "opera",
+      "aliases": [],
+      "location": {
+        "lat": 30.04191,
+        "lng": 31.22505
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_53a4539f55f5",
+      "type": "station",
+      "name": "orabi",
+      "aliases": [],
+      "location": {
+        "lat": 30.05708,
+        "lng": 31.24253
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_72fd4f3155da",
+      "type": "station",
+      "name": "rod el farag",
+      "aliases": [],
+      "location": {
+        "lat": 30.08051,
+        "lng": 31.24539
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_0551fbe840aa",
+      "type": "station",
+      "name": "saad zaghloul",
+      "aliases": [],
+      "location": {
+        "lat": 30.03557,
+        "lng": 31.23784
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_f95d607854c4",
+      "type": "station",
+      "name": "sadat",
+      "aliases": [
+        "tahrir",
+        "tahrir square",
+        "sadat square",
+        "ميدان التحرير"
+      ],
+      "location": {
+        "lat": 30.04403,
+        "lng": 31.23567
+      },
+      "routeIds": [
+        "route_metro_l1",
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_89fb28cebd18",
+      "type": "station",
+      "name": "sakanat el-maadi",
+      "aliases": [],
+      "location": {
+        "lat": 29.95335,
+        "lng": 31.263
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_27f5e7357b50",
+      "type": "station",
+      "name": "sakiat mekki",
+      "aliases": [],
+      "location": {
+        "lat": 29.99532,
+        "lng": 31.20851
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_7723f020f50a",
+      "type": "station",
+      "name": "saray el-qobba",
+      "aliases": [],
+      "location": {
+        "lat": 30.09762,
+        "lng": 31.3045
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_cd39c281d0ce",
+      "type": "station",
+      "name": "shubra el-kheima",
+      "aliases": [],
+      "location": {
+        "lat": 30.12246,
+        "lng": 31.24455
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_0af7650975d7",
+      "type": "station",
+      "name": "st. teresa",
+      "aliases": [],
+      "location": {
+        "lat": 30.08776,
+        "lng": 31.2454
+      },
+      "routeIds": [
+        "route_metro_l2"
+      ],
+      "status": "active",
+      "line": "Line 2",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_bf4c4a570966",
+      "type": "station",
+      "name": "stadium",
+      "aliases": [
+        "cairo stadium"
+      ],
+      "location": {
+        "lat": 30.07284,
+        "lng": 31.31724
+      },
+      "routeIds": [
+        "route_metro_l3"
+      ],
+      "status": "active",
+      "line": "Line 3",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_81bd0214f4da",
+      "type": "station",
+      "name": "tora el-asmant",
+      "aliases": [],
+      "location": {
+        "lat": 29.92653,
+        "lng": 31.28792
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_948cc49aee5e",
+      "type": "station",
+      "name": "tora el-balad",
+      "aliases": [],
+      "location": {
+        "lat": 29.94666,
+        "lng": 31.27268
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stn_297fa9fcc79d",
+      "type": "station",
+      "name": "wadi hof",
+      "aliases": [],
+      "location": {
+        "lat": 29.87909,
+        "lng": 31.31363
+      },
+      "routeIds": [
+        "route_metro_l1"
+      ],
+      "status": "active",
+      "line": "Line 1",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_da80847948e4",
+      "type": "stop",
+      "name": "egyptian museum",
+      "aliases": [],
+      "location": {
+        "lat": 30.0478,
+        "lng": 31.2336
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_d64d9c33072b",
+      "type": "stop",
+      "name": "cairo tower",
+      "aliases": [],
+      "location": {
+        "lat": 30.0459,
+        "lng": 31.2243
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_7e1627c1e897",
+      "type": "stop",
+      "name": "khan el-khalili",
+      "aliases": [],
+      "location": {
+        "lat": 30.0477,
+        "lng": 31.2622
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_2070e7a786e2",
+      "type": "stop",
+      "name": "downtown cairo",
+      "aliases": [],
+      "location": {
+        "lat": 30.05,
+        "lng": 31.24
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_fecdb381301d",
+      "type": "stop",
+      "name": "zamalek",
+      "aliases": [
+        "الزمالك"
+      ],
+      "location": {
+        "lat": 30.0618,
+        "lng": 31.2194
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_9808ba6915f7",
+      "type": "stop",
+      "name": "heliopolis",
+      "aliases": [],
+      "location": {
+        "lat": 30.0878,
+        "lng": 31.326
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_c2255cebad44",
+      "type": "stop",
+      "name": "nasr city",
+      "aliases": [
+        "مدينة نصر"
+      ],
+      "location": {
+        "lat": 30.0511,
+        "lng": 31.3656
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_97111329ae90",
+      "type": "stop",
+      "name": "makram ebeid",
+      "aliases": [],
+      "location": {
+        "lat": 30.0596,
+        "lng": 31.3444
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_ef72fb3c9bbc",
+      "type": "stop",
+      "name": "city stars mall",
+      "aliases": [],
+      "location": {
+        "lat": 30.0726,
+        "lng": 31.3457
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_cb16d0b99d3a",
+      "type": "stop",
+      "name": "giza pyramids",
+      "aliases": [],
+      "location": {
+        "lat": 29.9773,
+        "lng": 31.1325
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_6e88ba453924",
+      "type": "stop",
+      "name": "grand egyptian museum",
+      "aliases": [],
+      "location": {
+        "lat": 29.9939,
+        "lng": 31.119
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_4cd8aa341892",
+      "type": "stop",
+      "name": "new cairo",
+      "aliases": [],
+      "location": {
+        "lat": 30.03,
+        "lng": 31.47
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    },
+    {
+      "id": "stop_89efc582b7a8",
+      "type": "stop",
+      "name": "adly mansour",
+      "aliases": [],
+      "location": {
+        "lat": 30.1418,
+        "lng": 31.4148
+      },
+      "routeIds": [
+        "route_bus_generic"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-07T12:10:01.615Z",
+      "updatedAt": "2026-06-07T12:10:01.615Z"
+    }
+  ]
+}

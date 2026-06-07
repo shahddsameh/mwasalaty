@@ -22,6 +22,12 @@ import Support from "../features/account/pages/Support.vue";
 import AllTickets from "../features/tickets/pages/AllTickets.vue";
 import OperatorScan from "../features/operator/pages/OperatorScan.vue";
 import { ensureAuthInitialized, useAuthState } from "@/services/authState";
+import AdminLayout from "../layouts/AdminLayout.vue";
+import AdminDashboard from "../features/admin/pages/AdminDashboard.vue";
+import AdminLogin from "../features/admin/pages/AdminLogin.vue";
+import AdminStations from "../features/admin/pages/AdminStations.vue";
+import AdminStops from "../features/admin/pages/AdminStops.vue";
+import { isAdminLoggedIn } from "../features/admin/services/adminAuth";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -84,10 +90,26 @@ const router = createRouter({
       component: Settings,
     },
     { path: "/support", name: "support", component: Support },
+    { path: "/admin/login", name: "admin-login", component: AdminLogin },
+    {
+      path: "/admin",
+      component: AdminLayout,
+      meta: { requiresAdmin: true },
+      children: [
+        { path: "", name: "admin", component: AdminDashboard, meta: { title: "Dashboard" } },
+        { path: "stops", name: "admin-stops", component: AdminStops, meta: { title: "Stops" } },
+        { path: "stations", name: "admin-stations", component: AdminStations, meta: { title: "Stations" } },
+      ],
+    },
   ],
 });
 
-router.beforeEach(async (to) => {
+router.beforeEach((to) => {
+  if (to.path.startsWith("/admin") && to.name !== "admin-login" && !isAdminLoggedIn()) {
+    return { path: "/admin/login", query: { redirect: to.fullPath } };
+  }
+  if (to.name === "admin-login" && isAdminLoggedIn()) return { path: "/admin/stations" };
+
   if (!to.meta.requiresOperator) return true;
 
   const operatorSession = localStorage.getItem("mwasalaty:operator-session");

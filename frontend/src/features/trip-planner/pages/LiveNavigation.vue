@@ -6,7 +6,7 @@
       <div class="flex items-center gap-3 min-w-0">
         <Navigation class="w-6 h-6 text-primary flex-shrink-0" />
         <div class="min-w-0">
-          <div class="font-display text-lg">Live Navigation</div>
+            <div class="font-display text-lg">{{ labels.liveNavigation }}</div>
           <div class="text-xs md:text-sm text-muted-foreground truncate">
             {{ start }} -&gt; {{ destination }}
           </div>
@@ -20,14 +20,14 @@
             class="hidden sm:inline text-sm"
             :class="isOnline ? 'text-success' : 'text-muted-foreground'"
           >
-            {{ isOnline ? "Online" : "Offline (Cached)" }}
+            {{ isOnline ? labels.online : labels.offlineDemo }}
           </span>
         </button>
         <button
           class="p-2 hover:bg-surface-dark-muted rounded-lg transition-colors flex items-center gap-1"
           @click="endModalOpen = true"
         >
-          <X class="w-5 h-5" /> Exit
+          <X class="w-5 h-5" /> {{ labels.exit }}
         </button>
       </div>
     </header>
@@ -46,7 +46,7 @@
           v-if="!hasGeometry"
           class="absolute bottom-24 lg:bottom-6 left-1/2 -translate-x-1/2 bg-card/95 backdrop-blur-sm rounded-lg px-4 py-3 text-sm text-muted-foreground shadow-lg border border-border pointer-events-none text-center max-w-xs z-[600]"
         >
-          Map route shape is not available for this step yet.
+          {{ labels.noGeometry }}
         </div>
       </section>
 
@@ -57,7 +57,7 @@
           <div class="p-4">
             <!-- Progress bar -->
             <div class="flex items-center justify-between mb-2 text-xs text-muted-foreground">
-              <span>Step {{ currentStepIndex + 1 }} of {{ steps.length }}</span>
+              <span>{{ labels.step }} {{ currentStepIndex + 1 }} {{ labels.of }} {{ steps.length }}</span>
               <span>{{ Math.round(progress) }}%</span>
             </div>
             <div class="h-1.5 bg-muted rounded-full overflow-hidden mb-3">
@@ -99,7 +99,7 @@
               class="mt-3 p-2.5 bg-muted/70 rounded-lg border border-border/50"
             >
               <div class="text-xs text-muted-foreground flex items-center gap-1.5 mb-1">
-                <ArrowRight class="w-3 h-3" /> Next: {{ nextStep.instruction }}
+                <ArrowRight class="w-3 h-3" /> {{ labels.next }}: {{ nextStep.instruction }}
               </div>
             </div>
           </div>
@@ -120,7 +120,7 @@
                 :disabled="currentStepIndex === 0"
                 @click="prev"
               >
-                <ArrowLeft class="w-4 h-4" /> Prev
+                <ArrowLeft class="w-4 h-4" /> {{ labels.prev }}
               </AppButton>
               <AppButton
                 size="md"
@@ -128,7 +128,7 @@
                 @click="next"
               >
                 {{
-                  currentStepIndex < steps.length - 1 ? "Next Step" : "Arrive"
+                  currentStepIndex < steps.length - 1 ? labels.nextStep : labels.arrive
                 }}
                 <ArrowRight
                   v-if="currentStepIndex < steps.length - 1"
@@ -146,7 +146,7 @@
                 class="flex-1 flex items-center justify-center gap-1.5 text-sm"
                 @click="recenterMap"
               >
-                <Crosshair class="w-4 h-4" /> Recenter
+                <Crosshair class="w-4 h-4" /> {{ labels.recenter }}
               </AppButton>
               <AppButton
                 variant="outline"
@@ -154,7 +154,7 @@
                 class="flex-1 flex items-center justify-center gap-1.5 text-sm"
                 @click="showStepsSheet = true"
               >
-                <Navigation class="w-4 h-4" /> All Steps
+                <Navigation class="w-4 h-4" /> {{ labels.allSteps }}
               </AppButton>
               <AppButton
                 variant="outline"
@@ -178,7 +178,7 @@
           <div
             class="flex items-center justify-between mb-2 text-sm text-muted-foreground"
           >
-            <span>Step {{ currentStepIndex + 1 }} of {{ steps.length }}</span>
+            <span>{{ labels.step }} {{ currentStepIndex + 1 }} {{ labels.of }} {{ steps.length }}</span>
             <span>{{ Math.round(progress) }}%</span>
           </div>
           <div class="h-2 bg-muted rounded-full overflow-hidden">
@@ -196,7 +196,7 @@
             <div
               class="inline-flex items-center gap-2 px-3 py-1.5 bg-success/15 border border-success text-success rounded-full text-sm mb-3"
             >
-              <Navigation class="w-4 h-4" /> Current Step
+              <Navigation class="w-4 h-4" /> {{ labels.currentStep }}
             </div>
             <div
               class="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-sm font-semibold mb-3"
@@ -223,8 +223,8 @@
           </div>
 
           <div class="grid grid-cols-2 gap-3">
-            <MiniStat label="Remaining Time" value="32 min" />
-            <MiniStat label="Distance Left" value="18.5 km" />
+            <MiniStat :label="labels.remainingTime" :value="remainingTimeLabel" />
+            <MiniStat :label="labels.distanceLeft" :value="remainingDistanceLabel" />
           </div>
 
           <!-- next step preview -->
@@ -235,7 +235,7 @@
             <div
               class="text-xs md:text-sm text-muted-foreground mb-2 flex items-center gap-2"
             >
-              <ArrowRight class="w-4 h-4" /> Next Step
+              <ArrowRight class="w-4 h-4" /> {{ labels.nextStep }}
             </div>
             <div class="font-display text-sm md:text-base text-foreground">
               {{ nextStep.instruction }}
@@ -282,7 +282,7 @@
               :disabled="currentStepIndex === 0"
               @click="prev"
             >
-              <ArrowLeft class="w-5 h-5" /> Prev
+              <ArrowLeft class="w-5 h-5" /> {{ labels.prev }}
             </AppButton>
             <AppButton
               size="lg"
@@ -295,7 +295,7 @@
               />
               <ThumbsUp v-else class="w-5 h-5" />
               {{
-                currentStepIndex < steps.length - 1 ? "Next Step" : "Arrive"
+                currentStepIndex < steps.length - 1 ? labels.nextStep : labels.arrive
               }}
             </AppButton>
           </div>
@@ -306,7 +306,7 @@
             class="w-full flex items-center justify-center gap-2"
             @click="recenterMap"
           >
-            <Crosshair class="w-5 h-5" /> Recenter Map
+            <Crosshair class="w-5 h-5" /> {{ labels.recenterMap }}
           </AppButton>
 
           <AppButton
@@ -315,7 +315,7 @@
             class="w-full flex items-center justify-center gap-2"
             @click="ticketModalOpen = true"
           >
-            <Ticket class="w-5 h-5" /> View Digital Ticket
+            <Ticket class="w-5 h-5" /> {{ labels.viewTicket }}
           </AppButton>
         </div>
       </aside>
@@ -444,7 +444,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, onMounted, ref, watch } from "vue";
+import { computed, defineComponent, h, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import {
   ArrowLeft,
@@ -475,6 +475,7 @@ import {
   saveRouteSearch,
 } from "../services/routeSearch";
 import { useNavMap } from "@/composables/useNavMap";
+import { useLiveLocation } from "@/composables/useLiveLocation";
 
 // ── Route state (exactly as original) ────────────────────────────────────────
 const router = useRouter();
@@ -514,17 +515,40 @@ const start = state.start ?? savedSearch.start ?? "Unknown start";
 const destination =
   state.destination ?? savedSearch.destination ?? "Unknown destination";
 const filter = normalizeFilter(state.filter ?? savedSearch.filter);
+const progressKey = `mwasalaty:live-nav-step:${route.id || start}:${destination}`;
 
 saveRouteSearch({ start, destination, filter });
 
 // ── Navigation state ──────────────────────────────────────────────────────────
 const isOnline = ref(true);
-const currentStepIndex = ref(0);
+const currentStepIndex = ref(readSavedStepIndex());
 const endModalOpen = ref(false);
+// TODO: Wire feedback and ticket modals to backend data/submission when APIs are ready.
 const feedbackModalOpen = ref(false);
 const ticketModalOpen = ref(false);
 const showStepsSheet = ref(false);
 const feedbackRating = ref<"good" | "bad" | null>(null);
+const lastAutoAdvanceAt = ref(0);
+const labels = {
+  liveNavigation: "Live Navigation",
+  online: "Online",
+  offlineDemo: "Offline demo (TODO: not real offline)",
+  exit: "Exit",
+  noGeometry: "Map route shape is not available for this step yet.",
+  step: "Step",
+  of: "of",
+  next: "Next",
+  prev: "Prev",
+  nextStep: "Next Step",
+  arrive: "Arrive",
+  recenter: "Recenter",
+  recenterMap: "Recenter Map",
+  allSteps: "All Steps",
+  currentStep: "Current Step",
+  remainingTime: "Remaining Time",
+  distanceLeft: "Distance Left",
+  viewTicket: "View Digital Ticket",
+};
 
 const currentStep = computed(
   () => steps[currentStepIndex.value] ?? fallbackStep,
@@ -533,13 +557,28 @@ const nextStep = computed(() => steps[currentStepIndex.value + 1]);
 const progress = computed(
   () => ((currentStepIndex.value + 1) / Math.max(steps.length, 1)) * 100,
 );
+const remainingDistanceMeters = computed(() => {
+  let total = 0;
+  for (let i = currentStepIndex.value; i < steps.length; i += 1) {
+    total += stepGeometryDistance(steps[i]);
+  }
+  return total;
+});
+const remainingDistanceLabel = computed(() => formatDistance(remainingDistanceMeters.value));
+const remainingTimeLabel = computed(() => {
+  const minutes = steps
+    .slice(currentStepIndex.value)
+    .reduce((sum, step) => sum + parseDurationMinutes(step.duration), 0);
+  return minutes > 0 ? `${minutes} min` : "N/A";
+});
 
 // ── Map ───────────────────────────────────────────────────────────────────────
 const mapContainer = ref<HTMLElement | null>(null);
-const { initMap, fitStep, recenter, fitFullRoute, hasGeometry } = useNavMap(
+const { initMap, fitStep, recenter, fitFullRoute, hasGeometry, updateUserLocationMarker } = useNavMap(
   mapContainer,
   steps,
 );
+const { location, startTracking, stopTracking } = useLiveLocation();
 
 onMounted(async () => {
   await initMap();
@@ -547,13 +586,25 @@ onMounted(async () => {
   fitFullRoute();
   // Then smoothly focus step 1 after a short delay
   setTimeout(() => {
-    fitStep(0);
+    fitStep(currentStepIndex.value);
   }, 1000);
+  startTracking();
 });
 
 // Re-focus map whenever the active step changes
 watch(currentStepIndex, (idx) => {
   fitStep(idx);
+  localStorage.setItem(progressKey, String(idx));
+});
+
+watch(location, (nextLocation) => {
+  if (!nextLocation) return;
+  updateUserLocationMarker(nextLocation.lat, nextLocation.lng, nextLocation.accuracy);
+  maybeAutoAdvance(nextLocation);
+});
+
+onUnmounted(() => {
+  stopTracking();
 });
 
 // ── Step navigation ────────────────────────────────────────────────────────────
@@ -576,6 +627,80 @@ function recenterMap() {
 
 function modeLabel(type: string) {
   return type === "walking" ? "Walk" : type === "metro" ? "Metro" : "Bus";
+}
+
+type NavPoint = { lat: number; lng: number } | [number, number];
+
+function normalizePoint(point: unknown): { lat: number; lng: number } | null {
+  if (Array.isArray(point) && point.length >= 2) {
+    const [lat, lng] = point;
+    return Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null;
+  }
+  if (point && typeof point === "object") {
+    const candidate = point as Partial<{ lat: number; lng: number }>;
+    return Number.isFinite(candidate.lat) && Number.isFinite(candidate.lng)
+      ? { lat: candidate.lat as number, lng: candidate.lng as number }
+      : null;
+  }
+  return null;
+}
+
+function distanceMeters(a: NavPoint, b: NavPoint) {
+  const pointA = normalizePoint(a);
+  const pointB = normalizePoint(b);
+  if (!pointA || !pointB) return 0;
+
+  const radius = 6371000;
+  const dLat = toRad(pointB.lat - pointA.lat);
+  const dLng = toRad(pointB.lng - pointA.lng);
+  const lat1 = toRad(pointA.lat);
+  const lat2 = toRad(pointB.lat);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  return 2 * radius * Math.asin(Math.sqrt(h));
+}
+
+function toRad(value: number) {
+  return (value * Math.PI) / 180;
+}
+
+function stepGeometryDistance(step: RouteDetailStep | undefined) {
+  const geometry = Array.isArray(step?.geometry) ? step.geometry : [];
+  let total = 0;
+  for (let i = 1; i < geometry.length; i += 1) {
+    total += distanceMeters(geometry[i - 1] as NavPoint, geometry[i] as NavPoint);
+  }
+  return total;
+}
+
+function parseDurationMinutes(duration: string) {
+  const value = Number.parseFloat(duration);
+  return Number.isFinite(value) ? Math.max(0, Math.round(value)) : 0;
+}
+
+function formatDistance(value: number) {
+  if (!Number.isFinite(value) || value <= 0) return "N/A";
+  return value >= 1000 ? `${(value / 1000).toFixed(1)} km` : `${Math.round(value)} m`;
+}
+
+function maybeAutoAdvance(userLocation: { lat: number; lng: number; accuracy: number }) {
+  if (userLocation.accuracy > 80 || currentStepIndex.value >= steps.length - 1) return;
+  const geometry = currentStep.value?.geometry;
+  const stepEnd = Array.isArray(geometry) ? normalizePoint(geometry[geometry.length - 1]) : null;
+  if (!stepEnd) return;
+  const now = Date.now();
+  if (now - lastAutoAdvanceAt.value < 10000) return;
+  if (distanceMeters(userLocation, stepEnd) <= 40) {
+    lastAutoAdvanceAt.value = now;
+    next();
+  }
+}
+
+function readSavedStepIndex() {
+  const saved = Number.parseInt(localStorage.getItem(progressKey) ?? "0", 10);
+  if (!Number.isFinite(saved)) return 0;
+  return Math.min(Math.max(saved, 0), Math.max(steps.length - 1, 0));
 }
 
 // ── Inline sub-components (unchanged from original) ───────────────────────────

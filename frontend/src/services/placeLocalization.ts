@@ -1,0 +1,166 @@
+import { getFallbackLanguage, type AppLanguage } from "./language";
+
+export type KnownPlace = {
+  label: string;
+  arLabel: string;
+  lat: number;
+  lng: number;
+  aliases: string[];
+};
+
+const KNOWN_PLACES: KnownPlace[] = [
+  {
+    label: "Makram Ebeid, Nasr City",
+    arLabel: "مكرم عبيد",
+    lat: 30.05957,
+    lng: 31.34438,
+    aliases: ["makram ebeid", "makram ebeid nasr city", "مكرم عبيد"],
+  },
+  {
+    label: "Cairo University",
+    arLabel: "جامعة القاهرة",
+    lat: 30.01309,
+    lng: 31.20869,
+    aliases: ["cairo university", "جامعة القاهرة"],
+  },
+  {
+    label: "Nasr City",
+    arLabel: "مدينة نصر",
+    lat: 30.05661,
+    lng: 31.33011,
+    aliases: ["nasr city", "مدينة نصر"],
+  },
+  {
+    label: "Downtown Cairo",
+    arLabel: "وسط البلد",
+    lat: 30.04442,
+    lng: 31.23571,
+    aliases: ["downtown cairo", "downtown", "وسط البلد"],
+  },
+  {
+    label: "Heliopolis",
+    arLabel: "مصر الجديدة",
+    lat: 30.09103,
+    lng: 31.32246,
+    aliases: ["heliopolis", "مصر الجديدة"],
+  },
+  {
+    label: "Maadi",
+    arLabel: "المعادي",
+    lat: 29.96024,
+    lng: 31.2569,
+    aliases: ["maadi", "المعادي"],
+  },
+];
+
+export function resolveKnownPlace(value: string | null | undefined): KnownPlace | undefined {
+  const normalized = normalizeSearchPlace(value ?? "");
+  if (!normalized) return undefined;
+
+  return KNOWN_PLACES.find((place) =>
+    [place.label, place.arLabel, ...place.aliases].some(
+      (alias) => normalizeSearchPlace(alias) === normalized,
+    ),
+  );
+}
+
+const PLACE_AR: Record<string, string> = {
+  origin: "نقطة البداية",
+  destination: "الوجهة",
+  "current location": "الموقع الحالي",
+  "makram ebeid": "مكرم عبيد",
+  "makram ebeid, nasr city": "مكرم عبيد، مدينة نصر",
+  "awwal makram ebeid": "أول مكرم عبيد",
+  "cairo university": "جامعة القاهرة",
+  faisal: "فيصل",
+  "al-shohada": "الشهداء",
+  "al-shohadaa": "الشهداء",
+  "al-sayeda zeinab": "السيدة زينب",
+  "ramses railway station": "محطة رمسيس",
+  ramses: "رمسيس",
+  sadat: "السادات",
+  "tahrir square": "ميدان التحرير",
+  attaba: "العتبة",
+  nasser: "ناصر",
+  "mohamed naguib": "محمد نجيب",
+  opera: "الأوبرا",
+  dokki: "الدقي",
+  bohooth: "البحوث",
+  "el giza": "الجيزة",
+  "el-giza": "الجيزة",
+  "el mounib": "المنيب",
+  "el-mounib": "المنيب",
+  maadi: "المعادي",
+  helwan: "حلوان",
+  abbassiya: "العباسية",
+  abbasiya: "العباسية",
+  "cairo stadium": "استاد القاهرة",
+  "nasr city": "مدينة نصر",
+  "city stars mall": "سيتي ستارز",
+  heliopolis: "مصر الجديدة",
+  "adly mansour": "عدلي منصور",
+  "new cairo": "القاهرة الجديدة",
+  zamalek: "الزمالك",
+  "cairo tower": "برج القاهرة",
+  "egyptian museum": "المتحف المصري",
+  "khan el-khalili": "خان الخليلي",
+  "giza pyramids": "أهرامات الجيزة",
+  "grand egyptian museum": "المتحف المصري الكبير",
+};
+
+export function localizePlaceName(value: string | null | undefined, language = getFallbackLanguage()) {
+  if (!value || language === "en") return value ?? "";
+
+  const normalized = normalizePlace(value);
+  return PLACE_AR[normalized] ?? value;
+}
+
+export function localizeRouteInstruction(
+  instruction: string,
+  language = getFallbackLanguage(),
+) {
+  if (language === "en") return instruction;
+
+  const walkMatch = instruction.match(/^Walk to (.+)$/i);
+  if (walkMatch) {
+    return `امشِ إلى ${localizePlaceName(walkMatch[1], language)}`;
+  }
+
+  const takeMatch = instruction.match(/^Take (Bus|Metro|Train|Tram) ([^ ]+)(?: towards (.+))?$/i);
+  if (takeMatch) {
+    const mode = localizeMode(takeMatch[1], language);
+    const route = takeMatch[2];
+    const towards = takeMatch[3]
+      ? ` باتجاه ${localizePlaceName(takeMatch[3], language)}`
+      : "";
+    return `اركب ${mode} ${route}${towards}`;
+  }
+
+  return instruction;
+}
+
+export function localizeMode(value: string, language: AppLanguage = getFallbackLanguage()) {
+  if (language === "en") return value;
+
+  const normalized = value.toLowerCase();
+  if (normalized === "walk" || normalized === "walking") return "مشي";
+  if (normalized === "bus") return "أتوبيس";
+  if (normalized === "metro" || normalized === "subway") return "مترو";
+  if (normalized === "train" || normalized === "rail") return "قطار";
+  if (normalized === "tram") return "ترام";
+  return value;
+}
+
+function normalizePlace(value: string) {
+  return value.trim().toLowerCase().replace(/[-_]+/g, " ").replace(/\s+/g, " ");
+}
+
+function normalizeSearchPlace(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[،,]/g, " ")
+    .replace(/[-_]+/g, " ")
+    .replace(/[\u064B-\u065F\u0670]/g, "")
+    .replace(/\s+/g, " ");
+}

@@ -13,7 +13,7 @@
         class="flex items-center gap-2 px-5 py-3 rounded-full bg-red-200 text-red-900 text-xs font-semibold"
       >
         <Zap class="w-4 h-4" />
-        Fastest
+        {{ t("routeResults.fastest") }}
       </span>
 
       <span
@@ -21,14 +21,14 @@
         class="flex items-center gap-2 px-5 py-3 rounded-full bg-green-200 text-green-900 text-xs font-semibold"
       >
         <Wallet class="w-4 h-4" />
-        Cheapest
+        {{ t("routeResults.cheapest") }}
       </span>
       <span
         v-if="isComfortable"
         class="flex items-center gap-2 px-5 py-3 rounded-full bg-blue-200 text-blue-900 text-xs font-semibold"
       >
         <Sofa class="w-4 h-4" />
-        Most Comfortable
+        {{ t("routeResults.mostComfortable") }}
       </span>
     </div>
     <!-- Transport Steps -->
@@ -38,13 +38,13 @@
           <component :is="getIcon(step.type)" class="w-5 h-5 text-primary" />
 
           <span class="text-sm font-medium text-foreground">
-            {{ step.label }}
+            {{ formatStepLabel(step.label, step.type) }}
           </span>
         </div>
 
         <ChevronRight
           v-if="index < route.steps.length - 1"
-          class="w-4 h-4 text-muted-foreground"
+          class="w-4 h-4 text-muted-foreground rtl:rotate-180"
         />
       </template>
     </div>
@@ -52,25 +52,25 @@
     <!-- Route Stats -->
     <div class="grid grid-cols-4 gap-4 mb-5">
       <div>
-        <p class="text-xs text-muted-foreground">Total Duration</p>
+        <p class="text-xs text-muted-foreground">{{ t("routeResults.totalDuration") }}</p>
         <p class="font-semibold text-lg">
-          {{ route.duration }}
+          {{ formatUnit(route.duration) }}
         </p>
       </div>
 
       <div>
-        <p class="text-xs text-muted-foreground">Total Cost</p>
+        <p class="text-xs text-muted-foreground">{{ t("routeResults.totalCost") }}</p>
         <p class="font-semibold text-lg">
-          {{ route.cost }}
+          {{ formatUnit(route.cost) }}
         </p>
       </div>
       <div>
-        <p class="text-xs text-muted-foreground">Transfers</p>
+        <p class="text-xs text-muted-foreground">{{ t("routeResults.transfers") }}</p>
         <p class="font-semibold">{{ route.transfers }}</p>
       </div>
       <div>
-        <p class="text-xs text-muted-foreground">Walking</p>
-        <p class="font-semibold">{{ route.walkingDistance }}</p>
+        <p class="text-xs text-muted-foreground">{{ t("routeResults.walking") }}</p>
+        <p class="font-semibold">{{ formatUnit(route.walkingDistance) }}</p>
       </div>
     </div>
 
@@ -86,7 +86,7 @@
     </a> -->
     <!-- View Details -->
     <AppButton variant="primary" class="w-full" @click.stop="$emit('select')">
-      View Details
+      {{ t("routeResults.viewDetails") }}
     </AppButton>
   </div>
 </template>
@@ -103,9 +103,12 @@ import {
   Wallet,
   Sofa,
 } from "@lucide/vue";
+import { useI18n } from "vue-i18n";
 import AppButton from "../ui/AppButton.vue";
+import { localizeMode, localizeRouteInstruction } from "@/services/placeLocalization";
 
 const emit = defineEmits(["select"]);
+const { locale, t } = useI18n();
 
 const props = defineProps({
   route: {
@@ -141,5 +144,30 @@ function getIcon(type: string) {
     default:
       return Bus;
   }
+}
+
+function formatUnit(value: unknown) {
+  const text = String(value);
+  if (locale.value !== "ar") return text;
+  return text
+    .replace(/(\d+(?:\.\d+)?)\s*min\b/gi, "$1 دقيقة")
+    .replace(/(\d+(?:\.\d+)?)\s*km\b/gi, "$1 كم")
+    .replace(/(\d+(?:\.\d+)?)\s*m\b/gi, "$1 م")
+    .replace(/(\d+(?:\.\d+)?)\s*EGP\b/gi, "$1 جنيه");
+}
+
+function formatStepLabel(label: string, type: string) {
+  if (locale.value !== "ar") return label;
+
+  const modeMatch = label.match(/^(Bus|Metro)\s+(.+)$/i);
+  if (modeMatch) {
+    return `${localizeMode(modeMatch[1], "ar")} ${modeMatch[2]}`;
+  }
+
+  if (type === "walking" || type === "walk") {
+    return localizeRouteInstruction(label, "ar");
+  }
+
+  return localizeRouteInstruction(label, "ar");
 }
 </script>

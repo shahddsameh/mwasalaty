@@ -1,0 +1,337 @@
+{
+  "app": {
+    "name": "Mwasalaty"
+  },
+  "nav": {
+    "routePlanner": "Route Planner",
+    "aiTripPlanner": "AI Trip Planner",
+    "aiTrip": "AI Trip",
+    "saved": "Saved",
+    "allTickets": "All Tickets",
+    "tickets": "Tickets",
+    "profile": "Profile",
+    "settings": "Settings",
+    "login": "Login"
+  },
+  "language": {
+    "toggle": "العربية",
+    "current": "English"
+  },
+  "home": {
+    "title": "Where are you going?",
+    "subtitle": "Plan your journey across Greater Cairo with multiple transport options",
+    "startingPoint": "Starting point",
+    "whereTo": "Where to?",
+    "currentLocation": "Current Location",
+    "useCurrentLocation": "Use current location",
+    "gettingLocation": "Getting your location...",
+    "searchRoutes": "Search Routes",
+    "askAi": "Ask AI",
+    "recentSearches": "Recent Searches",
+    "recentEmpty": "Your recent routes will appear here.",
+    "savedPlaces": "Saved Places",
+    "saveDestination": "Save destination",
+    "saveStartingPoint": "Save starting point",
+    "placeName": "Place name",
+    "addressOrLocation": "Address or location",
+    "save": "Save",
+    "cancel": "Cancel",
+    "popularDestinations": "Popular Destinations",
+    "deleteRecentSearch": "Delete recent search",
+    "validation": {
+      "locationUnavailable": "Location isn't available on this device.",
+      "permissionDenied": "Location permission denied. Enter a starting point instead.",
+      "locationFailed": "Couldn't get your location. Enter a starting point instead.",
+      "placeAddressRequired": "Enter a place address first.",
+      "startRequired": "Please enter a starting point.",
+      "destinationRequired": "Please enter a destination.",
+      "bothRequired": "Please enter both the starting point and destination."
+    },
+    "filters": {
+      "fastest": "Fastest",
+      "cheapest": "Cheapest",
+      "comfortable": "Comfortable"
+    },
+    "placeTypes": {
+      "home": "Home",
+      "work": "Work",
+      "school": "School",
+      "gym": "Gym",
+      "other": "Other"
+    },
+    "time": {
+      "justNow": "Just now",
+      "minute": "min",
+      "minutes": "mins",
+      "hour": "hour",
+      "hours": "hours",
+      "day": "day",
+      "days": "days",
+      "ago": "ago"
+    },
+    "popular": {
+      "cairoAirport": {
+        "name": "Cairo Airport",
+        "area": "Heliopolis"
+      },
+      "egyptianMuseum": {
+        "name": "Egyptian Museum",
+        "area": "Downtown"
+      },
+      "cityStars": {
+        "name": "City Stars Mall",
+        "area": "Nasr City"
+      },
+      "cairoTower": {
+        "name": "Cairo Tower",
+        "area": "Zamalek"
+      },
+      "khanElKhalili": {
+        "name": "Khan el-Khalili",
+        "area": "Islamic Cairo"
+      },
+      "gizaPyramids": {
+        "name": "Giza Pyramids",
+        "area": "Giza"
+      }
+    }
+  },
+  "ticket": {
+    "status": {
+      "active": "Active",
+      "used": "Used",
+      "refunded": "Refunded",
+      "partially_refunded": "Partially refunded",
+      "expired": "Expired",
+      "pending": "Pending"
+    }
+  },
+  "account": {
+    "profileTitle": "Profile & Account",
+    "profileSubtitle": "Manage your account and preferences",
+    "memberSince": "Member since {date}",
+    "yourStats": "Your Stats",
+    "totalTrips": "Total Trips",
+    "savedRoutes": "Saved Routes",
+    "personalInformation": "Personal Information",
+    "savedPaymentMethods": "Saved Payment Methods",
+    "transactionHistory": "Transaction History",
+    "fullName": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
+    "primary": "Primary",
+    "tabs": {
+      "personalInfo": "Personal Info",
+      "payments": "Payments",
+      "transactions": "Transactions"
+    }
+  },
+  "tickets": {
+    "allTitle": "All Tickets",
+    "allSubtitle": "Your tickets and booking history",
+    "activeTickets": "Active Tickets ({count})",
+    "bookingHistory": "Booking History ({count})",
+    "digitalTicket": "Digital Ticket",
+    "valid": "Valid",
+    "route": "Route",
+    "cost": "Cost",
+    "validUntil": "Valid Until",
+    "expires": "Expires {date}",
+    "viewDetails": "View Ticket Details",
+    "booked": "Booked",
+    "bookAgain": "Book Again"
+  },
+  "saved": {
+    "title": "Saved & History",
+    "subtitle": "Your saved places, routes, and travel history",
+    "tabs": {
+      "places": "Places",
+      "routes": "Routes",
+      "trips": "Trips",
+      "aiPlans": "AI Plans",
+      "offline": "Offline"
+    },
+    "places": {
+      "title": "Saved Places",
+      "subtitle": "Quick destinations you can reuse for route planning.",
+      "addNewPlace": "Add New Place",
+      "addPlace": "Add Place",
+      "emptyTitle": "No saved places yet",
+      "emptyCopy": "Add home, work, school, or frequent destinations for faster planning.",
+      "modalCopy": "Save frequent destinations so they are always one tap away when planning routes.",
+      "searchPlaceholder": "Search for station, area, or landmark...",
+      "searchHelp": "Choose from suggested Cairo locations for better route results.",
+      "namePlaceholder": "Home, Work, Gym...",
+      "placeType": "Place type",
+      "savePlace": "Save Place",
+      "planRoute": "Plan Route",
+      "actions": "Saved place actions",
+      "quickRoute": "Quick route",
+      "deletePlace": "Delete Place"
+    },
+    "routes": {
+      "title": "Saved Routes",
+      "subtitle": "Routes you marked for quick reuse.",
+      "meta": "{duration} - {cost} - Last used {lastUsed}",
+      "useRoute": "Use Route"
+    },
+    "history": {
+      "title": "Recent Trips",
+      "subtitle": "Past journeys you can repeat or review.",
+      "completed": "Completed",
+      "repeatTrip": "Repeat Trip"
+    },
+    "ai": {
+      "title": "AI Plans",
+      "subtitle": "Saved itinerary ideas.",
+      "created": "Created {date}",
+      "meta": "{budget} - {count} destinations",
+      "openPlan": "Open Plan"
+    },
+    "offline": {
+      "title": "Offline Routes",
+      "subtitle": "Downloaded routes available without internet.",
+      "downloaded": "{size} - Downloaded {date}",
+      "remove": "Remove"
+    }
+  },
+  "routeResults": {
+    "title": "Route Options",
+    "backToSearch": "Back to Search",
+    "mapOverview": "Map Overview",
+    "interactiveMap": "Interactive map",
+    "showingAllRoutes": "showing all routes",
+    "fastest": "Fastest",
+    "cheapest": "Cheapest",
+    "comfortable": "Comfortable",
+    "mostComfortable": "Most Comfortable",
+    "totalDuration": "Total Duration",
+    "totalCost": "Total Cost",
+    "transfers": "Transfers",
+    "walking": "Walking",
+    "viewDetails": "View Details",
+    "distance": "Distance",
+    "routesFound": "Routes Found",
+    "optionsCount": "{count} options",
+    "planning": "Planning your route...",
+    "noRoutesTitle": "No dynamic routes found",
+    "backendHelp": "Make sure the backend and OpenTripPlanner are running, then try the search again.",
+    "noRoutesForSearch": "No dynamic routes found for this search.",
+    "errors": {
+      "placeNotFound": "Place not found: {place}. Choose a known place from suggestions.",
+      "planFailed": "Could not plan this route."
+    }
+  },
+  "routeDetails": {
+    "backToResults": "Back to Results",
+    "title": "Route Details",
+    "routeMap": "Route Map",
+    "interactiveMap": "Interactive route map",
+    "liveTracking": "with live tracking",
+    "saveDestination": "Save Destination",
+    "aiExplanation": "AI Route Explanation",
+    "walking": "Walking",
+    "transfers": "Transfers",
+    "totalCost": "Total Cost",
+    "duration": "Duration",
+    "stepByStep": "Step-by-Step",
+    "bookPay": "Book & Pay",
+    "saveRoute": "Save Route",
+    "startNavigation": "Start Navigation",
+    "stops": "{count} stops",
+    "saveRouteCopy": "Save this route for quick access later.",
+    "routeNamePlaceholder": "Route name (optional)",
+    "explanationBasic": "This route takes you from {start} to {destination}.",
+    "explanationWithSteps": "This route takes you from {start} to {destination}: {steps}."
+  },
+  "aiTripPlanner": {
+    "title": "AI Trip Planner",
+    "subtitle": "Let AI create a complete day itinerary with attractions, restaurants, and transport",
+    "formTitle": "Tell me about your trip",
+    "tripKind": "What kind of trip are you planning?",
+    "tripPlaceholder": "E.g., A weekend cultural tour of Cairo...",
+    "duration": "Trip Duration",
+    "durationPlaceholder": "Number of days",
+    "budget": "Total Budget (EGP)",
+    "budgetPlaceholder": "Your budget",
+    "interests": "Select your interests",
+    "generate": "Generate My Trip Plan",
+    "popularIdeas": "Popular Trip Ideas",
+    "howItWorks": "How it works",
+    "included": "Included in your plan",
+    "interest": {
+      "culture": "Cultural Sites",
+      "food": "Food & Dining",
+      "shopping": "Shopping",
+      "nature": "Parks & Nature",
+      "history": "Historical",
+      "modern": "Modern Cairo"
+    },
+    "ideas": {
+      "ancient": "Ancient Cairo Explorer",
+      "food": "Food Lover's Tour",
+      "modern": "Modern Cairo Experience",
+      "weekend": "Weekend Cultural Tour"
+    },
+    "steps": {
+      "preferences": {
+        "title": "Tell us your preferences",
+        "copy": "Duration, budget, and interests"
+      },
+      "create": {
+        "title": "AI creates your plan",
+        "copy": "Attractions, food, and transport"
+      },
+      "save": {
+        "title": "Save your trip",
+        "copy": "Access it anytime"
+      }
+    },
+    "includedItems": {
+      "itineraries": "AI-generated daily itineraries",
+      "activities": "Personalized activity suggestions",
+      "restaurants": "Restaurant and cafe recommendations",
+      "cost": "Detailed cost breakdown"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your app preferences and account",
+    "preferences": "Preferences",
+    "language": "Language",
+    "languageDescription": "Choose the app language for navigation, labels, and trip details.",
+    "english": "English",
+    "arabic": "Arabic",
+    "theme": "Theme",
+    "themeDescription": "Switch between the default light appearance and dark mode.",
+    "light": "Light",
+    "dark": "Dark",
+    "notifications": "Notifications",
+    "pushNotifications": "Push Notifications",
+    "pushDescription": "Route updates and journey alerts",
+    "dataStorage": "Data & Storage",
+    "clearOfflineData": "Clear Offline Data",
+    "clearOfflineDescription": "Remove downloaded routes and cached trip data.",
+    "account": "Account",
+    "profileSettings": "Profile Settings",
+    "profileDescription": "Edit personal details and payment methods",
+    "logout": "Logout",
+    "logoutDescription": "Sign out from this device",
+    "privacyLegal": "Privacy & Legal",
+    "privacyPolicy": "Privacy Policy",
+    "privacyDescription": "How your data is used",
+    "terms": "Terms of Service",
+    "termsDescription": "App usage rules",
+    "helpSupport": "Help & Support",
+    "contactSupport": "Contact Support",
+    "supportDescription": "Get help with routes, tickets, and payments",
+    "version": "Version 1.0.0",
+    "rights": "2024 All rights reserved",
+    "logoutConfirm": "Are you sure you want to logout?",
+    "loggingOut": "Logging out..."
+  },
+  "example": {
+    "ticketStatusTitle": "Ticket status",
+    "ticketStatusDescription": "This example uses vue-i18n and logical spacing classes."
+  }
+}

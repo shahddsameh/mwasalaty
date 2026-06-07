@@ -27,6 +27,10 @@ import AdminDashboard from "../features/admin/pages/AdminDashboard.vue";
 import AdminLogin from "../features/admin/pages/AdminLogin.vue";
 import AdminStations from "../features/admin/pages/AdminStations.vue";
 import AdminStops from "../features/admin/pages/AdminStops.vue";
+import AdminRoutes from "../features/admin/pages/AdminRoutes.vue";
+import AdminTickets from "../features/admin/pages/AdminTickets.vue";
+import AdminUsers from "../features/admin/pages/AdminUsers.vue";
+import AdminSettings from "../features/admin/pages/AdminSettings.vue";
 import { isAdminLoggedIn } from "../features/admin/services/adminAuth";
 
 const router = createRouter({
@@ -97,8 +101,12 @@ const router = createRouter({
       meta: { requiresAdmin: true },
       children: [
         { path: "", name: "admin", component: AdminDashboard, meta: { title: "Dashboard" } },
+        { path: "routes", name: "admin-routes", component: AdminRoutes, meta: { title: "Routes" } },
         { path: "stops", name: "admin-stops", component: AdminStops, meta: { title: "Stops" } },
         { path: "stations", name: "admin-stations", component: AdminStations, meta: { title: "Stations" } },
+        { path: "tickets", name: "admin-tickets", component: AdminTickets, meta: { title: "Tickets" } },
+        { path: "users", name: "admin-users", component: AdminUsers, meta: { title: "Users" } },
+        { path: "settings", name: "admin-settings", component: AdminSettings, meta: { title: "Settings" } },
       ],
     },
   ],

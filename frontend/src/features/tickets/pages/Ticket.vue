@@ -231,19 +231,32 @@ function readStoredTicket(): Ticket | null {
   }
 }
 
+function storeTicket(ticket: Ticket) {
+  try {
+    sessionStorage.setItem(CURRENT_TICKET_KEY, JSON.stringify(ticket));
+  } catch {
+    // Storage can be unavailable in private mode or if the quota is exceeded.
+  }
+}
+
 onMounted(async () => {
   const id = routeParamId();
   const stored = readStoredTicket();
 
-  if (stored && (!id || stored.ticketId === id)) {
-    ticket.value = stored;
-  } else if (id) {
+  if (id) {
     try {
       ticket.value = await getTicket(id);
+      if (ticket.value) storeTicket(ticket.value);
     } catch (err) {
-      errorMessage.value =
-        err instanceof Error ? err.message : "This ticket could not be found.";
+      if (stored && stored.ticketId === id) {
+        ticket.value = stored;
+      } else {
+        errorMessage.value =
+          err instanceof Error ? err.message : "This ticket could not be found.";
+      }
     }
+  } else if (stored) {
+    ticket.value = stored;
   }
 
   loading.value = false;

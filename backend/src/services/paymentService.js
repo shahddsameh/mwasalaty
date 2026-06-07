@@ -10,6 +10,23 @@ function splitName(name) {
   return { first: parts[0], last: parts.slice(1).join(' ') };
 }
 
+function normalizeUrl(baseUrl, fallback) {
+  const value = String(baseUrl ?? '').trim().replace(/\/+$/, '');
+  return value || fallback;
+}
+
+function normalizeEmail(email, specialReference) {
+  const value = String(email ?? '').trim();
+  if (value && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return value;
+  return `${specialReference}@example.com`;
+}
+
+function normalizePhone(phone) {
+  const digits = String(phone ?? '').replace(/\D/g, '');
+  if (digits.length >= 8) return digits;
+  return '01000000000';
+}
+
 export async function createCheckoutSession(body) {
   const errors = [];
   if (!body?.planId) errors.push('planId is required');
@@ -24,18 +41,20 @@ export async function createCheckoutSession(body) {
   }
 
   const { planId, itineraryId, passenger, paymentBreakdown, itinerary } = body;
-  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
-  const backendUrl = process.env.BACKEND_URL || 'http://localhost:3000';
+  const clientUrl = normalizeUrl(process.env.CLIENT_URL, 'http://localhost:5173');
+  const backendUrl = normalizeUrl(process.env.BACKEND_URL, 'http://localhost:3000');
 
   // We control the merchant reference; it doubles as our internal session id.
   const specialReference = `mwasalaty_${itineraryId}_${Date.now()}`;
   const { first, last } = splitName(passenger.name);
+  const email = normalizeEmail(passenger.email, specialReference);
+  const phone = normalizePhone(passenger.phone);
 
   const billingData = {
     first_name: first,
     last_name: last,
-    email: passenger.email || 'NA',
-    phone_number: passenger.phone || 'NA',
+    email,
+    phone_number: phone,
     apartment: 'NA',
     floor: 'NA',
     street: 'NA',
@@ -58,7 +77,7 @@ export async function createCheckoutSession(body) {
         quantity: 1,
       }],
       billingData,
-      customer: { first_name: first, last_name: last, email: passenger.email || 'NA' },
+      customer: { first_name: first, last_name: last, email },
       specialReference,
       redirectionUrl: `${clientUrl}/payment/success`,
       notificationUrl: `${backendUrl}/api/payments/paymob-webhook`,

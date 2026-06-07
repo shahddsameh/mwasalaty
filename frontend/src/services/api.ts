@@ -278,7 +278,12 @@ export type CreateCheckoutPayload = {
 
 async function readApiError(res: Response): Promise<string> {
   const body = await res.json().catch(() => null);
-  return body?.error?.message ?? body?.message ?? `Request failed (${res.status}).`;
+  return (
+    body?.error?.details?.paymobError ??
+    body?.error?.message ??
+    body?.message ??
+    `Request failed (${res.status}).`
+  );
 }
 
 export async function createCheckoutSession(

@@ -266,6 +266,11 @@ async function startCheckout() {
       passenger: {
         userId: user.value?.id ?? "guest",
         name: passengerName.value.trim(),
+        email: user.value?.email ?? undefined,
+        phone:
+          typeof user.value?.user_metadata?.phone === "string"
+            ? user.value.user_metadata.phone
+            : undefined,
       },
       paymentBreakdown: {
         fareAmount: total.value,

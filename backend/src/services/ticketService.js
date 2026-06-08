@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { saveTicket, getTicket, updateTicket } from '../stores/ticketStore.js';
+import { saveTicket, getTicket, getAllTickets, updateTicket } from '../stores/ticketStore.js';
 import { getProfileById } from '../stores/scannerProfileStore.js';
 import { ErrorCodes } from '../helpers/errors.js';
 
@@ -151,6 +151,12 @@ export function getTicketById(ticketId) {
     throw { code: ErrorCodes.TICKET_NOT_FOUND, message: `Ticket '${ticketId}' not found`, details: { ticketId } };
   }
   return ticket;
+}
+
+export function listTickets(userId) {
+  return getAllTickets()
+    .filter(ticket => ticket.passenger?.userId === userId)
+    .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
 }
 
 export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, validatedAt, stationsTraversed }) {
@@ -389,6 +395,24 @@ export function refundTicket(ticketId, legIds, refundMeta = {}) {
 
     refundableLegs = candidateLegs;
   } else {
+    const usedLegIds = ticket.legs.filter(l => l.status === 'used').map(l => l.ticketLegId);
+    if (usedLegIds.length > 0) {
+      throw {
+        code: ErrorCodes.LEG_ALREADY_USED,
+        message: 'A total refund is not available after any leg has been used',
+        details: { ticketId, usedLegIds },
+      };
+    }
+
+    const refundedLegIds = ticket.legs.filter(l => l.status === 'refunded').map(l => l.ticketLegId);
+    if (refundedLegIds.length > 0) {
+      throw {
+        code: ErrorCodes.LEG_ALREADY_REFUNDED,
+        message: 'A total refund is not available after a partial refund',
+        details: { ticketId, refundedLegIds },
+      };
+    }
+
     refundableLegs = ticket.legs.filter(l => l.status === 'unused');
     if (refundableLegs.length === 0) {
       throw {

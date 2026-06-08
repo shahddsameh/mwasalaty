@@ -224,6 +224,7 @@ export type TicketLeg = {
   fareAmount: number;
   currency?: string;
   status: TicketLegStatus;
+  refundedAt?: string;
 };
 
 export type Ticket = {
@@ -231,6 +232,8 @@ export type Ticket = {
   status: 'active' | 'used' | 'refunded' | 'partially_refunded';
   createdAt?: string;
   expiresAt?: string;
+  sourcePlanId?: string;
+  sourceItineraryId?: string;
   passenger?: { userId?: string; name?: string | null };
   payment: {
     paymentId?: string;
@@ -240,6 +243,8 @@ export type Ticket = {
     currency: string;
     paymobOrderId?: string | number;
     paymobTransactionId?: string | number;
+    refundedAmount?: number;
+    refundedAt?: string;
   };
   qrPayload: TicketQrPayload;
   legs: TicketLeg[];
@@ -314,4 +319,35 @@ export async function getTicket(ticketId: string): Promise<Ticket> {
   const res = await fetch(`/api/tickets/${encodeURIComponent(ticketId)}`);
   if (!res.ok) throw new Error(await readApiError(res));
   return (await res.json()) as Ticket;
+}
+
+export async function getTickets(userId: string): Promise<Ticket[]> {
+  const res = await fetch(`/api/tickets?userId=${encodeURIComponent(userId)}`);
+  if (!res.ok) throw new Error(await readApiError(res));
+  const data = (await res.json()) as { tickets?: Ticket[] };
+  return data.tickets ?? [];
+}
+
+export type RefundResult = {
+  ticketId: string;
+  refundedLegs: Array<{
+    ticketLegId: string;
+    mode: string;
+    fareAmount: number;
+    refundedAt: string;
+  }>;
+  refundAmount: number;
+  currency: string;
+  remainingLegs: number;
+  message: string;
+};
+
+export async function refundTicket(ticketId: string, legIds?: string[]): Promise<RefundResult> {
+  const res = await fetch(`/api/tickets/${encodeURIComponent(ticketId)}/refund`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(legIds?.length ? { legIds } : {}),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return (await res.json()) as RefundResult;
 }

@@ -9,6 +9,7 @@ const profiles = [
   { scannerProfileId: 'scanner_bus_14',    label: 'Bus 14',    operatorId: 'operator_bus_001',    deviceId: 'scanner_web_demo_001', mode: 'BUS',    routeShortName: '14' },
   { scannerProfileId: 'scanner_bus_108',   label: 'Bus 108',   operatorId: 'operator_bus_001',    deviceId: 'scanner_web_demo_002', mode: 'BUS',    routeShortName: '108' },
   { scannerProfileId: 'scanner_subway_m2', label: 'Subway M2', operatorId: 'operator_subway_001', deviceId: 'scanner_web_demo_003', mode: 'SUBWAY', routeShortName: 'M2' },
+  { scannerProfileId: 'scanner_bus_19', label: 'Bus 19', operatorId: 'operator_bus_001', deviceId: 'scanner_web_demo_004', mode: 'BUS', routeShortName: '19' },
 ];
 
 export function getAllProfiles() {

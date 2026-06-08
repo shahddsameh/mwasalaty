@@ -205,11 +205,10 @@ import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
 import type { Ticket, TicketLeg, TicketLegStatus } from "@/services/api";
 import { getTicket } from "@/services/api";
+import { readCurrentTicket, storeCurrentTicket } from "@/services/currentTicket";
 
 const route = useRoute();
 const router = useRouter();
-
-const CURRENT_TICKET_KEY = "mwasalaty:current-ticket";
 
 const ticket = ref<Ticket | null>(null);
 const loading = ref(true);
@@ -222,31 +221,14 @@ function routeParamId(): string | undefined {
   return Array.isArray(id) ? id[0] : id || undefined;
 }
 
-function readStoredTicket(): Ticket | null {
-  try {
-    const raw = sessionStorage.getItem(CURRENT_TICKET_KEY);
-    return raw ? (JSON.parse(raw) as Ticket) : null;
-  } catch {
-    return null;
-  }
-}
-
-function storeTicket(ticket: Ticket) {
-  try {
-    sessionStorage.setItem(CURRENT_TICKET_KEY, JSON.stringify(ticket));
-  } catch {
-    // Storage can be unavailable in private mode or if the quota is exceeded.
-  }
-}
-
 onMounted(async () => {
   const id = routeParamId();
-  const stored = readStoredTicket();
+  const stored = readCurrentTicket();
 
   if (id) {
     try {
       ticket.value = await getTicket(id);
-      if (ticket.value) storeTicket(ticket.value);
+      if (ticket.value) storeCurrentTicket(ticket.value);
     } catch (err) {
       if (stored && stored.ticketId === id) {
         ticket.value = stored;

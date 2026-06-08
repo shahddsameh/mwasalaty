@@ -157,10 +157,11 @@
                 <Navigation class="w-4 h-4" /> {{ labels.allSteps }}
               </AppButton>
               <AppButton
+                v-if="currentTicket"
                 variant="outline"
                 size="sm"
                 class="flex items-center justify-center px-3"
-                @click="ticketModalOpen = true"
+                @click="openTicketModal"
               >
                 <Ticket class="w-4 h-4" />
               </AppButton>
@@ -310,10 +311,11 @@
           </AppButton>
 
           <AppButton
+            v-if="currentTicket"
             variant="outline"
             size="lg"
             class="w-full flex items-center justify-center gap-2"
-            @click="ticketModalOpen = true"
+            @click="openTicketModal"
           >
             <Ticket class="w-5 h-5" /> {{ labels.viewTicket }}
           </AppButton>
@@ -438,7 +440,11 @@
       title="Digital Ticket"
       @close="ticketModalOpen = false"
     >
-      <TicketPreview @close="ticketModalOpen = false" />
+      <TicketPreview
+        v-if="currentTicket"
+        :ticket="currentTicket"
+        @close="ticketModalOpen = false"
+      />
     </Modal>
   </main>
 </template>
@@ -449,12 +455,10 @@ import { useRouter } from "vue-router";
 import {
   ArrowLeft,
   ArrowRight,
-  Check,
   Clock,
   Crosshair,
   MapPin,
   Navigation,
-  QrCode,
   ThumbsUp,
   Ticket,
   TrendingUp,
@@ -466,8 +470,10 @@ import {
 } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
-import { ticketData } from "@/constants/data";
-import type { ApiRouteOption, RouteDetailStep } from "@/services/api";
+import TicketPreview from "@/features/tickets/components/TicketPreview.vue";
+import type { ApiRouteOption, RouteDetailStep, Ticket as TicketData } from "@/services/api";
+import { getTicket } from "@/services/api";
+import { readCurrentTicket, storeCurrentTicket } from "@/services/currentTicket";
 import {
   getSavedRouteSearch,
   getSelectedRoute,
@@ -523,9 +529,10 @@ saveRouteSearch({ start, destination, filter });
 const isOnline = ref(true);
 const currentStepIndex = ref(readSavedStepIndex());
 const endModalOpen = ref(false);
-// TODO: Wire feedback and ticket modals to backend data/submission when APIs are ready.
+// TODO: Wire feedback modal to backend submission when an API is ready.
 const feedbackModalOpen = ref(false);
 const ticketModalOpen = ref(false);
+const currentTicket = ref<TicketData | null>(matchingNavigationTicket(readCurrentTicket()));
 const showStepsSheet = ref(false);
 const feedbackRating = ref<"good" | "bad" | null>(null);
 const lastAutoAdvanceAt = ref(0);
@@ -625,6 +632,31 @@ function recenterMap() {
   recenter(currentStepIndex.value);
 }
 
+function matchingNavigationTicket(ticket: TicketData | null): TicketData | null {
+  if (!ticket?.sourceItineraryId || !route.itineraryId) return null;
+  return ticket.sourceItineraryId === route.itineraryId ? ticket : null;
+}
+
+async function openTicketModal() {
+  const cached = matchingNavigationTicket(readCurrentTicket());
+  currentTicket.value = cached;
+  if (!cached) return;
+
+  ticketModalOpen.value = true;
+  try {
+    const refreshed = matchingNavigationTicket(await getTicket(cached.ticketId));
+    if (!refreshed) {
+      currentTicket.value = null;
+      ticketModalOpen.value = false;
+      return;
+    }
+    currentTicket.value = refreshed;
+    storeCurrentTicket(refreshed);
+  } catch {
+    // Keep the matching cached ticket available when offline or the refresh fails.
+  }
+}
+
 function modeLabel(type: string) {
   return type === "walking" ? "Walk" : type === "metro" ? "Metro" : "Bus";
 }
@@ -711,84 +743,5 @@ const MiniStat = defineComponent({
       h("div", { class: "text-xs text-muted-foreground mb-0.5" }, props.label),
       h("div", { class: "font-display text-lg text-foreground" }, props.value),
     ]),
-});
-
-const TicketPreview = defineComponent({
-  emits: ["close"],
-  setup(_, { emit }) {
-    return () =>
-      h("div", { class: "space-y-5" }, [
-        h(
-          "div",
-          {
-            class:
-              "flex items-center justify-between p-4 bg-gradient-to-br from-primary-soft via-warning-soft to-primary rounded-lg",
-          },
-          [
-            h("div", [
-              h(
-                "div",
-                { class: "font-display text-lg text-foreground" },
-                "Mwasalaty",
-              ),
-              h(
-                "div",
-                { class: "text-sm text-foreground" },
-                "Transport Ticket",
-              ),
-            ]),
-            h(
-              "div",
-              {
-                class:
-                  "px-3 py-1 rounded-full bg-success text-success-foreground flex items-center gap-1 text-sm",
-              },
-              [h(Check, { class: "w-4 h-4" }), "Valid"],
-            ),
-          ],
-        ),
-        h("div", { class: "flex flex-col items-center py-4" }, [
-          h(
-            "div",
-            {
-              class:
-                "w-56 h-56 bg-card border-4 border-border rounded-2xl flex items-center justify-center mb-4",
-            },
-            [h(QrCode, { class: "w-48 h-48 text-foreground" })],
-          ),
-          h(
-            "div",
-            { class: "font-mono text-sm text-center break-all" },
-            ticketData.id,
-          ),
-        ]),
-        h("div", { class: "grid grid-cols-2 gap-3" }, [
-          h("div", { class: "p-3 bg-secondary rounded-lg" }, [
-            h("div", { class: "text-xs text-muted-foreground" }, "Cost"),
-            h("div", { class: "font-display" }, ticketData.cost),
-          ]),
-          h("div", { class: "p-3 bg-secondary rounded-lg" }, [
-            h("div", { class: "text-xs text-muted-foreground" }, "Valid Until"),
-            h("div", { class: "font-display" }, ticketData.validUntil),
-          ]),
-        ]),
-        h("div", { class: "flex gap-3" }, [
-          h(
-            AppButton,
-            { class: "flex-1", onClick: () => emit("close") },
-            () => "Close",
-          ),
-          h(
-            AppButton,
-            {
-              variant: "outline",
-              class: "flex-1",
-              onClick: () => router.push("/ticket"),
-            },
-            () => "Full Details",
-          ),
-        ]),
-      ]);
-  },
 });
 </script>

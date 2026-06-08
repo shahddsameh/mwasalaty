@@ -46,6 +46,7 @@ import { useRoute, useRouter } from "vue-router";
 import { AlertTriangle, Loader2 } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import { getCheckoutSessionResult } from "@/services/api";
+import { storeCurrentTicket } from "@/services/currentTicket";
 
 type State = "verifying" | "issuing" | "error";
 
@@ -53,7 +54,6 @@ const route = useRoute();
 const router = useRouter();
 
 const CHECKOUT_SESSION_KEY = "mwasalaty:checkout-session-id";
-const CURRENT_TICKET_KEY = "mwasalaty:current-ticket";
 const MAX_ATTEMPTS = 8;
 const RETRY_DELAY_MS = 2000;
 
@@ -93,11 +93,7 @@ async function poll(sessionId: string, attempt = 0) {
 
     if (result.status === "ready") {
       state.value = "issuing";
-      try {
-        sessionStorage.setItem(CURRENT_TICKET_KEY, JSON.stringify(result.ticket));
-      } catch {
-        // Ticket page will re-fetch from the API if storage is unavailable.
-      }
+      storeCurrentTicket(result.ticket);
       router.replace(`/ticket/${result.ticket.ticketId}`);
       return;
     }

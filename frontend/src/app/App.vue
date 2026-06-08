@@ -14,5 +14,8 @@ import PwaUpdatePrompt from "../pwa/PwaUpdatePrompt.vue";
 
 const route = useRoute();
 const headerlessRoutes = new Set(["live-navigation", "ticket", "payment-success"]);
-const showHeader = computed(() => !headerlessRoutes.has(String(route.name)));
+const isAdminRoute = computed(() => route.path.startsWith("/admin"));
+const showHeader = computed(
+  () => !isAdminRoute.value && !headerlessRoutes.has(String(route.name)),
+);
 </script>

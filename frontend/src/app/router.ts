@@ -22,6 +22,7 @@ import Support from "../features/account/pages/Support.vue";
 import AllTickets from "../features/tickets/pages/AllTickets.vue";
 import OperatorScan from "../features/operator/pages/OperatorScan.vue";
 import AdminDashboard from "../features/admin/pages/AdminDashboard.vue";
+import AdminLogin from "../features/admin/pages/AdminLogin.vue";
 import { ensureAuthInitialized, useAuthState } from "@/services/authState";
 
 const router = createRouter({
@@ -85,16 +86,19 @@ const router = createRouter({
       component: Settings,
     },
     { path: "/support", name: "support", component: Support },
-    {
-      path: "/admin",
-      name: "admin",
-      component: AdminDashboard,
-      meta: { requiresAdmin: true },
-    },
+    { path: "/admin/login", name: "admin-login", component: AdminLogin },
+    { path: "/admin", name: "admin", component: AdminDashboard, meta: { requiresAdmin: true } },
+    { path: "/admin/:section", name: "admin-section", component: AdminDashboard, meta: { requiresAdmin: true } },
   ],
 });
 
 router.beforeEach(async (to) => {
+  const adminToken = localStorage.getItem("mwasalaty:admin-token");
+  if (to.path.startsWith("/admin") && to.name !== "admin-login" && !adminToken) {
+    return { path: "/admin/login", query: { redirect: to.fullPath } };
+  }
+  if (to.name === "admin-login" && adminToken) return { path: "/admin/users" };
+
   if (!to.meta.requiresOperator) return true;
 
   const operatorSession = localStorage.getItem("mwasalaty:operator-session");

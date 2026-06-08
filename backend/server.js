@@ -6,6 +6,7 @@ import cors from 'cors';
 import planRouter from './src/routes/plan.js';
 import ticketRouter from './src/routes/ticket.js';
 import paymentRouter from './src/routes/payment.js';
+import adminRouter from './src/routes/admin.js';
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use('/api', planRouter);
 app.use('/api', ticketRouter);
 app.use('/api', paymentRouter);
+app.use('/api', adminRouter);
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {

@@ -41,6 +41,22 @@ export type RouteSearch = Record<string, unknown> & {
   latest_itineraries?: unknown;
 };
 
+export type DashboardStats = {
+  totals: {
+    users: number;
+    transitRoutes: number;
+    transitStops: number;
+    routeSearches: number;
+    tickets: number;
+    supportTickets?: number;
+  };
+  routeSearchesByDay: Array<{ date: string; count: number }>;
+  transitRoutesByMode: Array<{ mode: string; count: number }>;
+  ticketsByStatus: Array<{ status: string; count: number }>;
+  topSearchedRoutes: Array<{ from_label?: string; to_label?: string; search_count: number }>;
+  recentRouteSearches: Array<{ from_label?: string; to_label?: string; created_at?: string; total_routes?: number }>;
+};
+
 function token() {
   return localStorage.getItem(TOKEN_KEY) ?? "";
 }
@@ -176,4 +192,8 @@ export async function listTransitStops() {
 export async function listRouteSearches() {
   const data = await adminFetch("/api/admin/routes/searches");
   return (data.searches ?? []) as RouteSearch[];
+}
+
+export async function getDashboardStats() {
+  return (await adminFetch("/api/admin/dashboard/stats")) as DashboardStats;
 }

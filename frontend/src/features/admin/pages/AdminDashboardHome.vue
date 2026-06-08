@@ -6,19 +6,105 @@
       <div class="p-4 text-sm font-medium text-[#B91C1C]">{{ error }}</div>
     </Card>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-      <StatCard label="Total Transit Routes" :value="loading ? '...' : summary.routes" color="#2B2A27" />
-      <StatCard label="Total Route Searches" :value="loading ? '...' : summary.searches" color="#7C3AED" />
-      <StatCard label="Total Stops" :value="loading ? '...' : summary.stops" color="#00B86B" />
-      <StatCard label="Total Users" :value="loading ? '...' : summary.users" color="#0EA5E9" />
+    <div class="grid grid-cols-2 xl:grid-cols-6 gap-3 md:gap-4">
+      <StatCard label="Total Users" :value="cardValue('users')" color="#7C3AED" />
+      <StatCard label="Total Transit Routes" :value="cardValue('transitRoutes')" color="#2B2A27" />
+      <StatCard label="Total Stops" :value="cardValue('transitStops')" color="#00B86B" />
+      <StatCard label="Total Route Searches" :value="cardValue('routeSearches')" color="#0EA5E9" />
+      <StatCard label="Total Tickets" :value="cardValue('tickets')" color="#FF7A1A" />
+      <StatCard label="Support Tickets" :value="cardValue('supportTickets')" color="#E63946" />
     </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 md:gap-6">
+      <ChartCard title="Route Searches Over Time" :empty="!stats.routeSearchesByDay.length">
+        <Bar :data="searchesByDayData" :options="chartOptions" />
+      </ChartCard>
+
+      <ChartCard title="Transit Routes by Mode" :empty="!stats.transitRoutesByMode.length">
+        <Doughnut :data="routesByModeData" :options="doughnutOptions" />
+      </ChartCard>
+
+      <ChartCard title="Tickets by Status" :empty="!stats.ticketsByStatus.length">
+        <Bar :data="ticketsByStatusData" :options="chartOptions" />
+      </ChartCard>
+
+      <Card>
+        <div class="px-5 py-4 border-b border-[#E6DEC8]">
+          <h2 class="text-base font-bold text-[#2B2A27]" style="font-family: 'DM Sans', sans-serif">
+            Top Searched Routes
+          </h2>
+        </div>
+        <div v-if="!stats.topSearchedRoutes.length" class="p-8 text-center text-sm text-[#6B7280]">
+          No data yet
+        </div>
+        <div v-else class="p-5 flex flex-col gap-3">
+          <div v-for="route in stats.topSearchedRoutes" :key="`${route.from_label}-${route.to_label}`">
+            <div class="flex items-center justify-between gap-3 text-sm">
+              <span class="font-semibold text-[#2B2A27] truncate">
+                {{ route.from_label || '-' }} -> {{ route.to_label || '-' }}
+              </span>
+              <span class="font-bold text-[#111827]">{{ route.search_count }}</span>
+            </div>
+            <div class="mt-2 h-2 rounded-full bg-[#F3F0E8] overflow-hidden">
+              <div class="h-full rounded-full bg-[#FFC400]" :style="{ width: topRouteWidth(route.search_count) }" />
+            </div>
+          </div>
+        </div>
+      </Card>
+    </div>
+
+    <Card>
+      <div class="px-5 py-4 border-b border-[#E6DEC8]">
+        <h2 class="text-base font-bold text-[#2B2A27]" style="font-family: 'DM Sans', sans-serif">
+          Recent Activity
+        </h2>
+        <p class="text-xs text-[#6B7280]">Recent route searches</p>
+      </div>
+      <div v-if="!stats.recentRouteSearches.length" class="p-8 text-center text-sm text-[#6B7280]">
+        No data yet
+      </div>
+      <div v-else class="overflow-x-auto">
+        <table class="w-full min-w-[720px] text-left text-sm">
+          <thead class="bg-[#111827] text-[#FFC400] uppercase text-xs tracking-wide">
+            <tr>
+              <th class="px-4 py-3">From</th>
+              <th class="px-4 py-3">To</th>
+              <th class="px-4 py-3">Created</th>
+              <th class="px-4 py-3">Total Routes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in stats.recentRouteSearches" :key="`${item.from_label}-${item.to_label}-${item.created_at}`" class="border-b border-[#E6DEC8]">
+              <td class="px-4 py-3 font-semibold text-[#111827]">{{ item.from_label || '-' }}</td>
+              <td class="px-4 py-3 text-[#4B5563]">{{ item.to_label || '-' }}</td>
+              <td class="px-4 py-3 text-[#4B5563]">{{ formatDate(item.created_at) }}</td>
+              <td class="px-4 py-3 text-[#4B5563]">{{ item.total_routes ?? '-' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </Card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { computed, defineComponent, h, onMounted, reactive, ref } from 'vue';
+import { Bar, Doughnut } from 'vue-chartjs';
+import {
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  ArcElement,
+  Tooltip,
+} from 'chart.js';
 import { Card, StatCard } from '../components/AdminShared.vue';
-import { listRouteSearches, listTransitRoutes, listTransitStops, listUsers } from '../services/adminApi';
+import { getDashboardStats, type DashboardStats } from '../services/adminApi';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, ArcElement, Tooltip, Legend);
 
 defineEmits<{
   nav: [page: string];
@@ -26,33 +112,76 @@ defineEmits<{
 
 const loading = ref(true);
 const error = ref('');
-const summary = reactive({
-  routes: 0,
-  searches: 0,
-  stops: 0,
-  users: 0,
+const stats = reactive<DashboardStats>({
+  totals: { users: 0, transitRoutes: 0, transitStops: 0, routeSearches: 0, tickets: 0, supportTickets: 0 },
+  routeSearchesByDay: [],
+  transitRoutesByMode: [],
+  ticketsByStatus: [],
+  topSearchedRoutes: [],
+  recentRouteSearches: [],
 });
 
-async function loadSummary() {
+const colors = ['#FFC400', '#00B86B', '#0EA5E9', '#7C3AED', '#FF7A1A', '#E63946'];
+const chartOptions = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } };
+const doughnutOptions = { responsive: true, maintainAspectRatio: false };
+
+const ChartCard = defineComponent({
+  props: { title: { type: String, required: true }, empty: { type: Boolean, default: false } },
+  setup(props, { slots }) {
+    return () =>
+      h(Card, null, {
+        default: () => [
+          h('div', { class: 'px-5 py-4 border-b border-[#E6DEC8]' }, [
+            h('h2', { class: 'text-base font-bold text-[#2B2A27]', style: "font-family: 'DM Sans', sans-serif" }, props.title),
+          ]),
+          props.empty
+            ? h('div', { class: 'p-8 text-center text-sm text-[#6B7280]' }, 'No data yet')
+            : h('div', { class: 'h-72 p-5' }, slots.default?.()),
+        ],
+      });
+  },
+});
+
+function cardValue(key: keyof DashboardStats['totals']) {
+  return loading.value ? '...' : stats.totals[key] ?? 0;
+}
+
+function formatDate(value?: string) {
+  if (!value) return '-';
+  return new Date(value).toLocaleString();
+}
+
+function topRouteWidth(count: number) {
+  const max = Math.max(...stats.topSearchedRoutes.map((route) => route.search_count), 1);
+  return `${Math.max(8, Math.round((count / max) * 100))}%`;
+}
+
+const searchesByDayData = computed(() => ({
+  labels: stats.routeSearchesByDay.map((item) => item.date),
+  datasets: [{ data: stats.routeSearchesByDay.map((item) => item.count), backgroundColor: '#FFC400' }],
+}));
+
+const routesByModeData = computed(() => ({
+  labels: stats.transitRoutesByMode.map((item) => item.mode),
+  datasets: [{ data: stats.transitRoutesByMode.map((item) => item.count), backgroundColor: colors }],
+}));
+
+const ticketsByStatusData = computed(() => ({
+  labels: stats.ticketsByStatus.map((item) => item.status),
+  datasets: [{ data: stats.ticketsByStatus.map((item) => item.count), backgroundColor: '#0EA5E9' }],
+}));
+
+async function loadDashboard() {
   loading.value = true;
   error.value = '';
   try {
-    const [routes, searches, stops, users] = await Promise.all([
-      listTransitRoutes(),
-      listRouteSearches(),
-      listTransitStops(),
-      listUsers(),
-    ]);
-    summary.routes = routes.length;
-    summary.searches = searches.length;
-    summary.stops = stops.length;
-    summary.users = users.length;
+    Object.assign(stats, await getDashboardStats());
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to load dashboard summary';
+    error.value = err instanceof Error ? err.message : 'Failed to load dashboard stats';
   } finally {
     loading.value = false;
   }
 }
 
-onMounted(loadSummary);
+onMounted(loadDashboard);
 </script>

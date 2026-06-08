@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   adminBlockUserHandler,
+  adminDashboardStatsHandler,
   adminLoginHandler,
   adminLogoutHandler,
   adminRouteSearchesHandler,
@@ -29,6 +30,7 @@ router.get("/admin/users", adminUsersHandler);
 router.patch("/admin/users/:id", adminUpdateUserHandler);
 router.post("/admin/users/:id/block", adminBlockUserHandler);
 router.post("/admin/users/:id/unblock", adminUnblockUserHandler);
+router.get("/admin/dashboard/stats", adminDashboardStatsHandler);
 
 // Support Tickets (admin only)
 router.get("/admin/support/tickets", adminGetSupportTicketsHandler);

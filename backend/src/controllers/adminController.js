@@ -13,6 +13,8 @@ import {
   createSupportTicket,
 } from "../services/supportTicketService.js";
 import { listRouteSearches, listTransitRoutes, listTransitStops } from "../services/otpImportService.js";
+import { getSupabaseAdminClient } from "../services/supabaseClient.js";
+import { getAllTickets } from "../stores/ticketStore.js";
 
 function statusFor(error) {
   switch (error?.code) {
@@ -165,6 +167,103 @@ export async function adminTransitStopsHandler(req, res) {
 export async function adminRouteSearchesHandler(req, res) {
   try {
     res.json({ searches: await listRouteSearches() });
+  } catch (err) {
+    sendError(res, err);
+  }
+}
+
+function normalizeMode(mode) {
+  const value = String(mode || "Unknown").toLowerCase();
+  if (value === "bus") return "Bus";
+  if (["metro", "subway", "rail"].includes(value)) return "Metro";
+  return mode || "Unknown";
+}
+
+function dayKey(value) {
+  if (!value) return "Unknown";
+  return new Date(value).toISOString().slice(0, 10);
+}
+
+async function countTable(supabase, table) {
+  const { count, error } = await supabase.from(table).select("*", { count: "exact", head: true });
+  if (error) throw error;
+  return count || 0;
+}
+
+export async function adminDashboardStatsHandler(req, res) {
+  try {
+    const supabase = getSupabaseAdminClient();
+    const [users, supportTickets, tickets, transitRoutes, routeSearchesResult, transitRoutesCount, transitStopsCount, routeSearchesCount] =
+      await Promise.all([
+        listAdminUsers(),
+        getSupportTickets(),
+        Promise.resolve(getAllTickets()),
+        listTransitRoutes(),
+        supabase.from("route_searches").select("*").order("created_at", { ascending: false }).limit(1000),
+        countTable(supabase, "transit_routes"),
+        countTable(supabase, "transit_stops"),
+        countTable(supabase, "route_searches"),
+      ]);
+
+    if (routeSearchesResult.error) throw routeSearchesResult.error;
+    const routeSearches = routeSearchesResult.data || [];
+
+    const byDay = new Map();
+    const topRoutes = new Map();
+    for (const search of routeSearches) {
+      const day = dayKey(search.created_at);
+      byDay.set(day, (byDay.get(day) || 0) + 1);
+
+      const key = `${search.from_label || "-"} -> ${search.to_label || "-"}`;
+      const current = topRoutes.get(key) || {
+        from_label: search.from_label,
+        to_label: search.to_label,
+        search_count: 0,
+      };
+      current.search_count += 1;
+      topRoutes.set(key, current);
+    }
+
+    const byMode = new Map();
+    for (const route of transitRoutes) {
+      const mode = normalizeMode(route.mode);
+      byMode.set(mode, (byMode.get(mode) || 0) + 1);
+    }
+
+    const byStatus = new Map();
+    for (const ticket of tickets) {
+      const status = ticket.payment?.status || ticket.status || "pending";
+      byStatus.set(status, (byStatus.get(status) || 0) + 1);
+    }
+    for (const ticket of supportTickets) {
+      const status = ticket.status === "resolved" || ticket.status === "closed" ? "closed" : "open";
+      byStatus.set(status, (byStatus.get(status) || 0) + 1);
+    }
+
+    res.json({
+      totals: {
+        users: users.length,
+        transitRoutes: transitRoutesCount,
+        transitStops: transitStopsCount,
+        routeSearches: routeSearchesCount,
+        tickets: tickets.length,
+        supportTickets: supportTickets.length,
+      },
+      routeSearchesByDay: Array.from(byDay.entries())
+        .map(([date, count]) => ({ date, count }))
+        .sort((a, b) => String(a.date).localeCompare(String(b.date))),
+      transitRoutesByMode: Array.from(byMode.entries()).map(([mode, count]) => ({ mode, count })),
+      ticketsByStatus: Array.from(byStatus.entries()).map(([status, count]) => ({ status, count })),
+      topSearchedRoutes: Array.from(topRoutes.values())
+        .sort((a, b) => b.search_count - a.search_count)
+        .slice(0, 5),
+      recentRouteSearches: routeSearches.slice(0, 8).map((search) => ({
+        from_label: search.from_label,
+        to_label: search.to_label,
+        created_at: search.created_at,
+        total_routes: search.total_routes,
+      })),
+    });
   } catch (err) {
     sendError(res, err);
   }

@@ -21,6 +21,7 @@ import Settings from "../features/account/pages/Settings.vue";
 import Support from "../features/account/pages/Support.vue";
 import AllTickets from "../features/tickets/pages/AllTickets.vue";
 import OperatorScan from "../features/operator/pages/OperatorScan.vue";
+import AdminDashboard from "../features/admin/pages/AdminDashboard.vue";
 import { ensureAuthInitialized, useAuthState } from "@/services/authState";
 
 const router = createRouter({
@@ -84,6 +85,12 @@ const router = createRouter({
       component: Settings,
     },
     { path: "/support", name: "support", component: Support },
+    {
+      path: "/admin",
+      name: "admin",
+      component: AdminDashboard,
+      meta: { requiresAdmin: true },
+    },
   ],
 });
 

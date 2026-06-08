@@ -205,11 +205,10 @@ import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
 import type { Ticket, TicketLeg, TicketLegStatus } from "@/services/api";
 import { getTicket } from "@/services/api";
+import { readCurrentTicket, storeCurrentTicket } from "@/services/currentTicket";
 
 const route = useRoute();
 const router = useRouter();
-
-const CURRENT_TICKET_KEY = "mwasalaty:current-ticket";
 
 const ticket = ref<Ticket | null>(null);
 const loading = ref(true);
@@ -222,28 +221,24 @@ function routeParamId(): string | undefined {
   return Array.isArray(id) ? id[0] : id || undefined;
 }
 
-function readStoredTicket(): Ticket | null {
-  try {
-    const raw = sessionStorage.getItem(CURRENT_TICKET_KEY);
-    return raw ? (JSON.parse(raw) as Ticket) : null;
-  } catch {
-    return null;
-  }
-}
-
 onMounted(async () => {
   const id = routeParamId();
-  const stored = readStoredTicket();
+  const stored = readCurrentTicket();
 
-  if (stored && (!id || stored.ticketId === id)) {
-    ticket.value = stored;
-  } else if (id) {
+  if (id) {
     try {
       ticket.value = await getTicket(id);
+      if (ticket.value) storeCurrentTicket(ticket.value);
     } catch (err) {
-      errorMessage.value =
-        err instanceof Error ? err.message : "This ticket could not be found.";
+      if (stored && stored.ticketId === id) {
+        ticket.value = stored;
+      } else {
+        errorMessage.value =
+          err instanceof Error ? err.message : "This ticket could not be found.";
+      }
     }
+  } else if (stored) {
+    ticket.value = stored;
   }
 
   loading.value = false;

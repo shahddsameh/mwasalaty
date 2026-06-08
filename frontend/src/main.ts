@@ -7,6 +7,8 @@ import { i18n, setI18nLanguage } from "./i18n";
 import { ensureAuthInitialized } from "./services/authState";
 import { getSavedLanguage } from "./services/language";
 import { applyTheme, getSavedTheme } from "./services/theme";
+import { initializeSyncService } from "./core/offline/syncService";
+import { initializeCacheManager } from "./core/offline/cacheManager";
 
 applyTheme(getSavedTheme());
 
@@ -18,5 +20,10 @@ app.use(i18n);
 void (async () => {
   setI18nLanguage(await getSavedLanguage());
   await ensureAuthInitialized();
+  
+  // Initialize offline-first infrastructure
+  initializeSyncService();
+  initializeCacheManager();
+  
   app.mount("#root");
 })();

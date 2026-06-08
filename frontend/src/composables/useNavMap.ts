@@ -8,7 +8,7 @@
  * - Stable bounds padding that accounts for sidebar on desktop
  */
 
-import { onUnmounted, type Ref } from 'vue';
+import { onUnmounted, ref, type Ref } from 'vue';
 import type { RouteDetailStep } from '@/services/api';
 
 // Leaflet is loaded lazily so SSR / tests don't break.
@@ -30,6 +30,8 @@ const CAIRO_CENTER: [number, number] = [30.0444, 31.2357];
 const CAIRO_ZOOM = 12;
 
 type LeafletPolyline = import('leaflet').Polyline;
+type LeafletMarker = import('leaflet').Marker;
+type LeafletCircle = import('leaflet').Circle;
 
 export function useNavMap(
   containerRef: Ref<HTMLElement | null>,
@@ -40,7 +42,9 @@ export function useNavMap(
   let stepPolylines: LeafletPolyline[] = [];
   let stepMarkers: any[] = [];
   let currentStepMarker: any = null;
-  let hasGeometry = false;
+  let userMarker: LeafletMarker | null = null;
+  let accuracyCircle: LeafletCircle | null = null;
+  const hasGeometry = ref(false);
   let currentActiveIndex = -1;
 
   function buildPolyline(L: typeof import('leaflet'), step: RouteDetailStep, stepIndex: number, activeIdx: number) {
@@ -167,9 +171,9 @@ export function useNavMap(
     }).addTo(map);
 
     leafletLib = L;
-    hasGeometry = steps.some((step) => Array.isArray(step.geometry) && step.geometry.length > 1);
+    hasGeometry.value = steps.some((step) => Array.isArray(step.geometry) && step.geometry.length > 1);
     
-    if (hasGeometry) {
+    if (hasGeometry.value) {
       renderInitialFeatures(L);
     }
   }
@@ -219,7 +223,7 @@ export function useNavMap(
   }
 
   function fitFullRoute() {
-    if (!map || !leafletLib || !hasGeometry) return;
+    if (!map || !leafletLib || !hasGeometry.value) return;
     
     const allPoints: [number, number][] = [];
     steps.forEach((step) => {
@@ -247,7 +251,7 @@ export function useNavMap(
     // Update polyline styles first for smooth visual transition
     updatePolylineStyles(stepIndex);
 
-    if (hasGeometry) {
+    if (hasGeometry.value) {
       const polyline = stepPolylines[stepIndex];
       const bounds = polyline?.getBounds();
       
@@ -297,6 +301,36 @@ export function useNavMap(
     fitStep(stepIndex);
   }
 
+  function updateUserLocationMarker(lat: number, lng: number, accuracy = 0) {
+    if (!map || !leafletLib || !Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+    const point: [number, number] = [lat, lng];
+    if (!userMarker) {
+      const userIcon = leafletLib.divIcon({
+        className: 'custom-div-icon',
+        html: '<div class="w-4 h-4 rounded-full bg-blue-600 border-2 border-white shadow-lg"></div>',
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+      });
+      userMarker = leafletLib.marker(point, { icon: userIcon }).addTo(map);
+    } else {
+      userMarker.setLatLng(point);
+    }
+
+    if (!accuracyCircle) {
+      accuracyCircle = leafletLib.circle(point, {
+        radius: Math.max(accuracy, 0),
+        color: '#2563eb',
+        fillColor: '#3b82f6',
+        fillOpacity: 0.12,
+        weight: 1,
+      }).addTo(map);
+    } else {
+      accuracyCircle.setLatLng(point);
+      accuracyCircle.setRadius(Math.max(accuracy, 0));
+    }
+  }
+
   function destroy() {
     stepPolylines.forEach((polyline) => polyline?.remove());
     stepPolylines = [];
@@ -306,6 +340,14 @@ export function useNavMap(
       currentStepMarker.remove();
       currentStepMarker = null;
     }
+    if (userMarker) {
+      userMarker.remove();
+      userMarker = null;
+    }
+    if (accuracyCircle) {
+      accuracyCircle.remove();
+      accuracyCircle = null;
+    }
     if (map) {
       map.remove();
       map = null;
@@ -314,5 +356,5 @@ export function useNavMap(
 
   onUnmounted(destroy);
 
-  return { initMap, fitStep, recenter, fitFullRoute, hasGeometry };
+  return { initMap, fitStep, recenter, fitFullRoute, hasGeometry, updateUserLocationMarker };
 }

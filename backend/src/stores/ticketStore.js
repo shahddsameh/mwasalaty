@@ -8,6 +8,10 @@ export function getTicket(ticketId) {
   return tickets.get(ticketId) ?? null;
 }
 
+export function getAllTickets() {
+  return Array.from(tickets.values());
+}
+
 export function updateTicket(ticket) {
   tickets.set(ticket.ticketId, ticket);
 }

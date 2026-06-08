@@ -1,5 +1,5 @@
 import Dexie, { type Table } from "dexie";
-import type { Ticket } from "@/services/api";
+import type { Ticket, ApiRouteOption, ApiPlanResponse } from "@/services/api";
 
 export type SavedTrip = {
   id: string;
@@ -25,7 +25,9 @@ export type FavoritePlace = {
   address: string;
   lat?: number;
   lng?: number;
+  type?: string;
   createdAt: number;
+  updatedAt?: number;
 };
 
 export type OfflineTicket = Ticket & {
@@ -38,12 +40,58 @@ export type AppSetting = {
   updatedAt: number;
 };
 
+// Offline-first cache types
+export type CachedRoute = {
+  cacheKey: string; // Composite key: from|to|filter
+  from: string;
+  to: string;
+  filter: string;
+  routes: ApiRouteOption[];
+  planData?: ApiPlanResponse;
+  cachedAt: number;
+  expiresAt: number;
+};
+
+export type CachedPlace = {
+  id: string;
+  name: string;
+  address: string;
+  lat: number;
+  lng: number;
+  type?: string;
+  metadata?: Record<string, unknown>;
+  cachedAt: number;
+};
+
+export type SyncMetadata = {
+  key: string; // Entity type, e.g., 'favoritePlaces', 'recentSearches'
+  lastSyncAt: number;
+  syncStatus: 'idle' | 'syncing' | 'error';
+  errorMessage?: string;
+};
+
+export type PendingAction = {
+  id?: number;
+  actionType: 'create' | 'update' | 'delete';
+  entityType: 'favoritePlace' | 'recentSearch' | 'savedTrip' | 'setting';
+  entityId?: string;
+  payload: Record<string, unknown>;
+  createdAt: number;
+  retryCount: number;
+  lastAttemptAt?: number;
+  error?: string;
+};
+
 class MwasalatyDb extends Dexie {
   savedTrips!: Table<SavedTrip, string>;
   recentSearches!: Table<RecentSearchRecord, number>;
   favoritePlaces!: Table<FavoritePlace, string>;
   tickets!: Table<OfflineTicket, string>;
   settings!: Table<AppSetting, string>;
+  cachedRoutes!: Table<CachedRoute, string>;
+  cachedPlaces!: Table<CachedPlace, string>;
+  syncMetadata!: Table<SyncMetadata, string>;
+  pendingActions!: Table<PendingAction, number>;
 
   constructor() {
     super("mwasalaty-offline");
@@ -61,6 +109,19 @@ class MwasalatyDb extends Dexie {
       favoritePlaces: "id, name, address, createdAt",
       tickets: "ticketId, status, createdAt, expiresAt, savedAt",
       settings: "key, updatedAt",
+    });
+
+    // Version 3: Add offline-first caching and sync tables
+    this.version(3).stores({
+      savedTrips: "id, createdAt, start, destination",
+      recentSearches: "++id, searchedAt, from, to",
+      favoritePlaces: "id, name, address, createdAt, updatedAt",
+      tickets: "ticketId, status, createdAt, expiresAt, savedAt",
+      settings: "key, updatedAt",
+      cachedRoutes: "cacheKey, cachedAt, expiresAt, from, to",
+      cachedPlaces: "id, name, cachedAt",
+      syncMetadata: "key, lastSyncAt, syncStatus",
+      pendingActions: "++id, createdAt, entityType, actionType, retryCount",
     });
   }
 }

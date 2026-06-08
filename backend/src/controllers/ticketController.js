@@ -1,4 +1,4 @@
-import { createTicket, getTicketById, validateLeg, scanValidate, refundTicket } from '../services/ticketService.js';
+import { createTicket, getTicketById, listTickets, validateLeg, scanValidate, refundTicket } from '../services/ticketService.js';
 import { getAllProfiles } from '../stores/scannerProfileStore.js';
 import { makeError, ErrorCodes } from '../helpers/errors.js';
 import * as paymobService from '../services/paymobService.js';
@@ -50,6 +50,18 @@ export async function getTicketHandler(req, res) {
   }
 }
 
+export async function listTicketsHandler(req, res) {
+  const userId = String(req.query.userId ?? '').trim();
+  if (!userId) {
+    return res.status(400).json(makeError(
+      ErrorCodes.VALIDATION_ERROR,
+      'Request validation failed',
+      { fields: ['userId is required'] }
+    ));
+  }
+  return res.status(200).json({ tickets: listTickets(userId) });
+}
+
 export async function getScannerProfilesHandler(_req, res) {
   return res.status(200).json({ profiles: getAllProfiles() });
 }
@@ -79,6 +91,22 @@ function resolveRefundableLegs(ticket, legIds) {
       if (leg.status === 'used') throw { code: ErrorCodes.LEG_ALREADY_USED, message: 'Used legs cannot be refunded', details: { ticketLegId: id } };
       return leg;
     });
+  }
+  const used = ticket.legs.filter(l => l.status === 'used');
+  if (used.length > 0) {
+    throw {
+      code: ErrorCodes.LEG_ALREADY_USED,
+      message: 'A total refund is not available after any leg has been used',
+      details: { ticketId: ticket.ticketId, usedLegIds: used.map(l => l.ticketLegId) },
+    };
+  }
+  const refunded = ticket.legs.filter(l => l.status === 'refunded');
+  if (refunded.length > 0) {
+    throw {
+      code: ErrorCodes.LEG_ALREADY_REFUNDED,
+      message: 'A total refund is not available after a partial refund',
+      details: { ticketId: ticket.ticketId, refundedLegIds: refunded.map(l => l.ticketLegId) },
+    };
   }
   const unused = ticket.legs.filter(l => l.status === 'unused');
   if (unused.length === 0) throw { code: ErrorCodes.NO_REFUNDABLE_LEGS, message: 'No unused legs to refund', details: { ticketId: ticket.ticketId } };

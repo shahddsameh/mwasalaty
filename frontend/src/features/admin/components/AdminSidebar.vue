@@ -13,7 +13,7 @@
         <div>
           <p
             class="text-lg font-bold text-white"
-            style="font-family: 'DM Sans', sans-serif"
+            style="font-family: &quot;DM Sans&quot;, sans-serif"
           >
             Mwaslaty
           </p>
@@ -58,7 +58,8 @@ import {
   Ticket,
   Users,
   Settings,
-} from '@lucide/vue';
+  MessageCircle,
+} from "@lucide/vue";
 
 defineProps<{
   active: string;
@@ -69,11 +70,12 @@ defineEmits<{
 }>();
 
 const navItems = [
-  { page: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { page: 'routes', label: 'Routes', icon: RouteIcon },
-  { page: 'stops', label: 'Stops', icon: MapPin },
-  { page: 'tickets', label: 'Tickets', icon: Ticket },
-  { page: 'users', label: 'Users', icon: Users },
-  { page: 'settings', label: 'Settings', icon: Settings },
+  { page: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { page: "routes", label: "Routes", icon: RouteIcon },
+  { page: "stops", label: "Stops", icon: MapPin },
+  { page: "tickets", label: "Tickets", icon: Ticket },
+  { page: "users", label: "Users", icon: Users },
+  { page: "support", label: "Support", icon: MessageCircle },
+  { page: "settings", label: "Settings", icon: Settings },
 ];
 </script>

@@ -11,17 +11,45 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <section class="lg:col-span-2 space-y-6">
           <Card title="Send us a message">
+            <div
+              v-if="successMessage"
+              class="mb-6 p-4 bg-green-900/20 border border-green-700 rounded-lg"
+            >
+              <p class="text-green-200">{{ successMessage }}</p>
+            </div>
+            <div
+              v-if="errorMessage"
+              class="mb-6 p-4 bg-red-900/20 border border-red-700 rounded-lg"
+            >
+              <p class="text-red-200">{{ errorMessage }}</p>
+            </div>
             <div class="space-y-4 mb-6">
-              <AppInput label="Your Name" placeholder="Enter your name" />
               <AppInput
+                v-model="form.name"
+                label="Your Name"
+                placeholder="Enter your name"
+              />
+              <AppInput
+                v-model="form.email"
                 label="Email"
                 type="email"
                 placeholder="your@email.com"
               />
+              <AppInput
+                v-model="form.phone"
+                label="Phone (Optional)"
+                type="tel"
+                placeholder="+20 XXX XXX XXXX"
+              />
+              <AppInput
+                v-model="form.subject"
+                label="Subject (Optional)"
+                placeholder="What is this about?"
+              />
               <label class="block">
                 <span class="block text-sm text-foreground mb-2">Message</span>
                 <textarea
-                  v-model="message"
+                  v-model="form.message"
                   rows="6"
                   class="w-full px-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring resize-none"
                   placeholder="Describe your issue or question..."
@@ -32,9 +60,11 @@
             <AppButton
               size="lg"
               class="w-full flex items-center justify-center gap-2"
+              :disabled="sending"
               @click="send"
             >
-              <Send class="w-5 h-5" /> Send Message
+              <Send class="w-5 h-5" />
+              {{ sending ? "Sending..." : "Send Message" }}
             </AppButton>
             <p class="text-sm text-muted-foreground text-center mt-4">
               We typically respond within 24 hours
@@ -137,7 +167,17 @@ import AppButton from "@/components/ui/AppButton.vue";
 import AppInput from "@/components/ui/AppInput.vue";
 
 const activeQuestion = ref<number | null>(null);
-const message = ref("");
+const sending = ref(false);
+const successMessage = ref("");
+const errorMessage = ref("");
+
+const form = ref({
+  name: "",
+  email: "",
+  phone: "",
+  subject: "",
+  message: "",
+});
 
 const faqs = [
   {
@@ -184,10 +224,58 @@ const Card = defineComponent({
       ]),
 });
 
-function send() {
-  if (message.value.trim()) {
-    alert("Message sent! Our support team will respond within 24 hours.");
-    message.value = "";
+async function send() {
+  successMessage.value = "";
+  errorMessage.value = "";
+
+  if (!form.value.name.trim()) {
+    errorMessage.value = "Please enter your name";
+    return;
+  }
+  if (!form.value.email.trim()) {
+    errorMessage.value = "Please enter your email";
+    return;
+  }
+  if (!form.value.message.trim()) {
+    errorMessage.value = "Please write a message";
+    return;
+  }
+
+  sending.value = true;
+  try {
+    const response = await fetch("/api/support/tickets", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: form.value.name.trim(),
+        email: form.value.email.trim(),
+        phone: form.value.phone.trim() || undefined,
+        subject: form.value.subject.trim() || undefined,
+        message: form.value.message.trim(),
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.error?.message || "Failed to send message");
+    }
+
+    successMessage.value =
+      "Message sent! Our support team will respond within 24 hours.";
+    form.value = {
+      name: "",
+      email: "",
+      phone: "",
+      subject: "",
+      message: "",
+    };
+  } catch (err) {
+    errorMessage.value =
+      err instanceof Error ? err.message : "Failed to send message";
+    console.error("[Support] Error sending message:", err);
+  } finally {
+    sending.value = false;
   }
 }
 </script>

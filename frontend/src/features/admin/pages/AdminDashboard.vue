@@ -11,7 +11,7 @@
           <div class="min-w-0">
             <h1
               class="text-base md:text-lg font-bold text-white truncate"
-              style="font-family: 'DM Sans', sans-serif"
+              style="font-family: &quot;DM Sans&quot;, sans-serif"
             >
               {{ meta.title }}
             </h1>
@@ -64,47 +64,60 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { Bell, LogOut, ChevronDown } from '@lucide/vue';
-import AdminSidebar from '../components/AdminSidebar.vue';
-import AdminDashboardHome from './AdminDashboardHome.vue';
-import AdminRoutes from './AdminRoutes.vue';
-import AdminStops from './AdminStops.vue';
-import AdminTickets from './AdminTickets.vue';
-import AdminUsers from './AdminUsers.vue';
-import AdminSettings from './AdminSettings.vue';
-import { adminLogout } from '../services/adminApi';
+import { ref, computed, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { Bell, LogOut, ChevronDown } from "@lucide/vue";
+import AdminSidebar from "../components/AdminSidebar.vue";
+import AdminDashboardHome from "./AdminDashboardHome.vue";
+import AdminRoutes from "./AdminRoutes.vue";
+import AdminStops from "./AdminStops.vue";
+import AdminTickets from "./AdminTickets.vue";
+import AdminUsers from "./AdminUsers.vue";
+import AdminSupportTickets from "./AdminSupportTickets.vue";
+import AdminSettings from "./AdminSettings.vue";
+import { adminLogout } from "../services/adminApi";
 
 const route = useRoute();
 const router = useRouter();
-const activePage = ref('dashboard');
-const validPages = new Set(['dashboard', 'routes', 'stops', 'tickets', 'users', 'settings']);
+const activePage = ref("dashboard");
+const validPages = new Set([
+  "dashboard",
+  "routes",
+  "stops",
+  "tickets",
+  "users",
+  "support",
+  "settings",
+]);
 
 const PAGE_META: Record<string, { title: string; sub: string }> = {
   dashboard: {
-    title: 'Dashboard',
-    sub: 'Overview of transport operations',
+    title: "Dashboard",
+    sub: "Overview of transport operations",
   },
   routes: {
-    title: 'Routes Management',
-    sub: 'Create, edit, and manage transport routes',
+    title: "Routes Management",
+    sub: "Create, edit, and manage transport routes",
   },
   stops: {
-    title: 'Stops Management',
-    sub: 'Create, edit, and manage transport stops',
+    title: "Stops Management",
+    sub: "Create, edit, and manage transport stops",
   },
   tickets: {
-    title: 'Tickets Management',
-    sub: 'View and manage user bookings',
+    title: "Tickets Management",
+    sub: "View and manage user bookings",
   },
   users: {
-    title: 'Users Management',
-    sub: 'View and manage app users',
+    title: "Users Management",
+    sub: "View and manage app users",
+  },
+  support: {
+    title: "Customer Service Requests",
+    sub: "View and manage customer support messages",
   },
   settings: {
-    title: 'Settings',
-    sub: 'Configure app, admin account, and local database',
+    title: "Settings",
+    sub: "Configure app, admin account, and local database",
   },
 };
 
@@ -113,36 +126,38 @@ const meta = computed(() => PAGE_META[activePage.value] ?? PAGE_META.dashboard);
 watch(
   () => route.params.section,
   (section) => {
-    const page = typeof section === 'string' ? section : 'dashboard';
-    activePage.value = validPages.has(page) ? page : 'dashboard';
+    const page = typeof section === "string" ? section : "dashboard";
+    activePage.value = validPages.has(page) ? page : "dashboard";
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 function goToPage(page: string) {
-  const nextPage = validPages.has(page) ? page : 'dashboard';
+  const nextPage = validPages.has(page) ? page : "dashboard";
   activePage.value = nextPage;
-  router.push(nextPage === 'dashboard' ? '/admin' : `/admin/${nextPage}`);
+  router.push(nextPage === "dashboard" ? "/admin" : `/admin/${nextPage}`);
 }
 
 async function logout() {
   await adminLogout();
-  router.push('/admin/login');
+  router.push("/admin/login");
 }
 
 const currentComponent = computed(() => {
   switch (activePage.value) {
-    case 'dashboard':
+    case "dashboard":
       return AdminDashboardHome;
-    case 'routes':
+    case "routes":
       return AdminRoutes;
-    case 'stops':
+    case "stops":
       return AdminStops;
-    case 'tickets':
+    case "tickets":
       return AdminTickets;
-    case 'users':
+    case "users":
       return AdminUsers;
-    case 'settings':
+    case "support":
+      return AdminSupportTickets;
+    case "settings":
       return AdminSettings;
     default:
       return AdminDashboardHome;

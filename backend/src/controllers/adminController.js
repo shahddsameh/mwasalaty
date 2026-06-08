@@ -12,6 +12,7 @@ import {
   updateSupportTicketData,
   createSupportTicket,
 } from "../services/supportTicketService.js";
+import { listRouteSearches, listTransitRoutes, listTransitStops } from "../services/otpImportService.js";
 
 function statusFor(error) {
   switch (error?.code) {
@@ -87,6 +88,14 @@ export async function adminGetSupportTicketsHandler(req, res) {
   }
 }
 
+export async function adminTransitRoutesHandler(req, res) {
+  try {
+    res.json({ routes: await listTransitRoutes() });
+  } catch (err) {
+    sendError(res, err);
+  }
+}
+
 export async function adminGetSupportTicketHandler(req, res) {
   try {
     const ticket = await getSupportTicketById(req.params.id);
@@ -142,5 +151,21 @@ export async function createSupportTicketHandler(req, res) {
           ).error,
         });
     }
+  }
+}
+
+export async function adminTransitStopsHandler(req, res) {
+  try {
+    res.json({ stops: await listTransitStops() });
+  } catch (err) {
+    sendError(res, err);
+  }
+}
+
+export async function adminRouteSearchesHandler(req, res) {
+  try {
+    res.json({ searches: await listRouteSearches() });
+  } catch (err) {
+    sendError(res, err);
   }
 }

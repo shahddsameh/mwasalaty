@@ -10,6 +10,37 @@ export type AdminUser = {
   status: "active" | "blocked";
 };
 
+export type TransitRoute = Record<string, unknown> & {
+  id?: string;
+  short_name?: string;
+  long_name?: string;
+  mode?: string;
+};
+
+export type TransitStop = Record<string, unknown> & {
+  id?: string;
+  name?: string;
+  lat?: number;
+  lon?: number;
+  lng?: number;
+};
+
+export type RouteSearch = Record<string, unknown> & {
+  id?: string;
+  plan_id?: string;
+  from_label?: string;
+  to_label?: string;
+  date?: string;
+  time?: string;
+  optimized_for?: string;
+  total_routes?: number;
+  search_count?: number;
+  created_at?: string;
+  latest_created_at?: string;
+  itineraries?: unknown;
+  latest_itineraries?: unknown;
+};
+
 function token() {
   return localStorage.getItem(TOKEN_KEY) ?? "";
 }
@@ -130,4 +161,19 @@ export async function updateSupportTicket(id: string, updates: Partial<SupportTi
     body: JSON.stringify(updates),
   });
   return data.ticket as SupportTicket;
+}
+
+export async function listTransitRoutes() {
+  const data = await adminFetch("/api/admin/transit/routes");
+  return (data.routes ?? []) as TransitRoute[];
+}
+
+export async function listTransitStops() {
+  const data = await adminFetch("/api/admin/transit/stops");
+  return (data.stops ?? []) as TransitStop[];
+}
+
+export async function listRouteSearches() {
+  const data = await adminFetch("/api/admin/routes/searches");
+  return (data.searches ?? []) as RouteSearch[];
 }

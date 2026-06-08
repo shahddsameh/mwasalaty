@@ -3,6 +3,9 @@ import {
   adminBlockUserHandler,
   adminLoginHandler,
   adminLogoutHandler,
+  adminRouteSearchesHandler,
+  adminTransitRoutesHandler,
+  adminTransitStopsHandler,
   adminUnblockUserHandler,
   adminUpdateUserHandler,
   adminUsersHandler,
@@ -31,5 +34,8 @@ router.post("/admin/users/:id/unblock", adminUnblockUserHandler);
 router.get("/admin/support/tickets", adminGetSupportTicketsHandler);
 router.get("/admin/support/tickets/:id", adminGetSupportTicketHandler);
 router.patch("/admin/support/tickets/:id", adminUpdateSupportTicketHandler);
+router.get("/admin/transit/routes", adminTransitRoutesHandler);
+router.get("/admin/transit/stops", adminTransitStopsHandler);
+router.get("/admin/routes/searches", adminRouteSearchesHandler);
 
 export default router;

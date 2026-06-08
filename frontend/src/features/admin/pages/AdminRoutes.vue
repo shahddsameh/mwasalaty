@@ -2,199 +2,287 @@
   <div
     class="max-w-[1440px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 py-5 md:py-8 flex flex-col gap-4 md:gap-6"
   >
-    <!-- Stat cards -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-      <StatCard label="Total Routes" :value="stats.total" color="#2B2A27" />
-      <StatCard label="Active Routes" :value="stats.active" color="#00B86B" />
-      <StatCard label="Inactive Routes" :value="stats.inactive" color="#E63946" />
-      <StatCard label="Average Fare" :value="`${stats.avgFare} EGP`" color="#111827" />
+      <StatCard label="Transit Routes" :value="routes.length" color="#2B2A27" />
+      <StatCard label="Route Searches" :value="searches.length" color="#7C3AED" />
+      <StatCard label="Metro" :value="countByMode('metro')" color="#2563EB" />
+      <StatCard label="Bus" :value="countByMode('bus')" color="#00B86B" />
     </div>
 
-    <!-- Routes card -->
+    <Card v-if="error" className="border-[#FCA5A5] bg-[#FEF2F2]">
+      <div class="p-4 text-sm font-medium text-[#B91C1C]">{{ error }}</div>
+    </Card>
+
     <Card>
-      <!-- Toolbar -->
       <div class="p-4 md:p-5 border-b border-[#E6DEC8] flex flex-col gap-3">
-        <!-- Row 1: search + add button -->
-        <div class="flex items-center gap-3">
-          <div class="relative flex-1">
-            <Search
-              class="w-4 h-4 text-[#6B7280] absolute left-3 top-1/2 -translate-y-1/2"
-            />
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="tab in routeTabs"
+            :key="tab.value"
+            class="rounded-xl border-2 px-4 py-2 text-sm font-semibold transition-all"
+            :class="activeTab === tab.value ? 'border-[#FFC400] bg-[#FFC400] text-[#111827]' : 'border-[#E6DEC8] bg-white text-[#4B5563] hover:border-[#FFC400]'"
+            @click="activeTab = tab.value"
+          >
+            {{ tab.label }}
+          </button>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <div v-if="activeTab === 'transit'" class="flex flex-wrap gap-2">
+            <button
+              v-for="option in modeFilters"
+              :key="option.value"
+              class="rounded-xl border-2 px-4 py-2 text-sm font-semibold transition-all"
+              :class="selectedMode === option.value ? 'border-[#111827] bg-[#111827] text-white' : 'border-[#E6DEC8] bg-white text-[#4B5563] hover:border-[#FFC400]'"
+              @click="selectedMode = option.value"
+            >
+              {{ option.label }}
+            </button>
+          </div>
+
+          <div class="relative flex-1 min-w-[220px]">
+            <Search class="w-4 h-4 text-[#6B7280] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
-              v-model="filters.search"
-              placeholder="Search routes, stops…"
+              v-model="search"
+              :placeholder="activeTab === 'transit' ? 'Search transit routes...' : 'Search route searches...'"
               class="w-full pl-9 pr-4 py-2 border-2 border-[#E6DEC8] rounded-xl text-sm text-[#2B2A27] placeholder-[#6B7280] focus:outline-none focus:border-[#FFC400] bg-white"
             />
           </div>
           <button
-            @click="loadRoutes"
+            @click="loadData"
             class="p-2 rounded-xl border-2 border-[#E6DEC8] text-[#6B7280] hover:border-[#FFC400] hover:text-[#111827] transition-all flex-shrink-0"
             title="Refresh"
           >
             <RefreshCw class="w-4 h-4" />
           </button>
-          <button
-            @click="openAddModal"
-            class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#FFC400] text-[#111827] text-sm font-semibold hover:bg-[#FFD633] transition-colors flex-shrink-0"
-          >
-            <Plus class="w-4 h-4" />
-            <span class="hidden sm:inline">Add Route</span>
-            <span class="sm:hidden">Add</span>
-          </button>
         </div>
       </div>
 
-      <!-- Loading -->
       <div v-if="loading" class="flex items-center justify-center py-16 text-[#6B7280] text-sm">
-        Loading routes…
+        Loading routes...
       </div>
 
-      <!-- Routes list -->
-      <div v-else-if="filteredRoutes.length > 0" class="p-4 flex flex-col gap-3">
-        <div
-          v-for="route in filteredRoutes"
-          :key="route.id"
-          class="bg-white rounded-2xl border-2 border-[#FFC400] p-4"
-        >
-          <div class="flex items-start justify-between gap-2 mb-3">
-            <div class="min-w-0">
-              <p class="text-sm font-semibold text-[#2B2A27] truncate">
-                {{ route.name }}
-              </p>
-              <p class="text-xs text-[#6B7280] mt-0.5">
-                {{ route.from }} → {{ route.to }}
-              </p>
-            </div>
-            <StatusBadge :status="route.status" />
-          </div>
-
-          <div class="flex items-center gap-2 flex-wrap mb-4">
-            <span
-              class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold border"
-              :style="{
-                background: transportStyles[route.transportType].bg,
-                color: transportStyles[route.transportType].text,
-                borderColor: transportStyles[route.transportType].border,
-              }"
-            >
-              {{ route.transportType }}
-            </span>
-            <span class="text-xs text-[#6B7280]">
-              · {{ route.fare === 0 ? 'Free' : `${route.fare} EGP` }}
-            </span>
-            <span class="text-xs text-[#6B7280]">· {{ route.duration }} min</span>
-            <span v-if="route.transfers > 0" class="text-xs text-[#6B7280]">
-              · {{ route.transfers }} transfer{{ route.transfers > 1 ? 's' : '' }}
-            </span>
-          </div>
-
-          <div class="flex gap-2">
-            <button
-              @click="editRoute(route)"
-              class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-sm font-semibold border-2 border-[#E6DEC8] text-[#2B2A27] hover:border-[#FFC400] hover:bg-[#FFF7D6] transition-all"
-            >
-              <Pencil class="w-3.5 h-3.5" /> Edit
-            </button>
-            <button
-              @click="deleteRoute(route)"
-              class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-sm font-semibold border-2 border-[#FECACA] text-[#E63946] hover:bg-[#FEF2F2] transition-all"
-            >
-              <Trash2 class="w-3.5 h-3.5" /> Delete
-            </button>
-          </div>
-        </div>
+      <div v-else-if="activeTab === 'transit' && filteredRoutes.length > 0" class="overflow-x-auto">
+        <table class="w-full min-w-[760px] text-left text-sm">
+          <thead class="bg-[#111827] text-[#FFC400] uppercase text-xs tracking-wide">
+            <tr>
+              <th class="px-4 py-3">Short Name</th>
+              <th class="px-4 py-3">Long Name</th>
+              <th class="px-4 py-3">Mode</th>
+              <th class="px-4 py-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="route in filteredRoutes" :key="routeKey(route)" class="border-b border-[#E6DEC8]">
+              <td class="px-4 py-3 font-semibold text-[#111827]">{{ route.short_name || '-' }}</td>
+              <td class="px-4 py-3 text-[#4B5563]">{{ route.long_name || '-' }}</td>
+              <td class="px-4 py-3 text-[#4B5563]">{{ normalizeMode(route) }}</td>
+              <td class="px-4 py-3">
+                <button class="rounded-lg border border-[#E6DEC8] px-3 py-1.5 font-semibold hover:bg-[#FFF7D6]" @click="selectedRoute = route">
+                  View Details
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <!-- Empty state -->
+      <div v-else-if="activeTab === 'searches' && filteredSearches.length > 0" class="overflow-x-auto">
+        <table class="w-full min-w-[960px] text-left text-sm">
+          <thead class="bg-[#111827] text-[#FFC400] uppercase text-xs tracking-wide">
+            <tr>
+              <th class="px-4 py-3">From</th>
+              <th class="px-4 py-3">To</th>
+              <th class="px-4 py-3">Date</th>
+              <th class="px-4 py-3">Time</th>
+              <th class="px-4 py-3">Optimized For</th>
+              <th class="px-4 py-3">Total Routes</th>
+              <th class="px-4 py-3">Search Count</th>
+              <th class="px-4 py-3">Latest Created</th>
+              <th class="px-4 py-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in filteredSearches" :key="searchKey(item)" class="border-b border-[#E6DEC8]">
+              <td class="px-4 py-3 font-semibold text-[#111827]">{{ item.from_label || '-' }}</td>
+              <td class="px-4 py-3 text-[#4B5563]">{{ item.to_label || '-' }}</td>
+              <td class="px-4 py-3 text-[#4B5563]">{{ item.date || '-' }}</td>
+              <td class="px-4 py-3 text-[#4B5563]">{{ item.time || '-' }}</td>
+              <td class="px-4 py-3 text-[#4B5563]">{{ item.optimized_for || '-' }}</td>
+              <td class="px-4 py-3 text-[#4B5563]">{{ item.total_routes ?? '-' }}</td>
+              <td class="px-4 py-3 text-[#4B5563]">{{ item.search_count ?? 1 }}</td>
+              <td class="px-4 py-3 text-[#4B5563]">{{ formatDate(item.latest_created_at || item.created_at) }}</td>
+              <td class="px-4 py-3">
+                <button class="rounded-lg border border-[#E6DEC8] px-3 py-1.5 font-semibold hover:bg-[#FFF7D6]" @click="selectedSearch = item">
+                  View Details
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <div v-else class="flex flex-col items-center justify-center py-16 px-4 gap-3">
-        <div
-          class="w-16 h-16 rounded-2xl bg-[#FFF7D6] border-2 border-[#E6DEC8] flex items-center justify-center"
-        >
-          <RouteIcon class="w-7 h-7 text-[#6B7280]" />
-        </div>
-        <p
-          class="text-base font-bold text-[#2B2A27]"
-          style="font-family: 'DM Sans', sans-serif"
-        >
-          No routes found
-        </p>
+        <RouteIcon class="w-10 h-10 text-[#6B7280]" />
+        <p class="text-base font-bold text-[#2B2A27]">No routes found</p>
         <p class="text-sm text-[#6B7280] text-center">
-          Get started by adding your first route
+          {{ activeTab === 'transit' ? 'No transit routes match this filter.' : 'No user route searches match this filter.' }}
         </p>
-        <button
-          @click="openAddModal"
-          class="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FFC400] text-[#111827] text-sm font-semibold hover:bg-[#FFD633] transition-colors mt-1"
-        >
-          <Plus class="w-4 h-4" /> Add First Route
-        </button>
+      </div>
+    </Card>
+
+    <Card v-if="selectedRoute">
+      <DetailsHeader title="Transit Route Details" @close="selectedRoute = null" />
+      <pre class="p-4 md:p-5 whitespace-pre-wrap text-xs text-[#4B5563]">{{ selectedRoute }}</pre>
+    </Card>
+
+    <Card v-if="selectedSearch">
+      <DetailsHeader title="Route Search Details" @close="selectedSearch = null" />
+      <div class="p-4 md:p-5 space-y-3">
+        <p class="text-sm font-semibold text-[#111827]">
+          {{ selectedSearch.from_label || '-' }} -> {{ selectedSearch.to_label || '-' }}
+        </p>
+        <pre class="whitespace-pre-wrap text-xs text-[#4B5563]">{{ selectedSearch.latest_itineraries || selectedSearch.itineraries || selectedSearch }}</pre>
       </div>
     </Card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { Plus, Search, RefreshCw, Pencil, Trash2, Route as RouteIcon } from '@lucide/vue';
-import { adminDb, seedRoutes, type Route, type TransportType } from '@/db/adminDb';
-import { StatCard, Card, StatusBadge } from '../components/AdminShared.vue';
+import { computed, defineComponent, h, onMounted, ref } from 'vue';
+import { RefreshCw, Route as RouteIcon, Search } from '@lucide/vue';
+import { Card, StatCard } from '../components/AdminShared.vue';
+import {
+  listRouteSearches,
+  listTransitRoutes,
+  type RouteSearch,
+  type TransitRoute,
+} from '../services/adminApi';
 
-const routes = ref<Route[]>([]);
+const routes = ref<TransitRoute[]>([]);
+const searches = ref<RouteSearch[]>([]);
+const selectedRoute = ref<TransitRoute | null>(null);
+const selectedSearch = ref<RouteSearch | null>(null);
+const activeTab = ref<'transit' | 'searches'>('transit');
+const search = ref('');
+const selectedMode = ref('all');
 const loading = ref(true);
-const filters = ref({ search: '' });
+const error = ref('');
 
-const transportStyles: Record<TransportType, { bg: string; text: string; border: string }> = {
-  Metro: { bg: '#EFF6FF', text: '#1D4ED8', border: '#DBEAFE' },
-  Bus: { bg: '#F1F5F9', text: '#334155', border: '#E2E8F0' },
-  Microbus: { bg: '#FFF7ED', text: '#C2410C', border: '#FED7AA' },
-  Walking: { bg: '#F5F3FF', text: '#5B21B6', border: '#DDD6FE' },
-  'Ride-hailing': { bg: '#FFFBEB', text: '#92400E', border: '#FDE68A' },
-};
+const routeTabs = [
+  { value: 'transit', label: 'Transit Routes' },
+  { value: 'searches', label: 'User Route Searches' },
+] as const;
+
+const modeFilters = [
+  { value: 'all', label: 'All' },
+  { value: 'bus', label: 'Bus' },
+  { value: 'metro', label: 'Metro' },
+];
+
+const DetailsHeader = defineComponent({
+  props: { title: { type: String, required: true } },
+  emits: ['close'],
+  setup(props, { emit }) {
+    return () =>
+      h('div', { class: 'p-4 md:p-5 border-b border-[#E6DEC8] flex items-center justify-between gap-4' }, [
+        h('h3', { class: 'text-lg font-bold text-[#2B2A27]' }, props.title),
+        h(
+          'button',
+          {
+            class: 'rounded-lg border border-[#E6DEC8] px-3 py-1.5 text-sm font-semibold',
+            onClick: () => emit('close'),
+          },
+          'Close'
+        ),
+      ]);
+  },
+});
+
+function routeKey(route: TransitRoute) {
+  return String(route.id || route.short_name || route.long_name || JSON.stringify(route));
+}
+
+function searchKey(item: RouteSearch) {
+  return String(
+    [item.from_label, item.to_label, item.date, item.time, item.optimized_for].join('|') ||
+      item.id ||
+      item.plan_id ||
+      item.latest_created_at ||
+      JSON.stringify(item)
+  );
+}
+
+function looksLikeMetro(route: TransitRoute) {
+  const name = `${route.short_name || ''} ${route.long_name || ''} ${route.id || ''}`.toLowerCase();
+  return name.includes('metro') || /^m\d+\b/i.test(String(route.short_name || route.id || ''));
+}
+
+function normalizeMode(route: TransitRoute) {
+  const value = String(route.mode || '').toLowerCase();
+  if (value === 'bus') return 'Bus';
+  if (value === 'subway' || value === 'metro' || value === 'rail' || looksLikeMetro(route)) return 'Metro';
+  return route.mode ? String(route.mode) : 'Unknown';
+}
+
+function matchesMode(route: TransitRoute, mode: string) {
+  if (mode === 'all') return true;
+  return normalizeMode(route).toLowerCase() === mode.toLowerCase();
+}
+
+function countByMode(mode: string) {
+  return routes.value.filter((route) => matchesMode(route, mode)).length;
+}
+
+function formatDate(value?: string) {
+  if (!value) return '-';
+  return new Date(value).toLocaleString();
+}
 
 const filteredRoutes = computed(() => {
-  const q = filters.value.search.toLowerCase();
-  if (!q) return routes.value;
-  return routes.value.filter(
-    (r) =>
-      r.name.toLowerCase().includes(q) ||
-      r.from.toLowerCase().includes(q) ||
-      r.to.toLowerCase().includes(q)
+  const q = search.value.trim().toLowerCase();
+  return routes.value.filter((route) => {
+    if (!matchesMode(route, selectedMode.value)) return false;
+    if (!q) return true;
+    return [route.id, route.short_name, route.long_name, route.mode, normalizeMode(route)].some((value) =>
+      String(value || '').toLowerCase().includes(q)
+    );
+  });
+});
+
+const filteredSearches = computed(() => {
+  const q = search.value.trim().toLowerCase();
+  if (!q) return searches.value;
+  return searches.value.filter((item) =>
+    [
+      item.from_label,
+      item.to_label,
+      item.date,
+      item.time,
+      item.optimized_for,
+      item.total_routes,
+      item.search_count,
+      item.latest_created_at || item.created_at,
+    ].some((value) => String(value || '').toLowerCase().includes(q))
   );
 });
 
-const stats = computed(() => ({
-  total: routes.value.length,
-  active: routes.value.filter((r) => r.status === 'Active').length,
-  inactive: routes.value.filter((r) => r.status === 'Inactive').length,
-  avgFare: routes.value.length
-    ? Math.round(routes.value.reduce((s, r) => s + r.fare, 0) / routes.value.length)
-    : 0,
-}));
-
-async function loadRoutes() {
+async function loadData() {
   loading.value = true;
-  await seedRoutes();
-  routes.value = await adminDb.routes.toArray();
-  loading.value = false;
-}
-
-function openAddModal() {
-  alert('Add Route modal - To be implemented');
-}
-
-function editRoute(route: Route) {
-  alert(`Edit Route: ${route.name} - To be implemented`);
-}
-
-async function deleteRoute(route: Route) {
-  if (confirm(`Delete route "${route.name}"?`)) {
-    if (route.id) {
-      await adminDb.routes.delete(route.id);
-      await loadRoutes();
-    }
+  error.value = '';
+  try {
+    const [transitRoutes, routeSearches] = await Promise.all([
+      listTransitRoutes(),
+      listRouteSearches(),
+    ]);
+    routes.value = transitRoutes;
+    searches.value = routeSearches;
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Failed to load routes';
+  } finally {
+    loading.value = false;
   }
 }
 
-onMounted(() => {
-  loadRoutes();
-});
+onMounted(loadData);
 </script>

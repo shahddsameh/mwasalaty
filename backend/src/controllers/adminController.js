@@ -1,6 +1,7 @@
 import * as adminAuthService from '../services/adminAuthService.js';
+import * as adminUsersService from '../services/adminUsersService.js';
 import * as catalogService from '../services/catalogService.js';
-import * as routeStore from '../stores/routeStore.js';
+import * as routeSearchService from '../services/routeSearchService.js';
 import { ErrorCodes, makeError } from '../helpers/errors.js';
 
 const STATUS_MAP = {
@@ -46,7 +47,21 @@ export function updatePlaceHandler(req, res) {
 export function deletePlaceHandler(req, res) {
   try { return res.status(200).json(catalogService.deletePlace(req.params.id)); } catch (error) { return handleServiceError(res, error); }
 }
-export function getRoutesHandler(_req, res) { return res.status(200).json({ routes: routeStore.getAllRoutes() }); }
+export async function getRoutesHandler(_req, res) {
+  try { return res.status(200).json({ routes: await routeSearchService.listRouteSearches() }); } catch (error) { return handleServiceError(res, error); }
+}
 export function getDashboardHandler(_req, res) {
   try { return res.status(200).json(catalogService.getDashboardSummary()); } catch (error) { return handleServiceError(res, error); }
+}
+export async function listUsersHandler(_req, res) {
+  try { return res.status(200).json({ users: await adminUsersService.listUsers() }); } catch (error) { return handleServiceError(res, error); }
+}
+export async function updateUserHandler(req, res) {
+  try { return res.status(200).json({ user: await adminUsersService.updateUser(req.params.id, req.body) }); } catch (error) { return handleServiceError(res, error); }
+}
+export async function blockUserHandler(req, res) {
+  try { return res.status(200).json({ user: await adminUsersService.blockUser(req.params.id) }); } catch (error) { return handleServiceError(res, error); }
+}
+export async function unblockUserHandler(req, res) {
+  try { return res.status(200).json({ user: await adminUsersService.unblockUser(req.params.id) }); } catch (error) { return handleServiceError(res, error); }
 }

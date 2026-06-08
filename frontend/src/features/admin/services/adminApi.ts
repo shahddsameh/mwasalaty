@@ -15,6 +15,27 @@ export type Dashboard = {
   totals: { stops: number; stations: number; total: number };
   activeInactive: { active: number; inactive: number };
 };
+export type AdminUser = {
+  id: string;
+  email: string;
+  name: string;
+  phone: string;
+  created_at: string;
+  last_sign_in_at?: string;
+  status: "active" | "blocked";
+};
+export type RouteSearch = {
+  id?: string;
+  plan_id: string;
+  from_label: string | null;
+  to_label: string | null;
+  date: string;
+  time: string;
+  optimized_for: string;
+  total_routes: number;
+  itineraries?: unknown;
+  created_at?: string;
+};
 
 async function adminFetch(path: string, init: RequestInit = {}) {
   const res = await fetch(path, {
@@ -53,4 +74,32 @@ export async function updatePlace(id: string, place: Partial<AdminPlace>) {
 
 export async function deletePlace(id: string) {
   return adminFetch(`/api/admin/places/${encodeURIComponent(id)}`, { method: "DELETE" });
+}
+
+export async function listUsers() {
+  const data = await adminFetch("/api/admin/users");
+  return (data.users ?? []) as AdminUser[];
+}
+
+export async function updateUser(id: string, user: Partial<AdminUser>) {
+  const data = await adminFetch(`/api/admin/users/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: JSON.stringify(user),
+  });
+  return data.user as AdminUser;
+}
+
+export async function blockUser(id: string) {
+  const data = await adminFetch(`/api/admin/users/${encodeURIComponent(id)}/block`, { method: "POST" });
+  return data.user as AdminUser;
+}
+
+export async function unblockUser(id: string) {
+  const data = await adminFetch(`/api/admin/users/${encodeURIComponent(id)}/unblock`, { method: "POST" });
+  return data.user as AdminUser;
+}
+
+export async function listRouteSearches() {
+  const data = await adminFetch("/api/admin/routes");
+  return (data.routes ?? []) as RouteSearch[];
 }

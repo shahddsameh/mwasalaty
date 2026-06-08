@@ -1,5 +1,6 @@
 import { fetchOtpPlan } from '../services/otpClient.js';
 import { GeocodingError, resolvePlace } from '../services/geocodingService.js';
+import { saveRouteSearch } from '../services/routeSearchService.js';
 import { mapOtpPlan } from '../mappers/tripMapper.js';
 import { makeError, ErrorCodes } from '../helpers/errors.js';
 
@@ -77,7 +78,7 @@ export async function planHandler(req, res) {
       numItineraries: 10,
     });
 
-    const allItineraries = plan.itineraries ?? [];
+    const allItineraries = plan?.itineraries ?? [];
 
     if (!allItineraries.length) {
       return res.status(404).json(
@@ -103,6 +104,12 @@ export async function planHandler(req, res) {
       );
     }
 
+    saveRouteSearch({
+      result,
+      request: { date, time },
+      userId: req.user?.id ?? null,
+    }).catch((error) => console.error('[routeSearchService]', error));
+
     return res.json(result);
   } catch (err) {
     if (err instanceof GeocodingError) {
@@ -113,6 +120,13 @@ export async function planHandler(req, res) {
           err.message,
           err.details
         )
+      );
+    }
+    if (err.httpStatus === 403) {
+      return res.status(503).json(
+        makeError(ErrorCodes.OTP_SERVICE_UNAVAILABLE, 'OpenTripPlanner rejected the request with HTTP 403. Check OTP_GRAPHQL_URL and OTP access settings.', {
+          url: process.env.OTP_GRAPHQL_URL || 'http://localhost:8081/otp/routers/default/index/graphql',
+        })
       );
     }
     if (err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND' || err.httpStatus >= 500) {

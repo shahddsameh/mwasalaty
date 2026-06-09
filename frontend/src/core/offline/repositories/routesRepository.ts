@@ -1,6 +1,6 @@
 import { db, type CachedRoute } from '@/db/appDb';
 import { checkOnline } from '../networkStatus';
-import { planRoute, type ApiRouteOption } from '@/services/api';
+import { planRoute, type ApiRouteOption, type TripWhen } from '@/services/api';
 
 /**
  * Routes Repository
@@ -40,6 +40,7 @@ export async function getRoutes(
   toLabel: string,
   filter: 'fastest' | 'cheapest' | 'comfortable' = 'fastest',
   coords: { fromCoords?: { lat: number; lng: number }; toCoords?: { lat: number; lng: number } } = {},
+  when: TripWhen = { mode: 'now' },
 ): Promise<RoutesResult> {
   const cacheKey = getCacheKey(fromLabel, toLabel, filter);
 
@@ -61,7 +62,7 @@ export async function getRoutes(
 
   // If online, try to fetch fresh data
   try {
-    const routes = await planRoute(fromLabel, toLabel, filter, coords);
+    const routes = await planRoute(fromLabel, toLabel, filter, coords, when);
     
     // Cache the result
     const now = Date.now();

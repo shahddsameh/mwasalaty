@@ -10,6 +10,9 @@ export type SelectedRoute = RouteSearch & {
   // ISO timestamp of a scheduled (future) departure/arrival, if the rider
   // picked one. Drives the ticket's validity window at booking time.
   departureAt?: string;
+  // True when this selection was served from the offline route cache (a
+  // preview only). Booking re-plans a fresh itinerary before checkout.
+  fromCache?: boolean;
 };
 
 /**

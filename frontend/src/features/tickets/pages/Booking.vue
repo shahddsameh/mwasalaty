@@ -76,6 +76,14 @@
             </div>
           </Card>
 
+          <div
+            v-if="!isOnline"
+            class="flex items-start gap-3 p-4 rounded-lg border-2 border-warning bg-warning-soft text-sm text-foreground"
+          >
+            <CloudOff class="w-5 h-5 flex-shrink-0 text-warning mt-0.5" />
+            <span>You are offline. Reconnect before buying a ticket.</span>
+          </div>
+
           <p
             v-if="errorMessage"
             class="p-3 bg-destructive/10 text-destructive rounded-lg text-sm"
@@ -86,7 +94,7 @@
           <AppButton
             size="lg"
             class="w-full flex items-center justify-center gap-2"
-            :disabled="processing"
+            :disabled="processing || !isOnline"
             @click="proceed"
           >
             <Loader2 v-if="processing" class="w-5 h-5 animate-spin" />
@@ -158,17 +166,23 @@
 <script setup lang="ts">
 import { computed, defineComponent, h, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import { CreditCard, Loader2, ShieldCheck } from "@lucide/vue";
+import { CloudOff, CreditCard, Loader2, ShieldCheck } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import AppInput from "@/components/ui/AppInput.vue";
 import Modal from "@/components/ui/Modal.vue";
 import type { ApiRouteOption, ApiLeg } from "@/services/api";
-import { createCheckoutSession } from "@/services/api";
-import { getSelectedRoute } from "@/features/trip-planner/services/routeSearch";
+import { createCheckoutSession, planRoute } from "@/services/api";
+import {
+  getSelectedRoute,
+  getPlaceCoords,
+  normalizeFilter,
+} from "@/features/trip-planner/services/routeSearch";
 import { useAuthState } from "@/services/authState";
+import { useNetworkStatus } from "@/core/offline/networkStatus";
 
 const router = useRouter();
 const { user, isAuthenticated, ensureAuthInitialized } = useAuthState();
+const { isOnline } = useNetworkStatus();
 
 const CHECKOUT_SESSION_KEY = "mwasalaty:checkout-session-id";
 
@@ -226,6 +240,11 @@ const toLabel =
   "Destination";
 const departureAt =
   typeof selection.departureAt === "string" ? selection.departureAt : undefined;
+const filter = normalizeFilter(selection.filter);
+// True when the selected route came from the offline cache (preview only). We
+// re-plan a fresh itinerary before checkout so the ticket is never built from
+// stale cached route data.
+const fromCache = Boolean(selection.fromCache);
 
 const ticketableLegs = computed<ApiLeg[]>(() =>
   (route.legs ?? []).filter((l) => l.mode !== "WALK"),
@@ -254,17 +273,68 @@ function modeLabel(leg: ApiLeg) {
   return name ? `${mode} ${name}` : mode;
 }
 
+// Pick the best itinerary from a fresh plan, matching the rider's chosen filter.
+function pickByFilter(options: ApiRouteOption[]): ApiRouteOption {
+  if (filter === "cheapest") {
+    return options.reduce((best, r) =>
+      r.totalFare.amount < best.totalFare.amount ? r : best,
+    );
+  }
+  if (filter === "comfortable") {
+    return options.reduce((best, r) => (r.transfers < best.transfers ? r : best));
+  }
+  return options.reduce((best, r) =>
+    r.durationMinutes < best.durationMinutes ? r : best,
+  );
+}
+
 async function startCheckout() {
   errorMessage.value = "";
   if (!passengerName.value.trim()) {
     errorMessage.value = "Please enter the passenger's full name.";
     return;
   }
+  // A ticket may never be purchased from a cached/offline route preview.
+  if (!isOnline.value) {
+    errorMessage.value =
+      "You are offline. Reconnect before buying a ticket.";
+    return;
+  }
   processing.value = true;
   try {
+    // If the route came from the offline cache, revalidate it against the
+    // backend now and build the ticket strictly from the fresh response.
+    let effectiveRoute = route;
+    if (fromCache) {
+      const fresh = await planRoute(
+        fromLabel,
+        toLabel,
+        filter,
+        {
+          fromCoords: getPlaceCoords(fromLabel),
+          toCoords: getPlaceCoords(toLabel),
+        },
+        departureAt
+          ? { mode: "depart", date: departureAt.slice(0, 10), time: departureAt.slice(11, 16) }
+          : { mode: "now" },
+      );
+      if (!fresh.length) {
+        throw new Error(
+          "This route is no longer available. Please plan the trip again.",
+        );
+      }
+      effectiveRoute = pickByFilter(fresh);
+    }
+
+    const freshLegs = (effectiveRoute.legs ?? []).filter((l) => l.mode !== "WALK");
+    const freshCurrency = effectiveRoute.totalFare?.currency ?? "EGP";
+    const freshTotal =
+      effectiveRoute.totalFare?.amount ??
+      freshLegs.reduce((sum, l) => sum + (l.fare?.amount ?? 0), 0);
+
     const res = await createCheckoutSession({
-      planId: `plan_${route.itineraryId}`,
-      itineraryId: route.itineraryId,
+      planId: `plan_${effectiveRoute.itineraryId}`,
+      itineraryId: effectiveRoute.itineraryId,
       ...(departureAt ? { departureAt } : {}),
       passenger: {
         userId: user.value?.id ?? "guest",
@@ -276,24 +346,24 @@ async function startCheckout() {
             : undefined,
       },
       paymentBreakdown: {
-        fareAmount: total.value,
+        fareAmount: freshTotal,
         serviceFee: 0,
-        totalAmount: total.value,
-        operatorReceivable: total.value,
+        totalAmount: freshTotal,
+        operatorReceivable: freshTotal,
         platformCommission: 0,
         monetizationMode: "ADOPTION_FREE",
-        currency: currency.value,
+        currency: freshCurrency,
       },
       itinerary: {
-        itineraryId: route.itineraryId,
-        legs: ticketableLegs.value.map((l) => ({
+        itineraryId: effectiveRoute.itineraryId,
+        legs: freshLegs.map((l) => ({
           legId: l.legId,
           mode: l.mode,
           route: l.route ?? { shortName: l.mode, longName: l.mode },
           from: { name: l.from?.name ?? "" },
           to: { name: l.to?.name ?? "" },
           fareAmount: l.fare?.amount ?? 0,
-          currency: l.fare?.currency ?? currency.value,
+          currency: l.fare?.currency ?? freshCurrency,
         })),
       },
     });

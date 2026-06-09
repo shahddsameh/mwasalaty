@@ -43,6 +43,20 @@
         </div>
       </div>
 
+      <div
+        v-if="isFromCache"
+        class="mb-6 rounded-xl border-2 border-warning bg-warning-soft p-4"
+        role="status"
+      >
+        <div class="flex items-start gap-3">
+          <CloudOff class="mt-0.5 h-5 w-5 flex-shrink-0 text-warning" />
+          <div class="text-sm text-foreground">
+            <p class="font-display">{{ t("routeResults.preview.title") }}</p>
+            <p class="mt-1 text-muted-foreground">{{ t("routeResults.preview.subtitle") }}</p>
+          </div>
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         <div class="lg:col-span-2 space-y-4">
           <div
@@ -126,9 +140,10 @@
 import { computed, defineComponent, h, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { ArrowLeft, MapPin, SlidersHorizontal } from "@lucide/vue";
+import { ArrowLeft, CloudOff, MapPin, SlidersHorizontal } from "@lucide/vue";
 import RouteCard from "@/components/route/RouteCard.vue";
-import { planRoute, type ApiRouteOption } from "@/services/api";
+import { type ApiRouteOption } from "@/services/api";
+import { useRoutePlanning } from "@/composables/useRoutePlanning";
 import { localizePlaceName } from "@/services/placeLocalization";
 import {
   computeDepartureAt,
@@ -184,32 +199,30 @@ const tabs = [
   { value: "comfortable" as const, labelKey: "routeResults.comfortable" },
 ];
 
-const loading = ref(false);
-const errorMessage = ref("");
-const apiRoutes = ref<ApiRouteOption[]>([]);
+const {
+  routes: apiRoutes,
+  isLoading: loading,
+  error,
+  isFromCache,
+  searchRoutes,
+} = useRoutePlanning();
+
+const errorMessage = computed(() =>
+  error.value ? routeErrorMessage(new Error(error.value)) : "",
+);
 
 onMounted(async () => {
   saveRouteSearch({ start, destination, filter: sortBy.value });
-  loading.value = true;
-  errorMessage.value = "";
-
-  try {
-    apiRoutes.value = await planRoute(
-      start,
-      destination,
-      sortBy.value,
-      {
-        fromCoords: getPlaceCoords(start),
-        toCoords: getPlaceCoords(destination),
-      },
-      { mode: timeMode, date: tripDate, time: tripTime },
-    );
-  } catch (error) {
-    apiRoutes.value = [];
-    errorMessage.value = routeErrorMessage(error);
-  } finally {
-    loading.value = false;
-  }
+  await searchRoutes(
+    start,
+    destination,
+    sortBy.value,
+    {
+      fromCoords: getPlaceCoords(start),
+      toCoords: getPlaceCoords(destination),
+    },
+    { mode: timeMode, date: tripDate, time: tripTime },
+  );
 });
 
 const routes = computed<ApiRouteOption[]>(() => apiRoutes.value);
@@ -296,6 +309,7 @@ function selectRoute(route: ApiRouteOption) {
     filter: sortBy.value,
     steps: route.detailSteps,
     departureAt,
+    fromCache: isFromCache.value,
   });
   router.push({
     path: "/route-details",

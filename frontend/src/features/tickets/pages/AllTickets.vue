@@ -6,6 +6,15 @@
       </PageTitle>
 
       <div
+        v-if="offlineNotice"
+        class="mb-6 flex items-center gap-3 rounded-xl border-2 border-warning bg-warning-soft p-4 text-sm text-foreground"
+        role="status"
+      >
+        <CloudOff class="h-5 w-5 flex-shrink-0 text-warning" />
+        <span>You are offline. Showing your saved tickets.</span>
+      </div>
+
+      <div
         v-if="notice"
         class="mb-6 flex items-start justify-between gap-4 rounded-xl border p-4"
         :class="notice.type === 'success' ? 'border-success bg-success-soft text-success' : 'border-destructive bg-destructive/10 text-destructive'"
@@ -174,6 +183,7 @@ import {
   AlertTriangle,
   Check,
   CheckCircle2,
+  CloudOff,
   Loader2,
   Ticket as TicketIcon,
   X,
@@ -185,6 +195,7 @@ import type { Ticket, TicketLeg, TicketLegStatus } from "@/services/api";
 import { getTicket, getTickets, refundTicket } from "@/services/api";
 import { readCurrentTicket, storeCurrentTicket } from "@/services/currentTicket";
 import { useAuthState } from "@/services/authState";
+import { db } from "@/db/appDb";
 
 const router = useRouter();
 const { user, ensureAuthInitialized } = useAuthState();
@@ -196,6 +207,7 @@ const refundMode = ref<"total" | "partial">("partial");
 const selectedLegIds = ref<string[]>([]);
 const refunding = ref(false);
 const refundError = ref("");
+const offlineNotice = ref(false);
 const notice = ref<{ type: "success" | "error"; title: string; message: string } | null>(null);
 
 const activeTickets = computed(() =>
@@ -214,11 +226,37 @@ const refundAmount = computed(() => {
 async function loadTickets() {
   loading.value = true;
   errorMessage.value = "";
+  offlineNotice.value = false;
+
+  // Render saved tickets from IndexedDB first so the list works offline and
+  // never depends on GET /api/tickets while offline (req 9).
+  let offlineTickets: Ticket[] = [];
+  try {
+    offlineTickets = await db.tickets.orderBy("savedAt").reverse().toArray();
+  } catch {
+    // IndexedDB unavailable; continue with network only.
+  }
+  if (offlineTickets.length) tickets.value = offlineTickets;
+
   try {
     await ensureAuthInitialized();
-    tickets.value = await getTickets(user.value?.id ?? "guest");
+    const fresh = await getTickets(user.value?.id ?? "guest");
+    tickets.value = fresh;
+    // Keep the offline store in sync for the next offline visit.
+    try {
+      await db.tickets.bulkPut(fresh.map((t) => ({ ...t, savedAt: Date.now() })));
+    } catch {
+      // Best-effort persistence.
+    }
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : "Could not load your tickets.";
+    // Offline (or the request failed): show saved tickets with a note instead
+    // of an error, as long as we have something cached.
+    if (tickets.value.length) {
+      offlineNotice.value = true;
+    } else {
+      errorMessage.value =
+        error instanceof Error ? error.message : "Could not load your tickets.";
+    }
   } finally {
     loading.value = false;
   }

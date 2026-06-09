@@ -230,6 +230,10 @@
     "errors": {
       "placeNotFound": "Place not found: {place}. Choose a known place from suggestions.",
       "planFailed": "Could not plan this route."
+    },
+    "preview": {
+      "title": "You are offline. Showing a previously saved route. Availability may have changed.",
+      "subtitle": "Reconnect before starting the trip or buying a ticket."
     }
   },
   "routeDetails": {
@@ -246,6 +250,7 @@
     "duration": "Duration",
     "stepByStep": "Step-by-Step",
     "bookPay": "Book & Pay",
+    "reconnectToBuy": "Reconnect before buying a ticket.",
     "saveRoute": "Save Route",
     "startNavigation": "Start Navigation",
     "stops": "{count} stops",

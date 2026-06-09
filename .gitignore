@@ -14,3 +14,4 @@ backend/dist/
 *.log
 .claude/
 .playwright-mcp/
+frontend/dev-dist/

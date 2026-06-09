@@ -214,6 +214,7 @@ import Modal from "@/components/ui/Modal.vue";
 import type { Ticket, TicketLeg, TicketLegStatus } from "@/services/api";
 import { getTicket } from "@/services/api";
 import { readCurrentTicket, storeCurrentTicket } from "@/services/currentTicket";
+import { db } from "@/db/appDb";
 
 const route = useRoute();
 const router = useRouter();
@@ -234,15 +235,34 @@ onMounted(async () => {
   const stored = readCurrentTicket();
 
   if (id) {
+    // Render the saved copy from IndexedDB first so the ticket and QR work
+    // offline; then refresh from the network when reachable.
+    let offlineTicket: Ticket | null = null;
     try {
-      ticket.value = await getTicket(id);
-      if (ticket.value) storeCurrentTicket(ticket.value);
+      offlineTicket = (await db.tickets.get(id)) ?? null;
+    } catch {
+      // IndexedDB unavailable; fall back to network / sessionStorage below.
+    }
+    if (offlineTicket) ticket.value = offlineTicket;
+
+    try {
+      const fresh = await getTicket(id);
+      ticket.value = fresh;
+      storeCurrentTicket(fresh);
+      try {
+        await db.tickets.put({ ...fresh, savedAt: Date.now() });
+      } catch {
+        // Best-effort offline persistence.
+      }
     } catch (err) {
-      if (stored && stored.ticketId === id) {
-        ticket.value = stored;
-      } else {
-        errorMessage.value =
-          err instanceof Error ? err.message : "This ticket could not be found.";
+      // Network failed — keep whatever offline copy we already have.
+      if (!ticket.value) {
+        if (stored && stored.ticketId === id) {
+          ticket.value = stored;
+        } else {
+          errorMessage.value =
+            err instanceof Error ? err.message : "This ticket could not be found.";
+        }
       }
     }
   } else if (stored) {

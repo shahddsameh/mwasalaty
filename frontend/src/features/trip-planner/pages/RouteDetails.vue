@@ -122,11 +122,20 @@
               variant="outline"
               size="lg"
               class="flex items-center justify-center gap-2"
+              :disabled="!isOnline"
               @click="router.push('/booking')"
             >
               <DollarSign class="w-5 h-5" /> {{ t("routeDetails.bookPay") }}
             </AppButton>
           </div>
+
+          <p
+            v-if="!isOnline || fromCache"
+            class="mt-3 flex items-center gap-2 text-sm text-warning"
+          >
+            <CloudOff class="h-4 w-4 flex-shrink-0" />
+            {{ t("routeDetails.reconnectToBuy") }}
+          </p>
         </div>
 
         <aside class="lg:sticky lg:top-8 h-fit space-y-4 md:space-y-6">
@@ -223,6 +232,7 @@ import {
   ArrowLeft,
   BookmarkPlus,
   Clock,
+  CloudOff,
   DollarSign,
   MapPin,
   Navigation,
@@ -233,6 +243,7 @@ import {
   Car,
   PersonStanding,
 } from "@lucide/vue";
+import { useNetworkStatus } from "@/core/offline/networkStatus";
 import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
 import type { ApiRouteOption, RouteDetailStep } from "@/services/api";
@@ -254,8 +265,11 @@ const queryString = (value: unknown) =>
     : typeof value === "string"
       ? value
       : undefined;
+const { isOnline } = useNetworkStatus();
 const savedSearch = getSavedRouteSearch();
 const selectedRoute = getSelectedRoute();
+// True when the selected route was served from the offline cache (preview only).
+const fromCache = Boolean(selectedRoute.fromCache);
 const route = (state.route ??
   selectedRoute.route ?? {
     itineraryId: "",

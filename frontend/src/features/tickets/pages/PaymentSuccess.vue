@@ -47,6 +47,7 @@ import { AlertTriangle, Loader2 } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import { getCheckoutSessionResult } from "@/services/api";
 import { storeCurrentTicket } from "@/services/currentTicket";
+import { db } from "@/db/appDb";
 
 type State = "verifying" | "issuing" | "error";
 
@@ -94,6 +95,13 @@ async function poll(sessionId: string, attempt = 0) {
     if (result.status === "ready") {
       state.value = "issuing";
       storeCurrentTicket(result.ticket);
+      // Persist the issued ticket so it stays viewable offline (req 9).
+      try {
+        await db.tickets.put({ ...result.ticket, savedAt: Date.now() });
+      } catch {
+        // IndexedDB may be unavailable (private mode); the ticket still
+        // renders this session via storeCurrentTicket.
+      }
       router.replace(`/ticket/${result.ticket.ticketId}`);
       return;
     }

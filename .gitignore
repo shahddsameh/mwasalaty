@@ -12,3 +12,5 @@ backend/.env
 backend/node_modules/
 backend/dist/
 *.log
+.claude/
+.playwright-mcp/

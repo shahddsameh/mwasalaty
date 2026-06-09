@@ -224,6 +224,8 @@ const toLabel =
   (selection.destination as string) ??
   route.legs?.[route.legs.length - 1]?.to?.name ??
   "Destination";
+const departureAt =
+  typeof selection.departureAt === "string" ? selection.departureAt : undefined;
 
 const ticketableLegs = computed<ApiLeg[]>(() =>
   (route.legs ?? []).filter((l) => l.mode !== "WALK"),
@@ -263,6 +265,7 @@ async function startCheckout() {
     const res = await createCheckoutSession({
       planId: `plan_${route.itineraryId}`,
       itineraryId: route.itineraryId,
+      ...(departureAt ? { departureAt } : {}),
       passenger: {
         userId: user.value?.id ?? "guest",
         name: passengerName.value.trim(),

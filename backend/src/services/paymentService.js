@@ -40,7 +40,7 @@ export async function createCheckoutSession(body) {
     throw { code: ErrorCodes.PAYMENT_SESSION_FAILED, message: 'Checkout session validation failed', details: { fields: errors } };
   }
 
-  const { planId, itineraryId, passenger, paymentBreakdown, itinerary } = body;
+  const { planId, itineraryId, passenger, paymentBreakdown, itinerary, departureAt } = body;
   const clientUrl = normalizeUrl(process.env.CLIENT_URL, 'http://localhost:5173');
   const backendUrl = normalizeUrl(process.env.BACKEND_URL, 'http://localhost:3000');
 
@@ -92,7 +92,7 @@ export async function createCheckoutSession(body) {
     ticketId: null,
     createdAt: new Date().toISOString(),
     paymobOrderId: intention.paymobOrderId,
-    payload: { planId, itineraryId, passenger, paymentBreakdown, itinerary },
+    payload: { planId, itineraryId, passenger, paymentBreakdown, itinerary, departureAt },
   });
 
   return { checkoutUrl: buildCheckoutUrl(intention.clientSecret), sessionId: specialReference };
@@ -127,6 +127,7 @@ export async function handleWebhookEvent(body, receivedHmac) {
     itineraryId: pending.payload.itineraryId,
     passenger: pending.payload.passenger,
     itinerary: pending.payload.itinerary,
+    departureAt: pending.payload.departureAt,
     payment: {
       method: 'PAYMOB_TEST',
       amount: pending.payload.paymentBreakdown.totalAmount,

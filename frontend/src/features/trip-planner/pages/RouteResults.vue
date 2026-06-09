@@ -131,12 +131,15 @@ import RouteCard from "@/components/route/RouteCard.vue";
 import { planRoute, type ApiRouteOption } from "@/services/api";
 import { localizePlaceName } from "@/services/placeLocalization";
 import {
+  computeDepartureAt,
   getPlaceCoords,
   getSavedRouteSearch,
   normalizeFilter,
   saveRouteSearch,
   saveSelectedRoute,
 } from "../services/routeSearch";
+
+type TimeMode = "now" | "depart" | "arrive";
 
 const router = useRouter();
 const currentRoute = useRoute();
@@ -164,6 +167,13 @@ const destination =
 const displayStart = computed(() => localizePlaceName(start));
 const displayDestination = computed(() => localizePlaceName(destination));
 
+const timeMode = ((queryString(currentRoute.query.timeMode) ??
+  state.timeMode ??
+  "now") as TimeMode);
+const tripDate = queryString(currentRoute.query.date) ?? state.date ?? "";
+const tripTime = queryString(currentRoute.query.time) ?? state.time ?? "";
+const departureAt = computeDepartureAt(timeMode, tripDate, tripTime);
+
 const sortBy = ref<"fastest" | "cheapest" | "comfortable">(
   normalizeFilter(queryFilter ?? state.filter ?? savedSearch.filter),
 );
@@ -184,10 +194,16 @@ onMounted(async () => {
   errorMessage.value = "";
 
   try {
-    apiRoutes.value = await planRoute(start, destination, sortBy.value, {
-      fromCoords: getPlaceCoords(start),
-      toCoords: getPlaceCoords(destination),
-    });
+    apiRoutes.value = await planRoute(
+      start,
+      destination,
+      sortBy.value,
+      {
+        fromCoords: getPlaceCoords(start),
+        toCoords: getPlaceCoords(destination),
+      },
+      { mode: timeMode, date: tripDate, time: tripTime },
+    );
   } catch (error) {
     apiRoutes.value = [];
     errorMessage.value = routeErrorMessage(error);
@@ -279,6 +295,7 @@ function selectRoute(route: ApiRouteOption) {
     destination,
     filter: sortBy.value,
     steps: route.detailSteps,
+    departureAt,
   });
   router.push({
     path: "/route-details",

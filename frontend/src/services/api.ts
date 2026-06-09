@@ -131,18 +131,53 @@ const FILTER_TO_OPTIMIZE: Record<string, string> = {
 
 export type PlaceCoords = { lat: number; lng: number };
 
+export type PlaceResult = {
+  label: string;
+  lat: number;
+  lng: number;
+  source: string;
+};
+
+/**
+ * Autocomplete place search against the backend (GET /api/places/search).
+ * Pass an AbortSignal to cancel an in-flight request when the query changes.
+ */
+export async function searchPlaces(
+  q: string,
+  signal?: AbortSignal,
+): Promise<PlaceResult[]> {
+  const res = await fetch(`/api/places/search?q=${encodeURIComponent(q)}`, {
+    signal,
+  });
+  if (!res.ok) throw new Error('place_search_failed');
+  const data = (await res.json()) as { places?: PlaceResult[] };
+  return data.places ?? [];
+}
+
+export type TripWhen = {
+  mode: 'now' | 'depart' | 'arrive';
+  date?: string;
+  time?: string;
+};
+
 export async function planRoute(
   fromLabel: string,
   toLabel: string,
   filter: 'fastest' | 'cheapest' | 'comfortable' = 'fastest',
   coords: { fromCoords?: PlaceCoords; toCoords?: PlaceCoords } = {},
+  when: TripWhen = { mode: 'now' },
 ): Promise<ApiRouteOption[]> {
   const now = new Date();
   let date = now.toISOString().slice(0, 10);
   let time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const arriveBy = when.mode === 'arrive';
 
-  // TODO: remove test default before final production demo if needed.
-  if (import.meta.env.DEV) {
+  if (when.mode !== 'now' && when.date && when.time) {
+    // Scheduled trip: use the rider's chosen date/time directly.
+    date = when.date;
+    time = when.time.length === 5 ? when.time : when.time.slice(0, 5);
+  } else if (import.meta.env.DEV) {
+    // TODO: remove test default before final production demo if needed.
     time = '10:00';
     date = '2026-06-06';
   }
@@ -152,25 +187,21 @@ export async function planRoute(
   const fromCoords = coords.fromCoords ?? (knownFrom ? { lat: knownFrom.lat, lng: knownFrom.lng } : undefined);
   const toCoords = coords.toCoords ?? (knownTo ? { lat: knownTo.lat, lng: knownTo.lng } : undefined);
 
-  if (!fromCoords) throw new Error("place_not_found_from");
-  if (!toCoords) throw new Error("place_not_found_to");
-
-  const from = {
-    lat: fromCoords.lat,
-    lng: fromCoords.lng,
-    label: knownFrom?.label ?? fromLabel,
-  };
-  const to = {
-    lat: toCoords.lat,
-    lng: toCoords.lng,
-    label: knownTo?.label ?? toLabel,
-  };
+  // When we have client-side coordinates, send them; otherwise send the label
+  // only and let the backend geocoder (resolvePlace) resolve it.
+  const from = fromCoords
+    ? { lat: fromCoords.lat, lng: fromCoords.lng, label: knownFrom?.label ?? fromLabel }
+    : { label: fromLabel };
+  const to = toCoords
+    ? { lat: toCoords.lat, lng: toCoords.lng, label: knownTo?.label ?? toLabel }
+    : { label: toLabel };
 
   const payload = {
     from,
     to,
     date,
     time,
+    arriveBy,
     preferences: {
       modes: ['WALK', 'BUS', 'SUBWAY'],
       optimizeFor: FILTER_TO_OPTIMIZE[filter] ?? 'quickest',
@@ -232,6 +263,7 @@ export type Ticket = {
   status: 'active' | 'used' | 'refunded' | 'partially_refunded';
   createdAt?: string;
   expiresAt?: string;
+  departureAt?: string;
   sourcePlanId?: string;
   sourceItineraryId?: string;
   passenger?: { userId?: string; name?: string | null };
@@ -268,6 +300,7 @@ export type CheckoutLeg = {
 export type CreateCheckoutPayload = {
   planId: string;
   itineraryId: string;
+  departureAt?: string;
   passenger: { userId: string; name: string; email?: string; phone?: string };
   paymentBreakdown: {
     fareAmount: number;

@@ -110,8 +110,55 @@ const NORMALIZED_LOCAL_PLACES = Object.fromEntries(
   ])
 );
 
+// Pre-built, deduped list used for the /api/places/search autocomplete.
+// Reuses the same LOCAL_PLACES coverage so every suggestion is routable.
+const SEARCHABLE_PLACES = (() => {
+  const seen = new Set();
+  const list = [];
+  for (const [name, coords] of Object.entries(LOCAL_PLACES)) {
+    const label = toDisplayLabel(name);
+    const key = label.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    list.push({
+      label,
+      normalized: normalizePlaceName(name),
+      lat: coords.lat,
+      lng: coords.lng,
+      source: 'local',
+    });
+  }
+  return list;
+})();
+
 const cache = new Map();
 let lastNominatimRequestAt = 0;
+
+function toDisplayLabel(name) {
+  // Keep Arabic / non-Latin labels as authored; Title-Case Latin ones.
+  if (/[\u0080-\uffff]/.test(name)) return name;
+  return name.replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+/**
+ * Autocomplete-style place search over the curated in-coverage places.
+ * Ranks starts-with matches ahead of contains matches (mirrors the client).
+ * Returns up to `limit` of { label, lat, lng, source }.
+ */
+export function searchPlaces(query, limit = 8) {
+  const normalized = normalizePlaceName(query);
+  const strip = ({ normalized: _n, ...rest }) => rest;
+
+  if (!normalized) return SEARCHABLE_PLACES.slice(0, limit).map(strip);
+
+  const startsWith = [];
+  const contains = [];
+  for (const place of SEARCHABLE_PLACES) {
+    if (place.normalized.startsWith(normalized)) startsWith.push(place);
+    else if (place.normalized.includes(normalized)) contains.push(place);
+  }
+  return [...startsWith, ...contains].slice(0, limit).map(strip);
+}
 
 export class GeocodingError extends Error {
   constructor(message, details = {}, statusCode = 404) {

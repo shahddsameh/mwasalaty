@@ -17,6 +17,16 @@
     "toggle": "العربية",
     "current": "English"
   },
+  "tripSearch": {
+    "leaveNow": "Leave now",
+    "departAt": "Depart at",
+    "arriveBy": "Arrive by",
+    "when": "When",
+    "date": "Date",
+    "time": "Time",
+    "swap": "Swap start and destination",
+    "clear": "Clear"
+  },
   "home": {
     "title": "Where are you going?",
     "subtitle": "Plan your journey across Greater Cairo with multiple transport options",

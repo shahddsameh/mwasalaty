@@ -23,7 +23,9 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "prompt",
-      strategies: "generateSW",
+      strategies: "injectManifest",
+      srcDir: "src",
+      filename: "sw.ts",
       includeAssets: ["offline.html", "icons/pwa-icon.svg", "icons/pwa-maskable.svg"],
       manifest: {
         name: "Mwasalaty",
@@ -51,8 +53,7 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
-        navigateFallback: "/offline.html",
+      injectManifest: {
         globPatterns: ["**/*.{js,css,html,svg,png,ico,json,woff2}"],
       },
       devOptions: {

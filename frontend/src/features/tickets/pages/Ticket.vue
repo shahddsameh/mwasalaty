@@ -87,6 +87,11 @@
                 <Field label="Total Fare" :value="`${ticket.payment.amount} ${ticket.payment.currency}`" gold />
                 <Field label="Payment" :value="paymentLabel" />
                 <Field label="Valid Until" :value="validUntil" />
+                <Field
+                  v-if="departsAt"
+                  label="Scheduled Departure"
+                  :value="departsAt"
+                />
               </div>
             </div>
 
@@ -145,7 +150,10 @@
             <ol class="space-y-3 text-sm text-muted-foreground">
               <li>1. Show the QR code to the operator scanner.</li>
               <li>2. Each leg is marked as used after it is scanned.</li>
-              <li>3. The ticket is valid for 24 hours from booking.</li>
+              <li>
+                3. The ticket is valid for 24 hours from
+                {{ departsAt ? "your scheduled departure" : "booking" }}.
+              </li>
               <li>4. Works offline — keep this screen handy during your trip.</li>
             </ol>
           </InfoCard>
@@ -303,6 +311,12 @@ const validUntil = computed(() => {
   if (!ticket.value?.expiresAt) return "24h from booking";
   const d = new Date(ticket.value.expiresAt);
   return Number.isNaN(d.getTime()) ? "24h from booking" : d.toLocaleString();
+});
+
+const departsAt = computed(() => {
+  if (!ticket.value?.departureAt) return "";
+  const d = new Date(ticket.value.departureAt);
+  return Number.isNaN(d.getTime()) ? "" : d.toLocaleString();
 });
 
 function legLabel(leg: TicketLeg) {

@@ -56,6 +56,7 @@ export async function planHandler(req, res) {
   }
 
   const { from, to, date, time, preferences = {} } = req.body;
+  const arriveBy = req.body.arriveBy === true;
   const modes = preferences.modes?.length ? preferences.modes : ['WALK', 'BUS', 'SUBWAY'];
   const transitModes = modes.filter(m => m !== 'WALK');
   const optimizedFor = req.body.preferences?.optimizeFor || 'quickest'
@@ -75,6 +76,7 @@ export async function planHandler(req, res) {
       time,
       modes: allModes,
       numItineraries: 10,
+      arriveBy,
     });
 
     const allItineraries = plan.itineraries ?? [];

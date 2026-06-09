@@ -123,6 +123,12 @@ class MwasalatyDb extends Dexie {
       syncMetadata: "key, lastSyncAt, syncStatus",
       pendingActions: "++id, createdAt, entityType, actionType, retryCount",
     });
+
+    // Version 4: compound [from+to+filter] index so recentSearchesRepository
+    // can dedupe a search by its full identity.
+    this.version(4).stores({
+      recentSearches: "++id, searchedAt, from, to, [from+to+filter]",
+    });
   }
 }
 

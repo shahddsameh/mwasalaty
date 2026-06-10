@@ -2,6 +2,7 @@ import { createTicket, getTicketById, listTickets, validateLeg, scanValidate, re
 import { getAllProfiles } from '../stores/scannerProfileStore.js';
 import { makeError, ErrorCodes } from '../helpers/errors.js';
 import * as paymobService from '../services/paymobService.js';
+import { subscribeToTicket } from '../services/ticketEvents.js';
 
 const STATUS_MAP = {
   [ErrorCodes.VALIDATION_ERROR]:           400,
@@ -45,6 +46,32 @@ export async function getTicketHandler(req, res) {
   try {
     const ticket = getTicketById(req.params.id);
     return res.status(200).json(ticket);
+  } catch (err) {
+    return handleServiceError(res, err);
+  }
+}
+
+export function streamTicketHandler(req, res) {
+  try {
+    const ticket = getTicketById(req.params.id);
+    res.set({
+      'Cache-Control': 'no-cache, no-transform',
+      Connection: 'keep-alive',
+      'Content-Type': 'text/event-stream',
+    });
+    res.flushHeaders?.();
+
+    const sendTicket = (nextTicket) => {
+      res.write(`event: ticket\ndata: ${JSON.stringify(nextTicket)}\n\n`);
+    };
+    sendTicket(ticket);
+
+    const unsubscribe = subscribeToTicket(ticket.ticketId, sendTicket);
+    const heartbeat = setInterval(() => res.write(': keep-alive\n\n'), 25000);
+    req.on('close', () => {
+      clearInterval(heartbeat);
+      unsubscribe();
+    });
   } catch (err) {
     return handleServiceError(res, err);
   }

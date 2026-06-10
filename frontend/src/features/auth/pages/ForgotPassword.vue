@@ -39,20 +39,31 @@
             Enter your email address and we'll send you a link to reset your
             password.
           </p>
+          <p
+            v-if="errorMessage"
+            class="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive mb-4"
+          >
+            {{ errorMessage }}
+          </p>
           <AppInput
             v-model="email"
-            label="Email or Phone"
+            label="Email Address"
             type="email"
             placeholder="your@email.com"
           >
             <template #icon><Mail class="w-5 h-5" /></template>
           </AppInput>
-          <AppButton size="lg" class="w-full mt-6 mb-4" @click="sent = true"
-            >Send Reset Link</AppButton
+          <AppButton
+            size="lg"
+            class="w-full mt-6 mb-4"
+            :disabled="loading"
+            @click="handleSendReset"
+            >{{ loading ? "Sending..." : "Send Reset Link" }}</AppButton
           >
           <AppButton
             variant="outline"
             class="w-full"
+            :disabled="loading"
             @click="router.push('/login')"
             >Cancel</AppButton
           >
@@ -68,8 +79,38 @@ import { useRouter } from "vue-router";
 import { ArrowLeft, Check, Mail } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import AppInput from "@/components/ui/AppInput.vue";
+import { sendPasswordReset } from "@/services/supabaseAuth";
 
 const router = useRouter();
 const email = ref("");
 const sent = ref(false);
+const loading = ref(false);
+const errorMessage = ref("");
+
+async function handleSendReset() {
+  const address = email.value.trim();
+  errorMessage.value = "";
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address)) {
+    errorMessage.value = "Enter a valid email address.";
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const result = await sendPasswordReset(address);
+    if (result.error) {
+      errorMessage.value = result.error;
+      return;
+    }
+    sent.value = true;
+  } catch (error) {
+    errorMessage.value =
+      error instanceof Error
+        ? error.message
+        : "Could not send the reset email right now.";
+  } finally {
+    loading.value = false;
+  }
+}
 </script>

@@ -472,7 +472,7 @@ import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
 import TicketPreview from "@/features/tickets/components/TicketPreview.vue";
 import type { ApiRouteOption, RouteDetailStep, Ticket as TicketData } from "@/services/api";
-import { getTicket } from "@/services/api";
+import { getTicket, subscribeToTicket } from "@/services/api";
 import { readCurrentTicket, storeCurrentTicket } from "@/services/currentTicket";
 import {
   getSavedRouteSearch,
@@ -536,6 +536,7 @@ const currentTicket = ref<TicketData | null>(matchingNavigationTicket(readCurren
 const showStepsSheet = ref(false);
 const feedbackRating = ref<"good" | "bad" | null>(null);
 const lastAutoAdvanceAt = ref(0);
+let stopTicketUpdates: (() => void) | undefined;
 const labels = {
   liveNavigation: "Live Navigation",
   online: "Online",
@@ -588,6 +589,14 @@ const { initMap, fitStep, recenter, fitFullRoute, hasGeometry, updateUserLocatio
 const { location, startTracking, stopTracking } = useLiveLocation();
 
 onMounted(async () => {
+  if (currentTicket.value) {
+    stopTicketUpdates = subscribeToTicket(currentTicket.value.ticketId, (fresh) => {
+      const matching = matchingNavigationTicket(fresh);
+      if (!matching) return;
+      currentTicket.value = matching;
+      storeCurrentTicket(matching);
+    });
+  }
   await initMap();
   // Fit full route first if geometry exists
   fitFullRoute();
@@ -611,6 +620,7 @@ watch(location, (nextLocation) => {
 });
 
 onUnmounted(() => {
+  stopTicketUpdates?.();
   stopTracking();
 });
 

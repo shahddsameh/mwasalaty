@@ -195,7 +195,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, onMounted, ref } from "vue";
+import { computed, defineComponent, h, onMounted, onUnmounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import QRCode from "qrcode";
 import {
@@ -212,7 +212,7 @@ import {
 import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
 import type { Ticket, TicketLeg, TicketLegStatus } from "@/services/api";
-import { getTicket } from "@/services/api";
+import { getTicket, subscribeToTicket } from "@/services/api";
 import { readCurrentTicket, storeCurrentTicket } from "@/services/currentTicket";
 import { db } from "@/db/appDb";
 
@@ -224,6 +224,7 @@ const loading = ref(true);
 const errorMessage = ref("This ticket could not be found. It may have expired.");
 const qrDataUrl = ref("");
 const qrModalOpen = ref(false);
+let stopTicketUpdates: (() => void) | undefined;
 
 function routeParamId(): string | undefined {
   const id = route.params.id;
@@ -281,7 +282,19 @@ onMounted(async () => {
       // Fall back to the QrCode icon if generation fails.
     }
   }
+
+  if (ticket.value) {
+    stopTicketUpdates = subscribeToTicket(ticket.value.ticketId, (fresh) => {
+      ticket.value = fresh;
+      storeCurrentTicket(fresh);
+      void db.tickets.put({ ...fresh, savedAt: Date.now() }).catch(() => {
+        // Best-effort offline persistence.
+      });
+    });
+  }
 });
+
+onUnmounted(() => stopTicketUpdates?.());
 
 const statusLabel = computed(() => {
   switch (ticket.value?.status) {

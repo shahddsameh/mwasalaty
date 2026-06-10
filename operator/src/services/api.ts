@@ -155,3 +155,19 @@ export async function validateLeg(
 export async function getTicket(ticketId: string): Promise<Ticket> {
   return request<Ticket>(`/api/tickets/${encodeURIComponent(ticketId)}`);
 }
+
+export function subscribeToTicket(
+  ticketId: string,
+  onTicket: (ticket: Ticket) => void
+): () => void {
+  if (typeof EventSource === "undefined") return () => {};
+  const source = new EventSource(`/api/tickets/${encodeURIComponent(ticketId)}/events`);
+  source.addEventListener("ticket", (event) => {
+    try {
+      onTicket(JSON.parse((event as MessageEvent<string>).data) as Ticket);
+    } catch {
+      // Ignore malformed stream messages and wait for the next update.
+    }
+  });
+  return () => source.close();
+}

@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import { saveTicket, getTicket, getAllTickets, updateTicket } from '../stores/ticketStore.js';
 import { getProfileById } from '../stores/scannerProfileStore.js';
 import { ErrorCodes } from '../helpers/errors.js';
+import { publishTicketUpdate } from './ticketEvents.js';
 
 const TRANSIT_MODES = new Set(['BUS', 'METRO', 'SUBWAY', 'TRAM', 'RAIL', 'MICROBUS']);
 
@@ -211,6 +212,7 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
 
   ticket.status = resolveTicketStatus(ticket);
   updateTicket(ticket);
+  publishTicketUpdate(ticket);
 
   return {
     ticketId,
@@ -357,6 +359,7 @@ export function scanValidate(qrPayload, scannerProfileId, { stationsTraversed } 
 
   ticket.status = resolveTicketStatus(ticket);
   updateTicket(ticket);
+  publishTicketUpdate(ticket);
 
   return {
     ticketId: ticket.ticketId,
@@ -465,6 +468,7 @@ export function refundTicket(ticketId, legIds, refundMeta = {}) {
   }
 
   updateTicket(ticket);
+  publishTicketUpdate(ticket);
 
   return {
     ticketId,

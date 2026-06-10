@@ -209,6 +209,7 @@ export async function planRoute(
     to,
     date,
     time,
+    timeMode: when.mode,
     arriveBy,
     preferences: {
       modes: ['WALK', 'BUS', 'SUBWAY'],
@@ -393,10 +394,43 @@ export async function getCheckoutSessionResult(sessionId: string): Promise<Check
   return { status: 'ready', ticket: data.ticket };
 }
 
+/**
+ * Confirm a payment from PayMob's signed redirect params. Lets the success page
+ * issue the ticket immediately instead of waiting on the (possibly late) webhook.
+ * Returns the ticket on success; throws on failure or HMAC mismatch.
+ */
+export async function confirmCheckoutRedirect(
+  params: Record<string, string>,
+): Promise<{ ticket: Ticket }> {
+  const res = await fetch('/api/payments/confirm-redirect', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return (await res.json()) as { ticket: Ticket };
+}
+
 export async function getTicket(ticketId: string): Promise<Ticket> {
   const res = await fetch(`/api/tickets/${encodeURIComponent(ticketId)}`);
   if (!res.ok) throw new Error(await readApiError(res));
   return (await res.json()) as Ticket;
+}
+
+export function subscribeToTicket(
+  ticketId: string,
+  onTicket: (ticket: Ticket) => void,
+): () => void {
+  if (typeof EventSource === 'undefined') return () => {};
+  const source = new EventSource(`/api/tickets/${encodeURIComponent(ticketId)}/events`);
+  source.addEventListener('ticket', (event) => {
+    try {
+      onTicket(JSON.parse((event as MessageEvent<string>).data) as Ticket);
+    } catch {
+      // Ignore malformed stream messages and wait for the next update.
+    }
+  });
+  return () => source.close();
 }
 
 export async function getTickets(userId: string): Promise<Ticket[]> {

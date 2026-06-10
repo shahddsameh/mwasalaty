@@ -8,7 +8,15 @@
     :auto-advance-ms="4000"
     @primary="goNext"
     @auto-advance="goNext"
-  />
+  >
+    <RouterLink
+      v-if="outcome?.ticketId"
+      :to="{ name: 'ticket-detail', params: { id: outcome.ticketId } }"
+      class="mt-6 rounded-lg border border-white/40 bg-white/10 px-4 py-3 font-bold text-white transition hover:bg-white/20 focus-ring"
+    >
+      {{ $t("ticket.title") }}
+    </RouterLink>
+  </ResultScreen>
 </template>
 
 <script setup lang="ts">

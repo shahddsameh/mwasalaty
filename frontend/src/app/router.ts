@@ -16,6 +16,7 @@ import Login from "../features/auth/pages/Login.vue";
 import SignUp from "../features/auth/pages/SignUp.vue";
 import AuthCallback from "../features/auth/pages/AuthCallback.vue";
 import ForgotPassword from "../features/auth/pages/ForgotPassword.vue";
+import ResetPassword from "../features/auth/pages/ResetPassword.vue";
 import Profile from "../features/account/pages/Profile.vue";
 import Settings from "../features/account/pages/Settings.vue";
 import Support from "../features/account/pages/Support.vue";
@@ -71,6 +72,11 @@ const router = createRouter({
       path: "/forgot-password",
       name: "forgot-password",
       component: ForgotPassword,
+    },
+    {
+      path: "/reset-password",
+      name: "reset-password",
+      component: ResetPassword,
     },
     {
       path: "/profile",

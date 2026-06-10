@@ -1,4 +1,4 @@
-import { createCheckoutSession, handleWebhookEvent, getCheckoutResult } from '../services/paymentService.js';
+import { createCheckoutSession, handleWebhookEvent, getCheckoutResult, confirmFromRedirect } from '../services/paymentService.js';
 import { makeError, ErrorCodes } from '../helpers/errors.js';
 
 const STATUS_MAP = {
@@ -37,6 +37,15 @@ export async function webhookHandler(req, res) {
   try {
     await handleWebhookEvent(req.body, receivedHmac);
     return res.status(200).json({ received: true });
+  } catch (err) {
+    return handleServiceError(res, err);
+  }
+}
+
+export async function confirmRedirectHandler(req, res) {
+  try {
+    const result = confirmFromRedirect(req.body ?? {});
+    return res.status(200).json(result);
   } catch (err) {
     return handleServiceError(res, err);
   }

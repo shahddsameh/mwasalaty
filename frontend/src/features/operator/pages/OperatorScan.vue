@@ -24,15 +24,40 @@
             <label class="text-sm text-foreground" for="scanner-profile">
               Scanner profile
             </label>
+            <input
+              v-model="profileFilter"
+              type="search"
+              placeholder="Filter by line or route (e.g. M2, 108)"
+              class="mt-2 w-full rounded-lg border border-border bg-muted p-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
             <select
               id="scanner-profile"
               v-model="scannerProfileId"
-              class="mt-2 w-full rounded-lg border border-border bg-muted p-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              :disabled="profilesLoading"
+              class="mt-2 w-full rounded-lg border border-border bg-muted p-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-60"
             >
-              <option value="scanner_subway_001">Subway Scanner</option>
-              <option value="scanner_subway_m2">Subway M2</option>
-              <option value="scanner_bus_001">Bus Scanner</option>
+              <optgroup label="Subway">
+                <option
+                  v-for="p in filteredSubwayProfiles"
+                  :key="p.scannerProfileId"
+                  :value="p.scannerProfileId"
+                >
+                  {{ p.label || p.scannerProfileId }}
+                </option>
+              </optgroup>
+              <optgroup label="Bus">
+                <option
+                  v-for="p in filteredBusProfiles"
+                  :key="p.scannerProfileId"
+                  :value="p.scannerProfileId"
+                >
+                  {{ p.label || p.scannerProfileId }}
+                </option>
+              </optgroup>
             </select>
+            <p v-if="profilesError" class="mt-1 text-xs text-destructive">
+              {{ profilesError }}
+            </p>
           </div>
 
           <div>
@@ -49,8 +74,8 @@
               class="mt-2 w-full rounded-lg border border-border bg-muted p-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
             <p class="mt-1 text-xs text-muted-foreground">
-              Rejected if it exceeds the tier the ticket was paid for. Leave blank
-              for buses.
+              Enter at the exit scan — rejected if it exceeds the tier the ticket
+              was paid for. Leave blank at entry or for buses.
             </p>
           </div>
         </div>
@@ -75,14 +100,68 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useApi } from "@/composables/useApi";
 
+type ScannerProfile = {
+  scannerProfileId: string;
+  label?: string;
+  mode: "BUS" | "SUBWAY";
+  routeShortName?: string;
+};
+
 const qrPayload = ref("");
-const scannerProfileId = ref("scanner_subway_001");
+const scannerProfileId = ref("");
 const stationsTraveled = ref("");
 const message = ref("");
-const { loading, post } = useApi();
+const { loading, get, post } = useApi();
+
+const profiles = ref<ScannerProfile[]>([]);
+const profilesLoading = ref(false);
+const profilesError = ref("");
+const profileFilter = ref("");
+
+function matchesFilter(p: ScannerProfile) {
+  const q = profileFilter.value.trim().toLowerCase();
+  if (!q) return true;
+  return (
+    (p.label ?? "").toLowerCase().includes(q) ||
+    (p.routeShortName ?? "").toLowerCase().includes(q) ||
+    p.scannerProfileId.toLowerCase().includes(q)
+  );
+}
+
+const filteredSubwayProfiles = computed(() =>
+  profiles.value.filter((p) => p.mode === "SUBWAY" && matchesFilter(p)),
+);
+const filteredBusProfiles = computed(() =>
+  profiles.value.filter((p) => p.mode === "BUS" && matchesFilter(p)),
+);
+
+onMounted(async () => {
+  profilesLoading.value = true;
+  profilesError.value = "";
+  try {
+    const data = await get<{ profiles: ScannerProfile[] }>(
+      "/api/scanner-profiles",
+    );
+    profiles.value = data.profiles ?? [];
+    // Default to the first subway profile (the entry/exit metro flow is the
+    // common demo); fall back to whatever is first.
+    const firstSubway = profiles.value.find((p) => p.mode === "SUBWAY");
+    scannerProfileId.value =
+      firstSubway?.scannerProfileId ??
+      profiles.value[0]?.scannerProfileId ??
+      "";
+  } catch (error) {
+    profilesError.value =
+      error instanceof Error
+        ? error.message
+        : "Could not load scanner profiles.";
+  } finally {
+    profilesLoading.value = false;
+  }
+});
 
 async function validateTicket() {
   message.value = "";

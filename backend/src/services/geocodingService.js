@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { ARABIC_LABELS, LANDMARKS } from '../data/placeOverlay.js';
+import { ALIASES, ARABIC_LABELS, LANDMARKS } from '../data/placeOverlay.js';
 
 const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search';
 const MAPBOX_URL = 'https://api.mapbox.com/search/geocode/v6/forward';
@@ -34,18 +34,18 @@ const EN_TO_AR = (() => {
 const ALL_PLACES = (() => {
   const seen = new Set();
   const list = [];
-  const push = (label, arLabel, lat, lng) => {
+  const push = (label, arLabel, lat, lng, metro = false) => {
     const key = normalizePlaceName(label);
     if (!key || seen.has(key)) return;
     seen.add(key);
-    list.push({ label, arLabel: arLabel ?? null, lat, lng });
+    list.push({ label, arLabel: arLabel ?? null, lat, lng, metro });
   };
   for (const p of GENERATED_PLACES) {
     const ar = EN_TO_AR[normalizePlaceName(p.label)] ?? null;
-    push(p.label, ar, p.lat, p.lng);
+    push(p.label, ar, p.lat, p.lng, Boolean(p.metro));
   }
   for (const p of LANDMARKS) {
-    push(p.label, p.arLabel ?? null, p.lat, p.lng);
+    push(p.label, p.arLabel ?? null, p.lat, p.lng, false);
   }
   return list;
 })();
@@ -59,20 +59,50 @@ const NORMALIZED_LOCAL_PLACES = (() => {
     map[normalizePlaceName(place.label)] = entry;
     if (place.arLabel) map[normalizePlaceName(place.arLabel)] = entry;
   }
+  // Colloquial / short-form aliases point at an existing canonical entry. Registered
+  // here (the exact-match index) so they win over the fuzzy matcher.
+  for (const [alias, canonical] of Object.entries(ALIASES)) {
+    const target = map[normalizePlaceName(canonical)];
+    if (!target) continue;
+    map[normalizePlaceName(alias)] = {
+      lat: target.lat,
+      lng: target.lng,
+      label: target.label,
+      source: 'local-alias',
+    };
+  }
   return map;
 })();
 
 // Autocomplete corpus for /api/places/search. Pre-normalizes both labels so the
 // search can match English or Arabic input.
-const SEARCHABLE_PLACES = ALL_PLACES.map((place) => ({
-  label: place.label,
-  arLabel: place.arLabel,
-  normalized: normalizePlaceName(place.label),
-  normalizedAr: place.arLabel ? normalizePlaceName(place.arLabel) : null,
-  lat: place.lat,
-  lng: place.lng,
-  source: 'local',
-}));
+const SEARCHABLE_PLACES = [
+  ...ALL_PLACES.map((place) => ({
+    label: place.label,
+    arLabel: place.arLabel,
+    normalized: normalizePlaceName(place.label),
+    normalizedAr: place.arLabel ? normalizePlaceName(place.arLabel) : null,
+    lat: place.lat,
+    lng: place.lng,
+    source: 'local',
+  })),
+  // Alias rows: matched on the alias text but resolving to the canonical place, so
+  // autocomplete, findMentionedPlaces (AI parser), and the fuzzy matcher all see them.
+  ...Object.entries(ALIASES).flatMap(([alias, canonical]) => {
+    const target = NORMALIZED_LOCAL_PLACES[normalizePlaceName(canonical)];
+    if (!target) return [];
+    const normalizedAlias = normalizePlaceName(alias);
+    return [{
+      label: target.label,
+      arLabel: null,
+      normalized: normalizedAlias,
+      normalizedAr: normalizedAlias,
+      lat: target.lat,
+      lng: target.lng,
+      source: 'local',
+    }];
+  }),
+];
 
 const cache = new Map();
 let lastNominatimRequestAt = 0;
@@ -99,6 +129,79 @@ export function searchPlaces(query, limit = 8) {
     }
   }
   return [...startsWith, ...contains].slice(0, limit).map(toResult);
+}
+
+/**
+ * Canonical, deduped place catalog ({ label, arLabel, metro }) for AI prompting.
+ * Same in-coverage set the resolver trusts, so any name the LLM picks routes.
+ */
+export function getPlaceCatalog() {
+  return ALL_PLACES.map(({ label, arLabel, metro }) => ({ label, arLabel, metro }));
+}
+
+/**
+ * Exact, offline lookup: returns the canonical English label for a query that
+ * matches a local place by its English, Arabic, or alias spelling, else null.
+ * No fuzzy matching and no external geocoder call — used to snap/validate labels.
+ */
+export function matchLocalPlaceLabel(query) {
+  const normalized = normalizePlaceName(query);
+  return normalized ? (NORMALIZED_LOCAL_PLACES[normalized]?.label ?? null) : null;
+}
+
+const stripArabicArticle = (token) => token.replace(/^ال/, '');
+
+/**
+ * Best-effort fuzzy match against the in-coverage places, so an inexact, partial,
+ * Arabic, or colloquial label still snaps to a routable stop instead of escaping
+ * to the external geocoder. Token-based with Arabic-article stripping and a
+ * prefix bonus; returns the matched place or null when nothing clears `minScore`.
+ */
+export function findBestLocalMatch(query, { minScore = 0.5 } = {}) {
+  const qNorm = normalizePlaceName(query);
+  if (!qNorm) return null;
+  const qTokens = qNorm.split(' ').filter(Boolean);
+
+  const tokenMatch = (qt, lt) =>
+    qt === lt ||
+    (qt.length >= 3 && (stripArabicArticle(lt).startsWith(qt) || stripArabicArticle(qt).startsWith(lt)));
+
+  let best = null;
+  for (const place of SEARCHABLE_PLACES) {
+    for (const variant of [place.normalized, place.normalizedAr]) {
+      if (!variant) continue;
+      const lTokens = variant.split(' ').filter(Boolean);
+      const shared = qTokens.filter((qt) => lTokens.some((lt) => tokenMatch(qt, lt))).length;
+      if (!shared) continue;
+      let score = shared / Math.max(qTokens.length, lTokens.length);
+      if (variant.startsWith(qNorm) || qNorm.startsWith(variant)) score += 0.15;
+      if (!best || score > best.score || (score === best.score && variant.length < best.len)) {
+        best = { place, score, len: variant.length };
+      }
+    }
+  }
+  return best && best.score >= minScore ? best.place : null;
+}
+
+export function findMentionedPlaces(text) {
+  const normalizedText = ` ${normalizePlaceName(text).replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ')} `;
+  return SEARCHABLE_PLACES
+    .flatMap((place) => {
+      const matches = [place.normalized, place.normalizedAr]
+        .filter(Boolean)
+        .map((label) => ({ place, index: normalizedText.indexOf(` ${label} `), length: label.length }))
+        .filter((match) => match.index >= 0);
+      return matches.length ? [matches.sort((a, b) => b.length - a.length)[0]] : [];
+    })
+    .sort((a, b) => a.index - b.index || b.length - a.length)
+    .filter((match, index, matches) =>
+      !matches.some((other, otherIndex) =>
+        otherIndex !== index &&
+        other.index <= match.index &&
+        other.index + other.length >= match.index + match.length
+      )
+    )
+    .map(({ place }) => ({ label: place.label, lat: place.lat, lng: place.lng }));
 }
 
 export class GeocodingError extends Error {
@@ -145,8 +248,21 @@ export async function resolvePlace(place) {
     return cacheResult(normalized, {
       lat: localPlace.lat,
       lng: localPlace.lng,
-      label: query,
+      // For an alias hit, surface the canonical name; for a direct hit, echo the query.
+      label: localPlace.source === 'local-alias' ? localPlace.label : query,
       source: localPlace.source,
+    });
+  }
+
+  // Inexact / partial / colloquial input: snap to the nearest in-coverage place
+  // before falling back to the external geocoder (which can land off the OTP graph).
+  const fuzzy = findBestLocalMatch(query);
+  if (fuzzy) {
+    return cacheResult(normalized, {
+      lat: fuzzy.lat,
+      lng: fuzzy.lng,
+      label: fuzzy.label,
+      source: 'local-fuzzy',
     });
   }
 

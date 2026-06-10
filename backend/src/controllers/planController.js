@@ -23,8 +23,26 @@ function validateBody(body) {
   }
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) errors.push('date is required in YYYY-MM-DD format');
   if (!time || !/^\d{2}:\d{2}(:\d{2})?$/.test(time)) errors.push('time is required in HH:MM or HH:MM:SS format');
+  if (
+    body?.constraints?.maxDurationMinutes !== undefined &&
+    (!Number.isFinite(body.constraints.maxDurationMinutes) || body.constraints.maxDurationMinutes <= 0)
+  ) {
+    errors.push('constraints.maxDurationMinutes must be a positive number');
+  }
 
   return errors;
+}
+
+export function filterItinerariesByConstraints(result, constraints = {}) {
+  const maxDurationMinutes = constraints.maxDurationMinutes;
+  if (!Number.isFinite(maxDurationMinutes)) return result;
+  return {
+    ...result,
+    constraints: { maxDurationMinutes },
+    itineraries: result.itineraries.filter(
+      (itinerary) => itinerary.durationMinutes <= maxDurationMinutes
+    ),
+  };
 }
 
 async function resolvePlanPoint(point) {
@@ -92,7 +110,10 @@ export async function planHandler(req, res) {
       );
     }
 
-    const result = mapOtpPlan({ itineraries: allItineraries }, resolvedFrom, resolvedTo, date, time, optimizedFor);
+    const result = filterItinerariesByConstraints(
+      mapOtpPlan({ itineraries: allItineraries }, resolvedFrom, resolvedTo, date, time, optimizedFor),
+      req.body.constraints
+    );
 
     if (!result.itineraries.length) {
       return res.status(404).json(

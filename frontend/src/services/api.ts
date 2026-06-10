@@ -160,12 +160,17 @@ export type TripWhen = {
   time?: string;
 };
 
+export type TripConstraints = {
+  maxDurationMinutes?: number;
+};
+
 export async function planRoute(
   fromLabel: string,
   toLabel: string,
   filter: 'fastest' | 'cheapest' | 'comfortable' = 'fastest',
   coords: { fromCoords?: PlaceCoords; toCoords?: PlaceCoords } = {},
   when: TripWhen = { mode: 'now' },
+  constraints: TripConstraints = {},
 ): Promise<ApiRouteOption[]> {
   const now = new Date();
   let date = now.toISOString().slice(0, 10);
@@ -206,6 +211,7 @@ export async function planRoute(
       modes: ['WALK', 'BUS', 'SUBWAY'],
       optimizeFor: FILTER_TO_OPTIMIZE[filter] ?? 'quickest',
     },
+    ...(constraints.maxDurationMinutes ? { constraints } : {}),
   };
 
   if (import.meta.env.DEV) {
@@ -237,6 +243,36 @@ export async function planRoute(
     throw new Error('NO_ROUTES_FOUND');
   }
   return data.itineraries.map(mapItinerary);
+}
+
+export type AiRouteIntent = {
+  from: string | null;
+  to: string | null;
+  filter: 'fastest' | 'cheapest' | 'comfortable';
+  timeMode: 'now' | 'depart' | 'arrive';
+  date: string | null;
+  time: string | null;
+  maxDurationMinutes: number | null;
+};
+
+export type AiRouteIntentResponse =
+  | { status: 'ready'; intent: AiRouteIntent; source: string }
+  | {
+      status: 'needs_clarification';
+      intent: AiRouteIntent;
+      source: string;
+      missingFields: string[];
+      message: string;
+    };
+
+export async function parseAiRouteIntent(prompt: string): Promise<AiRouteIntentResponse> {
+  const res = await fetch('/api/ai/route-intent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt }),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return (await res.json()) as AiRouteIntentResponse;
 }
 
 /* ------------------------------------------------------------------ *

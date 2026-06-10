@@ -229,7 +229,9 @@
       "title": "Recent Trips",
       "subtitle": "Past journeys you can repeat or review.",
       "completed": "Completed",
-      "repeatTrip": "Repeat Trip"
+      "repeatTrip": "Repeat Trip",
+      "emptyTitle": "No trips yet",
+      "emptyCopy": "Routes you search will appear here."
     },
     "ai": {
       "title": "AI Plans",
@@ -242,7 +244,9 @@
       "title": "Offline Routes",
       "subtitle": "Downloaded routes available without internet.",
       "downloaded": "{size} - Downloaded {date}",
-      "remove": "Remove"
+      "remove": "Remove",
+      "emptyTitle": "No offline routes",
+      "emptyCopy": "Routes you view while online are cached here for offline use."
     }
   },
   "routeResults": {

@@ -185,6 +185,13 @@ const timeMode = ((queryString(currentRoute.query.timeMode) ??
   "now") as TimeMode);
 const tripDate = queryString(currentRoute.query.date) ?? state.date ?? "";
 const tripTime = queryString(currentRoute.query.time) ?? state.time ?? "";
+const parsedMaxDuration = Number(
+  queryString(currentRoute.query.maxDurationMinutes) ?? state.maxDurationMinutes,
+);
+const maxDurationMinutes =
+  Number.isFinite(parsedMaxDuration) && parsedMaxDuration > 0
+    ? parsedMaxDuration
+    : undefined;
 const departureAt = computeDepartureAt(timeMode, tripDate, tripTime);
 
 const sortBy = ref<"fastest" | "cheapest" | "comfortable">(
@@ -240,6 +247,7 @@ onMounted(async () => {
       toCoords: getPlaceCoords(destination),
     },
     { mode: timeMode, date: tripDate, time: tripTime },
+    { maxDurationMinutes },
   );
 });
 

@@ -7,6 +7,8 @@ import planRouter from './src/routes/plan.js';
 import ticketRouter from './src/routes/ticket.js';
 import paymentRouter from './src/routes/payment.js';
 import placesRouter from './src/routes/places.js';
+import favoritePlacesRouter from './src/routes/favoritePlaces.js';
+import aiRouter from './src/routes/ai.js';
 
 const app = express();
 
@@ -16,6 +18,8 @@ app.use('/api', planRouter);
 app.use('/api', ticketRouter);
 app.use('/api', paymentRouter);
 app.use('/api', placesRouter);
+app.use('/api', favoritePlacesRouter);
+app.use('/api', aiRouter);
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {

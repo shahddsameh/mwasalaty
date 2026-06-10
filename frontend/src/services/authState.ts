@@ -38,6 +38,9 @@ export async function ensureAuthInitialized() {
     authSubscription = supabase.auth.onAuthStateChange((_event, session) => {
       applySession(session);
       authReady.value = true;
+      if (session) {
+        void import("@/core/offline/syncService").then(({ performSync }) => performSync(true));
+      }
     }).data.subscription;
 
     authReady.value = true;

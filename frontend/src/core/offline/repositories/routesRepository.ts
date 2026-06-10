@@ -1,6 +1,6 @@
 import { db, type CachedRoute } from '@/db/appDb';
 import { checkOnline } from '../networkStatus';
-import { planRoute, type ApiRouteOption, type TripWhen } from '@/services/api';
+import { planRoute, type ApiRouteOption, type TripConstraints, type TripWhen } from '@/services/api';
 
 /**
  * Routes Repository
@@ -21,8 +21,8 @@ export interface RoutesResult {
 /**
  * Generate cache key for route query
  */
-function getCacheKey(from: string, to: string, filter: string): string {
-  return `${from}|${to}|${filter}`;
+function getCacheKey(from: string, to: string, filter: string, constraints: TripConstraints = {}): string {
+  return `${from}|${to}|${filter}|${constraints.maxDurationMinutes ?? ''}`;
 }
 
 /**
@@ -41,8 +41,9 @@ export async function getRoutes(
   filter: 'fastest' | 'cheapest' | 'comfortable' = 'fastest',
   coords: { fromCoords?: { lat: number; lng: number }; toCoords?: { lat: number; lng: number } } = {},
   when: TripWhen = { mode: 'now' },
+  constraints: TripConstraints = {},
 ): Promise<RoutesResult> {
-  const cacheKey = getCacheKey(fromLabel, toLabel, filter);
+  const cacheKey = getCacheKey(fromLabel, toLabel, filter, constraints);
 
   // Try to get from cache first
   const cachedRoute = await db.cachedRoutes.get(cacheKey);
@@ -62,7 +63,7 @@ export async function getRoutes(
 
   // If online, try to fetch fresh data
   try {
-    const routes = await planRoute(fromLabel, toLabel, filter, coords, when);
+    const routes = await planRoute(fromLabel, toLabel, filter, coords, when, constraints);
     
     // Cache the result
     const now = Date.now();
@@ -134,6 +135,13 @@ export async function clearExpiredRoutes(): Promise<void> {
 
   const keysToDelete = expiredRoutes.map(r => r.cacheKey);
   await db.cachedRoutes.bulkDelete(keysToDelete);
+}
+
+/**
+ * Remove a single cached route by its composite key
+ */
+export async function removeCachedRoute(cacheKey: string): Promise<void> {
+  await db.cachedRoutes.delete(cacheKey);
 }
 
 /**

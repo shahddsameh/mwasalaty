@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue';
 import { getRoutes, type RoutesResult } from '@/core/offline/repositories/routesRepository';
 import { addRecentSearch } from '@/core/offline/repositories/recentSearchesRepository';
-import type { ApiRouteOption, TripWhen } from '@/services/api';
+import type { ApiRouteOption, TripConstraints, TripWhen } from '@/services/api';
 
 /**
  * Composable for route planning with offline-first support
@@ -31,13 +31,14 @@ export function useRoutePlanning() {
     filter: 'fastest' | 'cheapest' | 'comfortable' = 'fastest',
     coords: { fromCoords?: { lat: number; lng: number }; toCoords?: { lat: number; lng: number } } = {},
     when: TripWhen = { mode: 'now' },
+    constraints: TripConstraints = {},
   ): Promise<void> {
     isLoading.value = true;
     error.value = null;
 
     try {
       // Use offline-first repository
-      const result: RoutesResult = await getRoutes(fromLabel, toLabel, filter, coords, when);
+      const result: RoutesResult = await getRoutes(fromLabel, toLabel, filter, coords, when, constraints);
       
       routes.value = result.routes;
       dataSource.value = result.source;

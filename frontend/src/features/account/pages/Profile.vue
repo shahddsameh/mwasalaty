@@ -470,7 +470,7 @@ onMounted(async () => {
     : userInfo.joined;
 
   try {
-    tickets.value = await getTickets(user.id);
+    tickets.value = await getTickets();
   } catch {
     // Leave the list empty if tickets can't be fetched; the page still renders.
     tickets.value = [];

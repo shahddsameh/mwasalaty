@@ -10,6 +10,16 @@ import {
   localizeRouteInstruction,
   resolveKnownPlace,
 } from "./placeLocalization";
+import { getCurrentSession } from "./supabaseAuth";
+
+/**
+ * Bearer auth header for the signed-in user, or an empty object when there is
+ * no session. Ticket read/refund endpoints are now scoped to the token's user.
+ */
+async function authHeader(): Promise<Record<string, string>> {
+  const session = await getCurrentSession();
+  return session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {};
+}
 
 const OTP_MODE_TO_TYPE: Record<string, string> = {
   WALK:   'walking',
@@ -412,7 +422,9 @@ export async function confirmCheckoutRedirect(
 }
 
 export async function getTicket(ticketId: string): Promise<Ticket> {
-  const res = await fetch(`/api/tickets/${encodeURIComponent(ticketId)}`);
+  const res = await fetch(`/api/tickets/${encodeURIComponent(ticketId)}`, {
+    headers: await authHeader(),
+  });
   if (!res.ok) throw new Error(await readApiError(res));
   return (await res.json()) as Ticket;
 }
@@ -422,19 +434,33 @@ export function subscribeToTicket(
   onTicket: (ticket: Ticket) => void,
 ): () => void {
   if (typeof EventSource === 'undefined') return () => {};
-  const source = new EventSource(`/api/tickets/${encodeURIComponent(ticketId)}/events`);
-  source.addEventListener('ticket', (event) => {
-    try {
-      onTicket(JSON.parse((event as MessageEvent<string>).data) as Ticket);
-    } catch {
-      // Ignore malformed stream messages and wait for the next update.
-    }
+  let source: EventSource | null = null;
+  let closed = false;
+  // EventSource can't set an Authorization header, so the access token is passed
+  // as a query param. Resolving the session is async, so open the stream once it
+  // is available and honour an early unsubscribe.
+  void getCurrentSession().then((session) => {
+    if (closed) return;
+    const token = session?.access_token;
+    const query = token ? `?access_token=${encodeURIComponent(token)}` : '';
+    source = new EventSource(`/api/tickets/${encodeURIComponent(ticketId)}/events${query}`);
+    source.addEventListener('ticket', (event) => {
+      try {
+        onTicket(JSON.parse((event as MessageEvent<string>).data) as Ticket);
+      } catch {
+        // Ignore malformed stream messages and wait for the next update.
+      }
+    });
   });
-  return () => source.close();
+  return () => {
+    closed = true;
+    source?.close();
+  };
 }
 
-export async function getTickets(userId: string): Promise<Ticket[]> {
-  const res = await fetch(`/api/tickets?userId=${encodeURIComponent(userId)}`);
+export async function getTickets(): Promise<Ticket[]> {
+  // The backend derives the user from the auth token; no userId query needed.
+  const res = await fetch('/api/tickets', { headers: await authHeader() });
   if (!res.ok) throw new Error(await readApiError(res));
   const data = (await res.json()) as { tickets?: Ticket[] };
   return data.tickets ?? [];
@@ -457,7 +483,7 @@ export type RefundResult = {
 export async function refundTicket(ticketId: string, legIds?: string[]): Promise<RefundResult> {
   const res = await fetch(`/api/tickets/${encodeURIComponent(ticketId)}/refund`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...(await authHeader()) },
     body: JSON.stringify(legIds?.length ? { legIds } : {}),
   });
   if (!res.ok) throw new Error(await readApiError(res));

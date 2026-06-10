@@ -130,18 +130,30 @@
         </button>
       </div>
       <div class="flex flex-col gap-2">
-        <button
+        <div
           v-for="recent in recentSearches"
           :key="recent.id ?? `${recent.from}-${recent.to}-${recent.searchedAt}`"
-          type="button"
-          class="flex items-center gap-2 rounded-lg border border-border p-2.5 text-start hover:border-primary hover:bg-secondary transition-all"
-          @click="applyRecent(recent)"
+          class="flex items-center gap-1 rounded-lg border border-border pe-1 hover:border-primary hover:bg-secondary transition-all"
         >
-          <History class="w-4 h-4 shrink-0 text-muted-foreground" />
-          <span class="min-w-0 truncate text-sm text-foreground">
-            {{ recent.from }} → {{ recent.to }}
-          </span>
-        </button>
+          <button
+            type="button"
+            class="flex min-w-0 flex-1 items-center gap-2 p-2.5 text-start"
+            @click="applyRecent(recent)"
+          >
+            <History class="w-4 h-4 shrink-0 text-muted-foreground" />
+            <span class="min-w-0 truncate text-sm text-foreground">
+              {{ recent.from }} → {{ recent.to }}
+            </span>
+          </button>
+          <button
+            type="button"
+            class="shrink-0 rounded-md p-1.5 text-muted-foreground hover:text-destructive transition-colors"
+            :aria-label="t('tripSearch.removeRecent')"
+            @click="removeRecent(recent)"
+          >
+            <X class="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </div>
   </section>
@@ -161,6 +173,7 @@ import {
   Sparkles,
   Star,
   Target,
+  X,
 } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import PlaceSearchInput from "./PlaceSearchInput.vue";
@@ -176,8 +189,12 @@ import {
 const router = useRouter();
 const { t } = useI18n();
 const store = useTripSearchStore();
-const { recentSearches, addRecentSearch, clearRecentSearches } =
+const { recentSearches, addRecentSearch, removeRecentSearch, clearRecentSearches } =
   useRecentSearches();
+
+function removeRecent(recent: { id?: number }) {
+  if (typeof recent.id === "number") void removeRecentSearch(recent.id);
+}
 
 const startError = ref("");
 const destinationError = ref("");

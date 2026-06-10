@@ -4,6 +4,7 @@ import { db, type RecentSearchRecord } from "@/db/appDb";
 import {
   addRecentSearch as addRecentSearchRepo,
   clearRecentSearches as clearRecentSearchesRepo,
+  removeRecentSearch as removeRecentSearchRepo,
 } from "@/core/offline/repositories/recentSearchesRepository";
 
 /**
@@ -31,7 +32,12 @@ export function useRecentSearches(limit = 10) {
      */
     addRecentSearch: (search: Omit<RecentSearchRecord, "id">) =>
       addRecentSearchRepo(search),
-    
+
+    /**
+     * Remove a single recent search by id
+     */
+    removeRecentSearch: (id: number) => removeRecentSearchRepo(id),
+
     /**
      * Clear all recent searches
      */

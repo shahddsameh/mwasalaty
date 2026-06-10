@@ -253,11 +253,14 @@ export function mapOtpPlan(
   time,
   optimizedFor = "quickest",
 ) {
-  const mapped = deduplicateByPattern(
-    otpPlan.itineraries.filter((itin) =>
-      itin.legs.some((leg) => leg.mode !== "WALK"),
-    ),
-  ).map((itin, i) => mapItinerary(itin, i));
+  // Keep walk-only itineraries: for short, off-grid trips a direct walk is
+  // often the genuine best option, and discarding it forces an absurd transit
+  // detour to surface instead. deduplicateByPattern collapses walk-only
+  // itineraries (their routePattern is "") down to a single entry, and the
+  // quickest sort naturally ranks a short walk above a long transit route.
+  const mapped = deduplicateByPattern(otpPlan.itineraries).map((itin, i) =>
+    mapItinerary(itin, i),
+  );
 
   const sorted = sortItineraries(mapped, optimizedFor).map((itin, i) => ({
     ...itin,

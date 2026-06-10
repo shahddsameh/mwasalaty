@@ -117,12 +117,18 @@
               {{ t("routeResults.mapOverview") }}
             </h3>
             <div
-              class="aspect-square bg-gradient-to-br from-primary-soft to-warning-soft rounded-lg flex items-center justify-center border-2 border-border"
+              class="aspect-square overflow-hidden rounded-lg border-2 border-border"
             >
-              <div class="text-center">
-                <MapPin class="w-16 h-16 text-primary mx-auto mb-2" />
-                <p class="text-sm text-muted-foreground">{{ t("routeResults.interactiveMap") }}</p>
-                <p class="text-xs text-muted-foreground">{{ t("routeResults.showingAllRoutes") }}</p>
+              <RoutePreviewMap v-if="previewSteps.length" :key="previewRouteId" :steps="previewSteps" />
+              <div
+                v-else
+                class="h-full w-full bg-gradient-to-br from-primary-soft to-warning-soft flex items-center justify-center"
+              >
+                <div class="text-center">
+                  <MapPin class="w-16 h-16 text-primary mx-auto mb-2" />
+                  <p class="text-sm text-muted-foreground">{{ t("routeResults.interactiveMap") }}</p>
+                  <p class="text-xs text-muted-foreground">{{ t("routeResults.showingAllRoutes") }}</p>
+                </div>
               </div>
             </div>
             <div class="mt-6 space-y-3">
@@ -142,6 +148,7 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { ArrowLeft, CloudOff, MapPin, SlidersHorizontal } from "@lucide/vue";
 import RouteCard from "@/components/route/RouteCard.vue";
+import RoutePreviewMap from "../components/RoutePreviewMap.vue";
 import { type ApiRouteOption } from "@/services/api";
 import { useRoutePlanning } from "@/composables/useRoutePlanning";
 import { localizePlaceName } from "@/services/placeLocalization";
@@ -276,6 +283,10 @@ const sortedRoutes = computed(() => {
 
   return routesCopy;
 });
+
+// Map preview shows the currently top-ranked route for the active sort tab.
+const previewSteps = computed(() => sortedRoutes.value[0]?.detailSteps ?? []);
+const previewRouteId = computed(() => sortedRoutes.value[0]?.id ?? "");
 
 const Stat = defineComponent({
   props: { label: String, value: String },

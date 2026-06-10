@@ -124,7 +124,7 @@
           <section
             class="bg-card rounded-xl p-4 md:p-5 border-2 border-border text-sm text-muted-foreground"
           >
-            <div class="font-display text-foreground mb-1">Mwasalaty</div>
+            <div class="font-display text-foreground mb-1">{{ t("app.name") }}</div>
             <div>{{ t("settings.version") }}</div>
             <div>{{ t("settings.rights") }}</div>
           </section>

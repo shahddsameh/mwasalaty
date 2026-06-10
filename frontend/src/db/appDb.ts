@@ -8,6 +8,8 @@ export type SavedTrip = {
   filter: string;
   duration?: string;
   cost?: string;
+  // Optional user-given label (not indexed; no schema bump needed).
+  name?: string;
   createdAt: number;
 };
 

@@ -79,15 +79,17 @@
                 </button>
               </div>
             </div>
-            <button
+            <div
               v-for="place in savedPlaces"
               :key="place.id"
-              class="w-full p-3 rounded-lg border border-border hover:border-primary hover:bg-secondary transition-all text-start"
-              @click="store.destination = place.address"
+              class="flex items-center gap-1 rounded-lg border border-border pe-1 hover:border-primary hover:bg-secondary transition-all"
             >
-              <div class="flex items-center gap-2.5">
+              <button
+                class="flex min-w-0 flex-1 items-center gap-2.5 p-3 text-start"
+                @click="store.destination = place.address"
+              >
                 <div
-                  class="w-8 h-8 rounded-lg flex items-center justify-center"
+                  class="w-8 h-8 shrink-0 rounded-lg flex items-center justify-center"
                   :style="{ backgroundColor: place.softColor }"
                 >
                   <component
@@ -96,16 +98,24 @@
                     :style="{ color: place.color }"
                   />
                 </div>
-                <div>
-                  <div class="text-foreground font-medium text-sm">
+                <div class="min-w-0">
+                  <div class="text-foreground font-medium text-sm truncate">
                     {{ savedPlaceLabel(place) }}
                   </div>
-                  <div class="text-xs text-muted-foreground">
+                  <div class="text-xs text-muted-foreground truncate">
                     {{ place.address }}
                   </div>
                 </div>
-              </div>
-            </button>
+              </button>
+              <button
+                type="button"
+                class="shrink-0 rounded-md p-2 text-muted-foreground hover:text-destructive transition-colors"
+                :aria-label="t('home.removePlace')"
+                @click="removeSavedPlace(place.id)"
+              >
+                <Trash2 class="w-4 h-4" />
+              </button>
+            </div>
           </Panel>
 
           <Panel :title="t('home.popularDestinations')">
@@ -140,7 +150,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, h, ref } from "vue";
+import { computed, defineComponent, h, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import {
   Briefcase,
@@ -154,6 +164,7 @@ import {
   ShoppingBag,
   Star,
   Train,
+  Trash2,
   Triangle,
 } from "@lucide/vue";
 import TripSearch from "@/features/trip-planner/components/TripSearch.vue";
@@ -161,15 +172,23 @@ import PlaceAutocomplete from "@/features/home/components/PlaceAutocomplete.vue"
 import { placeSuggestions } from "@/features/home/services/placeSuggestions";
 import { useTripSearchStore } from "@/stores/tripSearch";
 import {
-  getSavedPlaces,
-  savePlace,
+  describeSavedPlace,
+  makeSavedPlaceId,
+  normalizeSavedPlaceType,
   type SavedPlace,
   type SavedPlaceIconKey,
   type SavedPlaceType,
 } from "@/features/home/services/savedPlaces";
+import { useFavoritePlaces } from "@/composables/useFavoritePlaces";
 
 const { t } = useI18n();
 const store = useTripSearchStore();
+const { favoritePlaces, saveFavoritePlace, removeFavoritePlace } =
+  useFavoritePlaces();
+
+function removeSavedPlace(placeId: string) {
+  void removeFavoritePlace(placeId);
+}
 
 const savingPlace = ref(false);
 const newPlaceName = ref("");
@@ -177,7 +196,16 @@ const newPlaceAddress = ref("");
 const newPlaceType = ref<SavedPlaceType>("other");
 const savePlaceError = ref("");
 
-const savedPlaces = ref(getSavedPlaces());
+// Dynamic, offline-first saved places from IndexedDB (reactive via liveQuery).
+const savedPlaces = computed<SavedPlace[]>(() =>
+  favoritePlaces.value.map((place) => ({
+    id: place.id,
+    name: place.name,
+    address: place.address,
+    type: normalizeSavedPlaceType(place.type ?? "other"),
+    ...describeSavedPlace(place.name, place.address, place.type ?? "other"),
+  })),
+);
 
 const placeTypes = [
   { value: "home" as const, labelKey: "home.placeTypes.home" },
@@ -311,7 +339,7 @@ function closeSavePlace() {
   savePlaceError.value = "";
 }
 
-function addSavedPlace() {
+async function addSavedPlace() {
   const address = newPlaceAddress.value.trim();
   const name = newPlaceName.value.trim() || address;
 
@@ -320,10 +348,12 @@ function addSavedPlace() {
     return;
   }
 
-  savedPlaces.value = savePlace({
+  await saveFavoritePlace({
+    id: makeSavedPlaceId(name, address),
     name,
     address,
     type: newPlaceType.value,
+    createdAt: Date.now(),
   });
   closeSavePlace();
 }

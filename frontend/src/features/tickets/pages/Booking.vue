@@ -26,23 +26,53 @@
 
           <Card title="Legs">
             <div class="space-y-3">
-              <div
-                v-for="(leg, i) in ticketableLegs"
-                :key="leg.legId ?? i"
-                class="flex items-center justify-between gap-3 p-3 bg-secondary rounded-lg"
-              >
-                <div class="min-w-0">
-                  <div class="font-display text-foreground">
-                    {{ modeLabel(leg) }}
+              <template v-for="group in legGroups">
+                <!-- Bus / non-metro leg: one row, its own fare. -->
+                <div
+                  v-if="group.kind === 'leg'"
+                  :key="group.key"
+                  class="flex items-center justify-between gap-3 p-3 bg-secondary rounded-lg"
+                >
+                  <div class="min-w-0">
+                    <div class="font-display text-foreground">
+                      {{ modeLabel(group.leg) }}
+                    </div>
+                    <div class="text-sm text-muted-foreground truncate">
+                      {{ group.leg.from?.name }} -> {{ group.leg.to?.name }}
+                    </div>
                   </div>
-                  <div class="text-sm text-muted-foreground truncate">
-                    {{ leg.from?.name }} -> {{ leg.to?.name }}
+                  <div class="font-display text-foreground whitespace-nowrap">
+                    {{ group.amount }} {{ currency }}
                   </div>
                 </div>
-                <div class="font-display text-foreground whitespace-nowrap">
-                  {{ leg.fare?.amount ?? 0 }} {{ currency }}
+
+                <!-- Metro journey: keep each line step + interchange, one fare. -->
+                <div v-else :key="group.key" class="p-3 bg-secondary rounded-lg">
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="font-display text-foreground">Metro journey</div>
+                    <div class="font-display text-foreground whitespace-nowrap">
+                      {{ group.amount }} {{ currency }}
+                    </div>
+                  </div>
+                  <div class="mt-2 space-y-1">
+                    <div
+                      v-for="(leg, i) in group.legs"
+                      :key="leg.legId ?? i"
+                    >
+                      <div class="text-sm text-muted-foreground truncate">
+                        <span class="text-foreground">{{ group.lineNames[i] }}</span>
+                        &middot; {{ leg.from?.name }} -> {{ leg.to?.name }}
+                      </div>
+                      <div
+                        v-if="i < group.legs.length - 1"
+                        class="text-xs text-muted-foreground pl-3"
+                      >
+                        &#8627; transfer at {{ leg.to?.name }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </template>
             </div>
           </Card>
 
@@ -247,40 +277,75 @@ const total = computed(
     ticketableLegs.value.reduce((sum, l) => sum + (l.fare?.amount ?? 0), 0),
 );
 
-// A metro journey is a single fare even when it spans several lines, so the
-// fare breakdown collapses each run of consecutive SUBWAY legs into one line
-// (summing the legs' fares — the backend places the combined fare on the run's
-// first leg and 0 on the rest).
-const fareLines = computed(() => {
-  const lines: { key: string; label: string; amount: number }[] = [];
+// A metro journey is a single fare even when it spans several lines (line
+// interchanges are free), so we collapse each run of consecutive SUBWAY legs
+// into one group. The combined fare is the sum of the run's leg fares — the
+// backend places the combined fare on the run's first leg and 0 on the rest,
+// but summing also stays correct if that ever changes. Buses stay one per group.
+type MetroGroup = {
+  kind: "metro";
+  key: string;
+  legs: ApiLeg[];
+  lineNames: string[];
+  amount: number;
+};
+type SingleLegGroup = {
+  kind: "leg";
+  key: string;
+  leg: ApiLeg;
+  fareLabel: string;
+  amount: number;
+};
+type LegGroup = MetroGroup | SingleLegGroup;
+
+const legGroups = computed<LegGroup[]>(() => {
+  const groups: LegGroup[] = [];
   const legs = ticketableLegs.value;
   for (let i = 0; i < legs.length; ) {
     if (legs[i].mode !== "SUBWAY") {
-      lines.push({
-        key: legs[i].legId ?? `leg_${i}`,
-        label: modeLabel(legs[i]),
-        amount: legs[i].fare?.amount ?? 0,
+      const leg = legs[i];
+      groups.push({
+        kind: "leg",
+        key: leg.legId ?? `leg_${i}`,
+        leg,
+        fareLabel: modeLabel(leg),
+        amount: leg.fare?.amount ?? 0,
       });
       i += 1;
       continue;
     }
     let j = i;
     let amount = 0;
-    const names: string[] = [];
+    const run: ApiLeg[] = [];
+    const lineNames: string[] = [];
     while (j < legs.length && legs[j].mode === "SUBWAY") {
       amount += legs[j].fare?.amount ?? 0;
-      names.push(legs[j].route?.shortName ?? legs[j].route?.longName ?? "Metro");
+      lineNames.push(
+        legs[j].route?.shortName ?? legs[j].route?.longName ?? "Metro",
+      );
+      run.push(legs[j]);
       j += 1;
     }
-    lines.push({
+    groups.push({
+      kind: "metro",
       key: legs[i].legId ?? `metro_${i}`,
-      label: `Metro ${names.join(" → ")}`,
+      legs: run,
+      lineNames,
       amount,
     });
     i = j;
   }
-  return lines;
+  return groups;
 });
+
+// Fare breakdown rows derive from the same grouping (compact metro label).
+const fareLines = computed(() =>
+  legGroups.value.map((g) => ({
+    key: g.key,
+    label: g.kind === "metro" ? `Metro ${g.lineNames.join(" → ")}` : g.fareLabel,
+    amount: g.amount,
+  })),
+);
 
 const processing = ref(false);
 const errorMessage = ref("");

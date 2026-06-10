@@ -46,14 +46,6 @@
             </div>
           </Card>
 
-          <Card title="Passenger Information">
-            <AppInput
-              v-model="passengerName"
-              label="Full Name"
-              placeholder="Enter your full name"
-            />
-          </Card>
-
           <Card title="Payment Method">
             <div
               class="p-4 border-2 border-primary bg-secondary rounded-lg flex items-start gap-3"
@@ -110,10 +102,10 @@
         <aside class="space-y-6">
           <Card title="Fare Breakdown" sticky>
             <InfoRow
-              v-for="leg in ticketableLegs"
-              :key="leg.legId"
-              :label="modeLabel(leg)"
-              :value="`${leg.fare?.amount ?? 0} ${currency}`"
+              v-for="line in fareLines"
+              :key="line.key"
+              :label="line.label"
+              :value="`${line.amount} ${currency}`"
               small
             />
             <div
@@ -168,7 +160,6 @@ import { computed, defineComponent, h, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { CloudOff, CreditCard, Loader2, ShieldCheck } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
-import AppInput from "@/components/ui/AppInput.vue";
 import Modal from "@/components/ui/Modal.vue";
 import type { ApiRouteOption, ApiLeg } from "@/services/api";
 import { createCheckoutSession, planRoute } from "@/services/api";
@@ -256,7 +247,41 @@ const total = computed(
     ticketableLegs.value.reduce((sum, l) => sum + (l.fare?.amount ?? 0), 0),
 );
 
-const passengerName = ref("");
+// A metro journey is a single fare even when it spans several lines, so the
+// fare breakdown collapses each run of consecutive SUBWAY legs into one line
+// (summing the legs' fares — the backend places the combined fare on the run's
+// first leg and 0 on the rest).
+const fareLines = computed(() => {
+  const lines: { key: string; label: string; amount: number }[] = [];
+  const legs = ticketableLegs.value;
+  for (let i = 0; i < legs.length; ) {
+    if (legs[i].mode !== "SUBWAY") {
+      lines.push({
+        key: legs[i].legId ?? `leg_${i}`,
+        label: modeLabel(legs[i]),
+        amount: legs[i].fare?.amount ?? 0,
+      });
+      i += 1;
+      continue;
+    }
+    let j = i;
+    let amount = 0;
+    const names: string[] = [];
+    while (j < legs.length && legs[j].mode === "SUBWAY") {
+      amount += legs[j].fare?.amount ?? 0;
+      names.push(legs[j].route?.shortName ?? legs[j].route?.longName ?? "Metro");
+      j += 1;
+    }
+    lines.push({
+      key: legs[i].legId ?? `metro_${i}`,
+      label: `Metro ${names.join(" → ")}`,
+      amount,
+    });
+    i = j;
+  }
+  return lines;
+});
+
 const processing = ref(false);
 const errorMessage = ref("");
 const loginModalOpen = ref(false);
@@ -288,12 +313,20 @@ function pickByFilter(options: ApiRouteOption[]): ApiRouteOption {
   );
 }
 
+// Ticket passenger name: the signed-in user's profile name (or their email
+// handle as a fallback). Guests have no profile, so the name is omitted and the
+// ticket/billing fall back to "Guest" server-side. PayMob collects the actual
+// cardholder name separately at checkout.
+function resolvePassengerName(): string | undefined {
+  const meta = user.value?.user_metadata as Record<string, unknown> | undefined;
+  const fullName = typeof meta?.full_name === "string" ? meta.full_name.trim() : "";
+  if (fullName) return fullName;
+  const email = user.value?.email;
+  return email ? email.split("@")[0] : undefined;
+}
+
 async function startCheckout() {
   errorMessage.value = "";
-  if (!passengerName.value.trim()) {
-    errorMessage.value = "Please enter the passenger's full name.";
-    return;
-  }
   // A ticket may never be purchased from a cached/offline route preview.
   if (!isOnline.value) {
     errorMessage.value =
@@ -338,7 +371,7 @@ async function startCheckout() {
       ...(departureAt ? { departureAt } : {}),
       passenger: {
         userId: user.value?.id ?? "guest",
-        name: passengerName.value.trim(),
+        ...(resolvePassengerName() ? { name: resolvePassengerName() } : {}),
         email: user.value?.email ?? undefined,
         phone:
           typeof user.value?.user_metadata?.phone === "string"
@@ -364,6 +397,9 @@ async function startCheckout() {
           to: { name: l.to?.name ?? "" },
           fareAmount: l.fare?.amount ?? 0,
           currency: l.fare?.currency ?? freshCurrency,
+          ...(typeof l.stationCount === "number"
+            ? { stationCount: l.stationCount }
+            : {}),
         })),
       },
     });

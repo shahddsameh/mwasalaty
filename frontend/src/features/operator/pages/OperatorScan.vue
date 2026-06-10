@@ -19,6 +19,42 @@
           placeholder='{"ticketId":"ticket_demo","signature":"demo_signature"}'
         />
 
+        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="text-sm text-foreground" for="scanner-profile">
+              Scanner profile
+            </label>
+            <select
+              id="scanner-profile"
+              v-model="scannerProfileId"
+              class="mt-2 w-full rounded-lg border border-border bg-muted p-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+              <option value="scanner_subway_001">Subway Scanner</option>
+              <option value="scanner_subway_m2">Subway M2</option>
+              <option value="scanner_bus_001">Bus Scanner</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-sm text-foreground" for="stations-traveled">
+              Stations traveled (metro)
+            </label>
+            <input
+              id="stations-traveled"
+              v-model="stationsTraveled"
+              type="number"
+              min="1"
+              inputmode="numeric"
+              placeholder="e.g. 12"
+              class="mt-2 w-full rounded-lg border border-border bg-muted p-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+            <p class="mt-1 text-xs text-muted-foreground">
+              Rejected if it exceeds the tier the ticket was paid for. Leave blank
+              for buses.
+            </p>
+          </div>
+        </div>
+
         <button
           class="mt-4 w-full rounded-lg bg-primary px-4 py-2.5 text-primary-foreground hover:bg-primary-hover disabled:opacity-60"
           :disabled="loading"
@@ -43,6 +79,8 @@ import { ref } from "vue";
 import { useApi } from "@/composables/useApi";
 
 const qrPayload = ref("");
+const scannerProfileId = ref("scanner_subway_001");
+const stationsTraveled = ref("");
 const message = ref("");
 const { loading, post } = useApi();
 
@@ -51,12 +89,17 @@ async function validateTicket() {
 
   try {
     const payload = JSON.parse(qrPayload.value);
+    // Only send a numeric station count when the operator entered one; an empty
+    // field (or a bus scan) leaves the metro station limit unchecked.
+    const stations = Number.parseInt(stationsTraveled.value, 10);
     const result = await post<{ status: string; message?: string }>(
       "/api/tickets/scan/validate",
       {
         qrPayload: payload,
-        operatorId: "operator_demo",
-        deviceId: "web_scanner",
+        scannerProfileId: scannerProfileId.value,
+        ...(Number.isFinite(stations) && stations > 0
+          ? { stationsTraversed: stations }
+          : {}),
         validatedAt: new Date().toISOString(),
       },
     );

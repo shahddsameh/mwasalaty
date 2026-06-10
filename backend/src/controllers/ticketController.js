@@ -67,7 +67,7 @@ export async function getScannerProfilesHandler(_req, res) {
 }
 
 export async function scanValidateHandler(req, res) {
-  const { qrPayload, scannerProfileId } = req.body ?? {};
+  const { qrPayload, scannerProfileId, stationsTraversed } = req.body ?? {};
   const fieldErrors = [];
   if (!qrPayload) fieldErrors.push('qrPayload is required');
   if (!scannerProfileId) fieldErrors.push('scannerProfileId is required');
@@ -75,7 +75,7 @@ export async function scanValidateHandler(req, res) {
     return res.status(400).json(makeError(ErrorCodes.VALIDATION_ERROR, 'Request validation failed', { fields: fieldErrors }));
   }
   try {
-    const result = scanValidate(qrPayload, scannerProfileId);
+    const result = scanValidate(qrPayload, scannerProfileId, { stationsTraversed });
     return res.status(200).json(result);
   } catch (err) {
     return handleServiceError(res, err);

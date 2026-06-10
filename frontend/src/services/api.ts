@@ -37,6 +37,9 @@ export type ApiLeg = {
   instruction: string;
   geometry?: { lat: number; lng: number }[];
   fare: ApiFare;
+  // Stations this leg covers; for metro it is the combined count of the whole
+  // metro journey (used to set the ticket's tier/station limit).
+  stationCount?: number;
 };
 
 export type ApiItinerary = {
@@ -336,13 +339,14 @@ export type CheckoutLeg = {
   to: { name: string };
   fareAmount: number;
   currency: string;
+  stationCount?: number;
 };
 
 export type CreateCheckoutPayload = {
   planId: string;
   itineraryId: string;
   departureAt?: string;
-  passenger: { userId: string; name: string; email?: string; phone?: string };
+  passenger: { userId: string; name?: string; email?: string; phone?: string };
   paymentBreakdown: {
     fareAmount: number;
     serviceFee: number;

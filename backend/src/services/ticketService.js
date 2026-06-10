@@ -5,10 +5,13 @@ import { ErrorCodes } from '../helpers/errors.js';
 
 const TRANSIT_MODES = new Set(['BUS', 'METRO', 'SUBWAY', 'TRAM', 'RAIL', 'MICROBUS']);
 
+// Tiers mirror calculateFare() in mappers/tripMapper.js (10/12/15/20 EGP) so a
+// ticket's station limit matches the fare the rider actually paid.
 const METRO_TIERS = [
   { tier: 1, min: 1,  max: 9,        label: '1-9 stations' },
   { tier: 2, min: 10, max: 16,       label: '10-16 stations' },
-  { tier: 3, min: 17, max: Infinity, label: '17+ stations' },
+  { tier: 3, min: 17, max: 23,       label: '17-23 stations' },
+  { tier: 4, min: 24, max: Infinity, label: '24+ stations' },
 ];
 
 function normalizeMode(mode) {
@@ -219,7 +222,7 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
   };
 }
 
-export function scanValidate(qrPayload, scannerProfileId) {
+export function scanValidate(qrPayload, scannerProfileId, { stationsTraversed } = {}) {
   if (qrPayload?.type !== 'MWASALATY_MVP_TICKET') {
     throw {
       code: ErrorCodes.INVALID_QR_PAYLOAD,
@@ -330,6 +333,17 @@ export function scanValidate(qrPayload, scannerProfileId) {
   }
 
   const leg = unusedLegs[0];
+
+  if (normalizeMode(leg.mode) === 'SUBWAY' && leg.subway && typeof stationsTraversed === 'number') {
+    if (stationsTraversed > leg.subway.maxStations) {
+      throw {
+        code: ErrorCodes.STATION_LIMIT_EXCEEDED,
+        message: `Passenger traveled ${stationsTraversed} stations but the ticket only covers up to ${leg.subway.maxStations} stations (Tier ${leg.subway.tier})`,
+        details: { ticketId: ticket.ticketId, ticketLegId: leg.ticketLegId, tier: leg.subway.tier, maxStations: leg.subway.maxStations, stationsTraversed },
+      };
+    }
+  }
+
   const resolvedAt = new Date().toISOString();
 
   leg.status = 'used';

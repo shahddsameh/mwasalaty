@@ -30,7 +30,7 @@
             @click="selectProfile(profile)"
           >
             <span class="text-xs font-bold uppercase text-muted-foreground">{{ profile.scannerProfileId }}</span>
-            <strong class="mt-2 block text-2xl">{{ profile.label || profile.scannerProfileId }}</strong>
+            <strong class="mt-2 block text-2xl">{{ displayProfile(profile) }}</strong>
             <span class="mt-3 inline-flex rounded-full bg-muted px-3 py-1 text-sm font-bold">
               {{ displayMode(profile.mode) }} / {{ profile.routeShortName || $t("profile.genericRoute") }}
             </span>
@@ -51,7 +51,7 @@ import StateView from "@/components/shared/StateView.vue";
 import { useOnline } from "@/composables/useOnline";
 import { getScannerProfiles, type ScannerProfile } from "@/services/api";
 import { getSelectedProfile, setSelectedProfile, startShift } from "@/services/session";
-import { displayMode } from "@/services/format";
+import { displayMode, displayProfile } from "@/services/format";
 
 const router = useRouter();
 const { t } = useI18n();

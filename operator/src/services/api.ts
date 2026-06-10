@@ -3,6 +3,7 @@ export type ScannerMode = "BUS" | "SUBWAY";
 export type ScannerProfile = {
   scannerProfileId: string;
   label?: string;
+  labelAr?: string;
   mode: ScannerMode;
   routeShortName?: string;
   operatorId: string;

@@ -269,6 +269,39 @@
       "emptyCopy": "Routes you view while online are cached here for offline use."
     }
   },
+  "operatorScan": {
+    "title": "Operator Scan",
+    "subtitle": "Validate a passenger ticket QR payload from an operator device.",
+    "qrPayload": "QR payload",
+    "qrPlaceholder": "{\"ticketId\":\"ticket_demo\",\"signature\":\"demo_signature\"}",
+    "scannerProfile": "Scanner profile",
+    "profileFilter": "Filter by line or route (e.g. M2, 108)",
+    "subway": "Subway",
+    "bus": "Bus",
+    "stationsTraveled": "Stations traveled (metro)",
+    "stationsPlaceholder": "e.g. 12",
+    "stationsHelp": "Enter at the exit scan. It is rejected if it exceeds the paid ticket tier. Leave blank at entry or for buses.",
+    "validating": "Validating...",
+    "validate": "Validate ticket",
+    "results": {
+      "valid": "Ticket validated successfully.",
+      "status": "Scan result: {status}"
+    },
+    "errors": {
+      "profiles": "Could not load scanner profiles.",
+      "validate": "Could not validate ticket.",
+      "invalidQr": "The QR payload is invalid.",
+      "ticketNotFound": "Ticket not found.",
+      "expired": "This ticket has expired.",
+      "alreadyUsed": "This ticket leg has already been used.",
+      "refunded": "This ticket leg has been refunded.",
+      "noMatch": "This ticket has no leg matching the selected scanner.",
+      "ambiguous": "Multiple ticket legs match this scanner. Choose a specific scanner profile.",
+      "stationLimit": "The traveled station count exceeds this ticket's limit.",
+      "profileNotFound": "The selected scanner profile was not found.",
+      "validation": "Complete the required scan information."
+    }
+  },
   "routeResults": {
     "title": "Route Options",
     "backToSearch": "Back to Search",

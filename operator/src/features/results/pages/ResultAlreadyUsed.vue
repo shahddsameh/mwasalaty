@@ -20,6 +20,7 @@ import { useI18n } from "vue-i18n";
 import ResultScreen from "@/components/ui/ResultScreen.vue";
 import { getLatestOutcome } from "@/features/results/resultStore";
 import { formatDateTime } from "@/services/format";
+import { getCurrentLocale } from "@/i18n";
 
 const router = useRouter();
 const { t } = useI18n();
@@ -27,8 +28,12 @@ const outcome = getLatestOutcome();
 
 const support = computed(() => {
   const validatedBy = outcome?.detail.validatedBy as Record<string, unknown> | undefined;
-  const scanner = typeof validatedBy?.label === "string"
-    ? validatedBy.label
+  const localizedLabel = getCurrentLocale() === "ar" ? validatedBy?.labelAr : validatedBy?.label;
+  const fallbackLabel = typeof validatedBy?.label === "string" ? validatedBy.label : undefined;
+  const scanner = typeof localizedLabel === "string"
+    ? localizedLabel
+    : fallbackLabel
+      ? fallbackLabel
     : typeof validatedBy?.scannerProfileId === "string"
       ? validatedBy.scannerProfileId
       : t("common.unknown");

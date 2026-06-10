@@ -28,18 +28,18 @@ const ROUTES_TXT = join(
 // The two generic catch-alls match any route of their mode. Kept first so demos
 // and existing operator unit tests (scanner_bus_001 / scanner_subway_001) work.
 const GENERIC_PROFILES = [
-  { scannerProfileId: 'scanner_bus_001',    label: 'Bus Scanner',    operatorId: 'operator_bus_001',    deviceId: 'scanner_web_demo_bus',    mode: 'BUS' },
-  { scannerProfileId: 'scanner_subway_001', label: 'Subway Scanner', operatorId: 'operator_subway_001', deviceId: 'scanner_web_demo_subway', mode: 'SUBWAY' },
+  { scannerProfileId: 'scanner_bus_001',    label: 'Bus Scanner',    labelAr: 'ماسح الحافلات', operatorId: 'operator_bus_001',    deviceId: 'scanner_web_demo_bus',    mode: 'BUS' },
+  { scannerProfileId: 'scanner_subway_001', label: 'Subway Scanner', labelAr: 'ماسح المترو',   operatorId: 'operator_subway_001', deviceId: 'scanner_web_demo_subway', mode: 'SUBWAY' },
 ];
 
 // Fallback used only if routes.txt cannot be read/parsed at startup.
 const FALLBACK_PROFILES = [
   ...GENERIC_PROFILES,
-  { scannerProfileId: 'scanner_subway_m1', label: 'Subway M1', operatorId: 'operator_subway_001', deviceId: 'scanner_web_l1', mode: 'SUBWAY', routeShortName: 'M1' },
-  { scannerProfileId: 'scanner_subway_m2', label: 'Subway M2', operatorId: 'operator_subway_001', deviceId: 'scanner_web_l2', mode: 'SUBWAY', routeShortName: 'M2' },
-  { scannerProfileId: 'scanner_subway_m3', label: 'Subway M3', operatorId: 'operator_subway_001', deviceId: 'scanner_web_l3', mode: 'SUBWAY', routeShortName: 'M3' },
-  { scannerProfileId: 'scanner_bus_14',  label: 'Bus 14',  operatorId: 'operator_bus_001', deviceId: 'scanner_web_demo_001', mode: 'BUS', routeShortName: '14' },
-  { scannerProfileId: 'scanner_bus_108', label: 'Bus 108', operatorId: 'operator_bus_001', deviceId: 'scanner_web_demo_002', mode: 'BUS', routeShortName: '108' },
+  { scannerProfileId: 'scanner_subway_m1', label: 'Subway M1', labelAr: 'مترو M1', operatorId: 'operator_subway_001', deviceId: 'scanner_web_l1', mode: 'SUBWAY', routeShortName: 'M1' },
+  { scannerProfileId: 'scanner_subway_m2', label: 'Subway M2', labelAr: 'مترو M2', operatorId: 'operator_subway_001', deviceId: 'scanner_web_l2', mode: 'SUBWAY', routeShortName: 'M2' },
+  { scannerProfileId: 'scanner_subway_m3', label: 'Subway M3', labelAr: 'مترو M3', operatorId: 'operator_subway_001', deviceId: 'scanner_web_l3', mode: 'SUBWAY', routeShortName: 'M3' },
+  { scannerProfileId: 'scanner_bus_14',  label: 'Bus 14',  labelAr: 'حافلة 14',  operatorId: 'operator_bus_001', deviceId: 'scanner_web_demo_001', mode: 'BUS', routeShortName: '14' },
+  { scannerProfileId: 'scanner_bus_108', label: 'Bus 108', labelAr: 'حافلة 108', operatorId: 'operator_bus_001', deviceId: 'scanner_web_demo_002', mode: 'BUS', routeShortName: '108' },
 ];
 
 // Minimal quote-aware CSV row parser — handles double-quoted fields that may
@@ -95,6 +95,7 @@ function buildProfilesFromGtfs() {
     if (routeType === '1') {
       subway.push({
         scannerProfileId: `scanner_subway_${shortName.toLowerCase()}`,
+        labelAr: `مترو ${shortName}`,
         label: `Subway ${shortName}${longName ? ` — ${longName}` : ''}`,
         operatorId: 'operator_subway_001',
         deviceId: `scanner_web_${routeId}`,
@@ -104,6 +105,7 @@ function buildProfilesFromGtfs() {
     } else if (routeType === '3') {
       bus.push({
         scannerProfileId: `scanner_bus_${routeId}`,
+        labelAr: `حافلة ${shortName}`,
         label: `Bus ${shortName}${longName ? ` — ${longName}` : ''}`,
         operatorId: 'operator_bus_001',
         deviceId: `scanner_web_${routeId}`,
@@ -133,4 +135,8 @@ export function getAllProfiles() {
 
 export function getProfileById(id) {
   return profiles.find(p => p.scannerProfileId === id) ?? null;
+}
+
+export function getProfileByOperatorDevice(operatorId, deviceId) {
+  return profiles.find(p => p.operatorId === operatorId && p.deviceId === deviceId) ?? null;
 }

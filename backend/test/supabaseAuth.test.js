@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import jwt from 'jsonwebtoken';
 import { requireSupabaseUser } from '../src/middleware/supabaseAuth.js';
+
+const TEST_SECRET = 'test-jwt-secret';
 
 function makeResponse() {
   return {
@@ -17,60 +20,68 @@ function makeResponse() {
   };
 }
 
-test('Supabase auth rejects a missing bearer token', async () => {
+function withSecret(secret, run) {
+  const previous = process.env.SUPABASE_JWT_SECRET;
+  if (secret === undefined) delete process.env.SUPABASE_JWT_SECRET;
+  else process.env.SUPABASE_JWT_SECRET = secret;
+  try {
+    return run();
+  } finally {
+    if (previous === undefined) delete process.env.SUPABASE_JWT_SECRET;
+    else process.env.SUPABASE_JWT_SECRET = previous;
+  }
+}
+
+test('Supabase auth rejects a missing bearer token', () => {
   const res = makeResponse();
-  await requireSupabaseUser({ get: () => null }, res, () => assert.fail('next should not run'));
+  withSecret(TEST_SECRET, () =>
+    requireSupabaseUser({ get: () => null }, res, () => assert.fail('next should not run'))
+  );
   assert.equal(res.statusCode, 401);
   assert.equal(res.body.error.code, 'AUTH_REQUIRED');
 });
 
-test('Supabase auth accepts a verified user and ignores request-provided user IDs', async () => {
-  const previousUrl = process.env.SUPABASE_URL;
-  const previousKey = process.env.SUPABASE_ANON_KEY;
-  const previousFetch = global.fetch;
-  process.env.SUPABASE_URL = 'https://example.supabase.co';
-  process.env.SUPABASE_ANON_KEY = 'anon';
-  global.fetch = async () => ({ ok: true, json: async () => ({ id: 'verified-user' }) });
-  try {
-    const req = { get: () => 'Bearer valid-token', body: { user_id: 'attacker' } };
-    const res = makeResponse();
-    let called = false;
-    await requireSupabaseUser(req, res, () => { called = true; });
-    assert.equal(called, true);
-    assert.equal(req.auth.user.id, 'verified-user');
-  } finally {
-    global.fetch = previousFetch;
-    if (previousUrl) process.env.SUPABASE_URL = previousUrl;
-    else delete process.env.SUPABASE_URL;
-    if (previousKey) process.env.SUPABASE_ANON_KEY = previousKey;
-    else delete process.env.SUPABASE_ANON_KEY;
-  }
+test('Supabase auth returns 503 when the JWT secret is not configured', () => {
+  const res = makeResponse();
+  withSecret(undefined, () =>
+    requireSupabaseUser({ get: () => 'Bearer anything' }, res, () => assert.fail('next should not run'))
+  );
+  assert.equal(res.statusCode, 503);
+  assert.equal(res.body.error.code, 'SUPABASE_SERVICE_ERROR');
 });
 
-test('Supabase auth accepts a backend-only service-role key as the API key', async () => {
-  const previousUrl = process.env.SUPABASE_URL;
-  const previousAnonKey = process.env.SUPABASE_ANON_KEY;
-  const previousServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  const previousFetch = global.fetch;
-  process.env.SUPABASE_URL = 'https://example.supabase.co';
-  delete process.env.SUPABASE_ANON_KEY;
-  process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role';
-  let receivedApiKey = '';
-  global.fetch = async (_url, options) => {
-    receivedApiKey = options.headers.apikey;
-    return { ok: true, json: async () => ({ id: 'verified-user' }) };
-  };
-  try {
-    const req = { get: () => 'Bearer valid-token' };
-    await requireSupabaseUser(req, makeResponse(), () => {});
-    assert.equal(receivedApiKey, 'service-role');
-  } finally {
-    global.fetch = previousFetch;
-    if (previousUrl) process.env.SUPABASE_URL = previousUrl;
-    else delete process.env.SUPABASE_URL;
-    if (previousAnonKey) process.env.SUPABASE_ANON_KEY = previousAnonKey;
-    else delete process.env.SUPABASE_ANON_KEY;
-    if (previousServiceKey) process.env.SUPABASE_SERVICE_ROLE_KEY = previousServiceKey;
-    else delete process.env.SUPABASE_SERVICE_ROLE_KEY;
-  }
+test('Supabase auth rejects a token signed with the wrong secret', () => {
+  const token = jwt.sign({ sub: 'verified-user' }, 'attacker-secret', { algorithm: 'HS256' });
+  const res = makeResponse();
+  withSecret(TEST_SECRET, () =>
+    requireSupabaseUser({ get: () => `Bearer ${token}` }, res, () => assert.fail('next should not run'))
+  );
+  assert.equal(res.statusCode, 401);
+  assert.equal(res.body.error.code, 'AUTH_INVALID');
+});
+
+test('Supabase auth rejects an expired token', () => {
+  const token = jwt.sign({ sub: 'verified-user' }, TEST_SECRET, { algorithm: 'HS256', expiresIn: -10 });
+  const res = makeResponse();
+  withSecret(TEST_SECRET, () =>
+    requireSupabaseUser({ get: () => `Bearer ${token}` }, res, () => assert.fail('next should not run'))
+  );
+  assert.equal(res.statusCode, 401);
+  assert.equal(res.body.error.code, 'AUTH_INVALID');
+});
+
+test('Supabase auth accepts a valid token and derives the user id from sub', () => {
+  const token = jwt.sign(
+    { sub: 'verified-user', email: 'rider@example.com', role: 'authenticated' },
+    TEST_SECRET,
+    { algorithm: 'HS256' }
+  );
+  const req = { get: () => `Bearer ${token}`, body: { user_id: 'attacker' } };
+  const res = makeResponse();
+  let called = false;
+  withSecret(TEST_SECRET, () => requireSupabaseUser(req, res, () => { called = true; }));
+  assert.equal(called, true);
+  assert.equal(req.auth.user.id, 'verified-user');
+  assert.equal(req.auth.user.email, 'rider@example.com');
+  assert.equal(req.auth.token, token);
 });

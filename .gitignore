@@ -15,3 +15,4 @@ backend/dist/
 .claude/
 .playwright-mcp/
 frontend/dev-dist/
+operator/tsconfig.tsbuildinfo

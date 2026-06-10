@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { saveTicket, getTicket, getAllTickets, updateTicket } from '../stores/ticketStore.js';
-import { getProfileById } from '../stores/scannerProfileStore.js';
+import { getProfileById, getProfileByOperatorDevice } from '../stores/scannerProfileStore.js';
 import { ErrorCodes } from '../helpers/errors.js';
 import { publishTicketUpdate } from './ticketEvents.js';
 
@@ -192,7 +192,11 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
   }
 
   if (leg.status === 'used') {
-    throw { code: ErrorCodes.LEG_ALREADY_USED, message: 'This ticket leg has already been used', details: { ticketId, ticketLegId, validatedAt: leg.validatedAt } };
+    throw {
+      code: ErrorCodes.LEG_ALREADY_USED,
+      message: 'This ticket leg has already been used',
+      details: { ticketId, ticketLegId, validatedAt: leg.validatedAt, validatedBy: leg.validatedBy },
+    };
   }
 
   if (normalizeMode(leg.mode) === 'SUBWAY' && leg.subway && typeof stationsTraversed === 'number') {
@@ -206,9 +210,18 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
   }
 
   const resolvedAt = validatedAt || new Date().toISOString();
+  const profile = getProfileByOperatorDevice(operatorId, deviceId);
   leg.status = 'used';
   leg.validatedAt = resolvedAt;
-  leg.validatedBy = { operatorId, deviceId };
+  leg.validatedBy = {
+    ...(profile && {
+      scannerProfileId: profile.scannerProfileId,
+      label: profile.label,
+      labelAr: profile.labelAr,
+    }),
+    operatorId,
+    deviceId,
+  };
 
   ticket.status = resolveTicketStatus(ticket);
   updateTicket(ticket);
@@ -219,7 +232,7 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
     ticketLegId,
     status: 'used',
     validatedAt: resolvedAt,
-    validatedBy: { operatorId, deviceId },
+    validatedBy: leg.validatedBy,
     message: 'Leg validated successfully',
   };
 }
@@ -319,6 +332,7 @@ export function scanValidate(qrPayload, scannerProfileId, { stationsTraversed } 
         ticketId: ticket.ticketId,
         ticketLegId: used.ticketLegId,
         validatedAt: used.validatedAt,
+        validatedBy: used.validatedBy,
       },
     };
   }
@@ -353,6 +367,7 @@ export function scanValidate(qrPayload, scannerProfileId, { stationsTraversed } 
   leg.validatedBy = {
     scannerProfileId: profile.scannerProfileId,
     label: profile.label,
+    labelAr: profile.labelAr,
     operatorId: profile.operatorId,
     deviceId: profile.deviceId,
   };

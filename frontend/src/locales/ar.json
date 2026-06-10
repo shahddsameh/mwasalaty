@@ -265,9 +265,8 @@
     "routesFound": "المسارات الموجودة",
     "optionsCount": "{count} خيارات",
     "planning": "جاري تخطيط المسار...",
-    "noRoutesTitle": "لم يتم العثور على مسارات ديناميكية",
-    "backendHelp": "تأكد من تشغيل الخادم و OpenTripPlanner ثم جرب البحث مرة أخرى.",
-    "noRoutesForSearch": "لم يتم العثور على مسارات ديناميكية لهذا البحث.",
+    "noRoutesTitle": "لم نعثر على مسارات",
+    "noRoutesBody": "لم نتمكن من إيجاد مسار بين {start} و{destination}. جرّب أماكن مختلفة أو وقتاً آخر.",
     "errors": {
       "placeNotFound": "لم يتم العثور على المكان: {place}. اختر مكاناً معروفاً من الاقتراحات.",
       "planFailed": "تعذر تخطيط هذا المسار."

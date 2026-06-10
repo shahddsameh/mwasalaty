@@ -265,9 +265,8 @@
     "routesFound": "Routes Found",
     "optionsCount": "{count} options",
     "planning": "Planning your route...",
-    "noRoutesTitle": "No dynamic routes found",
-    "backendHelp": "Make sure the backend and OpenTripPlanner are running, then try the search again.",
-    "noRoutesForSearch": "No dynamic routes found for this search.",
+    "noRoutesTitle": "No routes found",
+    "noRoutesBody": "We couldn't find a route between {start} and {destination}. Try different places or another time.",
     "errors": {
       "placeNotFound": "Place not found: {place}. Choose a known place from suggestions.",
       "planFailed": "Could not plan this route."

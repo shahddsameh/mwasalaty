@@ -219,6 +219,11 @@ export async function planRoute(
   });
   if (!res.ok) {
     const error = await res.json().catch(() => null);
+    // An empty plan is a normal "no routes for this search" outcome, not a
+    // failure — surface it as a stable sentinel so the UI can show friendly copy.
+    if (error?.error?.code === 'OTP_EMPTY_PLAN') {
+      throw new Error('NO_ROUTES_FOUND');
+    }
     throw new Error(error?.error?.message ?? error?.message ?? 'Could not plan this route.');
   }
   const data = (await res.json()) as ApiPlanResponse;
@@ -229,7 +234,7 @@ export async function planRoute(
   }
 
   if (!data.itineraries?.length) {
-    throw new Error('No routes were returned for this search.');
+    throw new Error('NO_ROUTES_FOUND');
   }
   return data.itineraries.map(mapItinerary);
 }

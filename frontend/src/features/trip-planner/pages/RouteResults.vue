@@ -81,22 +81,13 @@
             {{ t("routeResults.planning") }}
           </div>
           <div
-            v-else-if="errorMessage"
+            v-else-if="!routes.length"
             class="bg-card border-2 border-border rounded-xl p-6 text-muted-foreground"
           >
             <h2 class="font-display text-xl text-foreground mb-2">
               {{ t("routeResults.noRoutesTitle") }}
             </h2>
-            <p>{{ errorMessage }}</p>
-            <p class="mt-2 text-sm">
-              {{ t("routeResults.backendHelp") }}
-            </p>
-          </div>
-          <div
-            v-else-if="!routes.length"
-            class="bg-card border-2 border-border rounded-xl p-6 text-muted-foreground"
-          >
-            {{ t("routeResults.noRoutesForSearch") }}
+            <p>{{ emptyStateMessage }}</p>
           </div>
           <template v-else>
             <RouteCard
@@ -214,9 +205,29 @@ const {
   searchRoutes,
 } = useRoutePlanning();
 
-const errorMessage = computed(() =>
-  error.value ? routeErrorMessage(new Error(error.value)) : "",
-);
+// Friendly, rider-facing copy for the empty state. Never surfaces raw backend /
+// OpenTripPlanner wording: a genuine "no routes" outcome (or no error) reads as
+// "no routes found"; a place-not-found or any other failure maps to friendly i18n.
+const emptyStateMessage = computed(() => {
+  const message = error.value ?? "";
+
+  if (!message || message === "NO_ROUTES_FOUND") {
+    return t("routeResults.noRoutesBody", {
+      start: displayStart.value,
+      destination: displayDestination.value,
+    });
+  }
+  if (
+    message === "place_not_found_from" ||
+    /coordinates/i.test(message)
+  ) {
+    return t("routeResults.errors.placeNotFound", { place: start });
+  }
+  if (message === "place_not_found_to") {
+    return t("routeResults.errors.placeNotFound", { place: destination });
+  }
+  return t("routeResults.errors.planFailed");
+});
 
 onMounted(async () => {
   saveRouteSearch({ start, destination, filter: sortBy.value });
@@ -335,14 +346,4 @@ function selectRoute(route: ApiRouteOption) {
   });
 }
 
-function routeErrorMessage(error: unknown) {
-  if (!(error instanceof Error)) return t("routeResults.errors.planFailed");
-  if (error.message === "place_not_found_from") {
-    return t("routeResults.errors.placeNotFound", { place: start });
-  }
-  if (error.message === "place_not_found_to") {
-    return t("routeResults.errors.placeNotFound", { place: destination });
-  }
-  return error.message || t("routeResults.errors.planFailed");
-}
 </script>

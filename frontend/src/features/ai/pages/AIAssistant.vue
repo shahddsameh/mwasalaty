@@ -88,15 +88,17 @@
 <script setup lang="ts">
 import { defineComponent, h, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { Clock, MapPin, Send, Sparkles, TrendingUp } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import PageTitle from "@/components/shared/PageTitle.vue";
-import { parseAiRouteIntent } from "@/services/api";
+import { parseAiRouteIntent, type AiRouteIntent } from "@/services/api";
 import { getFavoritePlaces } from "@/core/offline/repositories/favoritePlacesRepository";
 import { setPlaceCoords } from "@/features/trip-planner/services/routeSearch";
 import type { FavoritePlace } from "@/db/appDb";
 
 const router = useRouter();
+const { t } = useI18n();
 const input = ref("");
 const loading = ref(false);
 const message = ref("");
@@ -143,6 +145,40 @@ function resolvePersonal(label: string | null): ResolvedPlace | null {
       ? { lat: fav.lat, lng: fav.lng }
       : undefined;
   return { label: fav.name, coords };
+}
+
+// One-shot device location (triggers the browser's permission prompt).
+function getCurrentCoords(): Promise<{ lat: number; lng: number }> {
+  return new Promise((resolve, reject) => {
+    if (!("geolocation" in navigator)) {
+      reject(new Error("unsupported"));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) =>
+        resolve({ lat: position.coords.latitude, lng: position.coords.longitude }),
+      (error) => reject(error),
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 },
+    );
+  });
+}
+
+function goToResults(startLabel: string, destLabel: string, intent: AiRouteIntent) {
+  router.push({
+    path: "/route-results",
+    query: {
+      start: startLabel,
+      destination: destLabel,
+      filter: intent.filter,
+      timeMode: intent.timeMode,
+      ...(intent.date ? { date: intent.date } : {}),
+      ...(intent.time ? { time: intent.time } : {}),
+      ...(intent.maxDurationMinutes
+        ? { maxDurationMinutes: String(intent.maxDurationMinutes) }
+        : {}),
+    },
+    state: { aiPrompt: input.value.trim(), ...intent, from: startLabel, to: destLabel },
+  });
 }
 const examples = [
   "Get me to Cairo Airport in under an hour",
@@ -209,35 +245,40 @@ async function search() {
     const destLabel = toRes?.label ?? intent.to ?? undefined;
 
     if (result.status === "needs_clarification") {
-      // Destination is known (e.g. "go home") but we still need a starting point.
-      if (result.missingFields.includes("from") && toRes && !fromRes) {
-        message.value = `Going to ${destLabel}. Where are you starting from? Please tell me your location.`;
+      // Destination is known (e.g. "go home") but the origin is missing — use the
+      // rider's current location, asking the browser for geolocation permission.
+      if (result.missingFields.includes("from") && toRes && !fromRes && destLabel) {
+        message.value = t("home.gettingLocation");
+        try {
+          const coords = await getCurrentCoords();
+          const startLabel = t("home.currentLocation");
+          setPlaceCoords(startLabel, coords);
+          if (toRes.coords) setPlaceCoords(destLabel, toRes.coords);
+          message.value = "";
+          goToResults(startLabel, destLabel, intent);
+        } catch (geoError: any) {
+          message.value =
+            geoError?.code === geoError?.PERMISSION_DENIED
+              ? t("home.validation.permissionDenied")
+              : t("home.validation.locationUnavailable");
+        }
       } else {
         message.value = result.message;
       }
       return;
     }
 
+    if (!startLabel || !destLabel) {
+      message.value = "Please include both a starting point and a destination.";
+      return;
+    }
+
     // The results page resolves a label to coordinates via getPlaceCoords, so make
     // the saved place's coords available under its label (no geocoding of "home").
-    if (startLabel && fromRes?.coords) setPlaceCoords(startLabel, fromRes.coords);
-    if (destLabel && toRes?.coords) setPlaceCoords(destLabel, toRes.coords);
+    if (fromRes?.coords) setPlaceCoords(startLabel, fromRes.coords);
+    if (toRes?.coords) setPlaceCoords(destLabel, toRes.coords);
 
-    router.push({
-      path: "/route-results",
-      query: {
-        start: startLabel!,
-        destination: destLabel!,
-        filter: intent.filter,
-        timeMode: intent.timeMode,
-        ...(intent.date ? { date: intent.date } : {}),
-        ...(intent.time ? { time: intent.time } : {}),
-        ...(intent.maxDurationMinutes
-          ? { maxDurationMinutes: String(intent.maxDurationMinutes) }
-          : {}),
-      },
-      state: { aiPrompt: prompt, ...intent, from: startLabel, to: destLabel },
-    });
+    goToResults(startLabel, destLabel, intent);
   } catch (error) {
     message.value =
       error instanceof Error ? error.message : "Could not understand that route request.";

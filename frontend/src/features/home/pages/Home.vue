@@ -12,105 +12,7 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
-          <div
-            class="bg-card rounded-xl p-4 md:p-6 lg:p-8 border-2 border-border shadow-sm"
-          >
-            <div class="space-y-5 mb-6">
-              <div>
-                <PlaceAutocomplete
-                  v-model="start"
-                  :placeholder="t('home.startingPoint')"
-                  :error="startError"
-                  :suggestions="placeSuggestions"
-                >
-                  <template #icon><MapPin class="w-5 h-5" /></template>
-                </PlaceAutocomplete>
-                <button
-                  class="mt-2 text-sm text-primary hover:text-primary-hover transition-colors flex items-center gap-1.5 disabled:opacity-60"
-                  :disabled="locating"
-                  @click="useCurrentLocation"
-                >
-                  <MapPinned class="w-4 h-4" />
-                  {{ locating ? t("home.gettingLocation") : t("home.useCurrentLocation") }}
-                </button>
-              </div>
-
-              <PlaceAutocomplete
-                v-model="destination"
-                :placeholder="t('home.whereTo')"
-                :error="destinationError"
-                :suggestions="placeSuggestions"
-              >
-                <template #icon><Target class="w-5 h-5" /></template>
-              </PlaceAutocomplete>
-            </div>
-
-            <div class="grid grid-cols-3 gap-2 md:gap-3 mb-6">
-              <button
-                v-for="option in filters"
-                :key="option.value"
-                :class="filterClass(option.value)"
-                @click="filter = option.value"
-              >
-                <component
-                  :is="option.icon"
-                  class="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1"
-                />
-                <div class="text-xs md:text-sm font-medium">
-                  {{ t(option.labelKey) }}
-                </div>
-              </button>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-              <AppButton size="lg" class="w-full" @click="searchRoutes">
-                {{ t("home.searchRoutes") }}
-              </AppButton>
-              <AppButton
-                variant="outline"
-                size="lg"
-                class="w-full flex items-center justify-center gap-2"
-                @click="router.push('/ai-assistant')"
-              >
-                <Sparkles class="w-5 h-5" /> {{ t("home.askAi") }}
-              </AppButton>
-            </div>
-          </div>
-
-          <Panel :title="t('home.recentSearches')" :icon="Clock">
-            <p
-              v-if="recentSearches.length === 0"
-              class="text-sm text-muted-foreground"
-            >
-              {{ t("home.recentEmpty") }}
-            </p>
-            <div
-              v-for="search in recentSearches"
-              :key="`${search.from}-${search.to}-${search.searchedAt}`"
-              class="flex items-center rounded-lg border border-border hover:border-primary hover:bg-secondary transition-all"
-            >
-              <button
-                type="button"
-                class="min-w-0 flex-1 p-3 text-start"
-                @click="useSearch(search)"
-              >
-                <div class="text-foreground text-sm truncate">
-                  {{ search.from }} -> {{ search.to }}
-                </div>
-                <div class="text-xs text-muted-foreground mt-0.5">
-                  {{ formatRecentTime(search.searchedAt) }}
-                </div>
-              </button>
-              <button
-                type="button"
-                class="me-2 shrink-0 p-2 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
-                :aria-label="t('home.deleteRecentSearch')"
-                @click="deleteSearch(search)"
-              >
-                <Trash2 class="w-4 h-4" />
-              </button>
-            </div>
-          </Panel>
+          <TripSearch />
         </div>
 
         <div class="space-y-6">
@@ -177,15 +79,17 @@
                 </button>
               </div>
             </div>
-            <button
+            <div
               v-for="place in savedPlaces"
               :key="place.id"
-              class="w-full p-3 rounded-lg border border-border hover:border-primary hover:bg-secondary transition-all text-start"
-              @click="destination = place.address"
+              class="flex items-center gap-1 rounded-lg border border-border pe-1 hover:border-primary hover:bg-secondary transition-all"
             >
-              <div class="flex items-center gap-2.5">
+              <button
+                class="flex min-w-0 flex-1 items-center gap-2.5 p-3 text-start"
+                @click="store.destination = place.address"
+              >
                 <div
-                  class="w-8 h-8 rounded-lg flex items-center justify-center"
+                  class="w-8 h-8 shrink-0 rounded-lg flex items-center justify-center"
                   :style="{ backgroundColor: place.softColor }"
                 >
                   <component
@@ -194,16 +98,24 @@
                     :style="{ color: place.color }"
                   />
                 </div>
-                <div>
-                  <div class="text-foreground font-medium text-sm">
+                <div class="min-w-0">
+                  <div class="text-foreground font-medium text-sm truncate">
                     {{ savedPlaceLabel(place) }}
                   </div>
-                  <div class="text-xs text-muted-foreground">
+                  <div class="text-xs text-muted-foreground truncate">
                     {{ place.address }}
                   </div>
                 </div>
-              </div>
-            </button>
+              </button>
+              <button
+                type="button"
+                class="shrink-0 rounded-md p-2 text-muted-foreground hover:text-destructive transition-colors"
+                :aria-label="t('home.removePlace')"
+                @click="removeSavedPlace(place.id)"
+              >
+                <Trash2 class="w-4 h-4" />
+              </button>
+            </div>
           </Panel>
 
           <Panel :title="t('home.popularDestinations')">
@@ -212,7 +124,7 @@
                 v-for="dest in popularDestinations"
                 :key="dest.name"
                 class="p-3 rounded-lg border border-border hover:border-primary hover:bg-secondary transition-all"
-                @click="destination = dest.name"
+                @click="store.destination = dest.name"
               >
                 <div
                   class="w-8 h-8 rounded-lg flex items-center justify-center mb-2 mx-auto"
@@ -238,98 +150,62 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, h, ref } from "vue";
+import { computed, defineComponent, h, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 import {
   Briefcase,
   Building2,
   CastleIcon,
-  Clock,
-  DollarSign,
-  Dumbbell,
   Home as HomeIcon,
   Landmark,
   MapPin,
-  MapPinned,
   Plane,
   Plus,
   ShoppingBag,
-  Sparkles,
   Star,
-  Target,
-  Trash2,
   Train,
+  Trash2,
   Triangle,
 } from "@lucide/vue";
-import AppButton from "@/components/ui/AppButton.vue";
+import TripSearch from "@/features/trip-planner/components/TripSearch.vue";
 import PlaceAutocomplete from "@/features/home/components/PlaceAutocomplete.vue";
 import { placeSuggestions } from "@/features/home/services/placeSuggestions";
+import { useTripSearchStore } from "@/stores/tripSearch";
 import {
-  getSavedPlaces,
-  savePlace,
+  describeSavedPlace,
+  makeSavedPlaceId,
+  normalizeSavedPlaceType,
   type SavedPlace,
   type SavedPlaceIconKey,
   type SavedPlaceType,
 } from "@/features/home/services/savedPlaces";
-import {
-  deleteRecentRouteSearch,
-  getRecentRouteSearches,
-  saveRecentRouteSearch,
-  saveRouteSearch,
-  setPlaceCoords,
-  type RecentRouteSearch,
-} from "@/features/trip-planner/services/routeSearch";
+import { useFavoritePlaces } from "@/composables/useFavoritePlaces";
 
-const router = useRouter();
 const { t } = useI18n();
-const start = ref("");
-const destination = ref("");
-const startError = ref("");
-const destinationError = ref("");
-const locating = ref(false);
-const filter = ref<"fastest" | "cheapest" | "comfortable">("fastest");
+const store = useTripSearchStore();
+const { favoritePlaces, saveFavoritePlace, removeFavoritePlace } =
+  useFavoritePlaces();
+
+function removeSavedPlace(placeId: string) {
+  void removeFavoritePlace(placeId);
+}
+
 const savingPlace = ref(false);
 const newPlaceName = ref("");
 const newPlaceAddress = ref("");
 const newPlaceType = ref<SavedPlaceType>("other");
 const savePlaceError = ref("");
 
-function useCurrentLocation() {
-  if (!("geolocation" in navigator)) {
-    startError.value = t("home.validation.locationUnavailable");
-    return;
-  }
-  locating.value = true;
-  startError.value = "";
-  // The browser shows its own permission prompt here.
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const { latitude, longitude } = position.coords;
-      const currentLocation = t("home.currentLocation");
-      setPlaceCoords(currentLocation, { lat: latitude, lng: longitude });
-      start.value = currentLocation;
-      locating.value = false;
-    },
-    (error) => {
-      locating.value = false;
-      startError.value =
-        error.code === error.PERMISSION_DENIED
-          ? t("home.validation.permissionDenied")
-          : t("home.validation.locationFailed");
-    },
-    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
-  );
-}
-
-const filters = [
-  { value: "fastest" as const, labelKey: "home.filters.fastest", icon: Clock },
-  { value: "cheapest" as const, labelKey: "home.filters.cheapest", icon: DollarSign },
-  { value: "comfortable" as const, labelKey: "home.filters.comfortable", icon: Star },
-];
-
-const recentSearches = ref<RecentRouteSearch[]>(getRecentRouteSearches());
-const savedPlaces = ref(getSavedPlaces());
+// Dynamic, offline-first saved places from IndexedDB (reactive via liveQuery).
+const savedPlaces = computed<SavedPlace[]>(() =>
+  favoritePlaces.value.map((place) => ({
+    id: place.id,
+    name: place.name,
+    address: place.address,
+    type: normalizeSavedPlaceType(place.type ?? "other"),
+    ...describeSavedPlace(place.name, place.address, place.type ?? "other"),
+  })),
+);
 
 const placeTypes = [
   { value: "home" as const, labelKey: "home.placeTypes.home" },
@@ -419,15 +295,6 @@ const Panel = defineComponent({
   },
 });
 
-function filterClass(value: string) {
-  return [
-    "py-2.5 md:py-3 rounded-lg border-2 transition-all",
-    filter.value === value
-      ? "border-primary bg-secondary text-primary"
-      : "border-border text-muted-foreground hover:border-primary",
-  ];
-}
-
 function placeTypeClass(value: SavedPlaceType) {
   return [
     "flex min-h-9 items-center justify-center rounded-lg border px-1 py-2 text-center text-xs transition-all",
@@ -460,7 +327,7 @@ function savedPlaceLabel(place: SavedPlace) {
 
 function openSavePlace(source: "start" | "destination") {
   newPlaceAddress.value =
-    source === "start" ? start.value.trim() : destination.value.trim();
+    source === "start" ? store.start.trim() : store.destination.trim();
   newPlaceName.value = "";
   newPlaceType.value = "other";
   savePlaceError.value = "";
@@ -472,7 +339,7 @@ function closeSavePlace() {
   savePlaceError.value = "";
 }
 
-function addSavedPlace() {
+async function addSavedPlace() {
   const address = newPlaceAddress.value.trim();
   const name = newPlaceName.value.trim() || address;
 
@@ -481,84 +348,13 @@ function addSavedPlace() {
     return;
   }
 
-  savedPlaces.value = savePlace({
+  await saveFavoritePlace({
+    id: makeSavedPlaceId(name, address),
     name,
     address,
     type: newPlaceType.value,
+    createdAt: Date.now(),
   });
   closeSavePlace();
-}
-
-function useSearch(search: RecentRouteSearch) {
-  start.value = search.from;
-  destination.value = search.to;
-  filter.value = search.filter;
-  startError.value = "";
-  destinationError.value = "";
-}
-
-function deleteSearch(search: RecentRouteSearch) {
-  deleteRecentRouteSearch(search);
-  recentSearches.value = getRecentRouteSearches();
-}
-
-function formatRecentTime(searchedAt: number) {
-  const elapsedMinutes = Math.max(0, Math.floor((Date.now() - searchedAt) / 60000));
-
-  if (elapsedMinutes < 1) return t("home.time.justNow");
-  if (elapsedMinutes < 60) {
-    const unit = elapsedMinutes === 1 ? t("home.time.minute") : t("home.time.minutes");
-    return `${elapsedMinutes} ${unit} ${t("home.time.ago")}`;
-  }
-
-  const elapsedHours = Math.floor(elapsedMinutes / 60);
-  if (elapsedHours < 24) {
-    const unit = elapsedHours === 1 ? t("home.time.hour") : t("home.time.hours");
-    return `${elapsedHours} ${unit} ${t("home.time.ago")}`;
-  }
-
-  const elapsedDays = Math.floor(elapsedHours / 24);
-  const unit = elapsedDays === 1 ? t("home.time.day") : t("home.time.days");
-  return `${elapsedDays} ${unit} ${t("home.time.ago")}`;
-}
-
-function searchRoutes() {
-  const trimmedStart = start.value.trim();
-  const trimmedDestination = destination.value.trim();
-
-  startError.value = trimmedStart ? "" : t("home.validation.startRequired");
-  destinationError.value = trimmedDestination
-    ? ""
-    : t("home.validation.destinationRequired");
-
-  if (!trimmedStart || !trimmedDestination) {
-    alert(t("home.validation.bothRequired"));
-    return;
-  }
-
-  saveRouteSearch({
-    start: trimmedStart,
-    destination: trimmedDestination,
-    filter: filter.value,
-  });
-  saveRecentRouteSearch({
-    start: trimmedStart,
-    destination: trimmedDestination,
-    filter: filter.value,
-  });
-  recentSearches.value = getRecentRouteSearches();
-  router.push({
-    path: "/route-results",
-    query: {
-      start: trimmedStart,
-      destination: trimmedDestination,
-      filter: filter.value,
-    },
-    state: {
-      start: trimmedStart,
-      destination: trimmedDestination,
-      filter: filter.value,
-    },
-  });
 }
 </script>

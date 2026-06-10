@@ -78,6 +78,33 @@ export function deleteSavedPlace(placeId: string): SavedPlace[] {
   return currentSavedPlaces;
 }
 
+/**
+ * Derive the display visuals (icon + colors) for a place from its name,
+ * address, and type. Lets dynamic stores (e.g. IndexedDB favorite places)
+ * reuse the same presentation rules without storing UI fields.
+ */
+export function describeSavedPlace(
+  name: string,
+  address: string,
+  type: string = "other",
+): { iconKey: SavedPlaceIconKey; color: string; softColor: string } {
+  const placeType = normalizeSavedPlaceType(type);
+  const styles = PLACE_STYLES[placeType];
+  return {
+    iconKey: inferIconKey(formatDefaultPlaceName(name), address, placeType),
+    color: styles.color,
+    softColor: styles.softColor,
+  };
+}
+
+/**
+ * Stable id for a saved place, derived from its name + address so the same
+ * place is de-duplicated across saves.
+ */
+export function makeSavedPlaceId(name: string, address: string): string {
+  return `${normalize(formatDefaultPlaceName(name))}-${normalize(address)}`;
+}
+
 export function normalizeSavedPlaceType(value: string): SavedPlaceType {
   const normalized = value.trim().toLowerCase();
   return normalized === "home" ||

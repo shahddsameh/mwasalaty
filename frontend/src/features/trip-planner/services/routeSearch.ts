@@ -7,7 +7,28 @@ export type RouteSearch = {
 export type SelectedRoute = RouteSearch & {
   route: unknown;
   steps?: unknown;
+  // ISO timestamp of a scheduled (future) departure/arrival, if the rider
+  // picked one. Drives the ticket's validity window at booking time.
+  departureAt?: string;
+  // True when this selection was served from the offline route cache (a
+  // preview only). Booking re-plans a fresh itinerary before checkout.
+  fromCache?: boolean;
 };
+
+/**
+ * Combine the time-picker mode + date + time into an ISO timestamp.
+ * Returns undefined for "now" or incomplete input (i.e. depart immediately).
+ */
+export function computeDepartureAt(
+  timeMode: "now" | "depart" | "arrive",
+  date?: string,
+  time?: string,
+): string | undefined {
+  if (timeMode === "now" || !date || !time) return undefined;
+  const parsed = new Date(`${date}T${time.length === 5 ? time : time.slice(0, 5)}`);
+  if (Number.isNaN(parsed.getTime())) return undefined;
+  return parsed.toISOString();
+}
 
 export type RecentRouteSearch = {
   from: string;

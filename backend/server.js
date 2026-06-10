@@ -8,6 +8,7 @@ import ticketRouter from './src/routes/ticket.js';
 import paymentRouter from './src/routes/payment.js';
 import adminRouter from './src/routes/admin.js';
 import { syncOtpTransitCatalog } from './src/services/otpImportService.js';
+import placesRouter from './src/routes/places.js';
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use('/api', planRouter);
 app.use('/api', ticketRouter);
 app.use('/api', paymentRouter);
 app.use('/api', adminRouter);
+app.use('/api', placesRouter);
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {

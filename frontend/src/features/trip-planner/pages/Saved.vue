@@ -84,13 +84,27 @@
           :title="t('saved.routes.title')"
           :subtitle="t('saved.routes.subtitle')"
         />
+        <div
+          v-if="savedRoutes.length === 0"
+          class="rounded-xl border-2 border-dashed border-border bg-card p-8 text-center"
+        >
+          <BookmarkCheck class="w-10 h-10 text-primary mx-auto mb-3" />
+          <h3 class="font-display text-lg text-foreground mb-1">
+            {{ t("saved.routes.emptyTitle") }}
+          </h3>
+          <p class="text-sm text-muted-foreground">
+            {{ t("saved.routes.emptyCopy") }}
+          </p>
+        </div>
         <ListRow
           v-for="route in savedRoutes"
-          :key="route.name"
+          v-else
+          :key="route.id"
           :title="route.name"
           :subtitle="`${route.from} -> ${route.to}`"
           :meta="t('saved.routes.meta', { duration: route.duration, cost: route.cost, lastUsed: route.lastUsed })"
           :action="t('saved.routes.useRoute')"
+          @action="useSavedRoute(route)"
         />
       </section>
 
@@ -241,20 +255,34 @@ import PageTitle from "@/components/shared/PageTitle.vue";
 import PlaceAutocomplete from "@/features/home/components/PlaceAutocomplete.vue";
 import { placeSuggestions } from "@/features/home/services/placeSuggestions";
 import {
-  deleteSavedPlace,
-  getSavedPlaces,
-  savePlace,
+  describeSavedPlace,
+  makeSavedPlaceId,
+  normalizeSavedPlaceType,
   type SavedPlaceIconKey,
   type SavedPlaceType,
 } from "@/features/home/services/savedPlaces";
+import { useFavoritePlaces } from "@/composables/useFavoritePlaces";
+import { useSavedTrips } from "@/composables/useSavedTrips";
 
 const router = useRouter();
 const { t } = useI18n();
+const { favoritePlaces, saveFavoritePlace, removeFavoritePlace } =
+  useFavoritePlaces();
+const { savedTrips } = useSavedTrips();
 const activeTab = ref<"places" | "routes" | "history" | "ai" | "offline">(
   "places",
 );
 const addPlaceModalOpen = ref(false);
-const savedPlaces = ref(getSavedPlaces());
+// Dynamic, offline-first saved places from IndexedDB (reactive via liveQuery).
+const savedPlaces = computed(() =>
+  favoritePlaces.value.map((place) => ({
+    id: place.id,
+    name: place.name,
+    address: place.address,
+    type: normalizeSavedPlaceType(place.type ?? "other"),
+    ...describeSavedPlace(place.name, place.address, place.type ?? "other"),
+  })),
+);
 const newPlaceName = ref("");
 const newPlaceAddress = ref("");
 const newPlaceType = ref<SavedPlaceType>("other");
@@ -264,7 +292,7 @@ const canSavePlace = computed(() => newPlaceAddress.value.trim().length > 0);
 
 const tabs = computed(() => [
   { value: "places" as const, labelKey: "saved.tabs.places", count: savedPlaces.value.length },
-  { value: "routes" as const, labelKey: "saved.tabs.routes", count: savedRoutes.length },
+  { value: "routes" as const, labelKey: "saved.tabs.routes", count: savedRoutes.value.length },
   { value: "history" as const, labelKey: "saved.tabs.trips", count: recentTrips.length },
   { value: "ai" as const, labelKey: "saved.tabs.aiPlans", count: aiPlans.length },
   { value: "offline" as const, labelKey: "saved.tabs.offline", count: offlineRoutes.length },
@@ -277,24 +305,31 @@ const placeTypes = [
   { value: "other" as const, labelKey: "home.placeTypes.gym" },
 ];
 
-const savedRoutes = [
-  {
-    name: "Morning Commute",
-    from: "Home",
-    to: "Work",
-    duration: "35 min",
-    cost: "18 EGP",
-    lastUsed: "2 hours ago",
-  },
-  {
-    name: "Airport Route",
-    from: "Tahrir Square",
-    to: "Cairo Airport",
-    duration: "45 min",
-    cost: "25 EGP",
-    lastUsed: "Yesterday",
-  },
-];
+// Dynamic, offline-first saved routes from IndexedDB.
+const savedRoutes = computed(() =>
+  savedTrips.value.map((trip) => ({
+    id: trip.id,
+    name: trip.name || `${trip.start} -> ${trip.destination}`,
+    from: trip.start,
+    to: trip.destination,
+    filter: trip.filter,
+    duration: trip.duration || "—",
+    cost: trip.cost || "—",
+    lastUsed: relativeTime(trip.createdAt),
+  })),
+);
+
+function relativeTime(timestamp: number): string {
+  const diffMs = Date.now() - timestamp;
+  const minutes = Math.round(diffMs / 60000);
+  if (minutes < 1) return t("saved.routes.justNow");
+  if (minutes < 60) return t("saved.routes.minutesAgo", { count: minutes });
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return t("saved.routes.hoursAgo", { count: hours });
+  const days = Math.round(hours / 24);
+  if (days < 7) return t("saved.routes.daysAgo", { count: days });
+  return new Date(timestamp).toLocaleDateString();
+}
 
 const recentTrips = [
   {
@@ -509,7 +544,8 @@ const SavedCard = defineComponent({
 
 const ListRow = defineComponent({
   props: { title: String, subtitle: String, meta: String, action: String },
-  setup: (p) => () =>
+  emits: ["action"],
+  setup: (p, { emit }) => () =>
     h("article", { class: "bg-card rounded-xl border-2 border-border overflow-hidden" }, [
       h("div", { class: "grid gap-4 p-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:p-5" }, [
         h("div", { class: "min-w-0" }, [
@@ -525,12 +561,29 @@ const ListRow = defineComponent({
         ]),
         h(
           AppButton,
-          { variant: "outline", size: "sm", class: "w-full md:w-auto" },
+          {
+            variant: "outline",
+            size: "sm",
+            class: "w-full md:w-auto",
+            onClick: () => emit("action"),
+          },
           () => p.action,
         ),
       ]),
     ]),
 });
+
+function useSavedRoute(route: {
+  from: string;
+  to: string;
+  filter: string;
+}) {
+  router.push({
+    path: "/route-results",
+    query: { start: route.from, destination: route.to, filter: route.filter },
+    state: { start: route.from, destination: route.to, filter: route.filter },
+  });
+}
 
 function tabClass(value: string) {
   return [
@@ -592,7 +645,7 @@ function selectPlaceType(type: SavedPlaceType) {
   }
 }
 
-function addNewPlace() {
+async function addNewPlace() {
   const address = newPlaceAddress.value.trim();
   const name = newPlaceName.value.trim() || address;
 
@@ -601,10 +654,12 @@ function addNewPlace() {
     return;
   }
 
-  savedPlaces.value = savePlace({
+  await saveFavoritePlace({
+    id: makeSavedPlaceId(name, address),
     name,
     address,
     type: newPlaceType.value,
+    createdAt: Date.now(),
   });
   newPlaceName.value = "";
   newPlaceAddress.value = "";
@@ -616,7 +671,7 @@ function removeSavedPlace(placeId: string) {
   if (activePlaceMenuId.value === placeId) {
     activePlaceMenuId.value = null;
   }
-  savedPlaces.value = deleteSavedPlace(placeId);
+  void removeFavoritePlace(placeId);
 }
 
 function togglePlaceMenu(placeId: string) {

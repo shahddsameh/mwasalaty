@@ -65,7 +65,7 @@ export function createTicket(body) {
     throw { code: ErrorCodes.VALIDATION_ERROR, message: 'Request validation failed', details: { fields: validationErrors } };
   }
 
-  const { planId, itineraryId, passenger, payment, itinerary } = body;
+  const { planId, itineraryId, passenger, payment, itinerary, departureAt } = body;
 
   const transitLegs = itinerary.legs.filter(leg => TRANSIT_MODES.has(leg.mode));
   if (transitLegs.length === 0) {
@@ -74,7 +74,15 @@ export function createTicket(body) {
 
   const ticketId = `ticket_${shortUUID()}`;
   const now = new Date();
-  const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+  // For trips scheduled in the future, the 24 h validity starts from the
+  // departure time instead of purchase time, so the ticket is still valid when
+  // the passenger actually travels. Past/now departures fall back to "now".
+  const parsedDeparture = departureAt ? new Date(departureAt) : null;
+  const expiryBase =
+    parsedDeparture && !Number.isNaN(parsedDeparture.getTime()) && parsedDeparture.getTime() > now.getTime()
+      ? parsedDeparture
+      : now;
+  const expiresAt = new Date(expiryBase.getTime() + 24 * 60 * 60 * 1000);
 
   const legs = transitLegs.map((leg, i) => {
     const ticketLegId = `ticket_leg_${String(i + 1).padStart(3, '0')}`;
@@ -117,6 +125,7 @@ export function createTicket(body) {
     status: 'active',
     createdAt: now.toISOString(),
     expiresAt: expiresAt.toISOString(),
+    ...(expiryBase !== now && { departureAt: parsedDeparture.toISOString() }),
     sourcePlanId: planId,
     sourceItineraryId: itineraryId,
     passenger: {

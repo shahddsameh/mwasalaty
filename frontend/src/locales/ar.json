@@ -17,6 +17,17 @@
     "toggle": "English",
     "current": "العربية"
   },
+  "tripSearch": {
+    "leaveNow": "انطلق الآن",
+    "departAt": "المغادرة في",
+    "arriveBy": "الوصول قبل",
+    "when": "موعد الرحلة",
+    "date": "التاريخ",
+    "time": "الوقت",
+    "swap": "تبديل نقطة البداية والوجهة",
+    "clear": "مسح",
+    "removeRecent": "إزالة هذا البحث الأخير"
+  },
   "home": {
     "title": "إلى أين تريد الذهاب؟",
     "subtitle": "خطط رحلتك داخل القاهرة الكبرى مع أكثر من وسيلة نقل",
@@ -31,6 +42,7 @@
     "recentEmpty": "ستظهر رحلاتك الأخيرة هنا.",
     "savedPlaces": "الأماكن المحفوظة",
     "saveDestination": "احفظ الوجهة",
+    "removePlace": "إزالة هذا المكان المحفوظ",
     "saveStartingPoint": "احفظ نقطة البداية",
     "placeName": "اسم المكان",
     "addressOrLocation": "العنوان أو الموقع",
@@ -128,18 +140,50 @@
   },
   "tickets": {
     "allTitle": "كل التذاكر",
-    "allSubtitle": "تذاكرك وسجل الحجوزات",
-    "activeTickets": "التذاكر النشطة ({count})",
-    "bookingHistory": "سجل الحجوزات ({count})",
+    "allSubtitle": "اعرض تذاكرك واطلب استرداد المقاطع غير المستخدمة.",
+    "offlineNotice": "أنت غير متصل بالإنترنت. يتم عرض التذاكر المحفوظة.",
+    "loading": "جاري تحميل تذاكرك...",
+    "loadErrorTitle": "تعذر تحميل التذاكر",
+    "loadError": "تعذر تحميل تذاكرك.",
+    "tryAgain": "حاول مرة أخرى",
+    "emptyTitle": "لا توجد تذاكر بعد",
+    "emptyCopy": "احجز مساراً وستظهر تذكرتك هنا.",
+    "planTrip": "خطط رحلة",
+    "activeSection": "التذاكر النشطة",
+    "historySection": "سجل التذاكر",
+    "noActive": "لا توجد تذاكر نشطة.",
+    "noHistory": "لا يوجد سجل تذاكر بعد.",
     "digitalTicket": "تذكرة رقمية",
-    "valid": "صالحة",
     "route": "المسار",
-    "cost": "التكلفة",
+    "totalFare": "إجمالي الأجرة",
     "validUntil": "صالحة حتى",
-    "expires": "تنتهي في {date}",
-    "viewDetails": "عرض تفاصيل التذكرة",
-    "booked": "تم الحجز",
-    "bookAgain": "احجز مرة أخرى"
+    "notAvailable": "غير متاح",
+    "start": "البداية",
+    "destination": "الوجهة",
+    "legsAvailable": "{count} من {total} مقطع متاح للاسترداد",
+    "viewDetails": "عرض التفاصيل",
+    "requestRefund": "طلب استرداد",
+    "nothingToRefund": "لا شيء للاسترداد",
+    "legStatus": {
+      "unused": "غير مستخدم",
+      "used": "مستخدم",
+      "refunded": "مسترد"
+    },
+    "refund": {
+      "title": "طلب استرداد",
+      "total": "استرداد كامل",
+      "totalDesc": "استرداد كل المقاطع. متاح فقط قبل استخدام أو استرداد أي مقطع.",
+      "partial": "استرداد جزئي",
+      "partialDesc": "اختر المقاطع غير المستخدمة. لا يمكن اختيار المقاطع المستخدمة أو المستردة.",
+      "amount": "مبلغ الاسترداد",
+      "note": "تتم إعادة المبالغ المستردة عبر وسيلة الدفع الأصلية.",
+      "cancel": "إلغاء",
+      "processing": "جاري معالجة الاسترداد...",
+      "confirm": "تأكيد الاسترداد",
+      "successTitle": "تم الاسترداد",
+      "successMessage": "تم استرداد {amount} لعدد {count} مقطع.",
+      "failed": "تعذر إتمام الاسترداد."
+    }
   },
   "saved": {
     "title": "المحفوظات والسجل",
@@ -173,7 +217,13 @@
       "title": "المسارات المحفوظة",
       "subtitle": "مسارات وضعتها للاستخدام السريع.",
       "meta": "{duration} - {cost} - آخر استخدام {lastUsed}",
-      "useRoute": "استخدم المسار"
+      "useRoute": "استخدم المسار",
+      "emptyTitle": "لا توجد مسارات محفوظة بعد",
+      "emptyCopy": "احفظ مساراً من صفحة تفاصيله لإعادة استخدامه هنا.",
+      "justNow": "الآن",
+      "minutesAgo": "منذ {count} دقيقة",
+      "hoursAgo": "منذ {count} ساعة",
+      "daysAgo": "منذ {count} يوم"
     },
     "history": {
       "title": "الرحلات الأخيرة",
@@ -207,6 +257,7 @@
     "mostComfortable": "الأكثر راحة",
     "totalDuration": "المدة الإجمالية",
     "totalCost": "التكلفة الإجمالية",
+    "free": "مجاني",
     "transfers": "التحويلات",
     "walking": "المشي",
     "viewDetails": "عرض التفاصيل",
@@ -214,12 +265,15 @@
     "routesFound": "المسارات الموجودة",
     "optionsCount": "{count} خيارات",
     "planning": "جاري تخطيط المسار...",
-    "noRoutesTitle": "لم يتم العثور على مسارات ديناميكية",
-    "backendHelp": "تأكد من تشغيل الخادم و OpenTripPlanner ثم جرب البحث مرة أخرى.",
-    "noRoutesForSearch": "لم يتم العثور على مسارات ديناميكية لهذا البحث.",
+    "noRoutesTitle": "لم نعثر على مسارات",
+    "noRoutesBody": "لم نتمكن من إيجاد مسار بين {start} و{destination}. جرّب أماكن مختلفة أو وقتاً آخر.",
     "errors": {
       "placeNotFound": "لم يتم العثور على المكان: {place}. اختر مكاناً معروفاً من الاقتراحات.",
       "planFailed": "تعذر تخطيط هذا المسار."
+    },
+    "preview": {
+      "title": "أنت غير متصل بالإنترنت. يتم عرض مسار محفوظ مسبقاً. قد يكون التوافر قد تغيّر.",
+      "subtitle": "أعد الاتصال قبل بدء الرحلة أو شراء التذكرة."
     }
   },
   "routeDetails": {
@@ -236,6 +290,7 @@
     "duration": "المدة",
     "stepByStep": "خطوة بخطوة",
     "bookPay": "احجز وادفع",
+    "reconnectToBuy": "أعد الاتصال قبل شراء التذكرة.",
     "saveRoute": "حفظ المسار",
     "startNavigation": "بدء الملاحة",
     "stops": "{count} محطات",

@@ -43,6 +43,20 @@
         </div>
       </div>
 
+      <div
+        v-if="isFromCache"
+        class="mb-6 rounded-xl border-2 border-warning bg-warning-soft p-4"
+        role="status"
+      >
+        <div class="flex items-start gap-3">
+          <CloudOff class="mt-0.5 h-5 w-5 flex-shrink-0 text-warning" />
+          <div class="text-sm text-foreground">
+            <p class="font-display">{{ t("routeResults.preview.title") }}</p>
+            <p class="mt-1 text-muted-foreground">{{ t("routeResults.preview.subtitle") }}</p>
+          </div>
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         <div class="lg:col-span-2 space-y-4">
           <div
@@ -67,22 +81,13 @@
             {{ t("routeResults.planning") }}
           </div>
           <div
-            v-else-if="errorMessage"
+            v-else-if="!routes.length"
             class="bg-card border-2 border-border rounded-xl p-6 text-muted-foreground"
           >
             <h2 class="font-display text-xl text-foreground mb-2">
               {{ t("routeResults.noRoutesTitle") }}
             </h2>
-            <p>{{ errorMessage }}</p>
-            <p class="mt-2 text-sm">
-              {{ t("routeResults.backendHelp") }}
-            </p>
-          </div>
-          <div
-            v-else-if="!routes.length"
-            class="bg-card border-2 border-border rounded-xl p-6 text-muted-foreground"
-          >
-            {{ t("routeResults.noRoutesForSearch") }}
+            <p>{{ emptyStateMessage }}</p>
           </div>
           <template v-else>
             <RouteCard
@@ -103,12 +108,18 @@
               {{ t("routeResults.mapOverview") }}
             </h3>
             <div
-              class="aspect-square bg-gradient-to-br from-primary-soft to-warning-soft rounded-lg flex items-center justify-center border-2 border-border"
+              class="aspect-square overflow-hidden rounded-lg border-2 border-border"
             >
-              <div class="text-center">
-                <MapPin class="w-16 h-16 text-primary mx-auto mb-2" />
-                <p class="text-sm text-muted-foreground">{{ t("routeResults.interactiveMap") }}</p>
-                <p class="text-xs text-muted-foreground">{{ t("routeResults.showingAllRoutes") }}</p>
+              <RoutePreviewMap v-if="previewSteps.length" :key="previewRouteId" :steps="previewSteps" />
+              <div
+                v-else
+                class="h-full w-full bg-gradient-to-br from-primary-soft to-warning-soft flex items-center justify-center"
+              >
+                <div class="text-center">
+                  <MapPin class="w-16 h-16 text-primary mx-auto mb-2" />
+                  <p class="text-sm text-muted-foreground">{{ t("routeResults.interactiveMap") }}</p>
+                  <p class="text-xs text-muted-foreground">{{ t("routeResults.showingAllRoutes") }}</p>
+                </div>
               </div>
             </div>
             <div class="mt-6 space-y-3">
@@ -126,17 +137,22 @@
 import { computed, defineComponent, h, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { ArrowLeft, MapPin, SlidersHorizontal } from "@lucide/vue";
+import { ArrowLeft, CloudOff, MapPin, SlidersHorizontal } from "@lucide/vue";
 import RouteCard from "@/components/route/RouteCard.vue";
-import { planRoute, type ApiRouteOption } from "@/services/api";
+import RoutePreviewMap from "../components/RoutePreviewMap.vue";
+import { type ApiRouteOption } from "@/services/api";
+import { useRoutePlanning } from "@/composables/useRoutePlanning";
 import { localizePlaceName } from "@/services/placeLocalization";
 import {
+  computeDepartureAt,
   getPlaceCoords,
   getSavedRouteSearch,
   normalizeFilter,
   saveRouteSearch,
   saveSelectedRoute,
 } from "../services/routeSearch";
+
+type TimeMode = "now" | "depart" | "arrive";
 
 const router = useRouter();
 const currentRoute = useRoute();
@@ -164,6 +180,13 @@ const destination =
 const displayStart = computed(() => localizePlaceName(start));
 const displayDestination = computed(() => localizePlaceName(destination));
 
+const timeMode = ((queryString(currentRoute.query.timeMode) ??
+  state.timeMode ??
+  "now") as TimeMode);
+const tripDate = queryString(currentRoute.query.date) ?? state.date ?? "";
+const tripTime = queryString(currentRoute.query.time) ?? state.time ?? "";
+const departureAt = computeDepartureAt(timeMode, tripDate, tripTime);
+
 const sortBy = ref<"fastest" | "cheapest" | "comfortable">(
   normalizeFilter(queryFilter ?? state.filter ?? savedSearch.filter),
 );
@@ -174,26 +197,50 @@ const tabs = [
   { value: "comfortable" as const, labelKey: "routeResults.comfortable" },
 ];
 
-const loading = ref(false);
-const errorMessage = ref("");
-const apiRoutes = ref<ApiRouteOption[]>([]);
+const {
+  routes: apiRoutes,
+  isLoading: loading,
+  error,
+  isFromCache,
+  searchRoutes,
+} = useRoutePlanning();
+
+// Friendly, rider-facing copy for the empty state. Never surfaces raw backend /
+// OpenTripPlanner wording: a genuine "no routes" outcome (or no error) reads as
+// "no routes found"; a place-not-found or any other failure maps to friendly i18n.
+const emptyStateMessage = computed(() => {
+  const message = error.value ?? "";
+
+  if (!message || message === "NO_ROUTES_FOUND") {
+    return t("routeResults.noRoutesBody", {
+      start: displayStart.value,
+      destination: displayDestination.value,
+    });
+  }
+  if (
+    message === "place_not_found_from" ||
+    /coordinates/i.test(message)
+  ) {
+    return t("routeResults.errors.placeNotFound", { place: start });
+  }
+  if (message === "place_not_found_to") {
+    return t("routeResults.errors.placeNotFound", { place: destination });
+  }
+  return t("routeResults.errors.planFailed");
+});
 
 onMounted(async () => {
   saveRouteSearch({ start, destination, filter: sortBy.value });
-  loading.value = true;
-  errorMessage.value = "";
-
-  try {
-    apiRoutes.value = await planRoute(start, destination, sortBy.value, {
+  await searchRoutes(
+    start,
+    destination,
+    sortBy.value,
+    {
       fromCoords: getPlaceCoords(start),
       toCoords: getPlaceCoords(destination),
-    });
-  } catch (error) {
-    apiRoutes.value = [];
-    errorMessage.value = routeErrorMessage(error);
-  } finally {
-    loading.value = false;
-  }
+    },
+    { mode: timeMode, date: tripDate, time: tripTime },
+  );
 });
 
 const routes = computed<ApiRouteOption[]>(() => apiRoutes.value);
@@ -248,6 +295,10 @@ const sortedRoutes = computed(() => {
   return routesCopy;
 });
 
+// Map preview shows the currently top-ranked route for the active sort tab.
+const previewSteps = computed(() => sortedRoutes.value[0]?.detailSteps ?? []);
+const previewRouteId = computed(() => sortedRoutes.value[0]?.id ?? "");
+
 const Stat = defineComponent({
   props: { label: String, value: String },
   setup(props) {
@@ -279,6 +330,8 @@ function selectRoute(route: ApiRouteOption) {
     destination,
     filter: sortBy.value,
     steps: route.detailSteps,
+    departureAt,
+    fromCache: isFromCache.value,
   });
   router.push({
     path: "/route-details",
@@ -293,14 +346,4 @@ function selectRoute(route: ApiRouteOption) {
   });
 }
 
-function routeErrorMessage(error: unknown) {
-  if (!(error instanceof Error)) return t("routeResults.errors.planFailed");
-  if (error.message === "place_not_found_from") {
-    return t("routeResults.errors.placeNotFound", { place: start });
-  }
-  if (error.message === "place_not_found_to") {
-    return t("routeResults.errors.placeNotFound", { place: destination });
-  }
-  return error.message || t("routeResults.errors.planFailed");
-}
 </script>

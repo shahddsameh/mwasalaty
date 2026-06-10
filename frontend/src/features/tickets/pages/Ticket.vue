@@ -87,6 +87,11 @@
                 <Field label="Total Fare" :value="`${ticket.payment.amount} ${ticket.payment.currency}`" gold />
                 <Field label="Payment" :value="paymentLabel" />
                 <Field label="Valid Until" :value="validUntil" />
+                <Field
+                  v-if="departsAt"
+                  label="Scheduled Departure"
+                  :value="departsAt"
+                />
               </div>
             </div>
 
@@ -145,7 +150,10 @@
             <ol class="space-y-3 text-sm text-muted-foreground">
               <li>1. Show the QR code to the operator scanner.</li>
               <li>2. Each leg is marked as used after it is scanned.</li>
-              <li>3. The ticket is valid for 24 hours from booking.</li>
+              <li>
+                3. The ticket is valid for 24 hours from
+                {{ departsAt ? "your scheduled departure" : "booking" }}.
+              </li>
               <li>4. Works offline — keep this screen handy during your trip.</li>
             </ol>
           </InfoCard>
@@ -206,6 +214,7 @@ import Modal from "@/components/ui/Modal.vue";
 import type { Ticket, TicketLeg, TicketLegStatus } from "@/services/api";
 import { getTicket } from "@/services/api";
 import { readCurrentTicket, storeCurrentTicket } from "@/services/currentTicket";
+import { db } from "@/db/appDb";
 
 const route = useRoute();
 const router = useRouter();
@@ -226,15 +235,34 @@ onMounted(async () => {
   const stored = readCurrentTicket();
 
   if (id) {
+    // Render the saved copy from IndexedDB first so the ticket and QR work
+    // offline; then refresh from the network when reachable.
+    let offlineTicket: Ticket | null = null;
     try {
-      ticket.value = await getTicket(id);
-      if (ticket.value) storeCurrentTicket(ticket.value);
+      offlineTicket = (await db.tickets.get(id)) ?? null;
+    } catch {
+      // IndexedDB unavailable; fall back to network / sessionStorage below.
+    }
+    if (offlineTicket) ticket.value = offlineTicket;
+
+    try {
+      const fresh = await getTicket(id);
+      ticket.value = fresh;
+      storeCurrentTicket(fresh);
+      try {
+        await db.tickets.put({ ...fresh, savedAt: Date.now() });
+      } catch {
+        // Best-effort offline persistence.
+      }
     } catch (err) {
-      if (stored && stored.ticketId === id) {
-        ticket.value = stored;
-      } else {
-        errorMessage.value =
-          err instanceof Error ? err.message : "This ticket could not be found.";
+      // Network failed — keep whatever offline copy we already have.
+      if (!ticket.value) {
+        if (stored && stored.ticketId === id) {
+          ticket.value = stored;
+        } else {
+          errorMessage.value =
+            err instanceof Error ? err.message : "This ticket could not be found.";
+        }
       }
     }
   } else if (stored) {
@@ -303,6 +331,12 @@ const validUntil = computed(() => {
   if (!ticket.value?.expiresAt) return "24h from booking";
   const d = new Date(ticket.value.expiresAt);
   return Number.isNaN(d.getTime()) ? "24h from booking" : d.toLocaleString();
+});
+
+const departsAt = computed(() => {
+  if (!ticket.value?.departureAt) return "";
+  const d = new Date(ticket.value.departureAt);
+  return Number.isNaN(d.getTime()) ? "" : d.toLocaleString();
 });
 
 function legLabel(leg: TicketLeg) {

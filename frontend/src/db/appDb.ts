@@ -8,6 +8,8 @@ export type SavedTrip = {
   filter: string;
   duration?: string;
   cost?: string;
+  // Optional user-given label (not indexed; no schema bump needed).
+  name?: string;
   createdAt: number;
 };
 
@@ -122,6 +124,12 @@ class MwasalatyDb extends Dexie {
       cachedPlaces: "id, name, cachedAt",
       syncMetadata: "key, lastSyncAt, syncStatus",
       pendingActions: "++id, createdAt, entityType, actionType, retryCount",
+    });
+
+    // Version 4: compound [from+to+filter] index so recentSearchesRepository
+    // can dedupe a search by its full identity.
+    this.version(4).stores({
+      recentSearches: "++id, searchedAt, from, to, [from+to+filter]",
     });
   }
 }

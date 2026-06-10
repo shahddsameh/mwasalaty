@@ -61,7 +61,7 @@
       <div>
         <p class="text-xs text-muted-foreground">{{ t("routeResults.totalCost") }}</p>
         <p class="font-semibold text-lg">
-          {{ formatUnit(route.cost) }}
+          {{ isFree ? t("routeResults.free") : formatUnit(route.cost) }}
         </p>
       </div>
       <div>
@@ -103,6 +103,7 @@ import {
   Wallet,
   Sofa,
 } from "@lucide/vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import AppButton from "../ui/AppButton.vue";
 import { localizeMode, localizeRouteInstruction } from "@/services/placeLocalization";
@@ -119,6 +120,9 @@ const props = defineProps({
   isCheapest: Boolean,
   isComfortable: Boolean,
 });
+
+// Walk-only itineraries have no fare — show "Free" rather than "0 EGP".
+const isFree = computed(() => Number(props.route?.totalFare?.amount) === 0);
 
 function handleCardClick() {
   if (!props.isComfortable) {

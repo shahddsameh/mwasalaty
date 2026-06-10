@@ -119,27 +119,33 @@
               <BookmarkPlus class="w-5 h-5" /> {{ t("routeDetails.saveRoute") }}
             </AppButton>
             <AppButton
+              v-if="!isWalkOnly"
               variant="outline"
               size="lg"
               class="flex items-center justify-center gap-2"
+              :disabled="!isOnline"
               @click="router.push('/booking')"
             >
               <DollarSign class="w-5 h-5" /> {{ t("routeDetails.bookPay") }}
             </AppButton>
           </div>
+
+          <p
+            v-if="!isOnline || fromCache"
+            class="mt-3 flex items-center gap-2 text-sm text-warning"
+          >
+            <CloudOff class="h-4 w-4 flex-shrink-0" />
+            {{ t("routeDetails.reconnectToBuy") }}
+          </p>
         </div>
 
         <aside class="lg:sticky lg:top-8 h-fit space-y-4 md:space-y-6">
           <div class="bg-card rounded-xl p-6 border-2 border-border">
             <h3 class="font-display text-xl text-foreground mb-4">{{ t("routeDetails.routeMap") }}</h3>
             <div
-              class="aspect-square bg-gradient-to-br from-primary-soft via-warning-soft to-primary rounded-lg flex items-center justify-center border-2 border-border"
+              class="aspect-square overflow-hidden rounded-lg border-2 border-border"
             >
-              <div class="text-center">
-                <MapPin class="w-16 h-16 text-foreground mx-auto mb-2" />
-                <p class="text-sm text-foreground">{{ t("routeDetails.interactiveMap") }}</p>
-                <p class="text-xs text-muted-foreground">{{ t("routeDetails.liveTracking") }}</p>
-              </div>
+              <RoutePreviewMap :steps="steps" />
             </div>
           </div>
           <AppButton
@@ -163,11 +169,12 @@
           {{ t("routeDetails.saveRouteCopy") }}
         </p>
         <input
+          v-model="routeName"
           class="w-full px-4 py-2.5 bg-card border border-border rounded-lg"
           :placeholder="t('routeDetails.routeNamePlaceholder')"
         />
         <div class="flex gap-3">
-          <AppButton class="flex-1" @click="saveModalOpen = false"
+          <AppButton class="flex-1" @click="saveCurrentRoute"
             >{{ t("routeDetails.saveRoute") }}</AppButton
           >
           <AppButton
@@ -182,32 +189,42 @@
 
     <Modal
       :open="savePlaceModalOpen"
-      title="Save Place"
-      @close="savePlaceModalOpen = false"
+      :title="t('routeDetails.saveDestination')"
+      @close="closeSavePlace"
     >
       <div class="space-y-4">
+        <p class="text-sm text-muted-foreground">
+          {{ t("saved.places.modalCopy") }}
+        </p>
+        <div class="flex items-center gap-2 rounded-lg bg-secondary p-3 text-sm text-foreground">
+          <MapPin class="w-4 h-4 flex-shrink-0 text-primary" />
+          <span class="truncate">{{ displayDestination }}</span>
+        </div>
         <div class="grid grid-cols-2 gap-2">
           <button
-            v-for="type in ['Home', 'Work', 'School', 'Other']"
-            :key="type"
-            class="p-3 border-2 border-border rounded-lg hover:border-primary"
+            v-for="type in placeTypes"
+            :key="type.value"
+            type="button"
+            :class="placeTypeClass(type.value)"
+            @click="newPlaceType = type.value"
           >
-            {{ type }}
+            {{ t(type.labelKey) }}
           </button>
         </div>
         <input
+          v-model="newPlaceName"
           class="w-full px-4 py-2.5 bg-card border border-border rounded-lg"
-          placeholder="Custom name (optional)"
+          :placeholder="t('saved.places.namePlaceholder')"
         />
         <div class="flex gap-3">
-          <AppButton class="flex-1" @click="savePlaceModalOpen = false"
-            >Save Place</AppButton
+          <AppButton class="flex-1" @click="saveCurrentDestination"
+            >{{ t("saved.places.savePlace") }}</AppButton
           >
           <AppButton
             variant="outline"
             class="flex-1"
-            @click="savePlaceModalOpen = false"
-            >Cancel</AppButton
+            @click="closeSavePlace"
+            >{{ t("home.cancel") }}</AppButton
           >
         </div>
       </div>
@@ -223,6 +240,7 @@ import {
   ArrowLeft,
   BookmarkPlus,
   Clock,
+  CloudOff,
   DollarSign,
   MapPin,
   Navigation,
@@ -233,8 +251,16 @@ import {
   Car,
   PersonStanding,
 } from "@lucide/vue";
+import { useNetworkStatus } from "@/core/offline/networkStatus";
 import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
+import RoutePreviewMap from "../components/RoutePreviewMap.vue";
+import { useSavedTrips } from "@/composables/useSavedTrips";
+import { useFavoritePlaces } from "@/composables/useFavoritePlaces";
+import {
+  makeSavedPlaceId,
+  type SavedPlaceType,
+} from "@/features/home/services/savedPlaces";
 import type { ApiRouteOption, RouteDetailStep } from "@/services/api";
 import { localizePlaceName, localizeRouteInstruction } from "@/services/placeLocalization";
 import {
@@ -254,8 +280,11 @@ const queryString = (value: unknown) =>
     : typeof value === "string"
       ? value
       : undefined;
+const { isOnline } = useNetworkStatus();
 const savedSearch = getSavedRouteSearch();
 const selectedRoute = getSelectedRoute();
+// True when the selected route was served from the offline cache (preview only).
+const fromCache = Boolean(selectedRoute.fromCache);
 const route = (state.route ??
   selectedRoute.route ?? {
     itineraryId: "",
@@ -286,6 +315,14 @@ const destination =
   "Unknown destination";
 const displayStart = computed(() => localizePlaceName(start, locale.value));
 const displayDestination = computed(() => localizePlaceName(destination, locale.value));
+// A walk-only itinerary has no ticketable transit leg, so there is nothing to
+// book or pay for — hide the Book & Pay action in that case.
+const isWalkOnly = computed(
+  () =>
+    Array.isArray(route.legs) &&
+    route.legs.length > 0 &&
+    route.legs.every((leg: { mode: string }) => leg.mode === "WALK"),
+);
 const filter = normalizeFilter(
   queryString(currentRoute.query.filter) ??
     state.filter ??
@@ -297,6 +334,65 @@ const steps = (state.steps ??
   selectedRoute.steps) as RouteDetailStep[];
 const saveModalOpen = ref(false);
 const savePlaceModalOpen = ref(false);
+const routeName = ref("");
+const newPlaceName = ref("");
+const newPlaceType = ref<SavedPlaceType>("other");
+const { saveTrip } = useSavedTrips();
+const { saveFavoritePlace } = useFavoritePlaces();
+
+const placeTypes = [
+  { value: "home" as const, labelKey: "home.placeTypes.home" },
+  { value: "work" as const, labelKey: "home.placeTypes.work" },
+  { value: "school" as const, labelKey: "home.placeTypes.school" },
+  { value: "other" as const, labelKey: "home.placeTypes.other" },
+];
+
+function placeTypeClass(value: SavedPlaceType) {
+  return [
+    "flex min-h-10 items-center justify-center rounded-lg border-2 px-3 py-2 text-sm transition-all",
+    newPlaceType.value === value
+      ? "border-primary bg-secondary text-primary"
+      : "border-border text-foreground hover:border-primary hover:bg-muted",
+  ];
+}
+
+async function saveCurrentRoute() {
+  const name = routeName.value.trim() || `${start} -> ${destination}`;
+  await saveTrip({
+    id: `${start}-${destination}-${filter}`.toLowerCase().replace(/\s+/g, "-"),
+    name,
+    start,
+    destination,
+    filter,
+    duration: String(route.duration),
+    cost: String(route.cost),
+    createdAt: Date.now(),
+  });
+  routeName.value = "";
+  saveModalOpen.value = false;
+}
+
+function closeSavePlace() {
+  savePlaceModalOpen.value = false;
+  newPlaceName.value = "";
+  newPlaceType.value = "other";
+}
+
+// Persist the route's destination as a saved place (shows in Saved > Places
+// and the Home planner, via the same offline-first IndexedDB store).
+async function saveCurrentDestination() {
+  const address = destination.trim();
+  if (!address) return;
+  const name = newPlaceName.value.trim() || address;
+  await saveFavoritePlace({
+    id: makeSavedPlaceId(name, address),
+    name,
+    address,
+    type: newPlaceType.value,
+    createdAt: Date.now(),
+  });
+  closeSavePlace();
+}
 
 saveRouteSearch({ start, destination, filter });
 

@@ -1,0 +1,5000 @@
+[
+{
+"label": "Abbassiya",
+"lat": 30.0696596,
+"lng": 31.2810667,
+"metro": true
+},
+{
+"label": "Abdou Pasha",
+"lat": 30.0647435,
+"lng": 31.2748382,
+"metro": true
+},
+{
+"label": "Ain Helwan",
+"lat": 29.8626045,
+"lng": 31.3250469,
+"metro": true
+},
+{
+"label": "Ain Shams",
+"lat": 30.1310233,
+"lng": 31.318945,
+"metro": true
+},
+{
+"label": "Al-Ahram",
+"lat": 30.0912563,
+"lng": 31.326641,
+"metro": true
+},
+{
+"label": "Al-Sayeda Zeinab",
+"lat": 30.029027,
+"lng": 31.2355028,
+"metro": true
+},
+{
+"label": "Al-Shohadaa",
+"lat": 30.061644,
+"lng": 31.2463081,
+"metro": true
+},
+{
+"label": "Attaba",
+"lat": 30.0530828,
+"lng": 31.2472008,
+"metro": true
+},
+{
+"label": "Bab El-Shaaria",
+"lat": 30.053878,
+"lng": 31.2561763,
+"metro": true
+},
+{
+"label": "Bohooth",
+"lat": 30.0357499,
+"lng": 31.2002888,
+"metro": true
+},
+{
+"label": "Cairo University",
+"lat": 30.0262473,
+"lng": 31.2014575,
+"metro": true
+},
+{
+"label": "Dar El-Salam",
+"lat": 29.9820564,
+"lng": 31.2418074,
+"metro": true
+},
+{
+"label": "Dokki",
+"lat": 30.038399,
+"lng": 31.212403,
+"metro": true
+},
+{
+"label": "El-Demerdash",
+"lat": 30.0773189,
+"lng": 31.2774003,
+"metro": true
+},
+{
+"label": "El-Geish",
+"lat": 30.0618404,
+"lng": 31.2670045,
+"metro": true
+},
+{
+"label": "El-Giza",
+"lat": 30.0105891,
+"lng": 31.2071994,
+"metro": true
+},
+{
+"label": "El-Maasara",
+"lat": 29.9063875,
+"lng": 31.2995916,
+"metro": true
+},
+{
+"label": "El-Malek El-Saleh",
+"lat": 30.0176562,
+"lng": 31.2312347,
+"metro": true
+},
+{
+"label": "El-Marg",
+"lat": 30.1521064,
+"lng": 31.3354805,
+"metro": true
+},
+{
+"label": "El-Matareyya",
+"lat": 30.1208752,
+"lng": 31.3137757,
+"metro": true
+},
+{
+"label": "El-Mounib",
+"lat": 29.9816362,
+"lng": 31.2113803,
+"metro": true
+},
+{
+"label": "El-Zahraa",
+"lat": 29.9955622,
+"lng": 31.2315935,
+"metro": true
+},
+{
+"label": "Ezbet El-Nakhl",
+"lat": 30.1393163,
+"lng": 31.3247177,
+"metro": true
+},
+{
+"label": "Fair Zone",
+"lat": 30.0731218,
+"lng": 31.3008644,
+"metro": true
+},
+{
+"label": "Faisal",
+"lat": 30.0173787,
+"lng": 31.2035911,
+"metro": true
+},
+{
+"label": "Ghamra",
+"lat": 30.0689013,
+"lng": 31.264835,
+"metro": true
+},
+{
+"label": "Hadayek El-Maadi",
+"lat": 29.9698858,
+"lng": 31.2510043,
+"metro": true
+},
+{
+"label": "Hadayek Helwan",
+"lat": 29.897197,
+"lng": 31.3040634,
+"metro": true
+},
+{
+"label": "Hadayeq El-Zaitoun",
+"lat": 30.1060784,
+"lng": 31.3103431,
+"metro": true
+},
+{
+"label": "Hammamat El-Qobba",
+"lat": 30.0910742,
+"lng": 31.2986307,
+"metro": true
+},
+{
+"label": "Helmeyet El-Zaitoun",
+"lat": 30.1132806,
+"lng": 31.3138846,
+"metro": true
+},
+{
+"label": "Helwan",
+"lat": 29.8491982,
+"lng": 31.3342786,
+"metro": true
+},
+{
+"label": "Helwan University",
+"lat": 29.8694514,
+"lng": 31.3200669,
+"metro": true
+},
+{
+"label": "Khalafawy",
+"lat": 30.0979197,
+"lng": 31.2454486,
+"metro": true
+},
+{
+"label": "Kobri El-Qobba",
+"lat": 30.0870205,
+"lng": 31.2942566,
+"metro": true
+},
+{
+"label": "Koleyet El-Banat",
+"lat": 30.0840455,
+"lng": 31.329124,
+"metro": true
+},
+{
+"label": "Kolleyyet El-Zeraa",
+"lat": 30.113577,
+"lng": 31.2490741,
+"metro": true
+},
+{
+"label": "Kozzika",
+"lat": 29.9364986,
+"lng": 31.2812804,
+"metro": true
+},
+{
+"label": "Maadi",
+"lat": 29.9603171,
+"lng": 31.2578118,
+"metro": true
+},
+{
+"label": "Manshiet El-Sadr",
+"lat": 30.0821643,
+"lng": 31.2875258,
+"metro": true
+},
+{
+"label": "Mar Girgis",
+"lat": 30.0062411,
+"lng": 31.2297029,
+"metro": true
+},
+{
+"label": "Masarra",
+"lat": 30.0709677,
+"lng": 31.2450258,
+"metro": true
+},
+{
+"label": "Mezallat",
+"lat": 30.1039134,
+"lng": 31.2460124,
+"metro": true
+},
+{
+"label": "Mohamed Naguib",
+"lat": 30.0452867,
+"lng": 31.2442266,
+"metro": true
+},
+{
+"label": "Nasser",
+"lat": 30.053327,
+"lng": 31.2386474,
+"metro": true
+},
+{
+"label": "New El-Marg",
+"lat": 30.1635322,
+"lng": 31.3382979,
+"metro": true
+},
+{
+"label": "Omm El-Misryeen",
+"lat": 30.0059628,
+"lng": 31.2077701,
+"metro": true
+},
+{
+"label": "Opera",
+"lat": 30.0419061,
+"lng": 31.2250549,
+"metro": true
+},
+{
+"label": "Orabi",
+"lat": 30.0570782,
+"lng": 31.2425299,
+"metro": true
+},
+{
+"label": "Rod El Farag",
+"lat": 30.0805102,
+"lng": 31.2453875,
+"metro": true
+},
+{
+"label": "Saad Zaghloul",
+"lat": 30.0355695,
+"lng": 31.2378368,
+"metro": true
+},
+{
+"label": "Sadat",
+"lat": 30.0439096,
+"lng": 31.2356404,
+"metro": true
+},
+{
+"label": "Sakanat El-Maadi",
+"lat": 29.953346,
+"lng": 31.2630002,
+"metro": true
+},
+{
+"label": "Sakiat Mekki",
+"lat": 29.9953195,
+"lng": 31.2085131,
+"metro": true
+},
+{
+"label": "Saray El-Qobba",
+"lat": 30.0976226,
+"lng": 31.3045012,
+"metro": true
+},
+{
+"label": "Shubra El-Kheima",
+"lat": 30.1224612,
+"lng": 31.2445512,
+"metro": true
+},
+{
+"label": "St. Teresa",
+"lat": 30.0880822,
+"lng": 31.2452969,
+"metro": true
+},
+{
+"label": "Stadium",
+"lat": 30.0728436,
+"lng": 31.3172404,
+"metro": true
+},
+{
+"label": "Tora El-Asmant",
+"lat": 29.9265346,
+"lng": 31.2879166,
+"metro": true
+},
+{
+"label": "Tora El-Balad",
+"lat": 29.9466599,
+"lng": 31.2726782,
+"metro": true
+},
+{
+"label": "Wadi Hof",
+"lat": 29.8790879,
+"lng": 31.3135996,
+"metro": true
+},
+{
+"label": "10th District (Al Hay Al Asher) - 6th of October",
+"lat": 29.9643201,
+"lng": 30.9155999,
+"metro": false
+},
+{
+"label": "10th District (Al Hay Al Asher) - Nasr City",
+"lat": 30.0490642,
+"lng": 31.3786623,
+"metro": false
+},
+{
+"label": "10th District Mini Bus Stop (Al Asher) - Al Shorouq",
+"lat": 30.1343247,
+"lng": 31.6572026,
+"metro": false
+},
+{
+"label": "10th of Ramadan (Asher Men Ramadan) City",
+"lat": 30.2951481,
+"lng": 31.7437644,
+"metro": false
+},
+{
+"label": "10th of Ramadan (Asher Men Ramadan) Station",
+"lat": 30.1507092,
+"lng": 31.4156946,
+"metro": false
+},
+{
+"label": "10th of Ramadan City Entrance",
+"lat": 30.2646134,
+"lng": 31.7554318,
+"metro": false
+},
+{
+"label": "10th of Ramadan Station - Ismailiya Desert Road",
+"lat": 30.1477793,
+"lng": 31.4208275,
+"metro": false
+},
+{
+"label": "11th District (Hay Al Hadi Ashr) - 6th of October",
+"lat": 29.96281,
+"lng": 30.90172,
+"metro": false
+},
+{
+"label": "11th District (Hay Al Hadi Ashr) - Sheikh Zayed",
+"lat": 30.0435947,
+"lng": 30.9685674,
+"metro": false
+},
+{
+"label": "11th District (Hay Al Hadi Ashr) Exit - Sheikh Zayed",
+"lat": 30.0490704,
+"lng": 30.97657,
+"metro": false
+},
+{
+"label": "15th of May Bridge",
+"lat": 30.057606,
+"lng": 31.2278301,
+"metro": false
+},
+{
+"label": "16th District (Hay Al Sades Ashr) - Sheikh Zayed",
+"lat": 30.0531891,
+"lng": 30.9661894,
+"metro": false
+},
+{
+"label": "1st Settlement (Tagamoa Awwal)",
+"lat": 30.0645681,
+"lng": 31.4491701,
+"metro": false
+},
+{
+"label": "1st Settlement (Tagamoa Awwal) Hospital",
+"lat": 30.072182,
+"lng": 31.4529153,
+"metro": false
+},
+{
+"label": "1st Settlement City Authority",
+"lat": 30.052115,
+"lng": 31.4481476,
+"metro": false
+},
+{
+"label": "26th of July Mehwar Exit -  Ring Road",
+"lat": 30.0640357,
+"lng": 31.1747916,
+"metro": false
+},
+{
+"label": "2nd District Entrance - Obour",
+"lat": 30.2496239,
+"lng": 31.4686739,
+"metro": false
+},
+{
+"label": "3rd Settlement (Tagamoa Thaleth)",
+"lat": 29.9834,
+"lng": 31.44278,
+"metro": false
+},
+{
+"label": "5th Settlement City Authority",
+"lat": 29.9933345,
+"lng": 31.4161053,
+"metro": false
+},
+{
+"label": "6th District - 6th of October",
+"lat": 29.931372,
+"lng": 30.917256,
+"metro": false
+},
+{
+"label": "6th Of October City Authority",
+"lat": 29.9826317,
+"lng": 30.9523001,
+"metro": false
+},
+{
+"label": "6th Of October Public Library",
+"lat": 29.9861098,
+"lng": 30.9431405,
+"metro": false
+},
+{
+"label": "6th Of October University",
+"lat": 29.9758302,
+"lng": 30.9497708,
+"metro": false
+},
+{
+"label": "7th District (Hay Al Sabea) - 6th of October",
+"lat": 29.9832713,
+"lng": 30.9394912,
+"metro": false
+},
+{
+"label": "7th District Entrance - 6th of October",
+"lat": 29.9799783,
+"lng": 30.9495586,
+"metro": false
+},
+{
+"label": "7th District Stop (Hay Al Sabea) - Nasr City",
+"lat": 30.0417037,
+"lng": 31.3296271,
+"metro": false
+},
+{
+"label": "8th District (Hay Al Thamen) - 6th of October",
+"lat": 29.97421,
+"lng": 30.93055,
+"metro": false
+},
+{
+"label": "8th District - Al Shorouq",
+"lat": 30.1638792,
+"lng": 31.6054452,
+"metro": false
+},
+{
+"label": "Abageyya Bridge",
+"lat": 30.0123326,
+"lng": 31.2669061,
+"metro": false
+},
+{
+"label": "Abageyya Stop",
+"lat": 30.0238653,
+"lng": 31.2637053,
+"metro": false
+},
+{
+"label": "Abbas Al Akkad - Mostafa Al Nahas",
+"lat": 30.0538943,
+"lng": 31.3385665,
+"metro": false
+},
+{
+"label": "Abbaseya Bridge - Start",
+"lat": 30.0703583,
+"lng": 31.2892982,
+"metro": false
+},
+{
+"label": "Abbasseya",
+"lat": 30.073322,
+"lng": 31.2846745,
+"metro": false
+},
+{
+"label": "Abbasseya Bridge - End",
+"lat": 30.0753864,
+"lng": 31.2836411,
+"metro": false
+},
+{
+"label": "Abbasseya Hospital",
+"lat": 30.0686745,
+"lng": 31.2921908,
+"metro": false
+},
+{
+"label": "Abbasseya Square",
+"lat": 30.0739107,
+"lng": 31.2854007,
+"metro": false
+},
+{
+"label": "Abboud",
+"lat": 30.1041827,
+"lng": 31.2536551,
+"metro": false
+},
+{
+"label": "Abd Al Moneim Riad",
+"lat": 30.0507417,
+"lng": 31.2344326,
+"metro": false
+},
+{
+"label": "Abdeen",
+"lat": 30.0411504,
+"lng": 31.2455933,
+"metro": false
+},
+{
+"label": "Abdo Basha",
+"lat": 30.0653991,
+"lng": 31.2766978,
+"metro": false
+},
+{
+"label": "Abou Al Majd Center - Mostorod",
+"lat": 30.1272009,
+"lng": 31.2878285,
+"metro": false
+},
+{
+"label": "Abou Al Reesh",
+"lat": 30.0282869,
+"lng": 31.2374816,
+"metro": false
+},
+{
+"label": "Abou Allaam",
+"lat": 29.9585927,
+"lng": 30.9010099,
+"metro": false
+},
+{
+"label": "Abou Wafya Bridge",
+"lat": 30.0956485,
+"lng": 31.2659272,
+"metro": false
+},
+{
+"label": "Abu Bakr Al Siddiq Mosque - 6th of October",
+"lat": 29.9606032,
+"lng": 30.9481304,
+"metro": false
+},
+{
+"label": "Abu Makarem Mosque - Al Waili",
+"lat": 30.0554918,
+"lng": 31.2797136,
+"metro": false
+},
+{
+"label": "Adidas Steps - Ring Road",
+"lat": 29.9844717,
+"lng": 31.3218606,
+"metro": false
+},
+{
+"label": "Adminstration Of Mobilization And Recruitment",
+"lat": 30.1065002,
+"lng": 31.3241539,
+"metro": false
+},
+{
+"label": "Agouza Corniche",
+"lat": 30.046638,
+"lng": 31.2183501,
+"metro": false
+},
+{
+"label": "Agouza Police Hospital",
+"lat": 30.0523147,
+"lng": 31.2167296,
+"metro": false
+},
+{
+"label": "Ahmed Al Sallab Mall",
+"lat": 30.0522985,
+"lng": 31.324305,
+"metro": false
+},
+{
+"label": "Ahmed Badawi Street",
+"lat": 30.0689573,
+"lng": 31.2453595,
+"metro": false
+},
+{
+"label": "Ahmed Galal Military Passage",
+"lat": 30.1412584,
+"lng": 31.4369424,
+"metro": false
+},
+{
+"label": "Ahmed Helmy",
+"lat": 30.0648445,
+"lng": 31.2449367,
+"metro": false
+},
+{
+"label": "Ahmed Maher Teaching Hospital",
+"lat": 30.0397311,
+"lng": 31.2503684,
+"metro": false
+},
+{
+"label": "Ahmed Oraby - Ramses",
+"lat": 30.0570782,
+"lng": 31.2425299,
+"metro": false
+},
+{
+"label": "Ahmed Oraby Square - Obour",
+"lat": 30.2253826,
+"lng": 31.4575936,
+"metro": false
+},
+{
+"label": "Ahmed Oraby Street",
+"lat": 30.0607126,
+"lng": 31.2429332,
+"metro": false
+},
+{
+"label": "Ahmed Saaed Bridge - End",
+"lat": 30.0706942,
+"lng": 31.2728938,
+"metro": false
+},
+{
+"label": "Ahram Canadian University",
+"lat": 29.9354086,
+"lng": 30.8811812,
+"metro": false
+},
+{
+"label": "Ahram Gardens Resort - 6th of October",
+"lat": 29.9516562,
+"lng": 31.0876689,
+"metro": false
+},
+{
+"label": "Ain Shams University",
+"lat": 30.0757414,
+"lng": 31.2870138,
+"metro": false
+},
+{
+"label": "Ain Shams University - Obour",
+"lat": 30.204477,
+"lng": 31.4574909,
+"metro": false
+},
+{
+"label": "Air Force Hospital",
+"lat": 30.0164654,
+"lng": 31.4334531,
+"metro": false
+},
+{
+"label": "Air Force Hospital - Al Waili",
+"lat": 30.0625751,
+"lng": 31.2735911,
+"metro": false
+},
+{
+"label": "Akhbar Al Yom Academy",
+"lat": 29.9410973,
+"lng": 30.889969,
+"metro": false
+},
+{
+"label": "Akhnaton School",
+"lat": 30.0063057,
+"lng": 31.414288,
+"metro": false
+},
+{
+"label": "Akhnaton Square",
+"lat": 30.0072491,
+"lng": 31.4117808,
+"metro": false
+},
+{
+"label": "Al Aalam Specialized Hospital",
+"lat": 30.0662778,
+"lng": 31.1916498,
+"metro": false
+},
+{
+"label": "Al Abeet Steps -Ring Road",
+"lat": 30.0669234,
+"lng": 31.1748163,
+"metro": false
+},
+{
+"label": "Al Ahly Sporting Club",
+"lat": 30.0716823,
+"lng": 31.3546007,
+"metro": false
+},
+{
+"label": "Al Alg Exit - Ring Road",
+"lat": 30.1658874,
+"lng": 31.359164,
+"metro": false
+},
+{
+"label": "Al Amir Steps - Ring Road",
+"lat": 30.1634187,
+"lng": 31.3185503,
+"metro": false
+},
+{
+"label": "Al Andalous Specialized Hospital",
+"lat": 30.0405454,
+"lng": 31.3297444,
+"metro": false
+},
+{
+"label": "Al Areesh - Haram Street",
+"lat": 29.9937969,
+"lng": 31.1602106,
+"metro": false
+},
+{
+"label": "Al Ashgar District",
+"lat": 29.9581053,
+"lng": 31.0673784,
+"metro": false
+},
+{
+"label": "Al Azhar Pedestrian Bridge",
+"lat": 30.060856,
+"lng": 31.3076585,
+"metro": false
+},
+{
+"label": "Al Azhar University - North",
+"lat": 30.0625852,
+"lng": 31.3110155,
+"metro": false
+},
+{
+"label": "Al Azhar University - South",
+"lat": 30.0510342,
+"lng": 31.3205199,
+"metro": false
+},
+{
+"label": "Al Bahr Al Aazam Exit - End",
+"lat": 29.9890132,
+"lng": 31.2152877,
+"metro": false
+},
+{
+"label": "Al Bahr Al Aazam Exit - Start",
+"lat": 29.9866974,
+"lng": 31.2176809,
+"metro": false
+},
+{
+"label": "Al Balloon Theatre",
+"lat": 30.0622558,
+"lng": 31.2143204,
+"metro": false
+},
+{
+"label": "Al Banat Mosque",
+"lat": 30.0465231,
+"lng": 31.2539464,
+"metro": false
+},
+{
+"label": "Al Barageel Entrance",
+"lat": 30.0647199,
+"lng": 31.1620694,
+"metro": false
+},
+{
+"label": "Al Barageel Steps - Ring Road",
+"lat": 30.0769116,
+"lng": 31.1790584,
+"metro": false
+},
+{
+"label": "Al Bassous Steps - Ring Road",
+"lat": 30.1446181,
+"lng": 31.2119825,
+"metro": false
+},
+{
+"label": "Al Bosta Steps - Ring Road",
+"lat": 30.1131395,
+"lng": 31.2028542,
+"metro": false
+},
+{
+"label": "Al Central - Laylat Al Qadr",
+"lat": 29.9442095,
+"lng": 30.9064604,
+"metro": false
+},
+{
+"label": "Al Dawagen - Maadi",
+"lat": 29.8796074,
+"lng": 31.289313,
+"metro": false
+},
+{
+"label": "Al Demerdash Hospital",
+"lat": 30.071487,
+"lng": 31.2765661,
+"metro": false
+},
+{
+"label": "Al Demerdash Metro Station",
+"lat": 30.076684,
+"lng": 31.2772274,
+"metro": false
+},
+{
+"label": "Al Eman Mosque",
+"lat": 30.0646644,
+"lng": 31.3448471,
+"metro": false
+},
+{
+"label": "Al Ezaby Pharmacy - Al Mehwar Al Markazi - 6th of October",
+"lat": 29.9642857,
+"lng": 30.9331945,
+"metro": false
+},
+{
+"label": "Al Fardous Compound Entrance - 6th of October",
+"lat": 29.9587033,
+"lng": 31.0541028,
+"metro": false
+},
+{
+"label": "Al Fath Mosque",
+"lat": 30.097862,
+"lng": 31.2491739,
+"metro": false
+},
+{
+"label": "Al Fath Superjet",
+"lat": 30.046111,
+"lng": 31.3082026,
+"metro": false
+},
+{
+"label": "Al Fayoum Road",
+"lat": 29.9470307,
+"lng": 31.0995717,
+"metro": false
+},
+{
+"label": "Al Fayrouz Center - 6th of October",
+"lat": 29.9574699,
+"lng": 30.9422804,
+"metro": false
+},
+{
+"label": "Al Galaa Bridge",
+"lat": 30.095952,
+"lng": 31.3425846,
+"metro": false
+},
+{
+"label": "Al Gamaia Al Sharaia",
+"lat": 30.0476471,
+"lng": 31.3134776,
+"metro": false
+},
+{
+"label": "Al Gehaz Entrance - 6th of October",
+"lat": 29.9624734,
+"lng": 30.9699058,
+"metro": false
+},
+{
+"label": "Al Geish Square",
+"lat": 30.0622023,
+"lng": 31.2678094,
+"metro": false
+},
+{
+"label": "Al Gezira - Sheikh Zayed",
+"lat": 30.025008,
+"lng": 30.9910123,
+"metro": false
+},
+{
+"label": "Al Hamd Square",
+"lat": 30.00225,
+"lng": 31.4231292,
+"metro": false
+},
+{
+"label": "Al Hedaya Mosque",
+"lat": 29.9280247,
+"lng": 30.9432096,
+"metro": false
+},
+{
+"label": "Al Hegaz (Obour Police Station) - Obour",
+"lat": 30.2355974,
+"lng": 31.4711495,
+"metro": false
+},
+{
+"label": "Al Hegaz Mall - 6th of October",
+"lat": 29.9641958,
+"lng": 30.9509605,
+"metro": false
+},
+{
+"label": "Al Hegaz Square",
+"lat": 30.1113394,
+"lng": 31.3453751,
+"metro": false
+},
+{
+"label": "Al Hekma Pharmaceutical Company - 6th of October",
+"lat": 29.9336363,
+"lng": 30.8906662,
+"metro": false
+},
+{
+"label": "Al Hennawy Furniture - Airport Road",
+"lat": 30.1242673,
+"lng": 31.3757569,
+"metro": false
+},
+{
+"label": "Al Herafyeen - Gesr Al Suez",
+"lat": 30.1368303,
+"lng": 31.3878683,
+"metro": false
+},
+{
+"label": "Al Hoda Factory - 6th of October",
+"lat": 29.911524,
+"lng": 30.8978515,
+"metro": false
+},
+{
+"label": "Al Horreya Square",
+"lat": 30.1688801,
+"lng": 31.6025911,
+"metro": false
+},
+{
+"label": "Al Hossary",
+"lat": 29.9736348,
+"lng": 30.944032,
+"metro": false
+},
+{
+"label": "Al Hossary Azhar Language School",
+"lat": 29.9706689,
+"lng": 30.9498982,
+"metro": false
+},
+{
+"label": "Al Hossary Square",
+"lat": 29.9720379,
+"lng": 30.9439475,
+"metro": false
+},
+{
+"label": "Al Hossary Station",
+"lat": 29.9689012,
+"lng": 30.9490323,
+"metro": false
+},
+{
+"label": "Al Imam Al Shafei Cemetaries - Autostrad",
+"lat": 30.0125858,
+"lng": 31.2676075,
+"metro": false
+},
+{
+"label": "Al Ismailiya Square",
+"lat": 30.0966978,
+"lng": 31.3348714,
+"metro": false
+},
+{
+"label": "Al Ismailiya Stop - 10th of Ramadan",
+"lat": 30.2650515,
+"lng": 31.7536985,
+"metro": false
+},
+{
+"label": "Al Itihadeya",
+"lat": 30.0905051,
+"lng": 31.3198678,
+"metro": false
+},
+{
+"label": "Al Juman",
+"lat": 30.0343702,
+"lng": 30.9827898,
+"metro": false
+},
+{
+"label": "Al Kabbani Furniture - 6th of October",
+"lat": 29.9573281,
+"lng": 30.9215584,
+"metro": false
+},
+{
+"label": "Al Kahraba Street - Nasr City",
+"lat": 30.0500158,
+"lng": 31.3891461,
+"metro": false
+},
+{
+"label": "Al Karma Compound Gate - Sheikh Zayed",
+"lat": 30.0422657,
+"lng": 31.0042941,
+"metro": false
+},
+{
+"label": "Al Kasr Al Aini Hospital",
+"lat": 30.0308025,
+"lng": 31.2324881,
+"metro": false
+},
+{
+"label": "Al Kersh Cars - Heliopolis",
+"lat": 30.0844616,
+"lng": 31.3257522,
+"metro": false
+},
+{
+"label": "Al Khalafawy Square",
+"lat": 30.0978883,
+"lng": 31.2452185,
+"metro": false
+},
+{
+"label": "Al Khazan Street",
+"lat": 29.9565029,
+"lng": 30.9200662,
+"metro": false
+},
+{
+"label": "Al Khelaa",
+"lat": 30.0176846,
+"lng": 31.2643644,
+"metro": false
+},
+{
+"label": "Al Kholafaa Al Rashdeen Mosque - Nasr City",
+"lat": 30.0371953,
+"lng": 31.3333995,
+"metro": false
+},
+{
+"label": "Al Kholafaa Al Rashedeen Mosque - 6th of October",
+"lat": 29.9502902,
+"lng": 30.9314641,
+"metro": false
+},
+{
+"label": "Al Khouly Steps - Ring Road",
+"lat": 30.0991304,
+"lng": 31.20088,
+"metro": false
+},
+{
+"label": "Al Laimoon Bridge",
+"lat": 30.0621289,
+"lng": 31.2459382,
+"metro": false
+},
+{
+"label": "Al Lewaa Steps - 26th of July Mehwar",
+"lat": 30.0599399,
+"lng": 31.1871371,
+"metro": false
+},
+{
+"label": "Al Maasara For Engineering Industries",
+"lat": 29.9057891,
+"lng": 31.2883569,
+"metro": false
+},
+{
+"label": "Al Magzar Al Aali - Autostrad",
+"lat": 30.0029095,
+"lng": 31.2747529,
+"metro": false
+},
+{
+"label": "Al Mahkama - New Cairo",
+"lat": 30.0033712,
+"lng": 31.4263178,
+"metro": false
+},
+{
+"label": "Al Malek Al Saleh Bridge",
+"lat": 30.0158102,
+"lng": 31.2288394,
+"metro": false
+},
+{
+"label": "Al Manarah Center For International Conferences",
+"lat": 30.0182231,
+"lng": 31.3859378,
+"metro": false
+},
+{
+"label": "Al Manhal Private School",
+"lat": 30.0557289,
+"lng": 31.3573484,
+"metro": false
+},
+{
+"label": "Al Manial",
+"lat": 30.0282952,
+"lng": 31.2243194,
+"metro": false
+},
+{
+"label": "Al Mansoreya - 26th of July Mehwar",
+"lat": 30.0629099,
+"lng": 31.0980206,
+"metro": false
+},
+{
+"label": "Al Marioteya Road - 26th of July Mehwar",
+"lat": 30.0647237,
+"lng": 31.127896,
+"metro": false
+},
+{
+"label": "Al Masabek Steps - Ring Road",
+"lat": 30.0908969,
+"lng": 31.1971654,
+"metro": false
+},
+{
+"label": "Al Masah Hospital - Mahdy Arafa",
+"lat": 30.0528503,
+"lng": 31.379334,
+"metro": false
+},
+{
+"label": "Al Massalah",
+"lat": 29.9276402,
+"lng": 30.9038653,
+"metro": false
+},
+{
+"label": "Al Matbaa",
+"lat": 29.9737227,
+"lng": 31.2471602,
+"metro": false
+},
+{
+"label": "Al Mazallat - Shubra",
+"lat": 30.1020014,
+"lng": 31.2458038,
+"metro": false
+},
+{
+"label": "Al Mazallat Metro Station",
+"lat": 30.1037459,
+"lng": 31.245818,
+"metro": false
+},
+{
+"label": "Al Mearag Mosque - Ring Road",
+"lat": 29.9861798,
+"lng": 31.3096408,
+"metro": false
+},
+{
+"label": "Al Mehwar Desert Road",
+"lat": 30.0467049,
+"lng": 31.0520002,
+"metro": false
+},
+{
+"label": "Al Mehwar Exit - 15th of May Bridge",
+"lat": 30.0581329,
+"lng": 31.2256617,
+"metro": false
+},
+{
+"label": "Al Moassasa",
+"lat": 30.1228764,
+"lng": 31.2417568,
+"metro": false
+},
+{
+"label": "Al Moassasa Steps - Ring Road",
+"lat": 30.1669148,
+"lng": 31.3716707,
+"metro": false
+},
+{
+"label": "Al Moemen Mosque",
+"lat": 30.0575457,
+"lng": 31.3745811,
+"metro": false
+},
+{
+"label": "Al Mohandes Insurance - Ramses",
+"lat": 30.0666291,
+"lng": 31.2597417,
+"metro": false
+},
+{
+"label": "Al Mokhayam Al Daaem - Al Shaheed Axis",
+"lat": 30.0474277,
+"lng": 31.3140184,
+"metro": false
+},
+{
+"label": "Al Mokhtabar - Haram Street",
+"lat": 29.9924658,
+"lng": 31.1566624,
+"metro": false
+},
+{
+"label": "Al Moneeb Entrance - Ring Road",
+"lat": 29.9866081,
+"lng": 31.2091374,
+"metro": false
+},
+{
+"label": "Al Moneeb Exit - Ring Road",
+"lat": 29.9857866,
+"lng": 31.2085708,
+"metro": false
+},
+{
+"label": "Al Mosheer Tantawy Mosque",
+"lat": 30.0202821,
+"lng": 31.3778372,
+"metro": false
+},
+{
+"label": "Al Moski - Port Said Street",
+"lat": 30.0479691,
+"lng": 31.2549632,
+"metro": false
+},
+{
+"label": "Al Mostafa Center - 6th of October",
+"lat": 29.9652307,
+"lng": 30.9053544,
+"metro": false
+},
+{
+"label": "Al Mostafa Mosque - 5th Settlement",
+"lat": 30.0058668,
+"lng": 31.4543498,
+"metro": false
+},
+{
+"label": "Al Mostaqbal Entrance - Dolce",
+"lat": 29.933129,
+"lng": 30.9206701,
+"metro": false
+},
+{
+"label": "Al Mostaqbal Square - Obour",
+"lat": 30.2673245,
+"lng": 31.4793008,
+"metro": false
+},
+{
+"label": "Al Motamayez",
+"lat": 29.9822887,
+"lng": 30.9791205,
+"metro": false
+},
+{
+"label": "Al Motamayez Entrance",
+"lat": 29.9957523,
+"lng": 30.9621827,
+"metro": false
+},
+{
+"label": "Al Motamayez Wahat Entrance 1",
+"lat": 29.9748936,
+"lng": 30.9891384,
+"metro": false
+},
+{
+"label": "Al Motamayez Wahat Entrance 2",
+"lat": 29.97363,
+"lng": 30.98698,
+"metro": false
+},
+{
+"label": "Al Mothalath - Ahmed Al Zomor",
+"lat": 30.0481317,
+"lng": 31.3714522,
+"metro": false
+},
+{
+"label": "Al Muluk - 6th of October",
+"lat": 29.9423911,
+"lng": 30.9197207,
+"metro": false
+},
+{
+"label": "Al Nagda Square",
+"lat": 29.9614312,
+"lng": 30.9293345,
+"metro": false
+},
+{
+"label": "Al Nahda Square - Al Shorouq",
+"lat": 30.1612104,
+"lng": 31.6234889,
+"metro": false
+},
+{
+"label": "Al Nahda Square - New Cairo",
+"lat": 29.9996608,
+"lng": 31.469336,
+"metro": false
+},
+{
+"label": "Al Nahyan Hospital - Sheikh Zayed",
+"lat": 30.0514463,
+"lng": 31.2885019,
+"metro": false
+},
+{
+"label": "Al Nakheel Center - 6th of October",
+"lat": 29.9637674,
+"lng": 30.9033999,
+"metro": false
+},
+{
+"label": "Al Narges 4 - 5th Settlement",
+"lat": 30.0058825,
+"lng": 31.4497611,
+"metro": false
+},
+{
+"label": "Al Narges 7 - 5th Settlement",
+"lat": 30.0034047,
+"lng": 31.4589449,
+"metro": false
+},
+{
+"label": "Al Narges 8 - 5th Settlement",
+"lat": 30.0016531,
+"lng": 31.4611356,
+"metro": false
+},
+{
+"label": "Al Nasr Sporting Club - Heliopolis",
+"lat": 30.1038279,
+"lng": 31.3285408,
+"metro": false
+},
+{
+"label": "Al Nour Mosque - 6th of October",
+"lat": 29.923308,
+"lng": 30.9352991,
+"metro": false
+},
+{
+"label": "Al Nour Mosque - Abbasseya",
+"lat": 30.074818,
+"lng": 31.2822872,
+"metro": false
+},
+{
+"label": "Al Nour Mosque - Nasr City",
+"lat": 30.0498349,
+"lng": 31.3858404,
+"metro": false
+},
+{
+"label": "Al Nozha Al Gadeeda",
+"lat": 30.1174766,
+"lng": 31.3608461,
+"metro": false
+},
+{
+"label": "Al Nozha Street - Al Horreya - Sheikh Zayed",
+"lat": 30.0449495,
+"lng": 31.0094213,
+"metro": false
+},
+{
+"label": "Al Nozha Street - Street 30 - Sheikh Zayed",
+"lat": 30.0419384,
+"lng": 31.0121071,
+"metro": false
+},
+{
+"label": "Al Orouba Tunnel",
+"lat": 30.0857174,
+"lng": 31.3232226,
+"metro": false
+},
+{
+"label": "Al Othman Motors - Ring Road",
+"lat": 30.1656816,
+"lng": 31.3589672,
+"metro": false
+},
+{
+"label": "Al Rabwa - Sheikh Zayed",
+"lat": 30.0565493,
+"lng": 30.9995749,
+"metro": false
+},
+{
+"label": "Al Rahma Mosque - Airport Road",
+"lat": 30.1213367,
+"lng": 31.3722185,
+"metro": false
+},
+{
+"label": "Al Rahman Mosque - 1st Settlement",
+"lat": 30.0528754,
+"lng": 31.4552045,
+"metro": false
+},
+{
+"label": "Al Rashidi Al Mizan - Industrial Zone 3",
+"lat": 29.9298198,
+"lng": 30.89228,
+"metro": false
+},
+{
+"label": "Al Rawda - Al Horreya",
+"lat": 30.040505,
+"lng": 31.0029091,
+"metro": false
+},
+{
+"label": "Al Rawda Square - Al Manial",
+"lat": 30.0161782,
+"lng": 31.2248696,
+"metro": false
+},
+{
+"label": "Al Remaya Square",
+"lat": 29.9890933,
+"lng": 31.1274775,
+"metro": false
+},
+{
+"label": "Al Safa Square - Sheikh Zayed",
+"lat": 30.030371,
+"lng": 30.9898756,
+"metro": false
+},
+{
+"label": "Al Safa Wal Marwa Mosque Steps - Ring Road",
+"lat": 29.9922349,
+"lng": 31.2405231,
+"metro": false
+},
+{
+"label": "Al Saff Bus Station",
+"lat": 29.86368,
+"lng": 31.3234,
+"metro": false
+},
+{
+"label": "Al Safwa Hospital - Shubra",
+"lat": 30.093833,
+"lng": 31.2453666,
+"metro": false
+},
+{
+"label": "Al Safwa Mall",
+"lat": 30.0155906,
+"lng": 31.0026135,
+"metro": false
+},
+{
+"label": "Al Safwa Wood Trading - 6th of October",
+"lat": 29.9570424,
+"lng": 30.898792,
+"metro": false
+},
+{
+"label": "Al Sahel Police Department",
+"lat": 30.0841364,
+"lng": 31.2452931,
+"metro": false
+},
+{
+"label": "Al Sahel Youth Center",
+"lat": 30.0977215,
+"lng": 31.2533449,
+"metro": false
+},
+{
+"label": "Al Salam",
+"lat": 30.1550039,
+"lng": 31.4089002,
+"metro": false
+},
+{
+"label": "Al Salam Exit - Ring Road",
+"lat": 30.1646405,
+"lng": 31.3890932,
+"metro": false
+},
+{
+"label": "Al Salam International Hospital",
+"lat": 29.9852036,
+"lng": 31.2296315,
+"metro": false
+},
+{
+"label": "Al Salam Mosque - Haram Street",
+"lat": 30.0038824,
+"lng": 31.186252,
+"metro": false
+},
+{
+"label": "Al Salam Mosque - Nasr City",
+"lat": 30.0467561,
+"lng": 31.3566103,
+"metro": false
+},
+{
+"label": "Al Salam Mosque - Wahat Road",
+"lat": 29.9643134,
+"lng": 31.0347303,
+"metro": false
+},
+{
+"label": "Al Salam Tunnel Ring Road - Start",
+"lat": 30.1486138,
+"lng": 31.4257609,
+"metro": false
+},
+{
+"label": "Al Saraya Mall - 5th Settlement",
+"lat": 29.9962974,
+"lng": 31.4306493,
+"metro": false
+},
+{
+"label": "Al Sawy Culture Wheel",
+"lat": 30.062117,
+"lng": 31.2171476,
+"metro": false
+},
+{
+"label": "Al Sayeda Aisha",
+"lat": 30.02606,
+"lng": 31.2572055,
+"metro": false
+},
+{
+"label": "Al Sayeda Khadija Mosque - Al Hegaz Street",
+"lat": 30.117909,
+"lng": 31.3552183,
+"metro": false
+},
+{
+"label": "Al Sayeda Zeinab",
+"lat": 30.0321604,
+"lng": 31.2429195,
+"metro": false
+},
+{
+"label": "Al Sekka - Ring Road",
+"lat": 30.0792461,
+"lng": 31.1834192,
+"metro": false
+},
+{
+"label": "Al Sekka Al Hadid Sporting Club - Nasr City",
+"lat": 30.0588883,
+"lng": 31.302972,
+"metro": false
+},
+{
+"label": "Al Serag Mall",
+"lat": 30.0512969,
+"lng": 31.346585,
+"metro": false
+},
+{
+"label": "Al Sewedy - Laylat Al Qadr",
+"lat": 29.9479226,
+"lng": 30.9071404,
+"metro": false
+},
+{
+"label": "Al Shaarawy Street - Shubra Al Kheima",
+"lat": 30.1337438,
+"lng": 31.2776047,
+"metro": false
+},
+{
+"label": "Al Shabab Entrance - 1st Settlement",
+"lat": 30.0526604,
+"lng": 31.4523274,
+"metro": false
+},
+{
+"label": "Al Shabab Entrance - 5th Settlement",
+"lat": 29.9865139,
+"lng": 31.4179504,
+"metro": false
+},
+{
+"label": "Al Shabab Square - 1st Settlement",
+"lat": 30.05299,
+"lng": 31.46214,
+"metro": false
+},
+{
+"label": "Al Shabrawy - 1st Settlement",
+"lat": 30.0596984,
+"lng": 31.4615138,
+"metro": false
+},
+{
+"label": "Al Shabrawy - Al Mansoreya Road",
+"lat": 29.9899881,
+"lng": 31.1351926,
+"metro": false
+},
+{
+"label": "Al Shabrawy - Haram Street",
+"lat": 29.9948436,
+"lng": 31.1624237,
+"metro": false
+},
+{
+"label": "Al Shaheed Axis",
+"lat": 30.0242098,
+"lng": 31.3437031,
+"metro": false
+},
+{
+"label": "Al Shaheed Axis Pedestrian Bridge",
+"lat": 30.0319553,
+"lng": 31.33554,
+"metro": false
+},
+{
+"label": "Al Shaheed Square - Obour",
+"lat": 30.258145,
+"lng": 31.4700337,
+"metro": false
+},
+{
+"label": "Al Sheikh Awad Mosque - Qalyoub",
+"lat": 30.18129,
+"lng": 31.20763,
+"metro": false
+},
+{
+"label": "Al Sherif Mosque - Al Manial",
+"lat": 30.0161782,
+"lng": 31.2248696,
+"metro": false
+},
+{
+"label": "Al Shorouq",
+"lat": 30.13893,
+"lng": 31.65398,
+"metro": false
+},
+{
+"label": "Al Shorouq Academy (Dorra)",
+"lat": 30.1190585,
+"lng": 31.6044315,
+"metro": false
+},
+{
+"label": "Al Shorouq City Authority Steps",
+"lat": 30.1579459,
+"lng": 31.6073114,
+"metro": false
+},
+{
+"label": "Al Shorouq School",
+"lat": 30.1664276,
+"lng": 31.6515977,
+"metro": false
+},
+{
+"label": "Al Shorouq Water Station",
+"lat": 30.1615708,
+"lng": 31.6215359,
+"metro": false
+},
+{
+"label": "Al Soltan Hassan Mosque",
+"lat": 30.0314138,
+"lng": 31.2567068,
+"metro": false
+},
+{
+"label": "Al Souq Al Qadeem",
+"lat": 29.9299797,
+"lng": 30.9150894,
+"metro": false
+},
+{
+"label": "Al Sudan Steps - 26th of July Mehwar",
+"lat": 30.0591546,
+"lng": 31.1895611,
+"metro": false
+},
+{
+"label": "Al Taawon Gas Station - Al Shabab Street - Obour",
+"lat": 30.247615,
+"lng": 31.4589487,
+"metro": false
+},
+{
+"label": "Al Tabba - 6th of October",
+"lat": 29.9915225,
+"lng": 30.9548912,
+"metro": false
+},
+{
+"label": "Al Tabba - Nasr City",
+"lat": 30.0583643,
+"lng": 31.3800118,
+"metro": false
+},
+{
+"label": "Al Takwa Mosque - 5th Settlement",
+"lat": 29.9952703,
+"lng": 31.4228485,
+"metro": false
+},
+{
+"label": "Al Talbeya Steps - Ring Road",
+"lat": 29.9864753,
+"lng": 31.1886466,
+"metro": false
+},
+{
+"label": "Al Tawheed Mosque - 1st Settlement",
+"lat": 30.0616841,
+"lng": 31.461825,
+"metro": false
+},
+{
+"label": "Al Tawheed Mosque - Al Zaytoun",
+"lat": 30.1002517,
+"lng": 31.2903553,
+"metro": false
+},
+{
+"label": "Al Tawheed Wal Nour - 10th of Ramadan",
+"lat": 30.2802136,
+"lng": 31.7488944,
+"metro": false
+},
+{
+"label": "Al Tawheed Wal Nour - Al Geish Street",
+"lat": 30.0604612,
+"lng": 31.2641811,
+"metro": false
+},
+{
+"label": "Al Tawheed Wal Nour - Al Hossary",
+"lat": 29.968775,
+"lng": 30.9392281,
+"metro": false
+},
+{
+"label": "Al Tawheed Wal Nour - Al Nozha Street - Heliopolis",
+"lat": 30.0903229,
+"lng": 31.3414361,
+"metro": false
+},
+{
+"label": "Al Tawheed Wal Nour - Al Sayeda Zeinab",
+"lat": 30.0358681,
+"lng": 31.2478897,
+"metro": false
+},
+{
+"label": "Al Tawheed Wal Nour - Al Waili",
+"lat": 30.0944742,
+"lng": 31.289008,
+"metro": false
+},
+{
+"label": "Al Tawheed Wal Nour - Mostafa Al Nahas",
+"lat": 30.0544619,
+"lng": 31.346392,
+"metro": false
+},
+{
+"label": "Al Tawheed Wal Nour - Obour",
+"lat": 30.199056,
+"lng": 31.4578106,
+"metro": false
+},
+{
+"label": "Al Tayaran - Mostafa Al Nahas",
+"lat": 30.0527674,
+"lng": 31.3271529,
+"metro": false
+},
+{
+"label": "Al Thawra Hospital",
+"lat": 30.0907482,
+"lng": 31.3258345,
+"metro": false
+},
+{
+"label": "Al Wafaa Wal Amal City",
+"lat": 30.0383702,
+"lng": 31.3551922,
+"metro": false
+},
+{
+"label": "Al Wagih Center - 6th of October",
+"lat": 29.9626175,
+"lng": 30.9013383,
+"metro": false
+},
+{
+"label": "Al Waha Compound - Al Shorouq",
+"lat": 30.1435714,
+"lng": 31.6618644,
+"metro": false
+},
+{
+"label": "Al Warraq",
+"lat": 30.1210892,
+"lng": 31.2029607,
+"metro": false
+},
+{
+"label": "Al Warraq Exit - Ring Road",
+"lat": 30.1189708,
+"lng": 31.2024505,
+"metro": false
+},
+{
+"label": "Al Wehda Square",
+"lat": 29.9823339,
+"lng": 31.4168071,
+"metro": false
+},
+{
+"label": "Al Yasmine Compound - 6th of October",
+"lat": 29.9376064,
+"lng": 30.9275446,
+"metro": false
+},
+{
+"label": "Al Yasmine Compound Gate 3 - Sheikh Zayed",
+"lat": 30.0526578,
+"lng": 30.9910057,
+"metro": false
+},
+{
+"label": "Al Zamalek Steps - 15th of May Bridge",
+"lat": 30.0581162,
+"lng": 31.2258777,
+"metro": false
+},
+{
+"label": "Al Zawya Al Hamra",
+"lat": 30.098659,
+"lng": 31.262305,
+"metro": false
+},
+{
+"label": "Al Zohour Nursery - Sheikh Zayed",
+"lat": 30.0471849,
+"lng": 30.9737914,
+"metro": false
+},
+{
+"label": "Alexandria Desert Road Exit - Ring Road",
+"lat": 29.9986878,
+"lng": 31.1168339,
+"metro": false
+},
+{
+"label": "Alexandria Desert Road Steps - 26th of July Mehwar",
+"lat": 30.0463643,
+"lng": 31.0517317,
+"metro": false
+},
+{
+"label": "Alf Maskan",
+"lat": 30.1190424,
+"lng": 31.3404377,
+"metro": false
+},
+{
+"label": "Alf Masnaa",
+"lat": 29.97534,
+"lng": 31.4801099,
+"metro": false
+},
+{
+"label": "Ali Basha Street",
+"lat": 30.0361838,
+"lng": 31.2549616,
+"metro": false
+},
+{
+"label": "American School - Sheikh Zayed",
+"lat": 30.0331379,
+"lng": 30.9881323,
+"metro": false
+},
+{
+"label": "American University in Cairo (AUC) - New Cairo",
+"lat": 30.00969,
+"lng": 31.5235,
+"metro": false
+},
+{
+"label": "American University in Cairo Gate 1",
+"lat": 30.0250475,
+"lng": 31.4985074,
+"metro": false
+},
+{
+"label": "Americana Plaza - Sheikh Zayed",
+"lat": 30.0282958,
+"lng": 31.0125005,
+"metro": false
+},
+{
+"label": "Amoun Fountain - Obour",
+"lat": 30.1872508,
+"lng": 31.4669895,
+"metro": false
+},
+{
+"label": "Amr Ibn Al Aas School",
+"lat": 30.0493001,
+"lng": 30.9820411,
+"metro": false
+},
+{
+"label": "Anwar Al Sadat Square",
+"lat": 29.9538496,
+"lng": 30.9094202,
+"metro": false
+},
+{
+"label": "Anwar Al-sadat Square",
+"lat": 29.9537999,
+"lng": 30.91004,
+"metro": false
+},
+{
+"label": "Arab African Bank - Haram Street",
+"lat": 29.9981389,
+"lng": 31.1718631,
+"metro": false
+},
+{
+"label": "Arab Contractors Sporting Club - Nasr Road",
+"lat": 30.0554793,
+"lng": 31.2946824,
+"metro": false
+},
+{
+"label": "Arab Engineering & Construction Company - Shubra Al Kheima",
+"lat": 30.1333113,
+"lng": 31.2785669,
+"metro": false
+},
+{
+"label": "Arab Specialized Hospital - Gesr Al Suez",
+"lat": 30.1265049,
+"lng": 31.3515294,
+"metro": false
+},
+{
+"label": "Arabella Square",
+"lat": 29.9855781,
+"lng": 31.4303909,
+"metro": false
+},
+{
+"label": "Aramex - 10th of Ramadan",
+"lat": 30.28918,
+"lng": 31.7459,
+"metro": false
+},
+{
+"label": "Ard Khedr Pedestrian Bridge - Shubra Al Kheima",
+"lat": 30.1294379,
+"lng": 31.237854,
+"metro": false
+},
+{
+"label": "Ariel - Industrial Zone 4",
+"lat": 29.9380476,
+"lng": 30.885326,
+"metro": false
+},
+{
+"label": "Arkadia Mall",
+"lat": 30.0697634,
+"lng": 31.2266866,
+"metro": false
+},
+{
+"label": "Armed Forces College Of Medicine",
+"lat": 30.0867961,
+"lng": 31.3036304,
+"metro": false
+},
+{
+"label": "Armed Forces Medical Complex - Kobry Al Qobba",
+"lat": 30.0858998,
+"lng": 31.2979977,
+"metro": false
+},
+{
+"label": "Asaer Al Fardous - 6th of October",
+"lat": 29.9510843,
+"lng": 30.9003744,
+"metro": false
+},
+{
+"label": "Ashrafco Tyres - Nasr City",
+"lat": 30.0504515,
+"lng": 31.3194224,
+"metro": false
+},
+{
+"label": "Aswan Pedestrian Bridge - Shubra Al Kheima",
+"lat": 30.1107648,
+"lng": 31.2758432,
+"metro": false
+},
+{
+"label": "Aswan Square - 6th of October",
+"lat": 29.9637609,
+"lng": 30.9144956,
+"metro": false
+},
+{
+"label": "Ataba",
+"lat": 30.0516345,
+"lng": 31.2505762,
+"metro": false
+},
+{
+"label": "Audi Bank - Salah Salem",
+"lat": 30.0768193,
+"lng": 31.3097598,
+"metro": false
+},
+{
+"label": "Autostrad - Al Moneeb Axis",
+"lat": 29.9938622,
+"lng": 31.2813182,
+"metro": false
+},
+{
+"label": "Awwal Abbas Al Akkad",
+"lat": 30.0683794,
+"lng": 31.3358761,
+"metro": false
+},
+{
+"label": "Awwal Makram Ebeid",
+"lat": 30.069495,
+"lng": 31.3438036,
+"metro": false
+},
+{
+"label": "Azhar University City for Boys",
+"lat": 30.0500276,
+"lng": 31.3166605,
+"metro": false
+},
+{
+"label": "Azhari Institute - Sheikh Zayed",
+"lat": 30.0374,
+"lng": 31.00933,
+"metro": false
+},
+{
+"label": "Bab Al Shaaria Square",
+"lat": 30.0547015,
+"lng": 31.2577059,
+"metro": false
+},
+{
+"label": "Badr - Sheikh Zayed",
+"lat": 30.0553702,
+"lng": 30.9594198,
+"metro": false
+},
+{
+"label": "Bahteem",
+"lat": 30.156882,
+"lng": 31.2805707,
+"metro": false
+},
+{
+"label": "Bahteem Specialized Hospital For Surgery",
+"lat": 30.1446901,
+"lng": 31.2778961,
+"metro": false
+},
+{
+"label": "Banha University - Obour",
+"lat": 30.2446854,
+"lng": 31.4593685,
+"metro": false
+},
+{
+"label": "Bank Al Etihad - South Teseen Street",
+"lat": 30.0160525,
+"lng": 31.4177958,
+"metro": false
+},
+{
+"label": "Bank Area (Bonook) - 5th Settlement",
+"lat": 30.0161316,
+"lng": 31.428791,
+"metro": false
+},
+{
+"label": "Bank Area - 6th of October",
+"lat": 29.9460291,
+"lng": 30.8978665,
+"metro": false
+},
+{
+"label": "Banque Misr - Abbas Al Akkad",
+"lat": 30.0586559,
+"lng": 31.3376708,
+"metro": false
+},
+{
+"label": "Baron Mall Pedestrian Bridge",
+"lat": 29.981865,
+"lng": 31.3383856,
+"metro": false
+},
+{
+"label": "Basateen",
+"lat": 29.9911729,
+"lng": 31.2822953,
+"metro": false
+},
+{
+"label": "Basateen Steps - Ring Road",
+"lat": 29.9905881,
+"lng": 31.2669352,
+"metro": false
+},
+{
+"label": "Basha Square",
+"lat": 30.020788,
+"lng": 31.225475,
+"metro": false
+},
+{
+"label": "Bashayer",
+"lat": 29.9672499,
+"lng": 30.9128867,
+"metro": false
+},
+{
+"label": "Bashayer Entrance",
+"lat": 29.9713455,
+"lng": 30.9180031,
+"metro": false
+},
+{
+"label": "Bashteel - Ring Road",
+"lat": 30.0841582,
+"lng": 31.1918957,
+"metro": false
+},
+{
+"label": "Bavaria Egypt- Gesr Al Suez",
+"lat": 30.1329446,
+"lng": 31.379123,
+"metro": false
+},
+{
+"label": "Bayt Al Karam Al Shamy - Haram Street",
+"lat": 29.9972157,
+"lng": 31.1687582,
+"metro": false
+},
+{
+"label": "Bisco Misr - Al Zaytoun",
+"lat": 30.1042663,
+"lng": 31.2959715,
+"metro": false
+},
+{
+"label": "Bloom Bank - South Teseen Street",
+"lat": 30.0160525,
+"lng": 31.4177958,
+"metro": false
+},
+{
+"label": "Blue Bells School - Al Motamayez",
+"lat": 29.9855699,
+"lng": 30.9754903,
+"metro": false
+},
+{
+"label": "Board of Trustees (Magles Al Omanaa) - 6th of October",
+"lat": 29.9942429,
+"lng": 30.9599886,
+"metro": false
+},
+{
+"label": "Bostan Street",
+"lat": 30.0460752,
+"lng": 31.235767,
+"metro": false
+},
+{
+"label": "Boury Square - 5th Settlement",
+"lat": 30.0074657,
+"lng": 31.4114824,
+"metro": false
+},
+{
+"label": "Cairo Alexandria Agriculture Road Exit - Ring Road",
+"lat": 30.149114,
+"lng": 31.2341584,
+"metro": false
+},
+{
+"label": "Cairo Economic Court - Ring Road",
+"lat": 29.9880168,
+"lng": 31.3026983,
+"metro": false
+},
+{
+"label": "Cairo Festival City - Ring Road",
+"lat": 30.0250002,
+"lng": 31.4029146,
+"metro": false
+},
+{
+"label": "Cairo Festival City - South Teseen Street",
+"lat": 30.0165783,
+"lng": 31.4075124,
+"metro": false
+},
+{
+"label": "Cairo Festival City Pedestrian Bridge",
+"lat": 30.0252986,
+"lng": 31.4010253,
+"metro": false
+},
+{
+"label": "Cairo Security Directorate (Modereyet Amn Al Qahera)",
+"lat": 30.0438147,
+"lng": 31.2528114,
+"metro": false
+},
+{
+"label": "Cairo Stadium",
+"lat": 30.0647878,
+"lng": 31.3064862,
+"metro": false
+},
+{
+"label": "Cairo Uiversity Square (Ceramica Prima) - Sheikh Zayed",
+"lat": 30.0351803,
+"lng": 31.01758,
+"metro": false
+},
+{
+"label": "Cairo University - Commerce Gate",
+"lat": 30.0284116,
+"lng": 31.205609,
+"metro": false
+},
+{
+"label": "Cairo University Bridge",
+"lat": 30.0283686,
+"lng": 31.2166253,
+"metro": false
+},
+{
+"label": "Cairo University Main Gate - Giza",
+"lat": 30.0280115,
+"lng": 31.2105681,
+"metro": false
+},
+{
+"label": "Cairo Universty Metro Station",
+"lat": 30.0255472,
+"lng": 31.201703,
+"metro": false
+},
+{
+"label": "CAPMAS",
+"lat": 30.0794814,
+"lng": 31.3155585,
+"metro": false
+},
+{
+"label": "Car Market - Nasr City",
+"lat": 30.0474801,
+"lng": 31.3662325,
+"metro": false
+},
+{
+"label": "Carrefour - Al Shorouq",
+"lat": 30.1731877,
+"lng": 31.5920297,
+"metro": false
+},
+{
+"label": "Carrefour - Obour",
+"lat": 30.1721295,
+"lng": 31.4749336,
+"metro": false
+},
+{
+"label": "Carrefour - Ring Road",
+"lat": 29.9838538,
+"lng": 31.3181614,
+"metro": false
+},
+{
+"label": "Cemeteries - Maadi",
+"lat": 30.0225166,
+"lng": 31.3454492,
+"metro": false
+},
+{
+"label": "Center Cairo Governorate Information Networks",
+"lat": 30.0951136,
+"lng": 31.3826178,
+"metro": false
+},
+{
+"label": "Ceramica Cleopatra - Sheikh Zayed",
+"lat": 30.0251555,
+"lng": 31.0172553,
+"metro": false
+},
+{
+"label": "Ceramica Square - Sheikh Zayed",
+"lat": 30.0381105,
+"lng": 30.9786886,
+"metro": false
+},
+{
+"label": "CIB - South Teseen Street",
+"lat": 30.0161246,
+"lng": 31.4227981,
+"metro": false
+},
+{
+"label": "CIC - Sheikh Zayed",
+"lat": 30.0450006,
+"lng": 30.9910137,
+"metro": false
+},
+{
+"label": "City Mall - Al Shorouq",
+"lat": 30.1776322,
+"lng": 31.6001845,
+"metro": false
+},
+{
+"label": "City Scape Mall - 6th of October",
+"lat": 29.9637912,
+"lng": 30.9273145,
+"metro": false
+},
+{
+"label": "City Stars Mall",
+"lat": 30.0737084,
+"lng": 31.339132,
+"metro": false
+},
+{
+"label": "Civil Registry - Haram Street",
+"lat": 29.9993907,
+"lng": 31.1744754,
+"metro": false
+},
+{
+"label": "Civil Registry - Imbaba",
+"lat": 30.0795604,
+"lng": 31.223733,
+"metro": false
+},
+{
+"label": "Concord Plaza - New Cairo",
+"lat": 30.0252784,
+"lng": 31.4852271,
+"metro": false
+},
+{
+"label": "Conrad Hotel",
+"lat": 30.0652088,
+"lng": 31.2272,
+"metro": false
+},
+{
+"label": "Constitutional Court",
+"lat": 29.9687856,
+"lng": 31.2388724,
+"metro": false
+},
+{
+"label": "Coptic Hospital",
+"lat": 30.0635244,
+"lng": 31.2519751,
+"metro": false
+},
+{
+"label": "Cottonil Factory - Gesr Al Suez",
+"lat": 30.1305216,
+"lng": 31.3721453,
+"metro": false
+},
+{
+"label": "Credit Agricole - Al Mansoreya Road",
+"lat": 29.9873732,
+"lng": 31.1322221,
+"metro": false
+},
+{
+"label": "CTA Garage - Heliopolis",
+"lat": 30.1284842,
+"lng": 31.3616598,
+"metro": false
+},
+{
+"label": "Culture & Science City - 6th of October",
+"lat": 29.9562934,
+"lng": 30.9133167,
+"metro": false
+},
+{
+"label": "Dabsha - Al Zaytoun",
+"lat": 30.1066519,
+"lng": 31.2877186,
+"metro": false
+},
+{
+"label": "Daewoo - 6th of October",
+"lat": 29.9199872,
+"lng": 30.8895024,
+"metro": false
+},
+{
+"label": "Dandy Mall",
+"lat": 30.0607033,
+"lng": 31.0287885,
+"metro": false
+},
+{
+"label": "Dar Al Foad Hospital - 6th of October",
+"lat": 29.9993402,
+"lng": 30.9669403,
+"metro": false
+},
+{
+"label": "Dar Al Mona - Alexandria Desert Road",
+"lat": 30.02459,
+"lng": 31.08537,
+"metro": false
+},
+{
+"label": "Dar Al Moshah - Heliopolis",
+"lat": 30.0779566,
+"lng": 31.3003827,
+"metro": false
+},
+{
+"label": "Dar Al Salam",
+"lat": 29.981073,
+"lng": 31.2319628,
+"metro": false
+},
+{
+"label": "Dar Misr Square - Al Shorouq",
+"lat": 30.1644967,
+"lng": 31.6403658,
+"metro": false
+},
+{
+"label": "Dawaran Shubra",
+"lat": 30.0805243,
+"lng": 31.2456992,
+"metro": false
+},
+{
+"label": "Dental Hospital - Al Manial",
+"lat": 30.0283989,
+"lng": 31.226738,
+"metro": false
+},
+{
+"label": "Diamonds Mall - 6th of October",
+"lat": 29.9768337,
+"lng": 30.9448381,
+"metro": false
+},
+{
+"label": "Didi Mall - 1st Settlement",
+"lat": 30.0705645,
+"lng": 31.4523349,
+"metro": false
+},
+{
+"label": "Doctors Tower - Nasr City",
+"lat": 30.0553517,
+"lng": 31.351984,
+"metro": false
+},
+{
+"label": "Dolce",
+"lat": 29.9356813,
+"lng": 30.9244214,
+"metro": false
+},
+{
+"label": "Dolphin Mall",
+"lat": 29.9787033,
+"lng": 30.9556571,
+"metro": false
+},
+{
+"label": "Downtown Mall",
+"lat": 30.016431,
+"lng": 31.4126098,
+"metro": false
+},
+{
+"label": "Dreamland",
+"lat": 29.9587996,
+"lng": 31.0546462,
+"metro": false
+},
+{
+"label": "Durra Square",
+"lat": 30.0226022,
+"lng": 31.0052131,
+"metro": false
+},
+{
+"label": "Dusit Hotel",
+"lat": 30.0251443,
+"lng": 31.4569763,
+"metro": false
+},
+{
+"label": "Ebny Baitak - Wahat Road",
+"lat": 29.9558908,
+"lng": 31.0787101,
+"metro": false
+},
+{
+"label": "Egypt Air Steps - Ring Road",
+"lat": 29.9828119,
+"lng": 31.1781977,
+"metro": false
+},
+{
+"label": "Egyptian Media Production City - EMPC",
+"lat": 29.9692065,
+"lng": 31.0177718,
+"metro": false
+},
+{
+"label": "Emad Center - 6th of October",
+"lat": 29.961286,
+"lng": 30.8993259,
+"metro": false
+},
+{
+"label": "Emerald - New Cairo",
+"lat": 30.0527622,
+"lng": 31.4307477,
+"metro": false
+},
+{
+"label": "ENPPI",
+"lat": 30.0449636,
+"lng": 31.3407411,
+"metro": false
+},
+{
+"label": "EPx Logistics For Transportation And Warehousing - Obour",
+"lat": 30.2605635,
+"lng": 31.4724963,
+"metro": false
+},
+{
+"label": "Etaby Center",
+"lat": 30.0460205,
+"lng": 30.9669294,
+"metro": false
+},
+{
+"label": "Experimental School - Bahteem",
+"lat": 30.1413015,
+"lng": 31.2751969,
+"metro": false
+},
+{
+"label": "Export Development Authority",
+"lat": 29.9412187,
+"lng": 30.9089788,
+"metro": false
+},
+{
+"label": "Ezbet Al Baydaa Steps - Ring Road",
+"lat": 30.1631709,
+"lng": 31.3270288,
+"metro": false
+},
+{
+"label": "Ezbet Al Mofti Steps - Ring Road",
+"lat": 30.0882671,
+"lng": 31.1955154,
+"metro": false
+},
+{
+"label": "Ezbet Anwar Steps - Ring Road",
+"lat": 30.1500009,
+"lng": 31.2653834,
+"metro": false
+},
+{
+"label": "Ezbet Kheirallah Steps 1 - Ring Road",
+"lat": 29.9924136,
+"lng": 31.2436614,
+"metro": false
+},
+{
+"label": "Ezbet Kheirallah Steps 2 - Ring Road",
+"lat": 29.9920362,
+"lng": 31.2518924,
+"metro": false
+},
+{
+"label": "Ezbet Kheirallah Steps 3 - Ring Road",
+"lat": 29.9895464,
+"lng": 31.260874,
+"metro": false
+},
+{
+"label": "Faculty of Agriculture - Ain Shams University",
+"lat": 30.1119499,
+"lng": 31.2481441,
+"metro": false
+},
+{
+"label": "Faculty of Engineering Cairo University - Sheikh Zayed",
+"lat": 30.0340322,
+"lng": 31.0106804,
+"metro": false
+},
+{
+"label": "Faculty of Medicine - Ain Shams University",
+"lat": 30.0771762,
+"lng": 31.2811379,
+"metro": false
+},
+{
+"label": "Faisal Metro Station",
+"lat": 30.0169614,
+"lng": 31.2047042,
+"metro": false
+},
+{
+"label": "Faisal Street - Al Marioteya Road",
+"lat": 29.9935419,
+"lng": 31.1471631,
+"metro": false
+},
+{
+"label": "Falcon School - Al Shorouq",
+"lat": 30.1356642,
+"lng": 31.6639423,
+"metro": false
+},
+{
+"label": "Family Land - 6th of October",
+"lat": 29.9777804,
+"lng": 30.9279588,
+"metro": false
+},
+{
+"label": "Farghali Real Estate - Bashayer",
+"lat": 29.9670598,
+"lng": 30.909044,
+"metro": false
+},
+{
+"label": "Fatma Al Sharbatly Mosque",
+"lat": 30.0053596,
+"lng": 31.4454105,
+"metro": false
+},
+{
+"label": "Fiat Service Center - Obour",
+"lat": 30.1790957,
+"lng": 31.4719538,
+"metro": false
+},
+{
+"label": "Fom Al Khalig",
+"lat": 30.0228687,
+"lng": 31.2309051,
+"metro": false
+},
+{
+"label": "Free Zone - Nasr City",
+"lat": 30.0349932,
+"lng": 31.3472091,
+"metro": false
+},
+{
+"label": "Future School - Nasr City",
+"lat": 30.045418,
+"lng": 31.3475618,
+"metro": false
+},
+{
+"label": "Future University in Egypt (FUE)",
+"lat": 30.0256797,
+"lng": 31.4900796,
+"metro": false
+},
+{
+"label": "Galleria 40",
+"lat": 30.0154014,
+"lng": 31.0015702,
+"metro": false
+},
+{
+"label": "Gamaa Street - Obour",
+"lat": 30.2108984,
+"lng": 31.4574941,
+"metro": false
+},
+{
+"label": "Gamal Abd Al Nasser Metro Station",
+"lat": 30.0535014,
+"lng": 31.2388378,
+"metro": false
+},
+{
+"label": "Gamal Abd Al Nasser Square - 5th Settlement",
+"lat": 29.9904122,
+"lng": 31.4307422,
+"metro": false
+},
+{
+"label": "Gamal Abd Al Nasser Steps - Ring Road",
+"lat": 30.0718921,
+"lng": 31.1759599,
+"metro": false
+},
+{
+"label": "Gamal Abd Al Nasser Street - Bashayer",
+"lat": 29.9700411,
+"lng": 30.9160016,
+"metro": false
+},
+{
+"label": "Gardenia Heights - New Cairo",
+"lat": 29.9858751,
+"lng": 31.4688003,
+"metro": false
+},
+{
+"label": "Gas - 5th Settlement",
+"lat": 30.0147857,
+"lng": 31.4162206,
+"metro": false
+},
+{
+"label": "General Administration Of Topographic Maps",
+"lat": 30.00233,
+"lng": 31.1822495,
+"metro": false
+},
+{
+"label": "Gesr Al Suez - Al Qobba",
+"lat": 30.0954785,
+"lng": 31.3108217,
+"metro": false
+},
+{
+"label": "Girls' College - Ain Shams University",
+"lat": 30.0810899,
+"lng": 31.3270618,
+"metro": false
+},
+{
+"label": "Giza Metro Station",
+"lat": 30.0111962,
+"lng": 31.2058067,
+"metro": false
+},
+{
+"label": "Giza Square",
+"lat": 30.0156659,
+"lng": 31.2118595,
+"metro": false
+},
+{
+"label": "Gladios Garden Compound",
+"lat": 30.009596,
+"lng": 31.104521,
+"metro": false
+},
+{
+"label": "Golf Square - 5th Settlement",
+"lat": 29.9989389,
+"lng": 31.4059351,
+"metro": false
+},
+{
+"label": "Greek Hospital",
+"lat": 30.0668221,
+"lng": 31.2809981,
+"metro": false
+},
+{
+"label": "Green Hills Club",
+"lat": 30.1634187,
+"lng": 31.634206,
+"metro": false
+},
+{
+"label": "Habitat - Obour",
+"lat": 30.18923,
+"lng": 31.46596,
+"metro": false
+},
+{
+"label": "Hadabet Al Ahram",
+"lat": 29.9712542,
+"lng": 31.1089542,
+"metro": false
+},
+{
+"label": "Hadayek Al Ahram Gate 3",
+"lat": 29.9485199,
+"lng": 31.0952874,
+"metro": false
+},
+{
+"label": "Hadayek Al Mohandeseen Gate - Sheikh Zayed",
+"lat": 30.0262083,
+"lng": 30.9928897,
+"metro": false
+},
+{
+"label": "Hadayek Al Qobba Station",
+"lat": 30.0870773,
+"lng": 31.28967,
+"metro": false
+},
+{
+"label": "Hadayek Al Qobba Youth Center",
+"lat": 30.089499,
+"lng": 31.2853916,
+"metro": false
+},
+{
+"label": "Hamada Emam - Industrial Zone 2",
+"lat": 29.90942,
+"lng": 30.89447,
+"metro": false
+},
+{
+"label": "Haram Marioteya",
+"lat": 29.9897866,
+"lng": 31.1494125,
+"metro": false
+},
+{
+"label": "Haram Mashaal",
+"lat": 29.9878342,
+"lng": 31.1438608,
+"metro": false
+},
+{
+"label": "Haram Mashaal - Al Mansoreya Road",
+"lat": 29.9867561,
+"lng": 31.1414208,
+"metro": false
+},
+{
+"label": "Hazem Hassan Co. - Alexandria Desert Road",
+"lat": 30.02179,
+"lng": 31.0721,
+"metro": false
+},
+{
+"label": "Health Affairs Directorate - 6th of October",
+"lat": 30.0459101,
+"lng": 30.9698142,
+"metro": false
+},
+{
+"label": "Health Insurance Hospital - Nasr City",
+"lat": 30.059331,
+"lng": 31.3262693,
+"metro": false
+},
+{
+"label": "Heliopolis Sporting Club",
+"lat": 30.0889717,
+"lng": 31.3174729,
+"metro": false
+},
+{
+"label": "Higher Institute Of Marketing Commerce & Information Systems",
+"lat": 30.0662382,
+"lng": 31.4500703,
+"metro": false
+},
+{
+"label": "Higher Technological Institute - 6th of October",
+"lat": 29.9558717,
+"lng": 30.9398378,
+"metro": false
+},
+{
+"label": "Hilton Pyramids Golf - Dreamland",
+"lat": 29.9615814,
+"lng": 31.0449982,
+"metro": false
+},
+{
+"label": "Hilton Ramses - Abd Al Moneim Riad",
+"lat": 30.0498291,
+"lng": 31.2312705,
+"metro": false
+},
+{
+"label": "Holding Co. For Water & Wastewater (HCWW)",
+"lat": 30.0801153,
+"lng": 31.230591,
+"metro": false
+},
+{
+"label": "Housing And Development Bank - Al Mehwar Al Markazi",
+"lat": 29.9592442,
+"lng": 30.9263391,
+"metro": false
+},
+{
+"label": "Huckstep",
+"lat": 30.1584342,
+"lng": 31.4704214,
+"metro": false
+},
+{
+"label": "Huckstep Bridge - Start",
+"lat": 30.1430571,
+"lng": 31.403746,
+"metro": false
+},
+{
+"label": "Hyper - Sheikh Zayed",
+"lat": 30.0295217,
+"lng": 31.0239593,
+"metro": false
+},
+{
+"label": "Hyper One - 10th of Ramadan",
+"lat": 30.2446501,
+"lng": 31.7254957,
+"metro": false
+},
+{
+"label": "Ibrahim Al Rifaie School - 1st Settlement",
+"lat": 30.0700536,
+"lng": 31.4562147,
+"metro": false
+},
+{
+"label": "Ibrahim Anwar Mosque - Al Zaytoun",
+"lat": 30.1030177,
+"lng": 31.3004972,
+"metro": false
+},
+{
+"label": "Icon For Construction And Development",
+"lat": 29.8938086,
+"lng": 31.3155495,
+"metro": false
+},
+{
+"label": "Ideal Standard - Nasr Road",
+"lat": 30.091215,
+"lng": 31.3724855,
+"metro": false
+},
+{
+"label": "Ikea - CFC",
+"lat": 30.0311307,
+"lng": 31.403855,
+"metro": false
+},
+{
+"label": "Imbaba",
+"lat": 30.0784557,
+"lng": 31.2177884,
+"metro": false
+},
+{
+"label": "Imbaba Fevers Hospital",
+"lat": 30.0838526,
+"lng": 31.2263008,
+"metro": false
+},
+{
+"label": "Imbaba Police Station",
+"lat": 30.0752705,
+"lng": 31.2221501,
+"metro": false
+},
+{
+"label": "Industrial School - 6th of October",
+"lat": 29.9480589,
+"lng": 30.9277809,
+"metro": false
+},
+{
+"label": "Isko",
+"lat": 30.1510143,
+"lng": 31.2782607,
+"metro": false
+},
+{
+"label": "Islamic Center East - Sheikh Zayed",
+"lat": 30.0496253,
+"lng": 30.9783739,
+"metro": false
+},
+{
+"label": "Islamic Center West - Sheikh Zayed",
+"lat": 30.0508271,
+"lng": 30.97694,
+"metro": false
+},
+{
+"label": "Islamic Center West- Sheikh Zayed",
+"lat": 30.0507877,
+"lng": 30.9767339,
+"metro": false
+},
+{
+"label": "Ismailiya Desert Road - Belbeis Desert Road",
+"lat": 30.1504975,
+"lng": 31.4299318,
+"metro": false
+},
+{
+"label": "Juhayna Square",
+"lat": 30.0085192,
+"lng": 30.9815784,
+"metro": false
+},
+{
+"label": "Kafr Tohormos Steps - Ring Road",
+"lat": 30.0181714,
+"lng": 31.1667591,
+"metro": false
+},
+{
+"label": "Kan Kan - 12th District (Hay Al Thani Ashr) - 6th of October",
+"lat": 29.9556409,
+"lng": 30.8966645,
+"metro": false
+},
+{
+"label": "Kattameya",
+"lat": 29.9748814,
+"lng": 31.3949084,
+"metro": false
+},
+{
+"label": "Kattameya Church",
+"lat": 29.9823339,
+"lng": 31.4168071,
+"metro": false
+},
+{
+"label": "Kawkab Al Sharq Cafe - Bashayer",
+"lat": 29.9687399,
+"lng": 30.9145391,
+"metro": false
+},
+{
+"label": "Kempinski Hotel - Ring Road",
+"lat": 30.0589902,
+"lng": 31.4164366,
+"metro": false
+},
+{
+"label": "Kempinski Nile Hotel",
+"lat": 30.0377331,
+"lng": 31.2297049,
+"metro": false
+},
+{
+"label": "KFC - Al Lebeny",
+"lat": 29.9871214,
+"lng": 31.1496876,
+"metro": false
+},
+{
+"label": "KFC - Al Manial",
+"lat": 30.0281848,
+"lng": 31.2265694,
+"metro": false
+},
+{
+"label": "Khadija Mosque - Obour",
+"lat": 30.235721,
+"lng": 31.4635751,
+"metro": false
+},
+{
+"label": "Khafraa Gate - Hadayek Al Ahram",
+"lat": 29.9650409,
+"lng": 31.1091046,
+"metro": false
+},
+{
+"label": "Khedr Al Touny - Al Tayaran",
+"lat": 30.0755985,
+"lng": 31.3219591,
+"metro": false
+},
+{
+"label": "Kheir Zaman - Ahmed Al Zomor",
+"lat": 30.0469876,
+"lng": 31.3595223,
+"metro": false
+},
+{
+"label": "Kheir Zaman - Al Mehwar Al Markazi",
+"lat": 29.9719999,
+"lng": 30.9378699,
+"metro": false
+},
+{
+"label": "Khofo Gate - Hadayek Al Ahram",
+"lat": 29.9772289,
+"lng": 31.1126657,
+"metro": false
+},
+{
+"label": "Kia Motors - Joseph Tito Street",
+"lat": 30.1361769,
+"lng": 31.3921567,
+"metro": false
+},
+{
+"label": "Kids Land - Mostafa Al Nahas",
+"lat": 30.0571939,
+"lng": 31.3691674,
+"metro": false
+},
+{
+"label": "Kit Kat District",
+"lat": 30.0711228,
+"lng": 31.2175832,
+"metro": false
+},
+{
+"label": "Kit Kat Square",
+"lat": 30.0664587,
+"lng": 31.213567,
+"metro": false
+},
+{
+"label": "Koleyet Al Banat Metro Station",
+"lat": 30.0839113,
+"lng": 31.3285976,
+"metro": false
+},
+{
+"label": "Korba District",
+"lat": 30.0924575,
+"lng": 31.3231416,
+"metro": false
+},
+{
+"label": "Laylat Al Qadr",
+"lat": 29.9466089,
+"lng": 30.904805,
+"metro": false
+},
+{
+"label": "Laylat Al Qadr Entrance",
+"lat": 29.9490381,
+"lng": 30.9022191,
+"metro": false
+},
+{
+"label": "Leather and Tanning Company - Autostrad",
+"lat": 29.9999959,
+"lng": 31.2763045,
+"metro": false
+},
+{
+"label": "Lebanon Square (Medan Lebnan)",
+"lat": 30.0594786,
+"lng": 31.1932471,
+"metro": false
+},
+{
+"label": "Maadi Corniche Exit - Ring Road",
+"lat": 29.9903414,
+"lng": 31.2290338,
+"metro": false
+},
+{
+"label": "Maadi Military Hospital",
+"lat": 29.9681699,
+"lng": 31.2394596,
+"metro": false
+},
+{
+"label": "Maahad - 5th Settlement",
+"lat": 29.9932502,
+"lng": 31.4344252,
+"metro": false
+},
+{
+"label": "Maahad Baneen - Sheikh Zayed",
+"lat": 30.0397684,
+"lng": 30.9782353,
+"metro": false
+},
+{
+"label": "Maasara - Autostrad",
+"lat": 29.9130952,
+"lng": 31.2979276,
+"metro": false
+},
+{
+"label": "Madbah Steps - Ring Road",
+"lat": 30.1493478,
+"lng": 31.2428809,
+"metro": false
+},
+{
+"label": "Madinat Al Talaba",
+"lat": 30.0698634,
+"lng": 31.2025886,
+"metro": false
+},
+{
+"label": "Madinaty Exit - Cairo Fayed Desert Road",
+"lat": 30.1741172,
+"lng": 31.5548626,
+"metro": false
+},
+{
+"label": "Magd Al Islam Hospital",
+"lat": 30.1028357,
+"lng": 31.2556982,
+"metro": false
+},
+{
+"label": "Magda Square",
+"lat": 29.9753239,
+"lng": 30.942338,
+"metro": false
+},
+{
+"label": "Magra Al Oyoun - Salah Salem",
+"lat": 30.0180401,
+"lng": 31.2517895,
+"metro": false
+},
+{
+"label": "Mahmoudeya - Kattameya",
+"lat": 29.9747787,
+"lng": 31.3970383,
+"metro": false
+},
+{
+"label": "Mall of Arabia",
+"lat": 30.0025306,
+"lng": 30.9726059,
+"metro": false
+},
+{
+"label": "Mall of Egypt",
+"lat": 29.9704837,
+"lng": 31.0133592,
+"metro": false
+},
+{
+"label": "Mamaleek",
+"lat": 30.0097554,
+"lng": 31.2259958,
+"metro": false
+},
+{
+"label": "Mankaraa Gate - Hadayek Al Ahram",
+"lat": 29.95373,
+"lng": 31.10399,
+"metro": false
+},
+{
+"label": "Manshiyat Al Bakri Steps - Ring Road",
+"lat": 30.0114199,
+"lng": 31.1455473,
+"metro": false
+},
+{
+"label": "Manshiyat Al Bakry General Hospital",
+"lat": 30.0924388,
+"lng": 31.307125,
+"metro": false
+},
+{
+"label": "Manshiyat Al Gamal",
+"lat": 30.0942252,
+"lng": 31.272355,
+"metro": false
+},
+{
+"label": "Manshiyat Nasser",
+"lat": 30.0453978,
+"lng": 31.278882,
+"metro": false
+},
+{
+"label": "Mansour Chevrolet Sales Center - Alexandria Desert Road",
+"lat": 30.0255041,
+"lng": 31.0921202,
+"metro": false
+},
+{
+"label": "Masaken Ain Shams",
+"lat": 30.1357847,
+"lng": 31.3499998,
+"metro": false
+},
+{
+"label": "Masaken Al Kendy",
+"lat": 29.9915392,
+"lng": 31.2927546,
+"metro": false
+},
+{
+"label": "Masaken Al Zobbat - 10th District - Nasr City",
+"lat": 30.038465,
+"lng": 31.3949714,
+"metro": false
+},
+{
+"label": "Masaken Othman",
+"lat": 29.9190136,
+"lng": 30.9393311,
+"metro": false
+},
+{
+"label": "Masaken Zainhom",
+"lat": 30.0227847,
+"lng": 31.2446097,
+"metro": false
+},
+{
+"label": "Masaken Zobbat Almaza",
+"lat": 30.0824089,
+"lng": 31.3790292,
+"metro": false
+},
+{
+"label": "Mashaal Smart Village (Al Qarya Al Zakeya)",
+"lat": 29.9922838,
+"lng": 31.1301352,
+"metro": false
+},
+{
+"label": "Maspero Exit - 15th of May Bridge",
+"lat": 30.0554302,
+"lng": 31.2287852,
+"metro": false
+},
+{
+"label": "Masraweya",
+"lat": 30.02559,
+"lng": 31.4755539,
+"metro": false
+},
+{
+"label": "Massalah Gadeeda (Matareya)",
+"lat": 30.127815,
+"lng": 31.3013342,
+"metro": false
+},
+{
+"label": "Matareya Educational Hospital",
+"lat": 30.1181581,
+"lng": 31.3040363,
+"metro": false
+},
+{
+"label": "Matareya Square",
+"lat": 30.1151397,
+"lng": 31.306427,
+"metro": false
+},
+{
+"label": "May Fair Village - Al Shorouq",
+"lat": 30.1328627,
+"lng": 31.6012979,
+"metro": false
+},
+{
+"label": "Mazallat",
+"lat": 30.1049689,
+"lng": 31.246744,
+"metro": false
+},
+{
+"label": "Mazar Mall",
+"lat": 30.05335,
+"lng": 30.9621319,
+"metro": false
+},
+{
+"label": "Mazda Plaza - Alexandria Desert Road",
+"lat": 30.0818808,
+"lng": 30.9947536,
+"metro": false
+},
+{
+"label": "Medicare - Sheikh Zayed",
+"lat": 30.0473299,
+"lng": 30.9766878,
+"metro": false
+},
+{
+"label": "Military Cemetery - N/A Axis",
+"lat": 30.0224446,
+"lng": 31.3526773,
+"metro": false
+},
+{
+"label": "Mina Gate 4 - Hadayek Al Ahram",
+"lat": 29.9518326,
+"lng": 31.0879493,
+"metro": false
+},
+{
+"label": "Minerals & Refrigeration Center - Abboud",
+"lat": 30.107644,
+"lng": 31.2604595,
+"metro": false
+},
+{
+"label": "Ministry Of Higher Education",
+"lat": 30.0379664,
+"lng": 31.3405971,
+"metro": false
+},
+{
+"label": "Ministry Of Youth And Sports",
+"lat": 30.0609468,
+"lng": 31.2053297,
+"metro": false
+},
+{
+"label": "Misr 2000",
+"lat": 30.0385295,
+"lng": 31.4389862,
+"metro": false
+},
+{
+"label": "Misr Al Gadeeda Military Hospital",
+"lat": 30.1135445,
+"lng": 31.3328824,
+"metro": false
+},
+{
+"label": "Misr Al Qadimah",
+"lat": 30.0004902,
+"lng": 31.2280854,
+"metro": false
+},
+{
+"label": "Misr Al Wosta Electricity Company - Al Bahr Al Aazam",
+"lat": 29.994374,
+"lng": 31.2153889,
+"metro": false
+},
+{
+"label": "Misr Gas Station - Giza Square",
+"lat": 30.0137354,
+"lng": 31.2089996,
+"metro": false
+},
+{
+"label": "Misr Packing - 6th of October",
+"lat": 29.9204975,
+"lng": 30.8930518,
+"metro": false
+},
+{
+"label": "Misr Sudan - 7th District - Nasr City",
+"lat": 30.0489964,
+"lng": 31.3279805,
+"metro": false
+},
+{
+"label": "Misr University",
+"lat": 29.9978341,
+"lng": 30.9646654,
+"metro": false
+},
+{
+"label": "Mit Nama Steps - Cairo Alexandria Agriculture Road",
+"lat": 30.1431662,
+"lng": 31.230885,
+"metro": false
+},
+{
+"label": "Mit Okba - Wadi Al Nile",
+"lat": 30.0606583,
+"lng": 31.2009093,
+"metro": false
+},
+{
+"label": "MIU - Obour",
+"lat": 30.1662666,
+"lng": 31.4910966,
+"metro": false
+},
+{
+"label": "Moassasa Pedestrian Bridge",
+"lat": 30.136281,
+"lng": 31.2330999,
+"metro": false
+},
+{
+"label": "Mobil - Mall of Arabia",
+"lat": 30.0046108,
+"lng": 30.9753293,
+"metro": false
+},
+{
+"label": "Mobil Hassan Al Sherif - Nasr City",
+"lat": 30.0515947,
+"lng": 31.3570858,
+"metro": false
+},
+{
+"label": "Mobil Mostafa Kamel Axis - 1st Settlement",
+"lat": 30.05896,
+"lng": 31.4437,
+"metro": false
+},
+{
+"label": "Mohamed Naguib Metro Station",
+"lat": 30.0451732,
+"lng": 31.2446062,
+"metro": false
+},
+{
+"label": "Moneeb",
+"lat": 29.9851702,
+"lng": 31.2136033,
+"metro": false
+},
+{
+"label": "Moneeb Konayyesa",
+"lat": 29.9857915,
+"lng": 31.1976591,
+"metro": false
+},
+{
+"label": "Mostorad Pedestrian Bridge",
+"lat": 30.1320006,
+"lng": 31.2838615,
+"metro": false
+},
+{
+"label": "Mostorod Bridge - Ring Road",
+"lat": 30.1628893,
+"lng": 31.3040433,
+"metro": false
+},
+{
+"label": "Mostorod Station",
+"lat": 30.1311993,
+"lng": 31.2893671,
+"metro": false
+},
+{
+"label": "Mountain View Square",
+"lat": 30.0159164,
+"lng": 31.4451581,
+"metro": false
+},
+{
+"label": "MSA University",
+"lat": 29.9550825,
+"lng": 30.9589637,
+"metro": false
+},
+{
+"label": "Mubarak Educational City Entrance",
+"lat": 30.0098176,
+"lng": 30.9938049,
+"metro": false
+},
+{
+"label": "N/A Axis",
+"lat": 30.0242694,
+"lng": 31.3587801,
+"metro": false
+},
+{
+"label": "Nadi Al Baraka Steps - Ring Road",
+"lat": 30.1657717,
+"lng": 31.3830232,
+"metro": false
+},
+{
+"label": "Naguib Mahfouz Square - 1st Settlement",
+"lat": 30.0631082,
+"lng": 31.4327548,
+"metro": false
+},
+{
+"label": "Nahya Steps - Ring Road",
+"lat": 30.0442852,
+"lng": 31.1752295,
+"metro": false
+},
+{
+"label": "Nasr Al Islam Mosque - Al Nozha Street",
+"lat": 30.0905565,
+"lng": 31.3418609,
+"metro": false
+},
+{
+"label": "Nasr City Police Station 2",
+"lat": 30.0505325,
+"lng": 31.3120403,
+"metro": false
+},
+{
+"label": "Nasr City Sporting Club",
+"lat": 30.0586583,
+"lng": 31.3107007,
+"metro": false
+},
+{
+"label": "Nasr City Towers",
+"lat": 30.0316103,
+"lng": 31.3546987,
+"metro": false
+},
+{
+"label": "Nasser Institue For Research - Al Khalafawy",
+"lat": 30.0967128,
+"lng": 31.2387668,
+"metro": false
+},
+{
+"label": "National Authority For Military Production",
+"lat": 30.1088056,
+"lng": 31.2609252,
+"metro": false
+},
+{
+"label": "National Institute for Occupational Safety and Health (Al Amn Al Senaey)",
+"lat": 30.1134528,
+"lng": 31.3481168,
+"metro": false
+},
+{
+"label": "National Security - Alexandria Desert Road",
+"lat": 30.0412911,
+"lng": 31.0559254,
+"metro": false
+},
+{
+"label": "Nefertari International School",
+"lat": 30.1542116,
+"lng": 31.4434117,
+"metro": false
+},
+{
+"label": "New Giza Gate 1",
+"lat": 30.0240293,
+"lng": 31.0673216,
+"metro": false
+},
+{
+"label": "New Marg",
+"lat": 30.1629694,
+"lng": 31.3389903,
+"metro": false
+},
+{
+"label": "New Marg Exit - Ring Road",
+"lat": 30.1629297,
+"lng": 31.3341326,
+"metro": false
+},
+{
+"label": "New Marg Steps - Ring Road",
+"lat": 30.1634107,
+"lng": 31.3414656,
+"metro": false
+},
+{
+"label": "Nile University",
+"lat": 30.0093121,
+"lng": 30.9854109,
+"metro": false
+},
+{
+"label": "Nissan - Kattameya",
+"lat": 29.9935448,
+"lng": 31.3840637,
+"metro": false
+},
+{
+"label": "North Cairo Electric Station",
+"lat": 30.1061932,
+"lng": 31.2697197,
+"metro": false
+},
+{
+"label": "North Cairo Electricity Co - Al Helmeya",
+"lat": 30.1111592,
+"lng": 31.3181354,
+"metro": false
+},
+{
+"label": "Noubar Street",
+"lat": 30.0445811,
+"lng": 31.2419359,
+"metro": false
+},
+{
+"label": "Nour Al Islam Mosque - Shubra Al Kheima",
+"lat": 30.1158692,
+"lng": 31.2844016,
+"metro": false
+},
+{
+"label": "Nour Al Islam Mosque Steps - Ring Road",
+"lat": 29.9929371,
+"lng": 31.2468077,
+"metro": false
+},
+{
+"label": "Nour City Steps - Ring Road",
+"lat": 30.0127746,
+"lng": 31.1555765,
+"metro": false
+},
+{
+"label": "Novartis Pharma - Al Zaytoun",
+"lat": 30.1054751,
+"lng": 31.2916078,
+"metro": false
+},
+{
+"label": "Obour",
+"lat": 30.2709,
+"lng": 31.4881,
+"metro": false
+},
+{
+"label": "Obour City Authority",
+"lat": 30.2390361,
+"lng": 31.4582424,
+"metro": false
+},
+{
+"label": "Obour Market - East",
+"lat": 30.1669256,
+"lng": 31.4768963,
+"metro": false
+},
+{
+"label": "Obour Market - South",
+"lat": 30.1613884,
+"lng": 31.4683582,
+"metro": false
+},
+{
+"label": "Obour Market 2 - South",
+"lat": 30.1632914,
+"lng": 31.4741971,
+"metro": false
+},
+{
+"label": "Obour Sporting Club",
+"lat": 30.2352096,
+"lng": 31.4581397,
+"metro": false
+},
+{
+"label": "Obour Square",
+"lat": 30.1667979,
+"lng": 31.4777502,
+"metro": false
+},
+{
+"label": "Obour Square - 3rd Settlement",
+"lat": 29.9840456,
+"lng": 31.4378832,
+"metro": false
+},
+{
+"label": "Obour Tunnel",
+"lat": 30.1639712,
+"lng": 31.4790217,
+"metro": false
+},
+{
+"label": "October Bus Station",
+"lat": 30.0512641,
+"lng": 31.1777186,
+"metro": false
+},
+{
+"label": "October Microbus Stop",
+"lat": 30.0144649,
+"lng": 31.2100183,
+"metro": false
+},
+{
+"label": "Om Hassan Restaurant - Abbas Al Akkad",
+"lat": 30.061825,
+"lng": 31.3374918,
+"metro": false
+},
+{
+"label": "Ommal Square - 5th Settlement",
+"lat": 29.99712,
+"lng": 31.43224,
+"metro": false
+},
+{
+"label": "Oriental Weavers - Al Mehwar Al Markazi",
+"lat": 29.9544873,
+"lng": 30.9171927,
+"metro": false
+},
+{
+"label": "Oriental Weavers - Haram",
+"lat": 30.0103726,
+"lng": 31.2040589,
+"metro": false
+},
+{
+"label": "Oriental Weavers - Shubra Al Kheima",
+"lat": 30.1221997,
+"lng": 31.2501911,
+"metro": false
+},
+{
+"label": "Othman Pedestrian Bridge - Ring Road",
+"lat": 30.1633065,
+"lng": 31.3127002,
+"metro": false
+},
+{
+"label": "Othman Steps - Ring Road",
+"lat": 30.16295,
+"lng": 31.30988,
+"metro": false
+},
+{
+"label": "Panorama October",
+"lat": 30.0741994,
+"lng": 31.3039888,
+"metro": false
+},
+{
+"label": "Paradise Al Shorouq Compound",
+"lat": 30.1526538,
+"lng": 31.659778,
+"metro": false
+},
+{
+"label": "Pizza Hut - Mostafa Al Nahas",
+"lat": 30.0567409,
+"lng": 31.3651104,
+"metro": false
+},
+{
+"label": "Plaza Club - Obour",
+"lat": 30.2521866,
+"lng": 31.463676,
+"metro": false
+},
+{
+"label": "Police Academy - East",
+"lat": 30.04985,
+"lng": 31.44219,
+"metro": false
+},
+{
+"label": "Police Academy - North",
+"lat": 30.053345,
+"lng": 31.4131564,
+"metro": false
+},
+{
+"label": "Police Academy - South",
+"lat": 30.0375421,
+"lng": 31.4094172,
+"metro": false
+},
+{
+"label": "Police Hospital - Al Shaheed Axis",
+"lat": 30.0391651,
+"lng": 31.3279264,
+"metro": false
+},
+{
+"label": "Police Station - 5th Settlement",
+"lat": 29.997787,
+"lng": 31.426639,
+"metro": false
+},
+{
+"label": "Port Said Street - Al Sawah",
+"lat": 30.107541,
+"lng": 31.2840842,
+"metro": false
+},
+{
+"label": "Porto Cairo Mall",
+"lat": 30.066688,
+"lng": 31.421758,
+"metro": false
+},
+{
+"label": "Postal Office - 1st Settlement",
+"lat": 30.0669988,
+"lng": 31.4618558,
+"metro": false
+},
+{
+"label": "Public Taxes Mission - Nasr City",
+"lat": 30.0594145,
+"lng": 31.345603,
+"metro": false
+},
+{
+"label": "Qalyub",
+"lat": 30.1811926,
+"lng": 31.1998886,
+"metro": false
+},
+{
+"label": "Qalyub District Court",
+"lat": 30.1809623,
+"lng": 31.2170007,
+"metro": false
+},
+{
+"label": "Qalyub Exit - Cairo Alexandria Agriculture Road",
+"lat": 30.1467183,
+"lng": 31.2297401,
+"metro": false
+},
+{
+"label": "Qalyub Exit - Ring Road",
+"lat": 30.1493033,
+"lng": 31.2253426,
+"metro": false
+},
+{
+"label": "Qalyub Steps - Ring Road",
+"lat": 30.1486237,
+"lng": 31.2306376,
+"metro": false
+},
+{
+"label": "Qawmeya Arabeya",
+"lat": 30.0953786,
+"lng": 31.2044016,
+"metro": false
+},
+{
+"label": "Qawmeya Steps - Ring Road",
+"lat": 30.096315,
+"lng": 31.1986781,
+"metro": false
+},
+{
+"label": "QNB Bank - Haram Street",
+"lat": 29.9887041,
+"lng": 31.1465828,
+"metro": false
+},
+{
+"label": "Rabaah Al Adaweya Mosque",
+"lat": 30.0674827,
+"lng": 31.3246081,
+"metro": false
+},
+{
+"label": "Radobis Cinema - Haram Street",
+"lat": 30.006235,
+"lng": 31.1944858,
+"metro": false
+},
+{
+"label": "Ragab Sons - 7th District - 6th of October",
+"lat": 29.9782434,
+"lng": 30.935866,
+"metro": false
+},
+{
+"label": "Ragab Sons - Al Lebny",
+"lat": 29.9769834,
+"lng": 31.162516,
+"metro": false
+},
+{
+"label": "Ragab Sons - Al Mehwar Al Markazi",
+"lat": 29.9668661,
+"lng": 30.9362562,
+"metro": false
+},
+{
+"label": "Ragab Sons - Al Shabab Street - Obour",
+"lat": 30.2654927,
+"lng": 31.4771108,
+"metro": false
+},
+{
+"label": "Ragab Sons - Mahdy Arafa",
+"lat": 30.0549787,
+"lng": 31.3797635,
+"metro": false
+},
+{
+"label": "Rahma Mosque - Ahmed Zomor",
+"lat": 30.0532396,
+"lng": 31.3328544,
+"metro": false
+},
+{
+"label": "Ramses",
+"lat": 30.0590597,
+"lng": 31.2445878,
+"metro": false
+},
+{
+"label": "Ramses Extension - Northside",
+"lat": 30.0637211,
+"lng": 31.2984158,
+"metro": false
+},
+{
+"label": "Ramses Extension - Southside",
+"lat": 30.0506546,
+"lng": 31.3073418,
+"metro": false
+},
+{
+"label": "Ramses Railway Station",
+"lat": 30.0619271,
+"lng": 31.2479582,
+"metro": false
+},
+{
+"label": "Raslan - Al Mehwar Al Markazi",
+"lat": 29.9527251,
+"lng": 30.9145122,
+"metro": false
+},
+{
+"label": "Rawda Mosque - Obour",
+"lat": 30.2420637,
+"lng": 31.4814687,
+"metro": false
+},
+{
+"label": "Real Estate Registration Mission - 6th of October",
+"lat": 29.9376603,
+"lng": 30.9118989,
+"metro": false
+},
+{
+"label": "Real Estate Registration Mission - Shubra",
+"lat": 30.0741828,
+"lng": 31.2479583,
+"metro": false
+},
+{
+"label": "Red Kiosk - 6th of October",
+"lat": 29.9659725,
+"lng": 30.9179172,
+"metro": false
+},
+{
+"label": "Rehab Gate 13",
+"lat": 30.0639621,
+"lng": 31.4749474,
+"metro": false
+},
+{
+"label": "Rehab Gate 6",
+"lat": 30.0532197,
+"lng": 31.490248,
+"metro": false
+},
+{
+"label": "Rehab Square",
+"lat": 30.0550055,
+"lng": 31.4743779,
+"metro": false
+},
+{
+"label": "Remaya Exit - Ring Road",
+"lat": 29.9999925,
+"lng": 31.1218337,
+"metro": false
+},
+{
+"label": "Rihana Plaza - Sheikh Zayed",
+"lat": 30.0518041,
+"lng": 31.0035653,
+"metro": false
+},
+{
+"label": "Ring Road Entrance - Cairo Alexandria Agriculture Road",
+"lat": 30.1493033,
+"lng": 31.2253426,
+"metro": false
+},
+{
+"label": "Ring Road Steps 1 - 26th of July Mehwar",
+"lat": 30.0623543,
+"lng": 31.1727447,
+"metro": false
+},
+{
+"label": "Ring Road Steps 2 - 26th of July Mehwar",
+"lat": 30.0622226,
+"lng": 31.1759247,
+"metro": false
+},
+{
+"label": "Rod Al Farag Metro Station",
+"lat": 30.0807066,
+"lng": 31.2453291,
+"metro": false
+},
+{
+"label": "Rod Al Farag Youth Center",
+"lat": 30.0754246,
+"lng": 31.2281407,
+"metro": false
+},
+{
+"label": "Roushdy Pharmacy - Al Remaya",
+"lat": 29.9910954,
+"lng": 31.1306892,
+"metro": false
+},
+{
+"label": "Roxy",
+"lat": 30.0931816,
+"lng": 31.3152888,
+"metro": false
+},
+{
+"label": "Royal City Gate - Sheikh Zayed",
+"lat": 30.0329864,
+"lng": 31.0288103,
+"metro": false
+},
+{
+"label": "Safeer Square - Heliopolis",
+"lat": 30.0974148,
+"lng": 31.3383842,
+"metro": false
+},
+{
+"label": "Saft Al Laban Entrance North - Ring Road",
+"lat": 30.0336109,
+"lng": 31.1656393,
+"metro": false
+},
+{
+"label": "Saft Al Laban Entrance South - Ring Road",
+"lat": 30.0256099,
+"lng": 31.1643943,
+"metro": false
+},
+{
+"label": "Saft Al Laban Steps - Ring Road",
+"lat": 30.0364636,
+"lng": 31.1683342,
+"metro": false
+},
+{
+"label": "Safwa Clinics - Obour",
+"lat": 30.256187,
+"lng": 31.4678488,
+"metro": false
+},
+{
+"label": "Saint Fatima Square",
+"lat": 30.1057119,
+"lng": 31.3437501,
+"metro": false
+},
+{
+"label": "Saint Teresa Metro Station",
+"lat": 30.0892751,
+"lng": 31.245254,
+"metro": false
+},
+{
+"label": "Sakkara Steps - Ring Road",
+"lat": 29.9742665,
+"lng": 31.1725192,
+"metro": false
+},
+{
+"label": "Salah Al Din Citadel - Salah Salem",
+"lat": 30.0252904,
+"lng": 31.2616149,
+"metro": false
+},
+{
+"label": "Salah Al Din Square - Heliopolis",
+"lat": 30.0951664,
+"lng": 31.3302592,
+"metro": false
+},
+{
+"label": "Salam Nahda",
+"lat": 30.1555046,
+"lng": 31.4094518,
+"metro": false
+},
+{
+"label": "Salama Afifi Street - Al Zawya Al Hamra",
+"lat": 30.0953244,
+"lng": 31.2674307,
+"metro": false
+},
+{
+"label": "Salamtak Labs - Dolce",
+"lat": 29.9341792,
+"lng": 30.9222854,
+"metro": false
+},
+{
+"label": "Samir & Ali - Al Thawra Street",
+"lat": 30.0827486,
+"lng": 31.3422539,
+"metro": false
+},
+{
+"label": "Saqr Quraish",
+"lat": 29.9861583,
+"lng": 31.2885844,
+"metro": false
+},
+{
+"label": "Saray Al Qobba",
+"lat": 30.0979875,
+"lng": 31.3073719,
+"metro": false
+},
+{
+"label": "Sekket Al Waili",
+"lat": 30.091659,
+"lng": 31.2796371,
+"metro": false
+},
+{
+"label": "Sekket Al Waili Street - Kobry Al Qobba",
+"lat": 30.0876601,
+"lng": 31.2897911,
+"metro": false
+},
+{
+"label": "Seoudi Supermarket - Sheikh Zayed",
+"lat": 30.02983,
+"lng": 30.99509,
+"metro": false
+},
+{
+"label": "Shabab Station - Misr Petroleum - Obour",
+"lat": 30.2730466,
+"lng": 31.4846255,
+"metro": false
+},
+{
+"label": "Sheikh Zayed Entrance",
+"lat": 30.0861329,
+"lng": 30.9632745,
+"metro": false
+},
+{
+"label": "Sheikh Zayed General Hospital Northside",
+"lat": 30.0405952,
+"lng": 31.0077598,
+"metro": false
+},
+{
+"label": "Sheikh Zayed General Hospital Southside",
+"lat": 30.0378829,
+"lng": 31.0072326,
+"metro": false
+},
+{
+"label": "Sheikh Zayed Islamic Center",
+"lat": 30.0280601,
+"lng": 30.9997885,
+"metro": false
+},
+{
+"label": "Sheikh Zayed Specialized Hospital",
+"lat": 30.0329279,
+"lng": 31.0033272,
+"metro": false
+},
+{
+"label": "Shepheard Hotel",
+"lat": 30.0424726,
+"lng": 31.2315126,
+"metro": false
+},
+{
+"label": "Sheraton Bus Station",
+"lat": 30.1058719,
+"lng": 31.3862107,
+"metro": false
+},
+{
+"label": "Shooting Club Pedestrian Tunnel",
+"lat": 29.983872,
+"lng": 31.3256631,
+"metro": false
+},
+{
+"label": "Shubra Al Kheima",
+"lat": 30.1230715,
+"lng": 31.2456601,
+"metro": false
+},
+{
+"label": "Shubra Al Kheima City Council",
+"lat": 30.1201508,
+"lng": 31.2432538,
+"metro": false
+},
+{
+"label": "Shubra Al Kheima East District Presidency",
+"lat": 30.1349976,
+"lng": 31.2727413,
+"metro": false
+},
+{
+"label": "Shubra Al Kheima Metro Station",
+"lat": 30.1242104,
+"lng": 31.2423438,
+"metro": false
+},
+{
+"label": "Shubra Al Kheima Power Plant",
+"lat": 30.1145385,
+"lng": 31.2418332,
+"metro": false
+},
+{
+"label": "Silver Nile Social Club - Maadi Corniche",
+"lat": 29.9784195,
+"lng": 31.23302,
+"metro": false
+},
+{
+"label": "Silver Star Mall - 5th Settlement",
+"lat": 30.003313,
+"lng": 31.420347,
+"metro": false
+},
+{
+"label": "Sky Mart Mall - 1st Settlement",
+"lat": 30.0678495,
+"lng": 31.4511912,
+"metro": false
+},
+{
+"label": "Small Industries Association - Al Hegaz Street - 6th of October",
+"lat": 29.9808028,
+"lng": 30.9464306,
+"metro": false
+},
+{
+"label": "Smart Village (Al Qarya Al Zakeya)",
+"lat": 30.0635164,
+"lng": 31.0239607,
+"metro": false
+},
+{
+"label": "Social Insurance Bureau - Shubra Al Kheima",
+"lat": 30.1360677,
+"lng": 31.2705919,
+"metro": false
+},
+{
+"label": "SODIC",
+"lat": 30.0773069,
+"lng": 30.9482007,
+"metro": false
+},
+{
+"label": "Sonesta Hotel - Salah Salem",
+"lat": 30.0787001,
+"lng": 31.3185828,
+"metro": false
+},
+{
+"label": "Souq Al Gomla",
+"lat": 29.9660581,
+"lng": 31.0287609,
+"metro": false
+},
+{
+"label": "Souq Bab Al Louk",
+"lat": 30.0450098,
+"lng": 31.2397448,
+"metro": false
+},
+{
+"label": "South Teseen Street Entrance",
+"lat": 30.0129186,
+"lng": 31.4015804,
+"metro": false
+},
+{
+"label": "Sphinx Airport",
+"lat": 30.07808,
+"lng": 30.91817,
+"metro": false
+},
+{
+"label": "Sphinx Square",
+"lat": 30.0601599,
+"lng": 31.207749,
+"metro": false
+},
+{
+"label": "St. Mary and St. Mark Church - 6th of October",
+"lat": 29.9596884,
+"lng": 30.9185477,
+"metro": false
+},
+{
+"label": "Street 10 Steps - Ring Road",
+"lat": 30.1063682,
+"lng": 31.2030068,
+"metro": false
+},
+{
+"label": "Street 29 - Al Hamd Square",
+"lat": 29.9998674,
+"lng": 31.422544,
+"metro": false
+},
+{
+"label": "Sudan Street",
+"lat": 30.0594842,
+"lng": 31.1900506,
+"metro": false
+},
+{
+"label": "Suez Bridge",
+"lat": 30.0799768,
+"lng": 31.436249,
+"metro": false
+},
+{
+"label": "Sultan Abou Al Ela Mosque - Maspero",
+"lat": 30.0563849,
+"lng": 31.2307868,
+"metro": false
+},
+{
+"label": "Sun Mall",
+"lat": 30.05027,
+"lng": 31.3926893,
+"metro": false
+},
+{
+"label": "Swan Lake Compound - 5th Settlement",
+"lat": 30.053442,
+"lng": 31.4419079,
+"metro": false
+},
+{
+"label": "Syndicate Of Commercial Professions - Abbasseya",
+"lat": 30.0665999,
+"lng": 31.2941908,
+"metro": false
+},
+{
+"label": "t",
+"lat": 29.9623248,
+"lng": 31.0415794,
+"metro": false
+},
+{
+"label": "Taawon Gas Station - Al Mataryaa",
+"lat": 30.1232814,
+"lng": 31.3013946,
+"metro": false
+},
+{
+"label": "Tabarak Children's Hospital - Nasr City",
+"lat": 30.0466241,
+"lng": 31.3283917,
+"metro": false
+},
+{
+"label": "Tahrir Square",
+"lat": 30.0440343,
+"lng": 31.2356697,
+"metro": false
+},
+{
+"label": "Taki - Al Waili",
+"lat": 30.0592101,
+"lng": 31.2762789,
+"metro": false
+},
+{
+"label": "Tara Compound Entrance - Sheikh Zayed",
+"lat": 30.0401831,
+"lng": 31.0139192,
+"metro": false
+},
+{
+"label": "Telecom Egypt Central - 6th Of October",
+"lat": 29.9739696,
+"lng": 30.9551393,
+"metro": false
+},
+{
+"label": "Telecom Egypt Central - Almaza",
+"lat": 30.086647,
+"lng": 31.3350626,
+"metro": false
+},
+{
+"label": "Teraat Al Gabal Street",
+"lat": 30.1018561,
+"lng": 31.3056844,
+"metro": false
+},
+{
+"label": "The Continental School - Obour",
+"lat": 30.1951959,
+"lng": 31.4610121,
+"metro": false
+},
+{
+"label": "The Egyptian Lawyers Association",
+"lat": 30.0523684,
+"lng": 31.2375907,
+"metro": false
+},
+{
+"label": "The Good Shepherd Hospital",
+"lat": 30.07692,
+"lng": 31.245208,
+"metro": false
+},
+{
+"label": "The Outlet Mall - 6th of October",
+"lat": 29.93699,
+"lng": 30.89577,
+"metro": false
+},
+{
+"label": "The Platform Maadi",
+"lat": 29.9744066,
+"lng": 31.2348463,
+"metro": false
+},
+{
+"label": "Three Pyramids Hotel",
+"lat": 30.0005765,
+"lng": 31.1780731,
+"metro": false
+},
+{
+"label": "Tiba Grand Mall",
+"lat": 29.9492017,
+"lng": 30.9090876,
+"metro": false
+},
+{
+"label": "Tolip - Zahraa Nasr City",
+"lat": 30.0516506,
+"lng": 31.4050669,
+"metro": false
+},
+{
+"label": "Tolip Plaza",
+"lat": 30.02536,
+"lng": 31.46561,
+"metro": false
+},
+{
+"label": "Tolip Plaza - 5th Settlement",
+"lat": 30.0256186,
+"lng": 31.4656059,
+"metro": false
+},
+{
+"label": "Tora Steps - Autostrad",
+"lat": 29.9519855,
+"lng": 31.2874946,
+"metro": false
+},
+{
+"label": "Total Gas Station - 6th of October",
+"lat": 29.93258,
+"lng": 30.87711,
+"metro": false
+},
+{
+"label": "Total Gas Station - Haram Marioteya",
+"lat": 29.9912428,
+"lng": 31.1528076,
+"metro": false
+},
+{
+"label": "Total Gas Station - Kattameya Entrance",
+"lat": 29.9836886,
+"lng": 31.3668248,
+"metro": false
+},
+{
+"label": "Total Gas Station Bassous - Ring Road",
+"lat": 30.1397678,
+"lng": 31.2065041,
+"metro": false
+},
+{
+"label": "Traffic Department (Moroor) - Kattameya",
+"lat": 29.9731092,
+"lng": 31.3901249,
+"metro": false
+},
+{
+"label": "Triumph Hotel",
+"lat": 30.0867083,
+"lng": 31.3063751,
+"metro": false
+},
+{
+"label": "Triumph Square",
+"lat": 30.1008109,
+"lng": 31.3430538,
+"metro": false
+},
+{
+"label": "Tuktuk Stop - 15th of May Bridge - Shubra Al Kheima",
+"lat": 30.1216096,
+"lng": 31.2503945,
+"metro": false
+},
+{
+"label": "Twin Plaza",
+"lat": 30.0530095,
+"lng": 31.4319231,
+"metro": false
+},
+{
+"label": "Union Housing Al Nasr - Kattameya",
+"lat": 29.9743133,
+"lng": 31.4079275,
+"metro": false
+},
+{
+"label": "Universal - 6th of October",
+"lat": 29.9257523,
+"lng": 30.9009572,
+"metro": false
+},
+{
+"label": "Unknown Soldier (Al Gondi Al Maghool)",
+"lat": 30.0645849,
+"lng": 31.3147075,
+"metro": false
+},
+{
+"label": "Vitrac Square - 5th Settlement",
+"lat": 30.0113483,
+"lng": 31.4143632,
+"metro": false
+},
+{
+"label": "Vodafone - Ahmed Al Zomor",
+"lat": 30.0484828,
+"lng": 31.3745212,
+"metro": false
+},
+{
+"label": "Vodafone - Imbaba",
+"lat": 30.0719266,
+"lng": 31.2093406,
+"metro": false
+},
+{
+"label": "Vodafone Square",
+"lat": 29.9511194,
+"lng": 30.9123403,
+"metro": false
+},
+{
+"label": "Wadi Degla Sporting Club - 6th of October",
+"lat": 29.9728886,
+"lng": 31.0057314,
+"metro": false
+},
+{
+"label": "Wadi Degla Sporting Club - Heliopolis",
+"lat": 30.0951136,
+"lng": 31.3826178,
+"metro": false
+},
+{
+"label": "Wadi Degla Sporting Club - New Cairo",
+"lat": 30.0526751,
+"lng": 31.4265747,
+"metro": false
+},
+{
+"label": "Waha Garage - 10th District - Nasr City",
+"lat": 30.0404398,
+"lng": 31.377906,
+"metro": false
+},
+{
+"label": "Waha Hotel - Alexandria Desert Road",
+"lat": 30.0134683,
+"lng": 31.1020784,
+"metro": false
+},
+{
+"label": "Wataneya Gas Station - Ring Road - Kattameya",
+"lat": 29.9866937,
+"lng": 31.3094528,
+"metro": false
+},
+{
+"label": "Water Station - Alexandria Desert Road",
+"lat": 30.0209747,
+"lng": 31.0977384,
+"metro": false
+},
+{
+"label": "Waterway Compound",
+"lat": 30.0413542,
+"lng": 31.47512,
+"metro": false
+},
+{
+"label": "Wax Museum - Helwan",
+"lat": 29.85955,
+"lng": 31.32625,
+"metro": false
+},
+{
+"label": "West Golf",
+"lat": 29.9993625,
+"lng": 31.4008248,
+"metro": false
+},
+{
+"label": "Windrose Academy",
+"lat": 29.9802759,
+"lng": 31.351959,
+"metro": false
+},
+{
+"label": "Yellow Kiosk - 6th of October",
+"lat": 29.9341647,
+"lng": 30.9148818,
+"metro": false
+},
+{
+"label": "Youth Club - Sheikh Zayed",
+"lat": 30.0436414,
+"lng": 30.9767202,
+"metro": false
+},
+{
+"label": "Youth Housing - Al Shorouq",
+"lat": 30.1656935,
+"lng": 31.647018,
+"metro": false
+},
+{
+"label": "Zahraa Exit - Ring Road",
+"lat": 29.9918109,
+"lng": 31.2334232,
+"metro": false
+},
+{
+"label": "Zahraa Madinet Nasr",
+"lat": 30.0548145,
+"lng": 31.4134011,
+"metro": false
+},
+{
+"label": "Zahraa Metro Station",
+"lat": 29.9950782,
+"lng": 31.2311601,
+"metro": false
+},
+{
+"label": "Zahraa Nasr City",
+"lat": 30.0513118,
+"lng": 31.4001758,
+"metro": false
+},
+{
+"label": "Zain Paint Store - Al Rawda - Sheikh Zayed",
+"lat": 30.0384668,
+"lng": 31.0049715,
+"metro": false
+},
+{
+"label": "Zaker Hussein - Al Tayaran",
+"lat": 30.0438288,
+"lng": 31.3292639,
+"metro": false
+},
+{
+"label": "Zamalek Sporting Club",
+"lat": 30.0609468,
+"lng": 31.2053297,
+"metro": false
+},
+{
+"label": "Zayed 2000",
+"lat": 30.0197282,
+"lng": 31.0084879,
+"metro": false
+},
+{
+"label": "Zayed 2000 Gate 3",
+"lat": 30.0190699,
+"lng": 30.9972801,
+"metro": false
+},
+{
+"label": "Zayed Boys Secondary School",
+"lat": 30.0499251,
+"lng": 30.9849,
+"metro": false
+},
+{
+"label": "Zewail Road - Wahat Road",
+"lat": 29.9561259,
+"lng": 31.0775723,
+"metro": false
+}
+]

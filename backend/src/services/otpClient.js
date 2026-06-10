@@ -16,6 +16,7 @@ export async function fetchOtpPlan({
   time,
   modes,
   numItineraries = 5,
+  arriveBy = false,
 }) {
   const url = process.env.OTP_GRAPHQL_URL || DEFAULT_OTP_URL;
 
@@ -25,6 +26,7 @@ export async function fetchOtpPlan({
       to: { lat: ${toLat}, lon: ${toLng} }
       date: "${date}"
       time: "${time}"
+      arriveBy: ${arriveBy === true}
       transportModes: [${buildModesFragment(modes)}]
       numItineraries: ${numItineraries}
     ) {

@@ -39,6 +39,33 @@ export const ARABIC_LABELS = {
   heliopolis: 'مصر الجديدة',
 };
 
+// Popular Egyptian colloquial / short-form call-outs -> a canonical label that
+// already exists in ALL_PLACES. Matched after normalizePlaceName runs, so keys
+// can be written naturally in Arabic or English. These are folded into the exact
+// resolver index, so they take precedence over the fuzzy matcher.
+//
+// NOTE: colloquial "عباس" means Abbas El Akkad St. in Nasr City, NOT Abbassiya
+// (العباسية) — the explicit alias here is what overrides the fuzzy substring match.
+export const ALIASES = {
+  'عباس': 'Abbas Al Akkad - Mostafa Al Nahas',
+  'عباس العقاد': 'Abbas Al Akkad - Mostafa Al Nahas',
+  abbas: 'Abbas Al Akkad - Mostafa Al Nahas',
+  'عاشر': '10th District (Al Hay Al Asher) - Nasr City',
+  'الحي العاشر': '10th District (Al Hay Al Asher) - Nasr City',
+  'سابع': '7th District Stop (Hay Al Sabea) - Nasr City',
+  'الحي السابع': '7th District Stop (Hay Al Sabea) - Nasr City',
+  // Popular areas missing from / weakly represented in the GTFS -> nearest covered point
+  'مهندسين': 'Dokki',
+  'المهندسين': 'Dokki',
+  mohandessin: 'Dokki',
+  // Landmark shortcuts
+  'مكرم': 'Makram Ebeid',
+  'سيتي ستارز': 'City Stars Mall',
+  'استاد': 'Cairo Stadium',
+  'الاستاد': 'Cairo Stadium',
+  'جامعه': 'Cairo University',
+};
+
 export const LANDMARKS = [
   // --- Non-GTFS landmarks ---
   { label: 'Makram Ebeid', arLabel: 'مكرم عبيد', lat: 30.0596, lng: 31.3444 },

@@ -2,6 +2,7 @@ import { ref, readonly } from 'vue';
 import { db } from '@/db/appDb';
 import { checkOnline, useNetworkStatus } from './networkStatus';
 import { processSyncQueue, getPendingActionCount } from './syncQueue';
+import { synchronizeFavoritePlaces } from './repositories/favoritePlacesRepository';
 
 /**
  * Sync Service
@@ -53,6 +54,7 @@ export async function performSync(force = false): Promise<void> {
 
     // Process pending actions
     const result = await processSyncQueue();
+    await synchronizeFavoritePlaces();
     
     console.log(`Sync complete: ${result.successful} successful, ${result.failed} failed`);
 
@@ -96,6 +98,12 @@ export function initializeSyncService(): void {
   window.addEventListener('online', () => {
     console.log('Network online: triggering sync');
     setTimeout(() => performSync(), 1000); // Small delay to ensure connection is stable
+  });
+  window.addEventListener('mwasalaty:sync-needed', () => {
+    void getPendingActionCount().then((count) => {
+      pendingCount.value = count;
+      if (checkOnline()) void performSync();
+    });
   });
 
   // Sync on app startup if online

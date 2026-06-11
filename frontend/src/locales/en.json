@@ -57,6 +57,7 @@
       "placeAddressRequired": "Enter a place address first.",
       "startRequired": "Please enter a starting point.",
       "destinationRequired": "Please enter a destination.",
+      "futureTimeRequired": "Choose a departure or arrival time in the future.",
       "bothRequired": "Please enter both the starting point and destination."
     },
     "filters": {
@@ -128,6 +129,25 @@
     "personalInformation": "Personal Information",
     "savedPaymentMethods": "Saved Payment Methods",
     "transactionHistory": "Transaction History",
+    "noTransactions": "No transactions yet. Your ticket purchases and refunds will appear here.",
+    "refundLabel": "Refund",
+    "editProfile": "Edit Profile",
+    "saveChanges": "Save changes",
+    "saving": "Saving…",
+    "emailChangeHint": "Changing your email requires confirming a link we'll send to the new address.",
+    "emailChangePending": "We sent a confirmation link to your new email. The change takes effect once you confirm.",
+    "nameRequired": "Name can't be empty.",
+    "invalidEmail": "Enter a valid email address.",
+    "updateFailed": "Could not save your changes.",
+    "changePassword": "Change Password",
+    "changePasswordDescription": "Update your account password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "passwordChanged": "Your password has been updated.",
+    "passwordMismatch": "New passwords don't match.",
+    "passwordTooShort": "Password must be at least 6 characters.",
+    "currentPasswordRequired": "Enter your current password.",
     "fullName": "Full Name",
     "email": "Email",
     "phone": "Phone",
@@ -229,7 +249,9 @@
       "title": "Recent Trips",
       "subtitle": "Past journeys you can repeat or review.",
       "completed": "Completed",
-      "repeatTrip": "Repeat Trip"
+      "repeatTrip": "Repeat Trip",
+      "emptyTitle": "No trips yet",
+      "emptyCopy": "Routes you search will appear here."
     },
     "ai": {
       "title": "AI Plans",
@@ -242,7 +264,42 @@
       "title": "Offline Routes",
       "subtitle": "Downloaded routes available without internet.",
       "downloaded": "{size} - Downloaded {date}",
-      "remove": "Remove"
+      "remove": "Remove",
+      "emptyTitle": "No offline routes",
+      "emptyCopy": "Routes you view while online are cached here for offline use."
+    }
+  },
+  "operatorScan": {
+    "title": "Operator Scan",
+    "subtitle": "Validate a passenger ticket QR payload from an operator device.",
+    "qrPayload": "QR payload",
+    "qrPlaceholder": "{\"ticketId\":\"ticket_demo\",\"signature\":\"demo_signature\"}",
+    "scannerProfile": "Scanner profile",
+    "profileFilter": "Filter by line or route (e.g. M2, 108)",
+    "subway": "Subway",
+    "bus": "Bus",
+    "stationsTraveled": "Stations traveled (metro)",
+    "stationsPlaceholder": "e.g. 12",
+    "stationsHelp": "Enter at the exit scan. It is rejected if it exceeds the paid ticket tier. Leave blank at entry or for buses.",
+    "validating": "Validating...",
+    "validate": "Validate ticket",
+    "results": {
+      "valid": "Ticket validated successfully.",
+      "status": "Scan result: {status}"
+    },
+    "errors": {
+      "profiles": "Could not load scanner profiles.",
+      "validate": "Could not validate ticket.",
+      "invalidQr": "The QR payload is invalid.",
+      "ticketNotFound": "Ticket not found.",
+      "expired": "This ticket has expired.",
+      "alreadyUsed": "This ticket leg has already been used.",
+      "refunded": "This ticket leg has been refunded.",
+      "noMatch": "This ticket has no leg matching the selected scanner.",
+      "ambiguous": "Multiple ticket legs match this scanner. Choose a specific scanner profile.",
+      "stationLimit": "The traveled station count exceeds this ticket's limit.",
+      "profileNotFound": "The selected scanner profile was not found.",
+      "validation": "Complete the required scan information."
     }
   },
   "routeResults": {

@@ -45,7 +45,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { AlertTriangle, Loader2 } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
-import { getCheckoutSessionResult } from "@/services/api";
+import { confirmCheckoutRedirect, getCheckoutSessionResult, type Ticket } from "@/services/api";
 import { storeCurrentTicket } from "@/services/currentTicket";
 import { db } from "@/db/appDb";
 
@@ -55,7 +55,10 @@ const route = useRoute();
 const router = useRouter();
 
 const CHECKOUT_SESSION_KEY = "mwasalaty:checkout-session-id";
-const MAX_ATTEMPTS = 8;
+// PayMob's webhook (and the 3DS step before it) can take well over 16s to land,
+// so poll for ~40s before giving up. The webhook is the only thing that issues
+// the ticket, so cutting this short strands a paid user on the error screen.
+const MAX_ATTEMPTS = 20;
 const RETRY_DELAY_MS = 2000;
 
 const state = ref<State>("verifying");
@@ -86,6 +89,32 @@ function resolveSessionId(): string | null {
   }
 }
 
+// Issue the ticket locally and route to it. Shared by the redirect-confirm path
+// and the poll fallback.
+async function issueAndGo(ticket: Ticket) {
+  state.value = "issuing";
+  storeCurrentTicket(ticket);
+  // Persist the issued ticket so it stays viewable offline (req 9).
+  try {
+    await db.tickets.put({ ...ticket, savedAt: Date.now() });
+  } catch {
+    // IndexedDB may be unavailable (private mode); the ticket still
+    // renders this session via storeCurrentTicket.
+  }
+  router.replace(`/ticket/${ticket.ticketId}`);
+}
+
+// Flatten Vue's LocationQuery (string | string[] | null) into plain strings so
+// the backend can verify PayMob's HMAC over the redirect params.
+function flattenQuery(): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [key, value] of Object.entries(route.query)) {
+    const v = queryValue(value);
+    if (v !== undefined) out[key] = v;
+  }
+  return out;
+}
+
 async function poll(sessionId: string, attempt = 0) {
   if (cancelled) return;
   try {
@@ -93,16 +122,7 @@ async function poll(sessionId: string, attempt = 0) {
     if (cancelled) return;
 
     if (result.status === "ready") {
-      state.value = "issuing";
-      storeCurrentTicket(result.ticket);
-      // Persist the issued ticket so it stays viewable offline (req 9).
-      try {
-        await db.tickets.put({ ...result.ticket, savedAt: Date.now() });
-      } catch {
-        // IndexedDB may be unavailable (private mode); the ticket still
-        // renders this session via storeCurrentTicket.
-      }
-      router.replace(`/ticket/${result.ticket.ticketId}`);
+      await issueAndGo(result.ticket);
       return;
     }
 
@@ -123,7 +143,7 @@ function fail(message: string) {
   state.value = "error";
 }
 
-onMounted(() => {
+onMounted(async () => {
   // PayMob redirects to this single URL for both success and failure.
   if (queryValue(route.query.success) === "false") {
     router.replace("/payment/cancelled");
@@ -135,6 +155,26 @@ onMounted(() => {
     fail("We couldn't find your checkout session. Please start the booking again.");
     return;
   }
+
+  // Preferred path: PayMob's redirect carries signed (hmac) transaction params.
+  // Confirm server-side right away so the ticket is issued even if the webhook
+  // is late or never arrives. Fall back to polling on any failure.
+  if (queryValue(route.query.hmac)) {
+    try {
+      const params = flattenQuery();
+      // Ensure the backend can locate the session even if the redirect omitted it.
+      if (!params.merchant_order_id) params.merchant_order_id = sessionId;
+      const { ticket } = await confirmCheckoutRedirect(params);
+      if (cancelled) return;
+      await issueAndGo(ticket);
+      return;
+    } catch {
+      // Redirect confirmation failed (e.g. HMAC mismatch or transient error);
+      // the webhook may still complete it, so fall through to polling.
+      if (cancelled) return;
+    }
+  }
+
   poll(sessionId);
 });
 

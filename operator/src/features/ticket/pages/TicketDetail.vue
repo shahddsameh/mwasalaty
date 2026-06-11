@@ -50,14 +50,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import AppNav from "@/components/shared/AppNav.vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import StateView from "@/components/shared/StateView.vue";
 import { useOnline } from "@/composables/useOnline";
-import { getTicket, type Ticket, type TicketLegStatus } from "@/services/api";
+import { getTicket, subscribeToTicket, type Ticket, type TicketLegStatus } from "@/services/api";
 import { displayLeg, formatDateTime } from "@/services/format";
 
 const route = useRoute();
@@ -66,6 +66,7 @@ const { isOnline } = useOnline();
 const ticketId = computed(() => String(route.params.id || ""));
 const ticket = ref<Ticket | null>(null);
 const state = ref<"loading" | "empty" | "error" | "ready">("loading");
+let stopTicketUpdates: (() => void) | undefined;
 
 const stateTitle = computed(() => {
   if (state.value === "loading") return t("ticket.loading");
@@ -107,5 +108,14 @@ async function loadTicket() {
   }
 }
 
-onMounted(loadTicket);
+onMounted(async () => {
+  await loadTicket();
+  if (!ticketId.value) return;
+  stopTicketUpdates = subscribeToTicket(ticketId.value, (fresh) => {
+    ticket.value = fresh;
+    state.value = "ready";
+  });
+});
+
+onUnmounted(() => stopTicketUpdates?.());
 </script>

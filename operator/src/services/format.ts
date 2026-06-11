@@ -1,17 +1,20 @@
 import type { ScannerProfile, TicketLeg } from "@/services/api";
 import type { Outcome } from "@/services/outcome";
 import { routeShortName } from "@/features/results/candidateLegs";
+import { getCurrentLocale, type Locale } from "@/i18n";
 
-export function displayMode(mode?: string | null): string {
-  if (mode === "SUBWAY") return "Subway";
-  if (mode === "BUS") return "Bus";
+export function displayMode(mode?: string | null, locale: Locale = getCurrentLocale()): string {
+  if (mode === "SUBWAY") return locale === "ar" ? "مترو" : "Subway";
+  if (mode === "BUS") return locale === "ar" ? "حافلة" : "Bus";
   return mode ?? "-";
 }
 
-export function displayProfile(profile: ScannerProfile | null): string {
+export function displayProfile(profile: ScannerProfile | null, locale: Locale = getCurrentLocale()): string {
   if (!profile) return "-";
+  const localizedLabel = locale === "ar" ? profile.labelAr : profile.label;
+  if (localizedLabel) return localizedLabel;
   const route = profile.routeShortName ? ` ${profile.routeShortName}` : "";
-  return `${displayMode(profile.mode)}${route}`;
+  return `${displayMode(profile.mode, locale)}${route}`;
 }
 
 export function displayLeg(leg?: TicketLeg | null): string {

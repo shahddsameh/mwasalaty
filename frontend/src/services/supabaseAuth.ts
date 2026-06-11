@@ -112,6 +112,84 @@ export async function getCurrentSession(): Promise<SupabaseAuthSession | null> {
   return data.session ?? null;
 }
 
+export async function updateProfile(input: {
+  name?: string;
+  phone?: string;
+  email?: string;
+}): Promise<{ error: string | null; emailChangePending: boolean }> {
+  const data: Record<string, unknown> = {};
+  if (input.name !== undefined) data.full_name = input.name;
+  if (input.phone !== undefined) data.phone = input.phone;
+
+  const { error } = await supabase.auth.updateUser({
+    ...(input.email ? { email: input.email } : {}),
+    data,
+  });
+
+  return {
+    error: error ? normalizeError(error, "Could not save your changes.") : null,
+    emailChangePending: Boolean(input.email) && !error,
+  };
+}
+
+/**
+ * True when the account can manage a password (i.e. it has an email/password
+ * identity). Google-only accounts have no password to change.
+ */
+export function isEmailPasswordUser(user: SupabaseAuthUser | null): boolean {
+  if (!user) return false;
+  const identities = user.identities ?? [];
+  if (identities.length) return identities.some((i) => i.provider === "email");
+  return user.app_metadata?.provider === "email";
+}
+
+export async function changePassword(input: {
+  currentPassword: string;
+  newPassword: string;
+}): Promise<{ error: string | null }> {
+  const { data: userData } = await supabase.auth.getUser();
+  const email = userData.user?.email;
+  if (!email) {
+    return { error: "You must be signed in to change your password." };
+  }
+
+  // Re-authenticate to verify the current password before changing it.
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email,
+    password: input.currentPassword,
+  });
+  if (signInError) {
+    return { error: "Current password is incorrect." };
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    password: input.newPassword,
+  });
+  return {
+    error: error ? normalizeError(error, "Could not update your password.") : null,
+  };
+}
+
+export async function sendPasswordReset(
+  email: string,
+): Promise<{ error: string | null }> {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: browserRedirectTo("/reset-password"),
+  });
+  return {
+    error: error ? normalizeError(error, "Could not send the reset email.") : null,
+  };
+}
+
+export async function updatePassword(
+  newPassword: string,
+): Promise<{ error: string | null }> {
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  return {
+    error: error ? normalizeError(error, "Could not update your password.") : null,
+  };
+}
+
 export async function signOut(): Promise<{ error: string | null }> {
   const { error } = await supabase.auth.signOut();
   return {

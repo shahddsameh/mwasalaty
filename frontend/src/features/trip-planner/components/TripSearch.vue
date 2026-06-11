@@ -94,10 +94,14 @@
           <input
             v-model="store.time"
             type="time"
+            :min="minimumTime"
             class="w-full px-3 py-2.5 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
           />
         </label>
       </div>
+      <p v-if="timeError" class="mt-2 text-sm text-destructive">
+        {{ timeError }}
+      </p>
     </div>
 
     <!-- Actions -->
@@ -198,9 +202,15 @@ function removeRecent(recent: { id?: number }) {
 
 const startError = ref("");
 const destinationError = ref("");
+const timeError = ref("");
 const locating = ref(false);
 
-const todayDate = new Date().toISOString().slice(0, 10);
+function localDateValue(date: Date) {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+const todayDate = localDateValue(new Date());
+const minimumTime = computed(() => (store.date === todayDate ? currentTimeValue() : undefined));
 
 const filters = [
   { value: "fastest" as const, labelKey: "home.filters.fastest", icon: Clock },
@@ -236,12 +246,26 @@ function pad(n: number) {
   return String(n).padStart(2, "0");
 }
 
+function currentTimeValue() {
+  const now = new Date();
+  return `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+}
+
+function scheduledTimeIsFuture() {
+  if (store.timeMode === "now") return true;
+  if (!store.date || !store.time) return false;
+
+  const scheduledAt = new Date(`${store.date}T${store.time}`);
+  return !Number.isNaN(scheduledAt.getTime()) && scheduledAt.getTime() > Date.now();
+}
+
 function setTimeMode(mode: TripTimeMode) {
   store.timeMode = mode;
+  timeError.value = "";
   if (mode !== "now" && (!store.date || !store.time)) {
-    const now = new Date();
-    store.date = now.toISOString().slice(0, 10);
-    store.time = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    const shortlyFromNow = new Date(Date.now() + 5 * 60 * 1000);
+    store.date = localDateValue(shortlyFromNow);
+    store.time = `${pad(shortlyFromNow.getHours())}:${pad(shortlyFromNow.getMinutes())}`;
   }
 }
 
@@ -310,7 +334,10 @@ function searchRoutes() {
   destinationError.value = destination
     ? ""
     : t("home.validation.destinationRequired");
-  if (!start || !destination) return;
+  timeError.value = scheduledTimeIsFuture()
+    ? ""
+    : t("home.validation.futureTimeRequired");
+  if (!start || !destination || timeError.value) return;
 
   if (store.fromCoords) setPlaceCoords(start, store.fromCoords);
   if (store.toCoords) setPlaceCoords(destination, store.toCoords);

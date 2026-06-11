@@ -12,6 +12,15 @@ import {
 } from "./placeLocalization";
 import { getCurrentSession } from "./supabaseAuth";
 
+/**
+ * Bearer auth header for the signed-in user, or an empty object when there is
+ * no session. Ticket read/refund endpoints are now scoped to the token's user.
+ */
+async function authHeader(): Promise<Record<string, string>> {
+  const session = await getCurrentSession();
+  return session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {};
+}
+
 const OTP_MODE_TO_TYPE: Record<string, string> = {
   WALK:   'walking',
   SUBWAY: 'metro',
@@ -38,6 +47,9 @@ export type ApiLeg = {
   instruction: string;
   geometry?: { lat: number; lng: number }[];
   fare: ApiFare;
+  // Stations this leg covers; for metro it is the combined count of the whole
+  // metro journey (used to set the ticket's tier/station limit).
+  stationCount?: number;
 };
 
 export type ApiItinerary = {
@@ -179,12 +191,17 @@ function anonymousSessionId() {
   }
 }
 
+export type TripConstraints = {
+  maxDurationMinutes?: number;
+};
+
 export async function planRoute(
   fromLabel: string,
   toLabel: string,
   filter: 'fastest' | 'cheapest' | 'comfortable' = 'fastest',
   coords: { fromCoords?: PlaceCoords; toCoords?: PlaceCoords } = {},
   when: TripWhen = { mode: 'now' },
+  constraints: TripConstraints = {},
 ): Promise<ApiRouteOption[]> {
   const now = new Date();
   let date = now.toISOString().slice(0, 10);
@@ -220,12 +237,14 @@ export async function planRoute(
     to,
     date,
     time,
+    timeMode: when.mode,
     arriveBy,
     anonymousSessionId: anonymousSessionId(),
     preferences: {
       modes: ['WALK', 'BUS', 'SUBWAY'],
       optimizeFor: FILTER_TO_OPTIMIZE[filter] ?? 'quickest',
     },
+    ...(constraints.maxDurationMinutes ? { constraints } : {}),
   };
 
   if (import.meta.env.DEV) {
@@ -264,6 +283,36 @@ export async function planRoute(
     throw new Error('NO_ROUTES_FOUND');
   }
   return data.itineraries.map(mapItinerary);
+}
+
+export type AiRouteIntent = {
+  from: string | null;
+  to: string | null;
+  filter: 'fastest' | 'cheapest' | 'comfortable';
+  timeMode: 'now' | 'depart' | 'arrive';
+  date: string | null;
+  time: string | null;
+  maxDurationMinutes: number | null;
+};
+
+export type AiRouteIntentResponse =
+  | { status: 'ready'; intent: AiRouteIntent; source: string }
+  | {
+      status: 'needs_clarification';
+      intent: AiRouteIntent;
+      source: string;
+      missingFields: string[];
+      message: string;
+    };
+
+export async function parseAiRouteIntent(prompt: string): Promise<AiRouteIntentResponse> {
+  const res = await fetch('/api/ai/route-intent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt }),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return (await res.json()) as AiRouteIntentResponse;
 }
 
 /* ------------------------------------------------------------------ *
@@ -327,13 +376,14 @@ export type CheckoutLeg = {
   to: { name: string };
   fareAmount: number;
   currency: string;
+  stationCount?: number;
 };
 
 export type CreateCheckoutPayload = {
   planId: string;
   itineraryId: string;
   departureAt?: string;
-  passenger: { userId: string; name: string; email?: string; phone?: string };
+  passenger: { userId: string; name?: string; email?: string; phone?: string };
   paymentBreakdown: {
     fareAmount: number;
     serviceFee: number;
@@ -380,14 +430,63 @@ export async function getCheckoutSessionResult(sessionId: string): Promise<Check
   return { status: 'ready', ticket: data.ticket };
 }
 
+/**
+ * Confirm a payment from PayMob's signed redirect params. Lets the success page
+ * issue the ticket immediately instead of waiting on the (possibly late) webhook.
+ * Returns the ticket on success; throws on failure or HMAC mismatch.
+ */
+export async function confirmCheckoutRedirect(
+  params: Record<string, string>,
+): Promise<{ ticket: Ticket }> {
+  const res = await fetch('/api/payments/confirm-redirect', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return (await res.json()) as { ticket: Ticket };
+}
+
 export async function getTicket(ticketId: string): Promise<Ticket> {
-  const res = await fetch(`/api/tickets/${encodeURIComponent(ticketId)}`);
+  const res = await fetch(`/api/tickets/${encodeURIComponent(ticketId)}`, {
+    headers: await authHeader(),
+  });
   if (!res.ok) throw new Error(await readApiError(res));
   return (await res.json()) as Ticket;
 }
 
-export async function getTickets(userId: string): Promise<Ticket[]> {
-  const res = await fetch(`/api/tickets?userId=${encodeURIComponent(userId)}`);
+export function subscribeToTicket(
+  ticketId: string,
+  onTicket: (ticket: Ticket) => void,
+): () => void {
+  if (typeof EventSource === 'undefined') return () => {};
+  let source: EventSource | null = null;
+  let closed = false;
+  // EventSource can't set an Authorization header, so the access token is passed
+  // as a query param. Resolving the session is async, so open the stream once it
+  // is available and honour an early unsubscribe.
+  void getCurrentSession().then((session) => {
+    if (closed) return;
+    const token = session?.access_token;
+    const query = token ? `?access_token=${encodeURIComponent(token)}` : '';
+    source = new EventSource(`/api/tickets/${encodeURIComponent(ticketId)}/events${query}`);
+    source.addEventListener('ticket', (event) => {
+      try {
+        onTicket(JSON.parse((event as MessageEvent<string>).data) as Ticket);
+      } catch {
+        // Ignore malformed stream messages and wait for the next update.
+      }
+    });
+  });
+  return () => {
+    closed = true;
+    source?.close();
+  };
+}
+
+export async function getTickets(): Promise<Ticket[]> {
+  // The backend derives the user from the auth token; no userId query needed.
+  const res = await fetch('/api/tickets', { headers: await authHeader() });
   if (!res.ok) throw new Error(await readApiError(res));
   const data = (await res.json()) as { tickets?: Ticket[] };
   return data.tickets ?? [];
@@ -410,7 +509,7 @@ export type RefundResult = {
 export async function refundTicket(ticketId: string, legIds?: string[]): Promise<RefundResult> {
   const res = await fetch(`/api/tickets/${encodeURIComponent(ticketId)}/refund`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...(await authHeader()) },
     body: JSON.stringify(legIds?.length ? { legIds } : {}),
   });
   if (!res.ok) throw new Error(await readApiError(res));

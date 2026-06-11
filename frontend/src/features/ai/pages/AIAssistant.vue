@@ -27,10 +27,14 @@
           />
           <AppButton
             class="mt-4 w-full md:w-auto flex items-center gap-2"
+            :disabled="loading || !input.trim()"
             @click="search"
           >
-            <Send class="w-5 h-5" /> Search Route
+            <Send class="w-5 h-5" /> {{ loading ? "Understanding request..." : "Search Route" }}
           </AppButton>
+          <p v-if="message" class="mt-4 text-sm text-destructive" role="alert">
+            {{ message }}
+          </p>
         </section>
 
         <aside class="space-y-6">
@@ -82,14 +86,100 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, h, ref } from "vue";
+import { defineComponent, h, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { Clock, MapPin, Send, Sparkles, TrendingUp } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import PageTitle from "@/components/shared/PageTitle.vue";
+import { parseAiRouteIntent, type AiRouteIntent } from "@/services/api";
+import { getFavoritePlaces } from "@/core/offline/repositories/favoritePlacesRepository";
+import { setPlaceCoords } from "@/features/trip-planner/services/routeSearch";
+import type { FavoritePlace } from "@/db/appDb";
 
 const router = useRouter();
+const { t } = useI18n();
 const input = ref("");
+const loading = ref(false);
+const message = ref("");
+
+// Cached saved places (home / work / school / named favorites). The AI parser
+// emits the literal token "home"/"work"/"school" — we swap in the user's saved
+// place here so personal addresses never leave the device (or reach the LLM).
+const favorites = ref<FavoritePlace[]>([]);
+onMounted(async () => {
+  try {
+    favorites.value = (await getFavoritePlaces()).data;
+  } catch {
+    favorites.value = [];
+  }
+});
+
+const PERSONAL_TYPES: Record<string, string> = {
+  home: "home",
+  house: "home",
+  work: "work",
+  office: "work",
+  workplace: "work",
+  job: "work",
+  school: "school",
+  college: "school",
+  university: "school",
+};
+
+type ResolvedPlace = { label: string; coords?: { lat: number; lng: number }; missing?: boolean };
+
+// Resolve a parser place token against the user's favorites. Returns null when the
+// label is an ordinary place, `{ missing: true }` when a personal place is referenced
+// but not saved yet, otherwise the saved place's display label and coordinates.
+function resolvePersonal(label: string | null): ResolvedPlace | null {
+  if (!label) return null;
+  const key = label.trim().toLowerCase();
+  const type = PERSONAL_TYPES[key];
+  let fav = type ? favorites.value.find((f) => f.type === type) : undefined;
+  if (!fav) fav = favorites.value.find((f) => f.name.trim().toLowerCase() === key);
+  if (type && !fav) return { label, missing: true };
+  if (!fav) return null;
+  const coords =
+    typeof fav.lat === "number" && typeof fav.lng === "number"
+      ? { lat: fav.lat, lng: fav.lng }
+      : undefined;
+  return { label: fav.name, coords };
+}
+
+// One-shot device location (triggers the browser's permission prompt).
+function getCurrentCoords(): Promise<{ lat: number; lng: number }> {
+  return new Promise((resolve, reject) => {
+    if (!("geolocation" in navigator)) {
+      reject(new Error("unsupported"));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) =>
+        resolve({ lat: position.coords.latitude, lng: position.coords.longitude }),
+      (error) => reject(error),
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 },
+    );
+  });
+}
+
+function goToResults(startLabel: string, destLabel: string, intent: AiRouteIntent) {
+  router.push({
+    path: "/route-results",
+    query: {
+      start: startLabel,
+      destination: destLabel,
+      filter: intent.filter,
+      timeMode: intent.timeMode,
+      ...(intent.date ? { date: intent.date } : {}),
+      ...(intent.time ? { time: intent.time } : {}),
+      ...(intent.maxDurationMinutes
+        ? { maxDurationMinutes: String(intent.maxDurationMinutes) }
+        : {}),
+    },
+    state: { aiPrompt: input.value.trim(), ...intent, from: startLabel, to: destLabel },
+  });
+}
 const examples = [
   "Get me to Cairo Airport in under an hour",
   "What's the cheapest way to reach Giza Pyramids?",
@@ -131,9 +221,69 @@ const Feature = defineComponent({
   },
 });
 
-function search() {
-  if (input.value.trim()) {
-    router.push({ path: "/route-results", state: { aiPrompt: input.value } });
+async function search() {
+  const prompt = input.value.trim();
+  if (!prompt || loading.value) return;
+
+  loading.value = true;
+  message.value = "";
+  try {
+    const result = await parseAiRouteIntent(prompt);
+    const intent = result.intent;
+
+    const fromRes = resolvePersonal(intent.from);
+    const toRes = resolvePersonal(intent.to);
+
+    // Referenced a personal place that hasn't been saved yet.
+    if (fromRes?.missing || toRes?.missing) {
+      const which = fromRes?.missing ? intent.from : intent.to;
+      message.value = `You haven't saved a "${which}" place yet. Add it under Saved places first.`;
+      return;
+    }
+
+    const startLabel = fromRes?.label ?? intent.from ?? undefined;
+    const destLabel = toRes?.label ?? intent.to ?? undefined;
+
+    if (result.status === "needs_clarification") {
+      // Destination is known (e.g. "go home") but the origin is missing — use the
+      // rider's current location, asking the browser for geolocation permission.
+      if (result.missingFields.includes("from") && toRes && !fromRes && destLabel) {
+        message.value = t("home.gettingLocation");
+        try {
+          const coords = await getCurrentCoords();
+          const startLabel = t("home.currentLocation");
+          setPlaceCoords(startLabel, coords);
+          if (toRes.coords) setPlaceCoords(destLabel, toRes.coords);
+          message.value = "";
+          goToResults(startLabel, destLabel, intent);
+        } catch (geoError: any) {
+          message.value =
+            geoError?.code === geoError?.PERMISSION_DENIED
+              ? t("home.validation.permissionDenied")
+              : t("home.validation.locationUnavailable");
+        }
+      } else {
+        message.value = result.message;
+      }
+      return;
+    }
+
+    if (!startLabel || !destLabel) {
+      message.value = "Please include both a starting point and a destination.";
+      return;
+    }
+
+    // The results page resolves a label to coordinates via getPlaceCoords, so make
+    // the saved place's coords available under its label (no geocoding of "home").
+    if (fromRes?.coords) setPlaceCoords(startLabel, fromRes.coords);
+    if (toRes?.coords) setPlaceCoords(destLabel, toRes.coords);
+
+    goToResults(startLabel, destLabel, intent);
+  } catch (error) {
+    message.value =
+      error instanceof Error ? error.message : "Could not understand that route request.";
+  } finally {
+    loading.value = false;
   }
 }
 </script>

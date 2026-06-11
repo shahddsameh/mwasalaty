@@ -11,6 +11,13 @@ const RETRY_DELAY_MS = 2000;
 
 export type SyncHandler = (action: PendingAction) => Promise<void>;
 
+export class SyncDeferredError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'SyncDeferredError';
+  }
+}
+
 const syncHandlers = new Map<string, SyncHandler>();
 
 /**
@@ -37,17 +44,18 @@ export async function queuePendingAction(
     createdAt: Date.now(),
     retryCount: 0,
   });
+  window.dispatchEvent(new CustomEvent('mwasalaty:sync-needed'));
 }
 
 /**
  * Process a single pending action
  */
-async function processPendingAction(action: PendingAction): Promise<boolean> {
+async function processPendingAction(action: PendingAction): Promise<'success' | 'failed' | 'deferred'> {
   const handler = syncHandlers.get(action.entityType);
   
   if (!handler) {
     console.warn(`No sync handler registered for entity type: ${action.entityType}`);
-    return false;
+    return 'failed';
   }
 
   try {
@@ -58,8 +66,11 @@ async function processPendingAction(action: PendingAction): Promise<boolean> {
       await db.pendingActions.delete(action.id);
     }
     
-    return true;
+    return 'success';
   } catch (error) {
+    if (error instanceof SyncDeferredError) {
+      return 'deferred';
+    }
     console.error(`Failed to sync action ${action.id}:`, error);
     
     // Update retry count and error message
@@ -71,7 +82,7 @@ async function processPendingAction(action: PendingAction): Promise<boolean> {
       });
     }
     
-    return false;
+    return 'failed';
   }
 }
 
@@ -97,11 +108,11 @@ export async function processSyncQueue(): Promise<{
   let failed = 0;
 
   for (const action of pendingActions) {
-    const success = await processPendingAction(action);
+    const result = await processPendingAction(action);
     
-    if (success) {
+    if (result === 'success') {
       successful++;
-    } else {
+    } else if (result === 'failed') {
       failed++;
       
       // Add delay between retries to avoid hammering the server

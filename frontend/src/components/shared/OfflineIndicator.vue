@@ -56,9 +56,10 @@ const {
   performSync,
 } = useOffline();
 
-// Show indicator if offline, syncing, has pending changes, or there's an error
+// Show indicator if offline, has pending changes, or there's an error.
+// Routine background syncing (e.g. right after a page refresh) stays invisible.
 const shouldShow = computed(() => {
-  return isOffline.value || isSyncing.value || hasPendingChanges.value || syncError.value;
+  return isOffline.value || syncError.value || (hasPendingChanges.value && !isSyncing.value);
 });
 
 const statusType = computed(() => {

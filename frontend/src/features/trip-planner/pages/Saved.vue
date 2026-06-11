@@ -113,13 +113,27 @@
           :title="t('saved.history.title')"
           :subtitle="t('saved.history.subtitle')"
         />
+        <div
+          v-if="recentTrips.length === 0"
+          class="rounded-xl border-2 border-dashed border-border bg-card p-8 text-center"
+        >
+          <BookmarkCheck class="w-10 h-10 text-primary mx-auto mb-3" />
+          <h3 class="font-display text-lg text-foreground mb-1">
+            {{ t("saved.history.emptyTitle") }}
+          </h3>
+          <p class="text-sm text-muted-foreground">
+            {{ t("saved.history.emptyCopy") }}
+          </p>
+        </div>
         <ListRow
           v-for="trip in recentTrips"
-          :key="trip.date"
+          v-else
+          :key="trip.id"
           :title="`${trip.from} -> ${trip.to}`"
-          :subtitle="`${trip.date} - ${trip.duration}`"
+          :subtitle="trip.date"
           :meta="t('saved.history.completed')"
           :action="t('saved.history.repeatTrip')"
+          @action="repeatTrip(trip)"
         />
       </section>
 
@@ -146,12 +160,26 @@
           :title="t('saved.offline.title')"
           :subtitle="t('saved.offline.subtitle')"
         />
+        <div
+          v-if="offlineRoutes.length === 0"
+          class="rounded-xl border-2 border-dashed border-border bg-card p-8 text-center"
+        >
+          <BookmarkCheck class="w-10 h-10 text-primary mx-auto mb-3" />
+          <h3 class="font-display text-lg text-foreground mb-1">
+            {{ t("saved.offline.emptyTitle") }}
+          </h3>
+          <p class="text-sm text-muted-foreground">
+            {{ t("saved.offline.emptyCopy") }}
+          </p>
+        </div>
         <ListRow
           v-for="route in offlineRoutes"
-          :key="route.name"
+          v-else
+          :key="route.cacheKey"
           :title="route.name"
           :subtitle="t('saved.offline.downloaded', { size: route.size, date: route.downloaded })"
           :action="t('saved.offline.remove')"
+          @action="removeOfflineRoute(route.cacheKey)"
         />
       </section>
     </div>
@@ -263,12 +291,17 @@ import {
 } from "@/features/home/services/savedPlaces";
 import { useFavoritePlaces } from "@/composables/useFavoritePlaces";
 import { useSavedTrips } from "@/composables/useSavedTrips";
+import { useRecentSearches } from "@/composables/useRecentSearches";
+import { useCachedRoutes } from "@/composables/useCachedRoutes";
+import type { CachedRoute, RecentSearchRecord } from "@/db/appDb";
 
 const router = useRouter();
 const { t } = useI18n();
 const { favoritePlaces, saveFavoritePlace, removeFavoritePlace } =
   useFavoritePlaces();
 const { savedTrips } = useSavedTrips();
+const { recentSearches } = useRecentSearches(20);
+const { cachedRoutes, removeCachedRoute } = useCachedRoutes();
 const activeTab = ref<"places" | "routes" | "history" | "ai" | "offline">(
   "places",
 );
@@ -293,9 +326,9 @@ const canSavePlace = computed(() => newPlaceAddress.value.trim().length > 0);
 const tabs = computed(() => [
   { value: "places" as const, labelKey: "saved.tabs.places", count: savedPlaces.value.length },
   { value: "routes" as const, labelKey: "saved.tabs.routes", count: savedRoutes.value.length },
-  { value: "history" as const, labelKey: "saved.tabs.trips", count: recentTrips.length },
+  { value: "history" as const, labelKey: "saved.tabs.trips", count: recentTrips.value.length },
   { value: "ai" as const, labelKey: "saved.tabs.aiPlans", count: aiPlans.length },
-  { value: "offline" as const, labelKey: "saved.tabs.offline", count: offlineRoutes.length },
+  { value: "offline" as const, labelKey: "saved.tabs.offline", count: offlineRoutes.value.length },
 ]);
 
 const placeTypes = [
@@ -331,20 +364,16 @@ function relativeTime(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString();
 }
 
-const recentTrips = [
-  {
-    from: "Maadi",
-    to: "New Cairo",
-    date: "Today, 3:45 PM",
-    duration: "42 min",
-  },
-  {
-    from: "Tahrir",
-    to: "Airport",
-    date: "Yesterday, 6:20 AM",
-    duration: "48 min",
-  },
-];
+// Dynamic trip history from the offline-first recent-searches store.
+const recentTrips = computed(() =>
+  recentSearches.value.map((search: RecentSearchRecord) => ({
+    id: search.id ?? `${search.from}-${search.to}-${search.searchedAt}`,
+    from: search.from,
+    to: search.to,
+    filter: search.filter,
+    date: relativeTime(search.searchedAt),
+  })),
+);
 
 const aiPlans = [
   {
@@ -361,10 +390,15 @@ const aiPlans = [
   },
 ];
 
-const offlineRoutes = [
-  { name: "Home to Work", size: "2.4 MB", downloaded: "Dec 25, 2024" },
-  { name: "Airport Route", size: "3.1 MB", downloaded: "Dec 24, 2024" },
-];
+// Dynamic offline routes from the IndexedDB cachedRoutes store.
+const offlineRoutes = computed(() =>
+  cachedRoutes.value.map((route: CachedRoute) => ({
+    cacheKey: route.cacheKey,
+    name: `${route.from} -> ${route.to}`,
+    size: `${(JSON.stringify(route.routes).length / 1024).toFixed(1)} KB`,
+    downloaded: relativeTime(route.cachedAt),
+  })),
+);
 
 const SectionHeader = defineComponent({
   props: { title: String, subtitle: String },
@@ -583,6 +617,15 @@ function useSavedRoute(route: {
     query: { start: route.from, destination: route.to, filter: route.filter },
     state: { start: route.from, destination: route.to, filter: route.filter },
   });
+}
+
+// Re-run a past search from the History tab.
+function repeatTrip(trip: { from: string; to: string; filter: string }) {
+  useSavedRoute(trip);
+}
+
+function removeOfflineRoute(cacheKey: string) {
+  void removeCachedRoute(cacheKey);
 }
 
 function tabClass(value: string) {

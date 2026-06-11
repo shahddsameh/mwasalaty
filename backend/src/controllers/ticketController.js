@@ -2,6 +2,8 @@ import { createTicket, getTicketById, listTickets, validateLeg, scanValidate, re
 import { getAllProfiles } from '../stores/scannerProfileStore.js';
 import { makeError, ErrorCodes } from '../helpers/errors.js';
 import * as paymobService from '../services/paymobService.js';
+import { subscribeToTicket } from '../services/ticketEvents.js';
+import { bearerToken, verifyAccessToken } from '../middleware/supabaseAuth.js';
 
 const STATUS_MAP = {
   [ErrorCodes.VALIDATION_ERROR]:           400,
@@ -22,6 +24,16 @@ const STATUS_MAP = {
   [ErrorCodes.REFUND_FAILED]:              502,
   [ErrorCodes.PAYMENT_NOT_FOUND]:          404,
 };
+
+// Ownership is enforced by returning the same 404 a missing ticket would, so we
+// never reveal that someone else's ticket id exists.
+function ownsTicket(ticket, req) {
+  return ticket.passenger?.userId === req.auth?.user?.id;
+}
+
+function ticketNotFound(res, ticketId) {
+  return res.status(404).json(makeError(ErrorCodes.TICKET_NOT_FOUND, `Ticket '${ticketId}' not found`, { ticketId }));
+}
 
 function handleServiceError(res, err) {
   const status = STATUS_MAP[err.code];
@@ -44,22 +56,52 @@ export async function createTicketHandler(req, res) {
 export async function getTicketHandler(req, res) {
   try {
     const ticket = await getTicketById(req.params.id);
+    if (!ownsTicket(ticket, req)) return ticketNotFound(res, req.params.id);
     return res.status(200).json(ticket);
   } catch (err) {
     return handleServiceError(res, err);
   }
 }
 
-export async function listTicketsHandler(req, res) {
-  const userId = String(req.query.userId ?? '').trim();
-  if (!userId) {
-    return res.status(400).json(makeError(
-      ErrorCodes.VALIDATION_ERROR,
-      'Request validation failed',
-      { fields: ['userId is required'] }
-    ));
+export async function streamTicketHandler(req, res) {
+  // EventSource can't send headers, so the SSE stream also accepts the token as
+  // an `?access_token=` query param. Same local JWT verification either way.
+  const token = bearerToken(req) || String(req.query.access_token ?? '');
+  const result = await verifyAccessToken(token);
+  if (result.error) {
+    return res.status(result.error.status).json(makeError(result.error.code, result.error.message));
   }
-  return res.status(200).json({ tickets: await listTickets(userId) });
+
+  try {
+    const ticket = await getTicketById(req.params.id);
+    if (ticket.passenger?.userId !== result.user.id) return ticketNotFound(res, req.params.id);
+    res.set({
+      'Cache-Control': 'no-cache, no-transform',
+      Connection: 'keep-alive',
+      'Content-Type': 'text/event-stream',
+    });
+    res.flushHeaders?.();
+
+    const sendTicket = (nextTicket) => {
+      res.write(`event: ticket\ndata: ${JSON.stringify(nextTicket)}\n\n`);
+    };
+    sendTicket(ticket);
+
+    const unsubscribe = subscribeToTicket(ticket.ticketId, sendTicket);
+    const heartbeat = setInterval(() => res.write(': keep-alive\n\n'), 25000);
+    req.on('close', () => {
+      clearInterval(heartbeat);
+      unsubscribe();
+    });
+  } catch (err) {
+    return handleServiceError(res, err);
+  }
+}
+
+export async function listTicketsHandler(req, res) {
+  // Scope strictly to the authenticated user; the client can no longer pass an
+  // arbitrary ?userId and read another rider's tickets.
+  return res.status(200).json({ tickets: await listTickets(req.auth.user.id) });
 }
 
 export async function getScannerProfilesHandler(_req, res) {
@@ -67,7 +109,7 @@ export async function getScannerProfilesHandler(_req, res) {
 }
 
 export async function scanValidateHandler(req, res) {
-  const { qrPayload, scannerProfileId } = req.body ?? {};
+  const { qrPayload, scannerProfileId, stationsTraversed } = req.body ?? {};
   const fieldErrors = [];
   if (!qrPayload) fieldErrors.push('qrPayload is required');
   if (!scannerProfileId) fieldErrors.push('scannerProfileId is required');
@@ -75,7 +117,7 @@ export async function scanValidateHandler(req, res) {
     return res.status(400).json(makeError(ErrorCodes.VALIDATION_ERROR, 'Request validation failed', { fields: fieldErrors }));
   }
   try {
-    const result = scanValidate(qrPayload, scannerProfileId);
+    const result = scanValidate(qrPayload, scannerProfileId, { stationsTraversed });
     return res.status(200).json(result);
   } catch (err) {
     return handleServiceError(res, err);
@@ -116,6 +158,7 @@ function resolveRefundableLegs(ticket, legIds) {
 export async function refundTicketHandler(req, res) {
   try {
     const ticket = await getTicketById(req.params.id);
+    if (!ownsTicket(ticket, req)) return ticketNotFound(res, req.params.id);
     const legIds = req.body?.legIds ?? null;
 
     const legsToRefund = resolveRefundableLegs(ticket, legIds);

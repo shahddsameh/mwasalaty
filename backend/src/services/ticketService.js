@@ -1,19 +1,23 @@
 import { randomUUID } from 'crypto';
 import { saveTicket, getTicket, getAllTickets, updateTicket } from '../stores/ticketStore.js';
-import { getProfileById } from '../stores/scannerProfileStore.js';
+import { getProfileById, getProfileByOperatorDevice } from '../stores/scannerProfileStore.js';
 import {
   getTicketPayloadFromSupabase,
   listTicketPayloadsFromSupabase,
   syncTicketToSupabase,
 } from './adminTicketsService.js';
 import { ErrorCodes } from '../helpers/errors.js';
+import { publishTicketUpdate } from './ticketEvents.js';
 
 const TRANSIT_MODES = new Set(['BUS', 'METRO', 'SUBWAY', 'TRAM', 'RAIL', 'MICROBUS']);
 
+// Tiers mirror calculateFare() in mappers/tripMapper.js (10/12/15/20 EGP) so a
+// ticket's station limit matches the fare the rider actually paid.
 const METRO_TIERS = [
   { tier: 1, min: 1,  max: 9,        label: '1-9 stations' },
   { tier: 2, min: 10, max: 16,       label: '10-16 stations' },
-  { tier: 3, min: 17, max: Infinity, label: '17+ stations' },
+  { tier: 3, min: 17, max: 23,       label: '17-23 stations' },
+  { tier: 4, min: 24, max: Infinity, label: '24+ stations' },
 ];
 
 function normalizeMode(mode) {
@@ -75,6 +79,11 @@ async function getFreshTicket(ticketId) {
     console.warn(`[ticketService] Supabase ticket lookup failed for ${ticketId}: ${err.message}`);
   }
   return getTicket(ticketId);
+}
+
+function persistTicketUpdate(ticket) {
+  void syncTicketToSupabase(ticket);
+  publishTicketUpdate(ticket);
 }
 
 export function createTicket(body) {
@@ -223,7 +232,11 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
   }
 
   if (leg.status === 'used') {
-    throw { code: ErrorCodes.LEG_ALREADY_USED, message: 'This ticket leg has already been used', details: { ticketId, ticketLegId, validatedAt: leg.validatedAt } };
+    throw {
+      code: ErrorCodes.LEG_ALREADY_USED,
+      message: 'This ticket leg has already been used',
+      details: { ticketId, ticketLegId, validatedAt: leg.validatedAt, validatedBy: leg.validatedBy },
+    };
   }
 
   if (normalizeMode(leg.mode) === 'SUBWAY' && leg.subway && typeof stationsTraversed === 'number') {
@@ -237,25 +250,34 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
   }
 
   const resolvedAt = validatedAt || new Date().toISOString();
+  const profile = getProfileByOperatorDevice(operatorId, deviceId);
   leg.status = 'used';
   leg.validatedAt = resolvedAt;
-  leg.validatedBy = { operatorId, deviceId };
+  leg.validatedBy = {
+    ...(profile && {
+      scannerProfileId: profile.scannerProfileId,
+      label: profile.label,
+      labelAr: profile.labelAr,
+    }),
+    operatorId,
+    deviceId,
+  };
 
   ticket.status = resolveTicketStatus(ticket);
   updateTicket(ticket);
-  syncTicketToSupabase(ticket);
+  persistTicketUpdate(ticket);
 
   return {
     ticketId,
     ticketLegId,
     status: 'used',
     validatedAt: resolvedAt,
-    validatedBy: { operatorId, deviceId },
+    validatedBy: leg.validatedBy,
     message: 'Leg validated successfully',
   };
 }
 
-export function scanValidate(qrPayload, scannerProfileId) {
+export function scanValidate(qrPayload, scannerProfileId, { stationsTraversed } = {}) {
   if (qrPayload?.type !== 'MWASALATY_MVP_TICKET') {
     throw {
       code: ErrorCodes.INVALID_QR_PAYLOAD,
@@ -350,6 +372,7 @@ export function scanValidate(qrPayload, scannerProfileId) {
         ticketId: ticket.ticketId,
         ticketLegId: used.ticketLegId,
         validatedAt: used.validatedAt,
+        validatedBy: used.validatedBy,
       },
     };
   }
@@ -366,6 +389,17 @@ export function scanValidate(qrPayload, scannerProfileId) {
   }
 
   const leg = unusedLegs[0];
+
+  if (normalizeMode(leg.mode) === 'SUBWAY' && leg.subway && typeof stationsTraversed === 'number') {
+    if (stationsTraversed > leg.subway.maxStations) {
+      throw {
+        code: ErrorCodes.STATION_LIMIT_EXCEEDED,
+        message: `Passenger traveled ${stationsTraversed} stations but the ticket only covers up to ${leg.subway.maxStations} stations (Tier ${leg.subway.tier})`,
+        details: { ticketId: ticket.ticketId, ticketLegId: leg.ticketLegId, tier: leg.subway.tier, maxStations: leg.subway.maxStations, stationsTraversed },
+      };
+    }
+  }
+
   const resolvedAt = new Date().toISOString();
 
   leg.status = 'used';
@@ -373,13 +407,14 @@ export function scanValidate(qrPayload, scannerProfileId) {
   leg.validatedBy = {
     scannerProfileId: profile.scannerProfileId,
     label: profile.label,
+    labelAr: profile.labelAr,
     operatorId: profile.operatorId,
     deviceId: profile.deviceId,
   };
 
   ticket.status = resolveTicketStatus(ticket);
   updateTicket(ticket);
-  syncTicketToSupabase(ticket);
+  persistTicketUpdate(ticket);
 
   return {
     ticketId: ticket.ticketId,
@@ -489,6 +524,7 @@ export async function refundTicket(ticketId, legIds, refundMeta = {}) {
 
   updateTicket(ticket);
   await syncTicketToSupabase(ticket);
+  publishTicketUpdate(ticket);
 
   return {
     ticketId,

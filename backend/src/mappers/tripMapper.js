@@ -97,6 +97,11 @@ function mapLeg(leg, itinIdx, legIdx) {
   return {
     legId,
     mode: leg.mode,
+    // The number of stations this leg passes through (endpoints included).
+    // Carried end-to-end so the issued ticket's metro tier/limit reflects the
+    // distance actually paid for. For metro it is later overwritten with the
+    // combined count of the whole metro journey (see aggregateSubwayFares).
+    stationCount: stopCount,
     from: { name: leg.from?.name || "Unknown" },
     to: { name: toName },
     distanceMeters: Math.round(leg.distance),
@@ -117,9 +122,42 @@ function mapLeg(leg, itinIdx, legIdx) {
   };
 }
 
+// A metro journey is a single fare based on the total stations travelled, even
+// when it spans several lines (line interchanges are free). OTP returns each
+// line as its own leg, so without this a transfer like M2 → M3 would be charged
+// twice. We collapse each run of consecutive SUBWAY legs into one fare: the
+// combined-tier fare is placed on the first leg of the run and the rest are set
+// to 0, and every leg in the run carries the combined station count so the
+// issued ticket's tier and station limit match what the rider paid.
+function aggregateSubwayFares(legs) {
+  let i = 0;
+  while (i < legs.length) {
+    if (legs[i].mode !== "SUBWAY") {
+      i += 1;
+      continue;
+    }
+    let j = i;
+    while (j < legs.length && legs[j].mode === "SUBWAY") j += 1;
+    const group = legs.slice(i, j);
+    // Each leg's stationCount counts both endpoints, so the interchange station
+    // is shared by adjacent legs — subtract those duplicates from the total.
+    const combinedStops =
+      group.reduce((sum, l) => sum + l.stationCount, 0) - (group.length - 1);
+    const combinedFare = calculateFare("SUBWAY", combinedStops);
+    group.forEach((l, k) => {
+      l.stationCount = combinedStops;
+      l.fare = { amount: k === 0 ? combinedFare : 0, currency: "EGP" };
+    });
+    i = j;
+  }
+  return legs;
+}
+
 function mapItinerary(itin, itinIdx) {
   const itineraryId = `itin_${String(itinIdx + 1).padStart(3, "0")}`;
-  const legs = itin.legs.map((leg, legIdx) => mapLeg(leg, itinIdx, legIdx));
+  const legs = aggregateSubwayFares(
+    itin.legs.map((leg, legIdx) => mapLeg(leg, itinIdx, legIdx)),
+  );
 
   const transitLegs = legs.filter((l) => l.mode !== "WALK");
   const transfers = Math.max(0, transitLegs.length - 1);

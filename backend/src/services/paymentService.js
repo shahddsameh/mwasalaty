@@ -98,17 +98,18 @@ export async function createCheckoutSession(body) {
   return { checkoutUrl: buildCheckoutUrl(intention.clientSecret), sessionId: specialReference };
 }
 
-export async function handleWebhookEvent(body, receivedHmac) {
-  if (body?.type !== 'TRANSACTION') return null;
-
-  const obj = body.obj;
-  if (!verifyHmac(obj, receivedHmac)) {
-    throw { code: ErrorCodes.PAYMENT_WEBHOOK_FAILED, message: 'PayMob HMAC verification failed', details: {} };
-  }
-
-  const merchantOrderId = obj?.order?.merchant_order_id;
+/**
+ * Issue a ticket for a verified, successful PayMob transaction. Shared by the
+ * webhook and the redirect-confirm paths; both are idempotent, so whichever
+ * arrives first issues the ticket and the other returns the same one.
+ *
+ * @param obj   The transaction object (nested shape: `order.id`, `id`, `success`).
+ * @param source Label for logs ('webhook' | 'redirect').
+ */
+async function issueTicketForTransaction(obj, merchantOrderId, source) {
   const pending = getSession(merchantOrderId);
   if (!pending) {
+    console.error(`[${source}] no pending session for`, merchantOrderId, '— backend likely restarted (in-memory store wiped)');
     throw { code: ErrorCodes.PAYMENT_WEBHOOK_FAILED, message: 'No pending session found for this transaction', details: { merchantOrderId } };
   }
 
@@ -117,7 +118,11 @@ export async function handleWebhookEvent(body, receivedHmac) {
     return getTicketById(pending.ticketId);
   }
 
-  if (obj.success !== true) {
+  // PayMob sends booleans as real booleans in the webhook JSON but as 'true'/'false'
+  // strings in the redirect query params; accept both.
+  const isSuccess = obj.success === true || obj.success === 'true';
+  if (!isSuccess) {
+    console.warn(`[${source}] transaction not successful for`, merchantOrderId, '— marking session failed');
     updateSession({ ...pending, status: 'failed' });
     return null;
   }
@@ -146,11 +151,86 @@ export async function handleWebhookEvent(body, receivedHmac) {
   }
 
   updateSession({ ...pending, status: 'completed', ticketId: ticket.ticketId });
+  console.log(`[${source}] ticket issued`, { merchantOrderId, ticketId: ticket.ticketId, userId: ticket.passenger?.userId });
 
   return ticket;
 }
 
-export function getCheckoutResult(sessionId) {
+export async function handleWebhookEvent(body, receivedHmac) {
+  if (body?.type !== 'TRANSACTION') {
+    console.log('[webhook] ignored non-transaction event:', body?.type);
+    return null;
+  }
+
+  const obj = body.obj;
+  const merchantOrderId = obj?.order?.merchant_order_id;
+  console.log('[webhook] transaction received', {
+    merchantOrderId,
+    success: obj?.success,
+    transactionId: obj?.id,
+    orderId: obj?.order?.id,
+  });
+
+  if (!verifyHmac(obj, receivedHmac)) {
+    console.error('[webhook] HMAC verification FAILED for', merchantOrderId, '— check PAYMOB_HMAC_SECRET');
+    throw { code: ErrorCodes.PAYMENT_WEBHOOK_FAILED, message: 'PayMob HMAC verification failed', details: {} };
+  }
+
+  return issueTicketForTransaction(obj, merchantOrderId, 'webhook');
+}
+
+/**
+ * Confirm a payment directly from PayMob's browser redirect to the success page.
+ * The redirect carries the same signed transaction fields as the webhook (just
+ * flattened into query params), so we can issue the ticket without waiting on
+ * the webhook — closing the gap where a late/missing webhook stranded the user.
+ *
+ * @param query The flattened redirect query params (incl. `hmac`, `merchant_order_id`).
+ */
+export async function confirmFromRedirect(query) {
+  // Rebuild the nested transaction shape verifyHmac expects from the flat params.
+  // The HMAC is computed over the same field VALUES, so verification matches.
+  const obj = {
+    amount_cents: query.amount_cents,
+    created_at: query.created_at,
+    currency: query.currency,
+    error_occured: query.error_occured,
+    has_parent_transaction: query.has_parent_transaction,
+    id: query.id,
+    integration_id: query.integration_id,
+    is_3d_secure: query.is_3d_secure,
+    is_auth: query.is_auth,
+    is_capture: query.is_capture,
+    is_refunded: query.is_refunded,
+    is_standalone_payment: query.is_standalone_payment,
+    is_voided: query.is_voided,
+    order: { id: query.order, merchant_order_id: query.merchant_order_id },
+    owner: query.owner,
+    pending: query.pending,
+    source_data: {
+      pan: query['source_data.pan'],
+      sub_type: query['source_data.sub_type'],
+      type: query['source_data.type'],
+    },
+    success: query.success,
+  };
+
+  const merchantOrderId = query.merchant_order_id;
+  console.log('[redirect] confirmation received', { merchantOrderId, success: query.success, transactionId: query.id });
+
+  if (!verifyHmac(obj, query.hmac)) {
+    console.error('[redirect] HMAC verification FAILED for', merchantOrderId, '— webhook remains the fallback');
+    throw { code: ErrorCodes.PAYMENT_WEBHOOK_FAILED, message: 'PayMob HMAC verification failed', details: {} };
+  }
+
+  const ticket = await issueTicketForTransaction(obj, merchantOrderId, 'redirect');
+  if (!ticket) {
+    throw { code: ErrorCodes.PAYMENT_FAILED, message: 'Payment failed or was cancelled', details: {} };
+  }
+  return { ticket };
+}
+
+export async function getCheckoutResult(sessionId) {
   const session = getSession(sessionId);
   if (!session) {
     throw { code: ErrorCodes.PAYMENT_NOT_FOUND, message: `No checkout session found for '${sessionId}'`, details: { sessionId } };
@@ -164,5 +244,5 @@ export function getCheckoutResult(sessionId) {
     throw { code: ErrorCodes.PAYMENT_NOT_COMPLETED, message: 'Payment not yet completed', details: { status: session.status } };
   }
 
-  return { ticket: getTicketById(session.ticketId) };
+  return { ticket: await getTicketById(session.ticketId) };
 }

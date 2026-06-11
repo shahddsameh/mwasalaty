@@ -4,6 +4,8 @@ import { mapOtpPlan } from '../mappers/tripMapper.js';
 import { makeError, ErrorCodes } from '../helpers/errors.js';
 import { resolveRouteSearchUserId, safeLogRouteSearch } from '../services/routeSearchLogService.js';
 
+const PLAN_TIME_ZONE = process.env.PLAN_TIME_ZONE || 'Africa/Cairo';
+
 function hasCoordinates(place) {
   return typeof place?.lat === 'number' && typeof place?.lng === 'number';
 }
@@ -12,9 +14,49 @@ function hasLabel(place) {
   return typeof place?.label === 'string' && place.label.trim().length > 0;
 }
 
-function validateBody(body) {
+function parsePlanDateTime(date, time) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date ?? '');
+  const timeMatch = /^(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(time ?? '');
+  if (!match || !timeMatch) return null;
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const hour = Number(timeMatch[1]);
+  const minute = Number(timeMatch[2]);
+  const second = Number(timeMatch[3] ?? 0);
+  const parsed = new Date(Date.UTC(year, month - 1, day, hour, minute, second, 0));
+  if (
+    parsed.getUTCFullYear() !== year ||
+    parsed.getUTCMonth() !== month - 1 ||
+    parsed.getUTCDate() !== day ||
+    parsed.getUTCHours() !== hour ||
+    parsed.getUTCMinutes() !== minute ||
+    parsed.getUTCSeconds() !== second
+  ) {
+    return null;
+  }
+  return `${date}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')}`;
+}
+
+function localPlanTime(now) {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: PLAN_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(now);
+  const value = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${value.year}-${value.month}-${value.day}T${value.hour}:${value.minute}:${value.second}`;
+}
+
+export function validateBody(body, now = new Date()) {
   const errors = [];
-  const { from, to, date, time } = body ?? {};
+  const { from, to, date, time, timeMode } = body ?? {};
 
   if (!hasCoordinates(from) && !hasLabel(from)) {
     errors.push('from must include either numeric lat/lng or a non-empty label');
@@ -24,8 +66,36 @@ function validateBody(body) {
   }
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) errors.push('date is required in YYYY-MM-DD format');
   if (!time || !/^\d{2}:\d{2}(:\d{2})?$/.test(time)) errors.push('time is required in HH:MM or HH:MM:SS format');
+  if (timeMode !== undefined && !['now', 'depart', 'arrive'].includes(timeMode)) {
+    errors.push('timeMode must be now, depart, or arrive');
+  }
+
+  const planDateTime = parsePlanDateTime(date, time);
+  if (date && time && !planDateTime) {
+    errors.push('date and time must form a valid local date and time');
+  } else if (planDateTime && timeMode !== 'now' && planDateTime <= localPlanTime(now)) {
+    errors.push('departure or arrival time must be in the future');
+  }
+  if (
+    body?.constraints?.maxDurationMinutes !== undefined &&
+    (!Number.isFinite(body.constraints.maxDurationMinutes) || body.constraints.maxDurationMinutes <= 0)
+  ) {
+    errors.push('constraints.maxDurationMinutes must be a positive number');
+  }
 
   return errors;
+}
+
+export function filterItinerariesByConstraints(result, constraints = {}) {
+  const maxDurationMinutes = constraints.maxDurationMinutes;
+  if (!Number.isFinite(maxDurationMinutes)) return result;
+  return {
+    ...result,
+    constraints: { maxDurationMinutes },
+    itineraries: result.itineraries.filter(
+      (itinerary) => itinerary.durationMinutes <= maxDurationMinutes
+    ),
+  };
 }
 
 async function resolvePlanPoint(point) {
@@ -113,7 +183,10 @@ export async function planHandler(req, res) {
       );
     }
 
-    const result = mapOtpPlan({ itineraries: allItineraries }, resolvedFrom, resolvedTo, date, time, optimizedFor);
+    const result = filterItinerariesByConstraints(
+      mapOtpPlan({ itineraries: allItineraries }, resolvedFrom, resolvedTo, date, time, optimizedFor),
+      req.body.constraints
+    );
 
     if (!result.itineraries.length) {
       const searchLog = await safeLogRouteSearch({

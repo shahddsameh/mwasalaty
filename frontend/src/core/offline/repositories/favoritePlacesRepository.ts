@@ -1,6 +1,7 @@
 import { db, type FavoritePlace } from '@/db/appDb';
-import { queuePendingAction, registerSyncHandler } from '../syncQueue';
+import { queuePendingAction, registerSyncHandler, SyncDeferredError } from '../syncQueue';
 import { checkOnline } from '../networkStatus';
+import { getCurrentSession } from '@/services/supabaseAuth';
 
 /**
  * Favorite Places Repository
@@ -97,33 +98,62 @@ export async function clearFavoritePlaces(): Promise<void> {
  * This is called by the sync queue to push changes to backend
  */
 async function syncFavoritePlaceAction(action: any): Promise<void> {
-  // TODO: Implement actual backend API calls when backend supports favorite places
-  // For now, we'll just log and assume success since data is in Supabase
-  
-  console.log(`[Sync] FavoritePlace ${action.actionType}:`, action.payload);
+  const session = await getCurrentSession();
+  if (!session?.access_token) throw new SyncDeferredError('Sign in to sync favorite places');
 
-  // When backend API is ready, implement:
-  // switch (action.actionType) {
-  //   case 'create':
-  //     await fetch('/api/favorite-places', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(action.payload),
-  //     });
-  //     break;
-  //   case 'update':
-  //     await fetch(`/api/favorite-places/${action.entityId}`, {
-  //       method: 'PATCH',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(action.payload),
-  //     });
-  //     break;
-  //   case 'delete':
-  //     await fetch(`/api/favorite-places/${action.entityId}`, {
-  //       method: 'DELETE',
-  //     });
-  //     break;
-  // }
+  const id = action.entityId ?? action.payload.id;
+  const method = action.actionType === 'delete' ? 'DELETE' : action.actionType === 'update' ? 'PATCH' : 'PUT';
+  const response = await fetch(`/api/favorite-places/${encodeURIComponent(String(id))}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${session.access_token}`,
+      ...(method === 'DELETE' ? {} : { 'Content-Type': 'application/json' }),
+    },
+    ...(method === 'DELETE' ? {} : { body: JSON.stringify(action.payload) }),
+  });
+  if (!response.ok) throw new Error(await readFavoriteApiError(response));
+}
+
+async function readFavoriteApiError(response: Response) {
+  const body = await response.json().catch(() => null);
+  return body?.error?.message ?? `Favorite-place sync failed (${response.status})`;
+}
+
+export async function synchronizeFavoritePlaces(): Promise<void> {
+  if (!checkOnline()) return;
+  const session = await getCurrentSession();
+  if (!session?.access_token) return;
+
+  const headers = { Authorization: `Bearer ${session.access_token}` };
+  const response = await fetch('/api/favorite-places', { headers });
+  if (!response.ok) throw new Error(await readFavoriteApiError(response));
+
+  const body = (await response.json()) as { places?: FavoritePlace[] };
+  const serverPlaces = body.places ?? [];
+  const localPlaces = await db.favoritePlaces.toArray();
+  const merged = new Map<string, FavoritePlace>();
+
+  for (const place of [...serverPlaces, ...localPlaces]) {
+    const current = merged.get(place.id);
+    if (!current || (place.updatedAt ?? place.createdAt) > (current.updatedAt ?? current.createdAt)) {
+      merged.set(place.id, place);
+    }
+  }
+
+  for (const place of merged.values()) {
+    const serverPlace = serverPlaces.find((candidate) => candidate.id === place.id);
+    if (!serverPlace || (serverPlace.updatedAt ?? serverPlace.createdAt) < (place.updatedAt ?? place.createdAt)) {
+      await syncFavoritePlaceAction({ actionType: 'create', entityId: place.id, payload: place });
+    }
+  }
+
+  const refreshed = await fetch('/api/favorite-places', { headers });
+  if (!refreshed.ok) throw new Error(await readFavoriteApiError(refreshed));
+  const refreshedBody = (await refreshed.json()) as { places?: FavoritePlace[] };
+  await db.transaction('rw', db.favoritePlaces, async () => {
+    await db.favoritePlaces.clear();
+    await db.favoritePlaces.bulkPut(refreshedBody.places ?? []);
+  });
 }
 
 // Register the sync handler

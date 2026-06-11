@@ -242,7 +242,7 @@ async function loadTickets() {
 
   try {
     await ensureAuthInitialized();
-    const fresh = await getTickets(user.value?.id ?? "guest");
+    const fresh = await getTickets();
     tickets.value = fresh;
     // Keep the offline store in sync for the next offline visit.
     try {

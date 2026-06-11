@@ -9,9 +9,14 @@
     </Card>
 
     <Card>
-      <div class="flex items-center justify-between gap-3 border-b border-[#E6DEC8] p-4 md:p-5">
+      <div
+        class="flex items-center justify-between gap-3 border-b border-[#E6DEC8] p-4 md:p-5"
+      >
         <div>
-          <h2 class="text-lg font-bold text-[#2B2A27]" style="font-family: 'DM Sans', sans-serif">
+          <h2
+            class="text-lg font-bold text-[#2B2A27]"
+            style="font-family: &quot;DM Sans&quot;, sans-serif"
+          >
             Registered Users
           </h2>
           <p class="text-sm text-[#6B7280]">Supabase Auth users</p>
@@ -22,113 +27,146 @@
           :disabled="loading"
           @click="loadUsers"
         >
-          {{ loading ? 'Loading...' : 'Refresh' }}
+          {{ loading ? "Loading..." : "Refresh" }}
         </button>
       </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full min-w-[900px] text-left text-sm">
-          <thead class="bg-[#111827] text-[#FFC400] uppercase text-xs tracking-wide">
-            <tr>
-              <th class="px-4 py-3">Email</th>
-              <th class="px-4 py-3">Name</th>
-              <th class="px-4 py-3">Phone</th>
-              <th class="px-4 py-3">Created</th>
-              <th class="px-4 py-3">Last sign in</th>
-              <th class="px-4 py-3">Status</th>
-              <th class="px-4 py-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-if="!loading && users.length === 0">
-              <td class="px-4 py-6 text-[#6B7280]" colspan="7">No users found.</td>
-            </tr>
-            <tr v-for="user in users" :key="user.id" class="border-b border-[#E6DEC8]">
-              <td class="px-4 py-3 font-semibold text-[#111827]">{{ user.email || '-' }}</td>
-              <td class="px-4 py-3 text-[#4B5563]">{{ user.name || '-' }}</td>
-              <td class="px-4 py-3 text-[#4B5563]">{{ user.phone || '-' }}</td>
-              <td class="px-4 py-3 text-[#4B5563]">{{ formatDate(user.created_at) }}</td>
-              <td class="px-4 py-3 text-[#4B5563]">{{ formatDate(user.last_sign_in_at) }}</td>
-              <td class="px-4 py-3">
-                <span
-                  class="rounded-full px-2.5 py-1 text-xs font-bold"
-                  :class="user.status === 'blocked' ? 'bg-[#FEF2F2] text-[#B91C1C]' : 'bg-[#ECFDF5] text-[#047857]'"
+      <div
+        class="bg-[#1F2937] rounded-xl overflow-hidden border border-[#374151]"
+      >
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[900px] text-left text-sm">
+            <thead class="bg-[#111827] border-b border-[#374151]">
+              <tr>
+                <th
+                  class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
                 >
-                  {{ user.status }}
-                </span>
-              </td>
-              <td class="px-4 py-3">
-                <div class="flex flex-wrap gap-2">
-                  <button class="rounded-lg border px-3 py-1.5 font-semibold" @click="selectedUser = user">
-                    View Details
-                  </button>
-                  <button
-                    v-if="user.status !== 'blocked'"
-                    class="rounded-lg border border-[#FCA5A5] px-3 py-1.5 font-semibold text-[#B91C1C]"
-                    :disabled="busyId === user.id"
-                    @click="block(user.id)"
+                  Email
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                >
+                  Name
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                >
+                  Phone
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                >
+                  Created
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                >
+                  Last sign in
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                >
+                  Status
+                </th>
+                <th
+                  class="px-4 py-3 text-right text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#374151]">
+              <tr v-if="!loading && users.length === 0">
+                <td class="px-4 py-6 text-[#9CA3AF]" colspan="7">
+                  No users found.
+                </td>
+              </tr>
+              <tr
+                v-for="user in users"
+                :key="user.id"
+                class="hover:bg-[#111827] transition-colors"
+              >
+                <td class="px-4 py-4 font-medium text-white truncate">
+                  {{ user.email || "-" }}
+                </td>
+                <td class="px-4 py-4 text-[#9CA3AF]">{{ user.name || "-" }}</td>
+                <td class="px-4 py-4 text-[#9CA3AF]">
+                  {{ user.phone || "-" }}
+                </td>
+                <td class="px-4 py-4 text-[#9CA3AF]">
+                  {{ formatDate(user.created_at) }}
+                </td>
+                <td class="px-4 py-4 text-[#9CA3AF]">
+                  {{ formatDate(user.last_sign_in_at) }}
+                </td>
+                <td class="px-4 py-4">
+                  <span
+                    class="rounded-full px-2.5 py-1 text-xs font-medium"
+                    :class="
+                      user.status === 'blocked'
+                        ? 'bg-[#FEF2F2] text-[#B91C1C]'
+                        : 'bg-[#ECFDF5] text-[#047857]'
+                    "
+                    >{{ user.status }}</span
                   >
-                    Block
-                  </button>
-                  <button
-                    v-else
-                    class="rounded-lg border border-[#A7F3D0] px-3 py-1.5 font-semibold text-[#047857]"
-                    :disabled="busyId === user.id"
-                    @click="unblock(user.id)"
-                  >
-                    Unblock
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+                <td class="px-4 py-4 text-right">
+                  <div class="flex flex-wrap gap-2 justify-end">
+                    <button
+                      v-if="user.status !== 'blocked'"
+                      class="rounded-lg border border-[#FCA5A5] px-3 py-1.5 font-semibold text-[#B91C1C]"
+                      :disabled="busyId === user.id"
+                      @click="block(user.id)"
+                    >
+                      Block
+                    </button>
+                    <button
+                      v-else
+                      class="rounded-lg border border-[#A7F3D0] px-3 py-1.5 font-semibold text-[#047857]"
+                      :disabled="busyId === user.id"
+                      @click="unblock(user.id)"
+                    >
+                      Unblock
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </Card>
-
-    <Card v-if="selectedUser">
-      <div class="p-4 md:p-5 border-b border-[#E6DEC8] flex items-center justify-between gap-4">
-        <h3 class="text-lg font-bold text-[#2B2A27]">User Details</h3>
-        <button class="rounded-lg border border-[#E6DEC8] px-3 py-1.5 text-sm font-semibold" @click="selectedUser = null">Close</button>
-      </div>
-      <div class="p-4 md:p-5 grid gap-4 md:grid-cols-2 text-sm">
-        <div class="rounded-xl border border-[#E6DEC8] p-3"><span class="text-[#6B7280]">Email</span><p class="font-semibold">{{ selectedUser.email || '-' }}</p></div>
-        <div class="rounded-xl border border-[#E6DEC8] p-3"><span class="text-[#6B7280]">Name</span><p class="font-semibold">{{ selectedUser.name || '-' }}</p></div>
-        <div class="rounded-xl border border-[#E6DEC8] p-3"><span class="text-[#6B7280]">Phone</span><p class="font-semibold">{{ selectedUser.phone || '-' }}</p></div>
-        <div class="rounded-xl border border-[#E6DEC8] p-3"><span class="text-[#6B7280]">Status</span><p class="font-semibold">{{ selectedUser.status }}</p></div>
-      </div>
-    </Card>
+    <!-- View Details removed to simplify actions; Block/Unblock unchanged -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { Card } from '../components/AdminShared.vue';
+import { onMounted, ref } from "vue";
+import { Card } from "../components/AdminShared.vue";
 import {
   blockUser,
   listUsers,
   unblockUser,
   type AdminUser,
-} from '../services/adminApi';
+} from "../services/adminApi";
 
 const users = ref<AdminUser[]>([]);
 const loading = ref(false);
-const error = ref('');
+const error = ref("");
 const busyId = ref<string | null>(null);
-const selectedUser = ref<AdminUser | null>(null);
 
 function formatDate(value?: string | null) {
-  if (!value) return '-';
+  if (!value) return "-";
   return new Date(value).toLocaleString();
 }
 
 async function loadUsers() {
   loading.value = true;
-  error.value = '';
+  error.value = "";
   try {
     users.value = await listUsers();
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to load users';
+    error.value = err instanceof Error ? err.message : "Failed to load users";
   } finally {
     loading.value = false;
   }
@@ -136,12 +174,12 @@ async function loadUsers() {
 
 async function block(id: string) {
   busyId.value = id;
-  error.value = '';
+  error.value = "";
   try {
     await blockUser(id);
     await loadUsers();
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to block user';
+    error.value = err instanceof Error ? err.message : "Failed to block user";
   } finally {
     busyId.value = null;
   }
@@ -149,12 +187,12 @@ async function block(id: string) {
 
 async function unblock(id: string) {
   busyId.value = id;
-  error.value = '';
+  error.value = "";
   try {
     await unblockUser(id);
     await loadUsers();
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to unblock user';
+    error.value = err instanceof Error ? err.message : "Failed to unblock user";
   } finally {
     busyId.value = null;
   }

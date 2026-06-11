@@ -8,16 +8,26 @@ import {
   updateAdminUser,
 } from "../services/adminUsersService.js";
 import {
+  getAdminTicketFromSupabase,
+  listAdminTicketsFromSupabase,
+  reactivateAdminTicketInSupabase,
+  updateAdminTicketInSupabase,
+} from "../services/adminTicketsService.js";
+import {
   getSupportTickets,
   getSupportTicketById,
   updateSupportTicketData,
   createSupportTicket,
   replyToSupportTicket,
 } from "../services/supportTicketService.js";
-import { listRouteSearches, listTransitRoutes, listTransitStops } from "../services/otpImportService.js";
+import {
+  getTransitRouteDetails,
+  getTransitStopDetails,
+  listRouteSearches,
+  listTransitRoutes,
+  listTransitStops,
+} from "../services/otpImportService.js";
 import { getSupabaseAdminClient } from "../services/supabaseClient.js";
-import { getAllTickets } from "../stores/ticketStore.js";
-import { updateTicket as updateStoredTicket, getTicket as getStoredTicket } from "../stores/ticketStore.js";
 
 function statusFor(error) {
   switch (error?.code) {
@@ -101,6 +111,18 @@ export async function adminTransitRoutesHandler(req, res) {
   }
 }
 
+export async function adminTransitRouteDetailsHandler(req, res) {
+  try {
+    res.json(await getTransitRouteDetails(req.params.id));
+  } catch (err) {
+    if (err.code === "NOT_FOUND") {
+      res.status(404).json({ error: makeError("NOT_FOUND", err.message).error });
+    } else {
+      sendError(res, err);
+    }
+  }
+}
+
 export async function adminGetSupportTicketHandler(req, res) {
   try {
     const ticket = await getSupportTicketById(req.params.id);
@@ -167,6 +189,18 @@ export async function adminTransitStopsHandler(req, res) {
   }
 }
 
+export async function adminTransitStopDetailsHandler(req, res) {
+  try {
+    res.json(await getTransitStopDetails(req.params.id));
+  } catch (err) {
+    if (err.code === "NOT_FOUND") {
+      res.status(404).json({ error: makeError("NOT_FOUND", err.message).error });
+    } else {
+      sendError(res, err);
+    }
+  }
+}
+
 export async function adminRouteSearchesHandler(req, res) {
   try {
     res.json({ searches: await listRouteSearches() });
@@ -187,13 +221,25 @@ export async function meStatusHandler(req, res) {
 
 export async function adminReplySupportTicketHandler(req, res) {
   try {
-    const ticket = await replyToSupportTicket(req.params.id, req.body?.reply || req.body?.message);
+    const ticket = await replyToSupportTicket(req.params.id, req.body?.reply || req.body?.message, {
+      id: req.adminToken,
+    });
     res.json({ ticket });
   } catch (err) {
     if (err.code === "NOT_FOUND") {
       res.status(404).json({ error: makeError("NOT_FOUND", "Support ticket not found").error });
     } else if (err.code === "VALIDATION_ERROR" || err.code === "EMAIL_NOT_CONFIGURED") {
-      res.status(400).json({ error: makeError("VALIDATION_ERROR", err.message).error });
+      res.status(400).json({
+        error: makeError("VALIDATION_ERROR", err.message).error,
+        ticket: err.ticket,
+        reply: err.reply,
+      });
+    } else if (err.code === "EMAIL_SEND_FAILED") {
+      res.status(502).json({
+        error: makeError("EMAIL_SEND_FAILED", err.message).error,
+        ticket: err.ticket,
+        reply: err.reply,
+      });
     } else {
       sendError(res, err);
     }
@@ -225,7 +271,7 @@ export async function adminDashboardStatsHandler(req, res) {
       await Promise.all([
         listAdminUsers(),
         getSupportTickets(),
-        Promise.resolve(getAllTickets()),
+        listAdminTicketsFromSupabase(),
         listTransitRoutes(),
         supabase.from("route_searches").select("*").order("created_at", { ascending: false }).limit(1000),
         countTable(supabase, "transit_routes"),
@@ -260,7 +306,7 @@ export async function adminDashboardStatsHandler(req, res) {
 
     const byStatus = new Map();
     for (const ticket of tickets) {
-      const status = ticket.payment?.status || ticket.status || "pending";
+      const status = ticket.paymentStatus || ticket.status || "pending";
       byStatus.set(status, (byStatus.get(status) || 0) + 1);
     }
     for (const ticket of supportTickets) {
@@ -277,7 +323,7 @@ export async function adminDashboardStatsHandler(req, res) {
         routeSearches: routeSearchesCount,
         tickets: tickets.length,
         activeTickets: tickets.filter((ticket) => ticket.status === "active").length,
-        refundIssues: tickets.filter((ticket) => ticket.refundStatus === "refund_failed" || ticket.payment?.refundStatus === "refund_failed").length,
+        refundIssues: tickets.filter((ticket) => ticket.refundStatus === "refund_failed").length,
         supportTickets: supportTickets.length,
         openSupportTickets: supportTickets.filter((ticket) => !["resolved", "closed"].includes(ticket.status)).length,
       },
@@ -301,70 +347,60 @@ export async function adminDashboardStatsHandler(req, res) {
   }
 }
 
-function mapAdminTicket(ticket) {
-  const firstLeg = ticket.legs?.[0] || {};
-  const lastLeg = ticket.legs?.[ticket.legs.length - 1] || {};
-  return {
-    id: ticket.ticketId,
-    ticketId: ticket.ticketId,
-    userId: ticket.passenger?.userId,
-    userName: ticket.passenger?.name,
-    route: firstLeg.route?.shortName || firstLeg.route?.longName || firstLeg.route || null,
-    from: firstLeg.from?.name || firstLeg.from || null,
-    to: lastLeg.to?.name || lastLeg.to || null,
-    status: ticket.status,
-    paymentStatus: ticket.payment?.status,
-    refundStatus: ticket.refundStatus || ticket.payment?.refundStatus || null,
-    created_at: ticket.createdAt,
-    valid_until: ticket.expiresAt,
-    raw: ticket,
-  };
-}
-
-function updateTicketStatus(ticket, updates) {
-  const updated = {
-    ...ticket,
-    ...updates,
-    updatedAt: new Date().toISOString(),
-  };
-  updateStoredTicket(updated);
-  return mapAdminTicket(updated);
-}
-
 export async function adminTicketsHandler(_req, res) {
   try {
-    res.json({ tickets: getAllTickets().map(mapAdminTicket) });
+    res.json({ tickets: await listAdminTicketsFromSupabase() });
   } catch (err) {
     sendError(res, err);
   }
 }
 
 export async function adminTicketHandler(req, res) {
-  const ticket = getStoredTicket(req.params.id);
-  if (!ticket) return res.status(404).json({ error: makeError("NOT_FOUND", "Ticket not found").error });
-  return res.json({ ticket: mapAdminTicket(ticket) });
+  try {
+    const ticket = await getAdminTicketFromSupabase(req.params.id);
+    if (!ticket) return res.status(404).json({ error: makeError("NOT_FOUND", "Ticket not found").error });
+    return res.json({ ticket });
+  } catch (err) {
+    sendError(res, err);
+  }
 }
 
 export async function adminTicketStatusHandler(req, res) {
-  const ticket = getStoredTicket(req.params.id);
-  if (!ticket) return res.status(404).json({ error: makeError("NOT_FOUND", "Ticket not found").error });
-  return res.json({ ticket: updateTicketStatus(ticket, { status: req.body?.status || ticket.status }) });
+  try {
+    const ticket = await updateAdminTicketInSupabase(req.params.id, { status: req.body?.status });
+    if (!ticket) return res.status(404).json({ error: makeError("NOT_FOUND", "Ticket not found").error });
+    return res.json({ ticket });
+  } catch (err) {
+    sendError(res, err);
+  }
 }
 
 export async function adminActivateTicketHandler(req, res) {
-  const ticket = getStoredTicket(req.params.id);
-  if (!ticket) return res.status(404).json({ error: makeError("NOT_FOUND", "Ticket not found").error });
-  return res.json({ ticket: updateTicketStatus(ticket, { status: "active", refundStatus: null }) });
+  try {
+    const ticket = await reactivateAdminTicketInSupabase(req.params.id);
+    if (!ticket) return res.status(404).json({ error: makeError("NOT_FOUND", "Ticket not found").error });
+    return res.json({ ticket });
+  } catch (err) {
+    sendError(res, err);
+  }
 }
 
 export async function adminMarkRefundedHandler(req, res) {
-  const ticket = getStoredTicket(req.params.id);
-  if (!ticket) return res.status(404).json({ error: makeError("NOT_FOUND", "Ticket not found").error });
-  return res.json({ ticket: updateTicketStatus(ticket, { status: "refunded", refundStatus: "refunded" }) });
+  try {
+    const ticket = await updateAdminTicketInSupabase(req.params.id, { status: "refunded", refundStatus: "refunded" });
+    if (!ticket) return res.status(404).json({ error: makeError("NOT_FOUND", "Ticket not found").error });
+    return res.json({ ticket });
+  } catch (err) {
+    sendError(res, err);
+  }
 }
 
 export async function adminRefundFailedHandler(req, res) {
-  const ticket = getStoredTicket(req.params.id);
-  if (!ticket) return res.status(404).json({ error: makeError("NOT_FOUND", "Ticket not found").error });
-  return res.json({ ticket: updateTicketStatus(ticket, { refundStatus: "refund_failed" }) });
+  try {
+    const ticket = await updateAdminTicketInSupabase(req.params.id, { refundStatus: "refund_failed" });
+    if (!ticket) return res.status(404).json({ error: makeError("NOT_FOUND", "Ticket not found").error });
+    return res.json({ ticket });
+  } catch (err) {
+    sendError(res, err);
+  }
 }

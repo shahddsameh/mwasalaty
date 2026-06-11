@@ -15,14 +15,60 @@ export type TransitRoute = Record<string, unknown> & {
   short_name?: string;
   long_name?: string;
   mode?: string;
+  source?: string;
+  imported_at?: string;
+  created_at?: string;
 };
 
 export type TransitStop = Record<string, unknown> & {
   id?: string;
+  code?: string;
   name?: string;
   lat?: number;
   lon?: number;
   lng?: number;
+  zone_id?: string;
+  source?: string;
+  imported_at?: string;
+  created_at?: string;
+};
+
+export type RelatedStop = {
+  id: string;
+  code?: string;
+  name: string;
+  lat?: number | null;
+  lng?: number | null;
+  stopOrder?: number | null;
+  directionIds?: string[];
+  patternCodes?: string[];
+  tripCount?: number;
+  sampleTripId?: string;
+};
+
+export type RelatedRoute = {
+  id: string;
+  short_name?: string;
+  long_name?: string;
+  mode?: string;
+  directionIds?: string[];
+  tripCount?: number;
+};
+
+export type TransitRouteDetails = {
+  route: TransitRoute;
+  relatedStops: RelatedStop[];
+  relatedStopsCount: number;
+  source: string;
+  warning?: string;
+};
+
+export type TransitStopDetails = {
+  stop: TransitStop;
+  relatedRoutes: RelatedRoute[];
+  relatedRoutesCount: number;
+  source: string;
+  warning?: string;
 };
 
 export type RouteSearch = Record<string, unknown> & {
@@ -39,6 +85,12 @@ export type RouteSearch = Record<string, unknown> & {
   latest_created_at?: string;
   itineraries?: unknown;
   latest_itineraries?: unknown;
+  route_short_names?: string[];
+  route_long_names?: string[];
+  route_ids?: string[];
+  latest_route_short_names?: string[];
+  latest_route_long_names?: string[];
+  latest_route_ids?: string[];
 };
 
 export type DashboardStats = {
@@ -178,6 +230,17 @@ export type SupportTicket = {
   priority: "low" | "normal" | "high" | "urgent";
   adminNote?: string;
   adminReply?: string;
+  repliedAt?: string;
+  replies?: Array<{
+    id: string;
+    to: string;
+    subject: string;
+    message: string;
+    sentAt: string;
+    emailSent?: boolean;
+    adminEmail?: string;
+    adminId?: string;
+  }>;
   createdAt: string;
   updatedAt: string;
 };
@@ -201,10 +264,26 @@ export async function updateSupportTicket(id: string, updates: Partial<SupportTi
 }
 
 export async function replySupportTicket(id: string, reply: string) {
-  const data = await adminFetch(`/api/admin/support/tickets/${encodeURIComponent(id)}/reply`, {
+  const currentToken = token();
+  const res = await fetch(`/api/admin/support/tickets/${encodeURIComponent(id)}/reply`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${currentToken}`,
+    },
     body: JSON.stringify({ reply }),
   });
+  const data = await res.json().catch(() => null);
+  if (res.status === 401) {
+    localStorage.removeItem(TOKEN_KEY);
+    throw new Error(data?.error?.message ?? "Admin session expired. Sign in again.");
+  }
+  if (!res.ok) {
+    const error = new Error(data?.error?.message ?? data?.message ?? `Admin request failed (${res.status}).`);
+    (error as Error & { ticket?: SupportTicket; reply?: unknown }).ticket = data?.ticket;
+    (error as Error & { ticket?: SupportTicket; reply?: unknown }).reply = data?.reply;
+    throw error;
+  }
   return data.ticket as SupportTicket;
 }
 
@@ -223,24 +302,22 @@ export async function activateAdminTicket(id: string) {
   return data.ticket as AdminTicket;
 }
 
-export async function markAdminTicketRefunded(id: string) {
-  const data = await adminFetch(`/api/admin/tickets/${encodeURIComponent(id)}/mark-refunded`, { method: "POST" });
-  return data.ticket as AdminTicket;
-}
-
-export async function markAdminTicketRefundFailed(id: string) {
-  const data = await adminFetch(`/api/admin/tickets/${encodeURIComponent(id)}/refund-failed`, { method: "POST" });
-  return data.ticket as AdminTicket;
-}
-
 export async function listTransitRoutes() {
   const data = await adminFetch("/api/admin/transit/routes");
   return (data.routes ?? []) as TransitRoute[];
 }
 
+export async function getTransitRouteDetails(id: string) {
+  return (await adminFetch(`/api/admin/transit/routes/${encodeURIComponent(id)}/details`)) as TransitRouteDetails;
+}
+
 export async function listTransitStops() {
   const data = await adminFetch("/api/admin/transit/stops");
   return (data.stops ?? []) as TransitStop[];
+}
+
+export async function getTransitStopDetails(id: string) {
+  return (await adminFetch(`/api/admin/transit/stops/${encodeURIComponent(id)}/details`)) as TransitStopDetails;
 }
 
 export async function listRouteSearches() {

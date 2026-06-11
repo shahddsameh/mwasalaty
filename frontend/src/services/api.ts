@@ -10,6 +10,7 @@ import {
   localizeRouteInstruction,
   resolveKnownPlace,
 } from "./placeLocalization";
+import { getCurrentSession } from "./supabaseAuth";
 
 const OTP_MODE_TO_TYPE: Record<string, string> = {
   WALK:   'walking',
@@ -56,6 +57,7 @@ export type ApiPlanResponse = {
   from: { lat: number; lng: number; label: string | null };
   to: { lat: number; lng: number; label: string | null };
   itineraries: ApiItinerary[];
+  searchLog?: { id?: string; status?: string; error?: string };
   reliabilityNote?: string;
   highlights?: Record<string, unknown>;
 };
@@ -160,6 +162,23 @@ export type TripWhen = {
   time?: string;
 };
 
+const ANONYMOUS_SESSION_KEY = "mwasalaty:anonymous-session-id";
+
+function anonymousSessionId() {
+  try {
+    const existing = localStorage.getItem(ANONYMOUS_SESSION_KEY);
+    if (existing) return existing;
+    const generated =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `anon_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    localStorage.setItem(ANONYMOUS_SESSION_KEY, generated);
+    return generated;
+  } catch {
+    return `anon_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  }
+}
+
 export async function planRoute(
   fromLabel: string,
   toLabel: string,
@@ -202,6 +221,7 @@ export async function planRoute(
     date,
     time,
     arriveBy,
+    anonymousSessionId: anonymousSessionId(),
     preferences: {
       modes: ['WALK', 'BUS', 'SUBWAY'],
       optimizeFor: FILTER_TO_OPTIMIZE[filter] ?? 'quickest',
@@ -212,9 +232,16 @@ export async function planRoute(
     console.log('PLAN PAYLOAD SENT TO BACKEND:', payload);
   }
 
+  const session = await getCurrentSession().catch(() => null);
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    'X-Anonymous-Session-Id': payload.anonymousSessionId,
+  };
+  if (session?.access_token) headers.Authorization = `Bearer ${session.access_token}`;
+
   const res = await fetch('/api/plan', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify(payload),
   });
   if (!res.ok) {

@@ -11,7 +11,9 @@ import {
   adminLoginHandler,
   adminLogoutHandler,
   adminRouteSearchesHandler,
+  adminTransitRouteDetailsHandler,
   adminTransitRoutesHandler,
+  adminTransitStopDetailsHandler,
   adminTransitStopsHandler,
   adminUnblockUserHandler,
   adminUpdateUserHandler,
@@ -56,7 +58,9 @@ router.get("/admin/support-tickets", adminGetSupportTicketsHandler);
 router.get("/admin/support-tickets/:id", adminGetSupportTicketHandler);
 router.patch("/admin/support-tickets/:id/status", adminUpdateSupportTicketHandler);
 router.post("/admin/support-tickets/:id/reply", adminReplySupportTicketHandler);
+router.get("/admin/transit/routes/:id/details", adminTransitRouteDetailsHandler);
 router.get("/admin/transit/routes", adminTransitRoutesHandler);
+router.get("/admin/transit/stops/:id/details", adminTransitStopDetailsHandler);
 router.get("/admin/transit/stops", adminTransitStopsHandler);
 router.get("/admin/routes/searches", adminRouteSearchesHandler);
 

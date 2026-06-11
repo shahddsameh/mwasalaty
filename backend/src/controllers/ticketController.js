@@ -43,7 +43,7 @@ export async function createTicketHandler(req, res) {
 
 export async function getTicketHandler(req, res) {
   try {
-    const ticket = getTicketById(req.params.id);
+    const ticket = await getTicketById(req.params.id);
     return res.status(200).json(ticket);
   } catch (err) {
     return handleServiceError(res, err);
@@ -59,7 +59,7 @@ export async function listTicketsHandler(req, res) {
       { fields: ['userId is required'] }
     ));
   }
-  return res.status(200).json({ tickets: listTickets(userId) });
+  return res.status(200).json({ tickets: await listTickets(userId) });
 }
 
 export async function getScannerProfilesHandler(_req, res) {
@@ -115,7 +115,7 @@ function resolveRefundableLegs(ticket, legIds) {
 
 export async function refundTicketHandler(req, res) {
   try {
-    const ticket = getTicketById(req.params.id);
+    const ticket = await getTicketById(req.params.id);
     const legIds = req.body?.legIds ?? null;
 
     const legsToRefund = resolveRefundableLegs(ticket, legIds);
@@ -138,7 +138,7 @@ export async function refundTicketHandler(req, res) {
       }
     }
 
-    const result = refundTicket(req.params.id, legIds, refundMeta);
+    const result = await refundTicket(req.params.id, legIds, refundMeta);
     return res.status(200).json(result);
   } catch (err) {
     return handleServiceError(res, err);

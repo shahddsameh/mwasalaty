@@ -69,38 +69,46 @@
     </div>
 
     <!-- Tickets Table -->
-    <div v-else class="bg-[#1F2937] rounded-xl overflow-hidden">
+    <div v-else class="bg-[#1F2937] rounded-xl overflow-hidden border border-[#374151]">
       <div class="overflow-x-auto">
-        <table class="w-full">
+        <table class="w-full min-w-[920px] table-fixed">
+          <colgroup>
+            <col class="w-[22%]" />
+            <col class="w-[22%]" />
+            <col class="w-[25%]" />
+            <col class="w-[12%]" />
+            <col class="w-[11%]" />
+            <col class="w-[8%]" />
+          </colgroup>
           <thead class="bg-[#111827] border-b border-[#374151]">
             <tr>
               <th
-                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase"
+                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
               >
                 Customer
               </th>
               <th
-                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase hidden md:table-cell"
+                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
               >
                 Contact
               </th>
               <th
-                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase"
+                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
               >
                 Message
               </th>
               <th
-                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase hidden lg:table-cell"
+                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
               >
                 Date
               </th>
               <th
-                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase"
+                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
               >
                 Status
               </th>
               <th
-                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase"
+                class="px-4 py-3 text-right text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
               >
                 Actions
               </th>
@@ -112,43 +120,43 @@
               :key="ticket.id"
               class="hover:bg-[#111827] transition-colors"
             >
-              <td class="px-4 py-4">
-                <div class="font-medium text-white">{{ ticket.name }}</div>
+              <td class="px-4 py-4 align-top">
+                <div class="truncate font-medium text-white">{{ ticket.name }}</div>
                 <div
                   v-if="ticket.subject"
-                  class="text-sm text-[#9CA3AF] mt-0.5"
+                  class="truncate text-sm text-[#9CA3AF] mt-0.5"
                 >
                   {{ ticket.subject }}
                 </div>
               </td>
-              <td class="px-4 py-4 hidden md:table-cell">
-                <div class="text-sm text-[#9CA3AF]">{{ ticket.email }}</div>
-                <div v-if="ticket.phone" class="text-sm text-[#9CA3AF]">
+              <td class="px-4 py-4 align-top">
+                <div class="truncate text-sm text-[#9CA3AF]">{{ ticket.email }}</div>
+                <div v-if="ticket.phone" class="truncate text-sm text-[#9CA3AF]">
                   {{ ticket.phone }}
                 </div>
               </td>
-              <td class="px-4 py-4">
-                <div class="text-sm text-[#9CA3AF] line-clamp-2 max-w-md">
+              <td class="px-4 py-4 align-top">
+                <div class="truncate text-sm text-[#9CA3AF]">
                   {{ ticket.message }}
                 </div>
               </td>
-              <td class="px-4 py-4 text-sm text-[#9CA3AF] hidden lg:table-cell">
+              <td class="px-4 py-4 align-top text-sm text-[#9CA3AF] whitespace-nowrap">
                 {{ formatDate(ticket.createdAt) }}
               </td>
-              <td class="px-4 py-4">
+              <td class="px-4 py-4 align-top">
                 <span
                   :class="[
-                    'px-3 py-1 rounded-full text-xs font-medium',
+                    'inline-flex whitespace-nowrap px-3 py-1 rounded-full text-xs font-medium',
                     statusColors[ticket.status],
                   ]"
                 >
                   {{ statusLabels[ticket.status] }}
                 </span>
               </td>
-              <td class="px-4 py-4">
+              <td class="px-4 py-4 align-top text-right">
                 <button
                   @click="openTicket(ticket)"
-                  class="px-3 py-1.5 bg-[#FFC400] hover:bg-[#FFD633] text-[#111827] rounded-lg text-sm font-medium transition-colors"
+                  class="whitespace-nowrap rounded-lg border border-[#111827] bg-[#111827] px-3 py-1.5 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#2B2A27] active:bg-[#374151]"
                 >
                   View
                 </button>
@@ -214,6 +222,16 @@
                     formatDateTime(selectedTicket.createdAt)
                   }}</span>
                 </div>
+                <div class="flex items-center gap-2">
+                  <span
+                    :class="[
+                      'inline-flex whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium',
+                      statusColors[selectedTicket.status],
+                    ]"
+                  >
+                    {{ statusLabels[selectedTicket.status] }}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -230,6 +248,37 @@
                 class="bg-[#111827] rounded-lg p-4 text-[#9CA3AF] whitespace-pre-wrap"
               >
                 {{ selectedTicket.message }}
+              </div>
+            </div>
+
+            <!-- Reply History -->
+            <div>
+              <h3 class="text-sm font-medium text-[#9CA3AF] mb-2">
+                Reply History
+              </h3>
+              <div
+                v-if="replyHistory.length === 0"
+                class="bg-[#111827] rounded-lg p-4 text-sm text-[#9CA3AF]"
+              >
+                No admin replies have been sent yet.
+              </div>
+              <div v-else class="space-y-3">
+                <div
+                  v-for="reply in replyHistory"
+                  :key="reply.id"
+                  class="bg-[#111827] rounded-lg p-4"
+                >
+                  <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-[#9CA3AF]">
+                    <span class="truncate">To: {{ reply.to }}</span>
+                    <span class="whitespace-nowrap">{{ formatDateTime(reply.sentAt) }}</span>
+                  </div>
+                  <div class="mt-2 text-sm font-medium text-white">
+                    {{ reply.subject }}
+                  </div>
+                  <div class="mt-2 whitespace-pre-wrap text-sm text-[#D1D5DB]">
+                    {{ reply.message }}
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -384,6 +433,22 @@ const filteredTickets = computed(() => {
   return tickets.value.filter((t) => t.status === statusFilter.value);
 });
 
+const replyHistory = computed(() => {
+  if (!selectedTicket.value) return [];
+  const replies = selectedTicket.value.replies || [];
+  if (replies.length) return replies;
+  if (!selectedTicket.value.adminReply) return [];
+  return [
+    {
+      id: "legacy-admin-reply",
+      to: selectedTicket.value.email,
+      subject: `Re: ${selectedTicket.value.subject || "Mwasalaty support request"}`,
+      message: selectedTicket.value.adminReply,
+      sentAt: selectedTicket.value.repliedAt || selectedTicket.value.updatedAt,
+    },
+  ];
+});
+
 onMounted(() => {
   loadTickets();
 
@@ -511,6 +576,12 @@ async function sendReply() {
     replyOk.value = true;
     replyMessage.value = "Reply sent and ticket resolved.";
   } catch (err) {
+    const maybeTicket = (err as Error & { ticket?: SupportTicket }).ticket;
+    if (maybeTicket) {
+      const index = tickets.value.findIndex((t) => t.id === maybeTicket.id);
+      if (index !== -1) tickets.value[index] = maybeTicket;
+      selectedTicket.value = maybeTicket;
+    }
     replyOk.value = false;
     replyMessage.value = err instanceof Error ? err.message : "Failed to send reply";
   } finally {

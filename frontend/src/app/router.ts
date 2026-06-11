@@ -98,7 +98,7 @@ router.beforeEach(async (to) => {
   if (to.path.startsWith("/admin") && to.name !== "admin-login" && !adminToken) {
     return { path: "/admin/login", query: { redirect: to.fullPath } };
   }
-  if (to.name === "admin-login" && adminToken) return { path: "/admin/users" };
+  if (to.name === "admin-login" && adminToken) return { path: "/admin" };
 
   if (!to.meta.requiresOperator) return true;
 

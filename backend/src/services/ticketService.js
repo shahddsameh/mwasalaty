@@ -1,6 +1,11 @@
 import { randomUUID } from 'crypto';
 import { saveTicket, getTicket, getAllTickets, updateTicket } from '../stores/ticketStore.js';
 import { getProfileById } from '../stores/scannerProfileStore.js';
+import {
+  getTicketPayloadFromSupabase,
+  listTicketPayloadsFromSupabase,
+  syncTicketToSupabase,
+} from './adminTicketsService.js';
 import { ErrorCodes } from '../helpers/errors.js';
 
 const TRANSIT_MODES = new Set(['BUS', 'METRO', 'SUBWAY', 'TRAM', 'RAIL', 'MICROBUS']);
@@ -57,6 +62,19 @@ function validateCreateBody(body) {
   if (!body?.itinerary?.itineraryId) errors.push('itinerary.itineraryId is required');
   if (!Array.isArray(body?.itinerary?.legs)) errors.push('itinerary.legs is required and must be an array');
   return errors;
+}
+
+async function getFreshTicket(ticketId) {
+  try {
+    const supabaseTicket = await getTicketPayloadFromSupabase(ticketId);
+    if (supabaseTicket) {
+      updateTicket(supabaseTicket);
+      return supabaseTicket;
+    }
+  } catch (err) {
+    console.warn(`[ticketService] Supabase ticket lookup failed for ${ticketId}: ${err.message}`);
+  }
+  return getTicket(ticketId);
 }
 
 export function createTicket(body) {
@@ -151,19 +169,36 @@ export function createTicket(body) {
   };
 
   saveTicket(ticket);
+  syncTicketToSupabase(ticket);
   return ticket;
 }
 
-export function getTicketById(ticketId) {
-  const ticket = getTicket(ticketId);
+export async function getTicketById(ticketId) {
+  const ticket = await getFreshTicket(ticketId);
   if (!ticket) {
     throw { code: ErrorCodes.TICKET_NOT_FOUND, message: `Ticket '${ticketId}' not found`, details: { ticketId } };
   }
   return ticket;
 }
 
-export function listTickets(userId) {
-  return getAllTickets()
+export async function listTickets(userId) {
+  const merged = new Map();
+
+  try {
+    const supabaseTickets = await listTicketPayloadsFromSupabase(userId);
+    for (const ticket of supabaseTickets) {
+      merged.set(ticket.ticketId, ticket);
+      updateTicket(ticket);
+    }
+  } catch (err) {
+    console.warn(`[ticketService] Supabase ticket list failed for ${userId}: ${err.message}`);
+  }
+
+  for (const ticket of getAllTickets().filter(ticket => ticket.passenger?.userId === userId)) {
+    if (!merged.has(ticket.ticketId)) merged.set(ticket.ticketId, ticket);
+  }
+
+  return Array.from(merged.values())
     .filter(ticket => ticket.passenger?.userId === userId)
     .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
 }
@@ -208,6 +243,7 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
 
   ticket.status = resolveTicketStatus(ticket);
   updateTicket(ticket);
+  syncTicketToSupabase(ticket);
 
   return {
     ticketId,
@@ -343,6 +379,7 @@ export function scanValidate(qrPayload, scannerProfileId) {
 
   ticket.status = resolveTicketStatus(ticket);
   updateTicket(ticket);
+  syncTicketToSupabase(ticket);
 
   return {
     ticketId: ticket.ticketId,
@@ -356,8 +393,8 @@ export function scanValidate(qrPayload, scannerProfileId) {
   };
 }
 
-export function refundTicket(ticketId, legIds, refundMeta = {}) {
-  const ticket = getTicket(ticketId);
+export async function refundTicket(ticketId, legIds, refundMeta = {}) {
+  const ticket = await getFreshTicket(ticketId);
   if (!ticket) {
     throw { code: ErrorCodes.TICKET_NOT_FOUND, message: `Ticket '${ticketId}' not found`, details: { ticketId } };
   }
@@ -451,6 +488,7 @@ export function refundTicket(ticketId, legIds, refundMeta = {}) {
   }
 
   updateTicket(ticket);
+  await syncTicketToSupabase(ticket);
 
   return {
     ticketId,

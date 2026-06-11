@@ -44,17 +44,37 @@ export type RouteSearch = Record<string, unknown> & {
 export type DashboardStats = {
   totals: {
     users: number;
+    blockedUsers?: number;
     transitRoutes: number;
     transitStops: number;
     routeSearches: number;
     tickets: number;
+    activeTickets?: number;
+    refundIssues?: number;
     supportTickets?: number;
+    openSupportTickets?: number;
   };
   routeSearchesByDay: Array<{ date: string; count: number }>;
   transitRoutesByMode: Array<{ mode: string; count: number }>;
   ticketsByStatus: Array<{ status: string; count: number }>;
   topSearchedRoutes: Array<{ from_label?: string; to_label?: string; search_count: number }>;
   recentRouteSearches: Array<{ from_label?: string; to_label?: string; created_at?: string; total_routes?: number }>;
+};
+
+export type AdminTicket = Record<string, unknown> & {
+  id: string;
+  ticketId: string;
+  userId?: string;
+  userName?: string;
+  route?: string;
+  from?: string;
+  to?: string;
+  status?: string;
+  paymentStatus?: string;
+  refundStatus?: string | null;
+  created_at?: string;
+  valid_until?: string;
+  raw?: unknown;
 };
 
 function token() {
@@ -157,6 +177,7 @@ export type SupportTicket = {
   status: "new" | "in_progress" | "resolved" | "closed";
   priority: "low" | "normal" | "high" | "urgent";
   adminNote?: string;
+  adminReply?: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -177,6 +198,39 @@ export async function updateSupportTicket(id: string, updates: Partial<SupportTi
     body: JSON.stringify(updates),
   });
   return data.ticket as SupportTicket;
+}
+
+export async function replySupportTicket(id: string, reply: string) {
+  const data = await adminFetch(`/api/admin/support/tickets/${encodeURIComponent(id)}/reply`, {
+    method: "POST",
+    body: JSON.stringify({ reply }),
+  });
+  return data.ticket as SupportTicket;
+}
+
+export async function listAdminTickets() {
+  const data = await adminFetch("/api/admin/tickets");
+  return (data.tickets ?? []) as AdminTicket[];
+}
+
+export async function getAdminTicket(id: string) {
+  const data = await adminFetch(`/api/admin/tickets/${encodeURIComponent(id)}`);
+  return data.ticket as AdminTicket;
+}
+
+export async function activateAdminTicket(id: string) {
+  const data = await adminFetch(`/api/admin/tickets/${encodeURIComponent(id)}/activate`, { method: "POST" });
+  return data.ticket as AdminTicket;
+}
+
+export async function markAdminTicketRefunded(id: string) {
+  const data = await adminFetch(`/api/admin/tickets/${encodeURIComponent(id)}/mark-refunded`, { method: "POST" });
+  return data.ticket as AdminTicket;
+}
+
+export async function markAdminTicketRefundFailed(id: string) {
+  const data = await adminFetch(`/api/admin/tickets/${encodeURIComponent(id)}/refund-failed`, { method: "POST" });
+  return data.ticket as AdminTicket;
 }
 
 export async function listTransitRoutes() {

@@ -2,8 +2,7 @@ import { ErrorCodes, makeError } from '../helpers/errors.js';
 import { getSupabaseAdminClient } from './supabaseClient.js';
 
 function isBlocked(user) {
-  if (!user.banned_until) return false;
-  return new Date(user.banned_until).getTime() > Date.now();
+  return user.user_metadata?.blocked === true;
 }
 
 function mapUser(user) {
@@ -57,7 +56,7 @@ export async function updateAdminUser(id, input) {
 export async function blockAdminUser(id) {
   const supabase = getSupabaseAdminClient();
   const { data, error } = await supabase.auth.admin.updateUserById(id, {
-    ban_duration: '876000h',
+    user_metadata: { blocked: true },
   });
   assertSupabaseResult(error);
   return mapUser(data.user);
@@ -66,8 +65,19 @@ export async function blockAdminUser(id) {
 export async function unblockAdminUser(id) {
   const supabase = getSupabaseAdminClient();
   const { data, error } = await supabase.auth.admin.updateUserById(id, {
-    ban_duration: 'none',
+    user_metadata: { blocked: false },
   });
   assertSupabaseResult(error);
   return mapUser(data.user);
+}
+
+export async function getUserBlockedStatus(accessToken) {
+  if (!accessToken) return { blocked: false };
+  const supabase = getSupabaseAdminClient();
+  const { data, error } = await supabase.auth.getUser(accessToken);
+  if (error || !data?.user) return { blocked: false };
+  return {
+    blocked: data.user.user_metadata?.blocked === true,
+    reason: data.user.user_metadata?.blockedReason || undefined,
+  };
 }

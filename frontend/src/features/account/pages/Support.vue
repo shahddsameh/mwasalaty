@@ -322,7 +322,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, reactive, ref } from "vue";
+import { computed, defineComponent, h, onMounted, reactive, ref } from "vue";
 import {
   ArrowRight,
   CheckCircle2,
@@ -337,6 +337,7 @@ import {
 } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import AppInput from "@/components/ui/AppInput.vue";
+import { getCurrentSession, getCurrentUser } from "@/services/supabaseAuth";
 
 const activeQuestion = ref<number | null>(null);
 const sending = ref(false);
@@ -348,6 +349,7 @@ const topics = ["General", "Booking", "Payment", "Feedback"];
 
 const form = reactive({ name: "", email: "", subject: "", message: "" });
 const errors = reactive({ name: "", email: "", message: "" });
+const currentUserId = ref("");
 
 const isOpen = computed(() => {
   const hour = new Date().getHours();
@@ -459,6 +461,17 @@ const Card = defineComponent({
       ]),
 });
 
+onMounted(async () => {
+  const user = await getCurrentUser();
+  if (!user) return;
+  currentUserId.value = user.id;
+  form.email = user.email || form.email;
+  form.name =
+    (user.user_metadata.full_name as string | undefined) ||
+    (user.user_metadata.name as string | undefined) ||
+    form.name;
+});
+
 async function submit() {
   errorMessage.value = "";
   errors.name = form.name.trim() ? "" : "Please enter your name";
@@ -471,10 +484,15 @@ async function submit() {
 
   sending.value = true;
   try {
+    const session = await getCurrentSession();
     const response = await fetch("/api/support/tickets", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+      },
       body: JSON.stringify({
+        userId: currentUserId.value || undefined,
         name: form.name.trim(),
         email: form.email.trim(),
         subject: form.subject.trim() || topic.value,

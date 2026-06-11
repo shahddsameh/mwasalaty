@@ -6,13 +6,15 @@
       <div class="p-4 text-sm font-medium text-[#B91C1C]">{{ error }}</div>
     </Card>
 
-    <div class="grid grid-cols-2 xl:grid-cols-6 gap-3 md:gap-4">
-      <StatCard label="Total Users" :value="cardValue('users')" color="#7C3AED" />
-      <StatCard label="Total Transit Routes" :value="cardValue('transitRoutes')" color="#2B2A27" />
-      <StatCard label="Total Stops" :value="cardValue('transitStops')" color="#00B86B" />
-      <StatCard label="Total Route Searches" :value="cardValue('routeSearches')" color="#0EA5E9" />
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4">
       <StatCard label="Total Tickets" :value="cardValue('tickets')" color="#FF7A1A" />
-      <StatCard label="Support Tickets" :value="cardValue('supportTickets')" color="#E63946" />
+      <StatCard label="Active Tickets" :value="cardValue('activeTickets')" color="#00B86B" />
+      <StatCard label="Refund Issues" :value="cardValue('refundIssues')" color="#E63946" />
+      <StatCard label="Open Support Tickets" :value="cardValue('openSupportTickets')" color="#0EA5E9" />
+      <StatCard label="Total Users" :value="cardValue('users')" color="#7C3AED" />
+      <StatCard label="Blocked Users" :value="cardValue('blockedUsers')" color="#E63946" />
+      <StatCard label="Total Routes" :value="cardValue('transitRoutes')" color="#2B2A27" />
+      <StatCard label="Total Stops" :value="cardValue('transitStops')" color="#00B86B" />
     </div>
 
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 md:gap-6">
@@ -113,7 +115,7 @@ defineEmits<{
 const loading = ref(true);
 const error = ref('');
 const stats = reactive<DashboardStats>({
-  totals: { users: 0, transitRoutes: 0, transitStops: 0, routeSearches: 0, tickets: 0, supportTickets: 0 },
+  totals: { users: 0, blockedUsers: 0, transitRoutes: 0, transitStops: 0, routeSearches: 0, tickets: 0, activeTickets: 0, refundIssues: 0, supportTickets: 0, openSupportTickets: 0 },
   routeSearchesByDay: [],
   transitRoutesByMode: [],
   ticketsByStatus: [],

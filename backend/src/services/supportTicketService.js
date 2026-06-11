@@ -4,6 +4,7 @@ import {
   updateTicket,
   saveTicket,
 } from "../stores/supportTicketStore.js";
+import { sendSupportReply } from "./emailService.js";
 
 /**
  * Get all support tickets
@@ -91,6 +92,7 @@ export async function createSupportTicket(data) {
   // Create new ticket
   const ticket = {
     id: `ticket_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    userId: data.userId?.trim?.() || undefined,
     name: data.name.trim(),
     email: data.email.trim(),
     phone: data.phone?.trim() || undefined,
@@ -104,4 +106,30 @@ export async function createSupportTicket(data) {
   };
 
   return saveTicket(ticket);
+}
+
+export async function replyToSupportTicket(id, reply) {
+  const ticket = getTicket(id);
+  if (!ticket) {
+    const err = new Error("Support ticket not found");
+    err.code = "NOT_FOUND";
+    throw err;
+  }
+  if (!reply || !reply.trim()) {
+    const err = new Error("Reply message is required");
+    err.code = "VALIDATION_ERROR";
+    throw err;
+  }
+
+  await sendSupportReply({
+    to: ticket.email,
+    subject: `Re: ${ticket.subject || "Mwasalaty support request"}`,
+    message: reply.trim(),
+  });
+
+  return updateTicket(id, {
+    status: "resolved",
+    adminReply: reply.trim(),
+    adminNote: [ticket.adminNote, `Reply sent: ${reply.trim()}`].filter(Boolean).join("\n\n"),
+  });
 }

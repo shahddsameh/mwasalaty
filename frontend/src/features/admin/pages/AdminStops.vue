@@ -79,18 +79,26 @@
       <div class="p-4 md:p-5 flex items-start justify-between gap-4">
         <div>
           <h3 class="text-lg font-bold text-[#2B2A27]">{{ selectedStop.name || 'Stop details' }}</h3>
-          <pre class="mt-3 whitespace-pre-wrap text-xs text-[#4B5563]">{{ selectedStop }}</pre>
         </div>
         <button class="rounded-lg border border-[#E6DEC8] px-3 py-1.5 text-sm font-semibold" @click="selectedStop = null">
           Close
         </button>
+      </div>
+      <div class="p-4 md:p-5 grid gap-4 md:grid-cols-2 text-sm">
+        <Info label="Stop Name" :value="selectedStop.name || '-'" />
+        <Info label="Latitude" :value="String(selectedStop.lat ?? '-')" />
+        <Info label="Longitude" :value="String(selectedStop.lng ?? selectedStop.lon ?? '-')" />
+        <Info label="Zone ID" :value="String(selectedStop.zone_id || '-')" />
+        <Info label="Source" :value="String(selectedStop.source || 'OTP / Supabase')" />
+        <Info label="Imported At" :value="formatDate(String(selectedStop.imported_at || selectedStop.created_at || ''))" />
+        <Info label="Related Routes" value="Not available in current table" />
       </div>
     </Card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, defineComponent, h, onMounted, ref } from 'vue';
 import { MapPin, RefreshCw, Search } from '@lucide/vue';
 import { Card, StatCard } from '../components/AdminShared.vue';
 import { listTransitStops, type TransitStop } from '../services/adminApi';
@@ -100,6 +108,21 @@ const selectedStop = ref<TransitStop | null>(null);
 const search = ref('');
 const loading = ref(true);
 const error = ref('');
+
+const Info = defineComponent({
+  props: { label: String, value: [String, Number] },
+  setup(props) {
+    return () => h('div', { class: 'rounded-xl border border-[#E6DEC8] p-3' }, [
+      h('div', { class: 'text-xs text-[#6B7280]' }, props.label),
+      h('div', { class: 'mt-1 font-semibold text-[#111827]' }, String(props.value ?? '-')),
+    ]);
+  },
+});
+
+function formatDate(value?: string) {
+  if (!value) return '-';
+  return new Date(value).toLocaleString();
+}
 
 const locatedStops = computed(
   () => stops.value.filter((stop) => stop.lat !== null && stop.lat !== undefined && (stop.lng ?? stop.lon) !== null && (stop.lng ?? stop.lon) !== undefined).length

@@ -87,6 +87,7 @@ const validPages = new Set([
   "tickets",
   "users",
   "support",
+  "support-tickets",
   "settings",
 ]);
 
@@ -112,6 +113,10 @@ const PAGE_META: Record<string, { title: string; sub: string }> = {
     sub: "View and manage app users",
   },
   support: {
+    title: "Customer Service Requests",
+    sub: "View and manage customer support messages",
+  },
+  "support-tickets": {
     title: "Customer Service Requests",
     sub: "View and manage customer support messages",
   },
@@ -156,6 +161,7 @@ const currentComponent = computed(() => {
     case "users":
       return AdminUsers;
     case "support":
+    case "support-tickets":
       return AdminSupportTickets;
     case "settings":
       return AdminSettings;

@@ -8,49 +8,6 @@
       </div>
     </Card>
 
-    <Card v-if="editingUser">
-      <form class="p-4 md:p-5 grid gap-4 md:grid-cols-3" @submit.prevent="saveEdit">
-        <label class="flex flex-col gap-2 text-sm font-semibold text-[#2B2A27]">
-          Email
-          <input
-            v-model="editForm.email"
-            class="rounded-xl border border-[#E6DEC8] px-3 py-2 text-sm font-normal"
-            type="email"
-          />
-        </label>
-        <label class="flex flex-col gap-2 text-sm font-semibold text-[#2B2A27]">
-          Name
-          <input
-            v-model="editForm.name"
-            class="rounded-xl border border-[#E6DEC8] px-3 py-2 text-sm font-normal"
-          />
-        </label>
-        <label class="flex flex-col gap-2 text-sm font-semibold text-[#2B2A27]">
-          Phone
-          <input
-            v-model="editForm.phone"
-            class="rounded-xl border border-[#E6DEC8] px-3 py-2 text-sm font-normal"
-          />
-        </label>
-        <div class="md:col-span-3 flex gap-2">
-          <button
-            class="rounded-xl bg-[#FFC400] px-4 py-2 text-sm font-bold text-[#111827]"
-            type="submit"
-            :disabled="busyId === editingUser.id"
-          >
-            Save
-          </button>
-          <button
-            class="rounded-xl border border-[#E6DEC8] px-4 py-2 text-sm font-semibold"
-            type="button"
-            @click="editingUser = null"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-    </Card>
-
     <Card>
       <div class="flex items-center justify-between gap-3 border-b border-[#E6DEC8] p-4 md:p-5">
         <div>
@@ -102,8 +59,8 @@
               </td>
               <td class="px-4 py-3">
                 <div class="flex flex-wrap gap-2">
-                  <button class="rounded-lg border px-3 py-1.5 font-semibold" @click="startEdit(user)">
-                    Edit
+                  <button class="rounded-lg border px-3 py-1.5 font-semibold" @click="selectedUser = user">
+                    View Details
                   </button>
                   <button
                     v-if="user.status !== 'blocked'"
@@ -128,17 +85,29 @@
         </table>
       </div>
     </Card>
+
+    <Card v-if="selectedUser">
+      <div class="p-4 md:p-5 border-b border-[#E6DEC8] flex items-center justify-between gap-4">
+        <h3 class="text-lg font-bold text-[#2B2A27]">User Details</h3>
+        <button class="rounded-lg border border-[#E6DEC8] px-3 py-1.5 text-sm font-semibold" @click="selectedUser = null">Close</button>
+      </div>
+      <div class="p-4 md:p-5 grid gap-4 md:grid-cols-2 text-sm">
+        <div class="rounded-xl border border-[#E6DEC8] p-3"><span class="text-[#6B7280]">Email</span><p class="font-semibold">{{ selectedUser.email || '-' }}</p></div>
+        <div class="rounded-xl border border-[#E6DEC8] p-3"><span class="text-[#6B7280]">Name</span><p class="font-semibold">{{ selectedUser.name || '-' }}</p></div>
+        <div class="rounded-xl border border-[#E6DEC8] p-3"><span class="text-[#6B7280]">Phone</span><p class="font-semibold">{{ selectedUser.phone || '-' }}</p></div>
+        <div class="rounded-xl border border-[#E6DEC8] p-3"><span class="text-[#6B7280]">Status</span><p class="font-semibold">{{ selectedUser.status }}</p></div>
+      </div>
+    </Card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Card } from '../components/AdminShared.vue';
 import {
   blockUser,
   listUsers,
   unblockUser,
-  updateUser,
   type AdminUser,
 } from '../services/adminApi';
 
@@ -146,8 +115,7 @@ const users = ref<AdminUser[]>([]);
 const loading = ref(false);
 const error = ref('');
 const busyId = ref<string | null>(null);
-const editingUser = ref<AdminUser | null>(null);
-const editForm = reactive({ email: '', name: '', phone: '' });
+const selectedUser = ref<AdminUser | null>(null);
 
 function formatDate(value?: string | null) {
   if (!value) return '-';
@@ -163,28 +131,6 @@ async function loadUsers() {
     error.value = err instanceof Error ? err.message : 'Failed to load users';
   } finally {
     loading.value = false;
-  }
-}
-
-function startEdit(user: AdminUser) {
-  editingUser.value = user;
-  editForm.email = user.email ?? '';
-  editForm.name = user.name ?? '';
-  editForm.phone = user.phone ?? '';
-}
-
-async function saveEdit() {
-  if (!editingUser.value) return;
-  busyId.value = editingUser.value.id;
-  error.value = '';
-  try {
-    await updateUser(editingUser.value.id, editForm);
-    editingUser.value = null;
-    await loadUsers();
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to update user';
-  } finally {
-    busyId.value = null;
   }
 }
 

@@ -133,7 +133,15 @@
 
     <Card v-if="selectedRoute">
       <DetailsHeader title="Transit Route Details" @close="selectedRoute = null" />
-      <pre class="p-4 md:p-5 whitespace-pre-wrap text-xs text-[#4B5563]">{{ selectedRoute }}</pre>
+      <div class="p-4 md:p-5 grid gap-4 md:grid-cols-2 text-sm">
+        <Info label="Short Name" :value="selectedRoute.short_name || '-'" />
+        <Info label="Long Name" :value="selectedRoute.long_name || '-'" />
+        <Info label="Mode" :value="normalizeMode(selectedRoute)" />
+        <Info label="Source" :value="String(selectedRoute.source || 'OTP / Supabase')" />
+        <Info label="Imported At" :value="formatDate(String(selectedRoute.imported_at || selectedRoute.created_at || ''))" />
+        <Info label="Related Stops" value="Not available in current table" />
+        <Info label="Related Route Searches" :value="String(relatedSearchCount(selectedRoute))" />
+      </div>
     </Card>
 
     <Card v-if="selectedSearch">
@@ -142,7 +150,7 @@
         <p class="text-sm font-semibold text-[#111827]">
           {{ selectedSearch.from_label || '-' }} -> {{ selectedSearch.to_label || '-' }}
         </p>
-        <pre class="whitespace-pre-wrap text-xs text-[#4B5563]">{{ selectedSearch.latest_itineraries || selectedSearch.itineraries || selectedSearch }}</pre>
+        <pre class="whitespace-pre-wrap text-xs text-[#4B5563]">{{ selectedSearch.latest_itineraries || selectedSearch.itineraries || 'No itinerary details available' }}</pre>
       </div>
     </Card>
   </div>
@@ -199,6 +207,16 @@ const DetailsHeader = defineComponent({
   },
 });
 
+const Info = defineComponent({
+  props: { label: String, value: [String, Number] },
+  setup(props) {
+    return () => h('div', { class: 'rounded-xl border border-[#E6DEC8] p-3' }, [
+      h('div', { class: 'text-xs text-[#6B7280]' }, props.label),
+      h('div', { class: 'mt-1 font-semibold text-[#111827]' }, String(props.value ?? '-')),
+    ]);
+  },
+});
+
 function routeKey(route: TransitRoute) {
   return String(route.id || route.short_name || route.long_name || JSON.stringify(route));
 }
@@ -237,6 +255,16 @@ function countByMode(mode: string) {
 function formatDate(value?: string) {
   if (!value) return '-';
   return new Date(value).toLocaleString();
+}
+
+function relatedSearchCount(route: TransitRoute) {
+  const name = String(route.short_name || route.long_name || '').toLowerCase();
+  if (!name) return 0;
+  return searches.value.filter((item) =>
+    [item.from_label, item.to_label, item.optimized_for].some((value) =>
+      String(value || '').toLowerCase().includes(name)
+    )
+  ).length;
 }
 
 const filteredRoutes = computed(() => {

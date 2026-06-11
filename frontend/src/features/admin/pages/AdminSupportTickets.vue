@@ -283,6 +283,28 @@
                 {{ selectedTicket.adminNote }}
               </div>
             </div>
+
+            <div>
+              <h3 class="text-sm font-medium text-[#9CA3AF] mb-2">
+                Reply to Customer
+              </h3>
+              <textarea
+                v-model="replyInput"
+                rows="4"
+                class="w-full px-4 py-3 bg-[#111827] border border-[#374151] rounded-lg text-white placeholder-[#6B7280] focus:outline-none focus:ring-2 focus:ring-[#FFC400] resize-none"
+                placeholder="Write a reply to send by email..."
+              ></textarea>
+              <p v-if="replyMessage" class="mt-2 text-sm" :class="replyOk ? 'text-green-300' : 'text-red-300'">
+                {{ replyMessage }}
+              </p>
+              <button
+                @click="sendReply"
+                :disabled="updating || !replyInput.trim()"
+                class="mt-2 px-4 py-2 bg-[#FFC400] hover:bg-[#FFD633] text-[#111827] rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Send Reply & Resolve
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -295,6 +317,7 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import { MessageSquare, X, User, Mail, Phone, Calendar } from "@lucide/vue";
 import {
   getSupportTickets,
+  replySupportTicket,
   updateSupportTicket,
   type SupportTicket,
 } from "../services/adminApi";
@@ -306,6 +329,9 @@ const statusFilter = ref<string>("all");
 const selectedTicket = ref<SupportTicket | null>(null);
 const updating = ref(false);
 const adminNoteInput = ref("");
+const replyInput = ref("");
+const replyMessage = ref("");
+const replyOk = ref(false);
 let refreshInterval: ReturnType<typeof setInterval> | null = null;
 
 const statusOptions = [
@@ -404,11 +430,15 @@ async function loadTickets() {
 function openTicket(ticket: SupportTicket) {
   selectedTicket.value = ticket;
   adminNoteInput.value = ticket.adminNote || "";
+  replyInput.value = "";
+  replyMessage.value = "";
 }
 
 function closeTicket() {
   selectedTicket.value = null;
   adminNoteInput.value = "";
+  replyInput.value = "";
+  replyMessage.value = "";
 }
 
 async function updateStatus(status: SupportTicket["status"]) {
@@ -462,6 +492,27 @@ async function saveAdminNote() {
   } catch (err) {
     alert(err instanceof Error ? err.message : "Failed to save note");
     console.error("Failed to save note:", err);
+  } finally {
+    updating.value = false;
+  }
+}
+
+async function sendReply() {
+  if (!selectedTicket.value || !replyInput.value.trim() || updating.value) return;
+
+  updating.value = true;
+  replyMessage.value = "";
+  try {
+    const updated = await replySupportTicket(selectedTicket.value.id, replyInput.value.trim());
+    const index = tickets.value.findIndex((t) => t.id === selectedTicket.value!.id);
+    if (index !== -1) tickets.value[index] = updated;
+    selectedTicket.value = updated;
+    replyInput.value = "";
+    replyOk.value = true;
+    replyMessage.value = "Reply sent and ticket resolved.";
+  } catch (err) {
+    replyOk.value = false;
+    replyMessage.value = err instanceof Error ? err.message : "Failed to send reply";
   } finally {
     updating.value = false;
   }

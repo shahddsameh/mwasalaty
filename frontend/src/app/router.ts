@@ -24,6 +24,7 @@ import OperatorScan from "../features/operator/pages/OperatorScan.vue";
 import AdminDashboard from "../features/admin/pages/AdminDashboard.vue";
 import AdminLogin from "../features/admin/pages/AdminLogin.vue";
 import { ensureAuthInitialized, useAuthState } from "@/services/authState";
+import { getUserStatus } from "@/services/userStatus";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -113,6 +114,15 @@ router.beforeEach(async (to) => {
 router.beforeEach(async (to) => {
   await ensureAuthInitialized();
   const { isAuthenticated } = useAuthState();
+  const allowsBlockedUser = to.path === "/support" || ["login", "signup", "auth", "admin-login"].includes(String(to.name));
+
+  if (isAuthenticated.value && !to.path.startsWith("/admin") && !allowsBlockedUser) {
+    const status = await getUserStatus();
+    if (status.blocked === true) {
+      alert("Your account has been blocked due to suspicious activity or policy violations. You can contact support if you believe this is a mistake.");
+      return { path: "/support" };
+    }
+  }
 
   if (to.meta.requiresAuth) {
     if (!isAuthenticated.value) {

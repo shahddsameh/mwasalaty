@@ -129,6 +129,22 @@ export type AdminTicket = Record<string, unknown> & {
   raw?: unknown;
 };
 
+export type AdminNotification = {
+  id: string;
+  type: "support_ticket";
+  title: string;
+  message: string;
+  user_email: string;
+  status: "open" | "done";
+  created_at?: string;
+  targetUrl: string;
+};
+
+export type AdminNotificationsResponse = {
+  unreadCount: number;
+  notifications: AdminNotification[];
+};
+
 function token() {
   return localStorage.getItem(TOKEN_KEY) ?? "";
 }
@@ -216,6 +232,10 @@ export async function blockUser(id: string) {
 export async function unblockUser(id: string) {
   const data = await adminFetch(`/api/admin/users/${encodeURIComponent(id)}/unblock`, { method: "POST" });
   return data.user as AdminUser;
+}
+
+export async function getAdminNotifications() {
+  return (await adminFetch("/api/admin/notifications")) as AdminNotificationsResponse;
 }
 
 // Support Tickets

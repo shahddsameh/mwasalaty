@@ -1,6 +1,6 @@
 <template>
   <div
-    class="max-w-[1440px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 py-5 md:py-8 flex flex-col gap-4 md:gap-6"
+    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5"
   >
     <Card v-if="error" className="border-[#FCA5A5] bg-[#FEF2F2]">
       <div class="p-4 text-sm font-medium text-[#B91C1C]">
@@ -10,19 +10,19 @@
 
     <Card>
       <div
-        class="flex items-center justify-between gap-3 border-b border-[#E6DEC8] p-4 md:p-5"
+        class="flex items-center justify-between gap-3 border-b border-white/10 p-4 md:p-5"
       >
         <div>
           <h2
-            class="text-lg font-bold text-[#2B2A27]"
+            class="text-lg font-bold text-[#F8FAFC]"
             style="font-family: &quot;DM Sans&quot;, sans-serif"
           >
             Registered Users
           </h2>
-          <p class="text-sm text-[#6B7280]">Supabase Auth users</p>
+          <p class="text-sm text-[#94A3B8]">Supabase Auth users</p>
         </div>
         <button
-          class="rounded-xl border border-[#E6DEC8] px-4 py-2 text-sm font-semibold hover:bg-[#FFF7D6]"
+          class="rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-[#F8FAFC] hover:border-[#FFC400] hover:text-[#FFC400]"
           type="button"
           :disabled="loading"
           @click="loadUsers"
@@ -32,11 +32,11 @@
       </div>
 
       <div
-        class="bg-[#1F2937] rounded-xl overflow-hidden border border-[#374151]"
+        class="bg-[#1E293B] rounded-xl overflow-hidden border border-white/10"
       >
         <div class="overflow-x-auto">
           <table class="w-full min-w-[900px] text-left text-sm">
-            <thead class="bg-[#111827] border-b border-[#374151]">
+            <thead class="sticky top-0 bg-[#111827] border-b border-white/10">
               <tr>
                 <th
                   class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
@@ -75,7 +75,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-[#374151]">
+            <tbody class="divide-y divide-white/10">
               <tr v-if="!loading && users.length === 0">
                 <td class="px-4 py-6 text-[#9CA3AF]" colspan="7">
                   No users found.
@@ -84,37 +84,37 @@
               <tr
                 v-for="user in users"
                 :key="user.id"
-                class="hover:bg-[#111827] transition-colors"
+                class="hover:bg-[#0F172A] transition-colors"
               >
-                <td class="px-4 py-4 font-medium text-white truncate">
+                <td class="px-4 py-3 font-medium text-white truncate">
                   {{ user.email || "-" }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF]">{{ user.name || "-" }}</td>
-                <td class="px-4 py-4 text-[#9CA3AF]">
+                <td class="px-4 py-3 text-[#94A3B8]">{{ user.name || "-" }}</td>
+                <td class="px-4 py-3 text-[#94A3B8]">
                   {{ user.phone || "-" }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF]">
+                <td class="px-4 py-3 text-[#94A3B8]">
                   {{ formatDate(user.created_at) }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF]">
+                <td class="px-4 py-3 text-[#94A3B8]">
                   {{ formatDate(user.last_sign_in_at) }}
                 </td>
-                <td class="px-4 py-4">
+                <td class="px-4 py-3">
                   <span
                     class="rounded-full px-2.5 py-1 text-xs font-medium"
                     :class="
                       user.status === 'blocked'
-                        ? 'bg-[#FEF2F2] text-[#B91C1C]'
-                        : 'bg-[#ECFDF5] text-[#047857]'
+                        ? 'bg-red-500/10 text-[#EF4444]'
+                        : 'bg-emerald-500/10 text-[#10B981]'
                     "
                     >{{ user.status }}</span
                   >
                 </td>
-                <td class="px-4 py-4 text-right">
+                <td class="px-4 py-3 text-right">
                   <div class="flex flex-wrap gap-2 justify-end">
                     <button
                       v-if="user.status !== 'blocked'"
-                      class="rounded-lg border border-[#FCA5A5] px-3 py-1.5 font-semibold text-[#B91C1C]"
+                      class="rounded-xl border border-red-500/30 px-3 py-1.5 font-semibold text-[#EF4444] hover:bg-red-500/10"
                       :disabled="busyId === user.id"
                       @click="block(user.id)"
                     >
@@ -122,7 +122,7 @@
                     </button>
                     <button
                       v-else
-                      class="rounded-lg border border-[#A7F3D0] px-3 py-1.5 font-semibold text-[#047857]"
+                      class="rounded-xl border border-emerald-500/30 px-3 py-1.5 font-semibold text-[#10B981] hover:bg-emerald-500/10"
                       :disabled="busyId === user.id"
                       @click="unblock(user.id)"
                     >

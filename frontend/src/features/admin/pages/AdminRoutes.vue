@@ -1,9 +1,9 @@
 <template>
   <div
-    class="max-w-[1440px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 py-5 md:py-8 flex flex-col gap-4 md:gap-6"
+    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5"
   >
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-      <StatCard label="Transit Routes" :value="routes.length" color="#2B2A27" />
+      <StatCard label="Transit Routes" :value="routes.length" color="#38BDF8" />
       <StatCard
         label="Route Searches"
         :value="searches.length"
@@ -18,16 +18,16 @@
     </Card>
 
     <Card>
-      <div class="p-4 md:p-5 border-b border-[#E6DEC8] flex flex-col gap-3">
+      <div class="p-4 md:p-5 border-b border-white/10 flex flex-col gap-3">
         <div class="flex flex-wrap gap-2">
           <button
             v-for="tab in routeTabs"
             :key="tab.value"
-            class="rounded-xl border-2 px-4 py-2 text-sm font-semibold transition-all"
+            class="rounded-xl border px-4 py-2 text-sm font-semibold transition-all"
             :class="
               activeTab === tab.value
                 ? 'border-[#FFC400] bg-[#FFC400] text-[#111827]'
-                : 'border-[#E6DEC8] bg-white text-[#4B5563] hover:border-[#FFC400]'
+                : 'border-white/10 bg-[#0F172A] text-[#94A3B8] hover:border-[#FFC400] hover:text-[#F8FAFC]'
             "
             @click="activeTab = tab.value"
           >
@@ -40,11 +40,11 @@
             <button
               v-for="option in modeFilters"
               :key="option.value"
-              class="rounded-xl border-2 px-4 py-2 text-sm font-semibold transition-all"
+              class="rounded-xl border px-4 py-2 text-sm font-semibold transition-all"
               :class="
                 selectedMode === option.value
                   ? 'border-[#111827] bg-[#111827] text-white'
-                  : 'border-[#E6DEC8] bg-white text-[#4B5563] hover:border-[#FFC400]'
+                  : 'border-white/10 bg-[#0F172A] text-[#94A3B8] hover:border-[#FFC400] hover:text-[#F8FAFC]'
               "
               @click="selectedMode = option.value"
             >
@@ -54,7 +54,7 @@
 
           <div class="relative flex-1 min-w-[220px]">
             <Search
-              class="w-4 h-4 text-[#6B7280] absolute left-3 top-1/2 -translate-y-1/2"
+              class="w-4 h-4 text-[#94A3B8] absolute left-3 top-1/2 -translate-y-1/2"
             />
             <input
               v-model="search"
@@ -63,12 +63,12 @@
                   ? 'Search transit routes...'
                   : 'Search route searches...'
               "
-              class="w-full pl-9 pr-4 py-2 border-2 border-[#E6DEC8] rounded-xl text-sm text-[#2B2A27] placeholder-[#6B7280] focus:outline-none focus:border-[#FFC400] bg-white"
+              class="w-full pl-9 pr-4 py-2 border border-white/10 rounded-xl text-sm text-[#F8FAFC] placeholder-[#64748B] focus:outline-none focus:border-[#FFC400] bg-[#0F172A]"
             />
           </div>
           <button
             @click="loadData"
-            class="p-2 rounded-xl border-2 border-[#E6DEC8] text-[#6B7280] hover:border-[#FFC400] hover:text-[#111827] transition-all flex-shrink-0"
+            class="p-2 rounded-xl border border-white/10 text-[#94A3B8] hover:border-[#FFC400] hover:text-[#FFC400] transition-all flex-shrink-0"
             title="Refresh"
           >
             <RefreshCw class="w-4 h-4" />
@@ -78,14 +78,14 @@
 
       <div
         v-if="loading"
-        class="flex items-center justify-center py-16 text-[#6B7280] text-sm"
+        class="flex items-center justify-center py-16 text-[#94A3B8] text-sm"
       >
         Loading routes...
       </div>
 
       <div
         v-else-if="activeTab === 'transit' && filteredRoutes.length > 0"
-        class="bg-[#1F2937] rounded-xl overflow-hidden border border-[#374151]"
+        class="bg-[#1E293B] rounded-xl overflow-hidden border border-white/10"
       >
         <div class="overflow-x-auto">
           <table class="w-full min-w-[920px] table-fixed text-left text-sm">
@@ -95,7 +95,7 @@
               <col class="w-[16%]" />
               <col class="w-[24%]" />
             </colgroup>
-            <thead class="bg-[#111827] border-b border-[#374151]">
+            <thead class="sticky top-0 bg-[#111827] border-b border-white/10">
               <tr>
                 <th
                   class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
@@ -119,24 +119,24 @@
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-[#374151]">
+            <tbody class="divide-y divide-white/10">
               <tr
                 v-for="route in filteredRoutes"
                 :key="routeKey(route)"
-                class="hover:bg-[#111827] transition-colors"
+                class="hover:bg-[#0F172A] transition-colors"
               >
-                <td class="px-4 py-4 font-medium text-white truncate">
+                <td class="px-4 py-3 font-medium text-white truncate">
                   {{ route.short_name || "-" }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF] truncate">
+                <td class="px-4 py-3 text-[#94A3B8] truncate">
                   {{ route.long_name || "-" }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF] whitespace-nowrap">
+                <td class="px-4 py-3 text-[#94A3B8] whitespace-nowrap">
                   {{ normalizeMode(route) }}
                 </td>
-                <td class="px-4 py-4 text-right">
+                <td class="px-4 py-3 text-right">
                   <button
-                    class="whitespace-nowrap rounded-lg border border-[#111827] bg-[#111827] px-3 py-1.5 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#2B2A27] active:bg-[#374151]"
+                    class="whitespace-nowrap rounded-xl border border-white/10 bg-[#0F172A] px-3 py-1.5 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#111827]"
                     :disabled="detailsLoading && selectedRoute?.id === route.id"
                     @click="openRouteDetails(route)"
                   >
@@ -155,11 +155,11 @@
 
       <div
         v-else-if="activeTab === 'searches' && filteredSearches.length > 0"
-        class="bg-[#1F2937] rounded-xl overflow-hidden border border-[#374151]"
+        class="bg-[#1E293B] rounded-xl overflow-hidden border border-white/10"
       >
         <div class="overflow-x-auto">
           <table class="w-full min-w-[960px] text-left text-sm">
-            <thead class="bg-[#111827] border-b border-[#374151]">
+            <thead class="sticky top-0 bg-[#111827] border-b border-white/10">
               <tr>
                 <th
                   class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
@@ -208,35 +208,35 @@
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-[#374151]">
+            <tbody class="divide-y divide-white/10">
               <tr
                 v-for="item in filteredSearches"
                 :key="searchKey(item)"
-                class="hover:bg-[#111827] transition-colors"
+                class="hover:bg-[#0F172A] transition-colors"
               >
-                <td class="px-4 py-4 font-medium text-white">
+                <td class="px-4 py-3 font-medium text-white">
                   {{ item.from_label || "-" }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF]">
+                <td class="px-4 py-3 text-[#94A3B8]">
                   {{ item.to_label || "-" }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF]">{{ item.date || "-" }}</td>
-                <td class="px-4 py-4 text-[#9CA3AF]">{{ item.time || "-" }}</td>
-                <td class="px-4 py-4 text-[#9CA3AF]">
+                <td class="px-4 py-3 text-[#94A3B8]">{{ item.date || "-" }}</td>
+                <td class="px-4 py-3 text-[#94A3B8]">{{ item.time || "-" }}</td>
+                <td class="px-4 py-3 text-[#94A3B8]">
                   {{ item.optimized_for || "-" }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF]">
+                <td class="px-4 py-3 text-[#94A3B8]">
                   {{ item.total_routes ?? "-" }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF]">
+                <td class="px-4 py-3 text-[#94A3B8]">
                   {{ item.search_count ?? 1 }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF]">
+                <td class="px-4 py-3 text-[#94A3B8]">
                   {{ formatDate(item.latest_created_at || item.created_at) }}
                 </td>
-                <td class="px-4 py-4 text-right">
+                <td class="px-4 py-3 text-right">
                   <button
-                    class="rounded-lg border border-[#111827] bg-[#111827] px-3 py-1.5 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#2B2A27] active:bg-[#374151]"
+                    class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-1.5 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#111827]"
                     @click="selectedSearch = item"
                   >
                     View Details
@@ -252,9 +252,9 @@
         v-else
         class="flex flex-col items-center justify-center py-16 px-4 gap-3"
       >
-        <RouteIcon class="w-10 h-10 text-[#6B7280]" />
-        <p class="text-base font-bold text-[#2B2A27]">No routes found</p>
-        <p class="text-sm text-[#6B7280] text-center">
+        <RouteIcon class="w-10 h-10 text-[#64748B]" />
+        <p class="text-base font-bold text-[#F8FAFC]">No routes found</p>
+        <p class="text-sm text-[#94A3B8] text-center">
           {{
             activeTab === "transit"
               ? "No transit routes match this filter."
@@ -335,23 +335,23 @@
             />
           </div>
           <div class="px-4 pb-4 md:px-5 md:pb-5">
-            <div class="rounded-xl border border-[#E6DEC8] overflow-hidden">
+            <div class="rounded-xl border border-white/10 overflow-hidden">
               <div
-                class="flex items-center justify-between gap-3 border-b border-[#E6DEC8] bg-[#FFF8D9] px-4 py-3"
+                class="flex items-center justify-between gap-3 border-b border-white/10 bg-[#111827] px-4 py-3"
               >
-                <h4 class="font-bold text-[#2B2A27]">Related Stops</h4>
+                <h4 class="font-bold text-[#F8FAFC]">Related Stops</h4>
                 <span
                   class="rounded-full bg-[#111827] px-3 py-1 text-xs font-bold text-[#FFC400]"
                 >
                   {{ relatedStops.length }}
                 </span>
               </div>
-              <div v-if="detailsLoading" class="p-4 text-sm text-[#6B7280]">
+              <div v-if="detailsLoading" class="p-4 text-sm text-[#94A3B8]">
                 Loading related stops...
               </div>
               <div
                 v-else-if="relatedStops.length === 0"
-                class="p-4 text-sm text-[#6B7280]"
+                class="p-4 text-sm text-[#94A3B8]"
               >
                 No related stops found for this route.
               </div>
@@ -488,11 +488,11 @@
               />
             </div>
 
-            <div class="rounded-xl border border-[#E6DEC8] overflow-hidden">
+            <div class="rounded-xl border border-white/10 overflow-hidden">
               <div
-                class="flex items-center justify-between gap-3 border-b border-[#E6DEC8] bg-[#FFF8D9] px-4 py-3"
+                class="flex items-center justify-between gap-3 border-b border-white/10 bg-[#111827] px-4 py-3"
               >
-                <h4 class="font-bold text-[#2B2A27]">Returned Route Options</h4>
+                <h4 class="font-bold text-[#F8FAFC]">Returned Route Options</h4>
                 <span
                   class="rounded-full bg-[#111827] px-3 py-1 text-xs font-bold text-[#FFC400]"
                 >
@@ -501,7 +501,7 @@
               </div>
               <div
                 v-if="selectedSearchItineraries.length === 0"
-                class="p-4 text-sm text-[#6B7280]"
+                class="p-4 text-sm text-[#94A3B8]"
               >
                 No readable itinerary details are available for this search.
               </div>
@@ -509,38 +509,38 @@
                 <div
                   v-for="(itinerary, index) in selectedSearchItineraries"
                   :key="itinerary.itineraryId || index"
-                  class="border-b border-[#E6DEC8] p-4 last:border-b-0"
+                  class="border-b border-white/10 p-4 last:border-b-0"
                 >
                   <div class="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <div class="text-sm font-bold text-[#111827]">
+                      <div class="text-sm font-bold text-[#F8FAFC]">
                         Option {{ index + 1
                         }}{{
                           itinerary.summary ? `: ${itinerary.summary}` : ""
                         }}
                       </div>
                       <div
-                        class="mt-1 flex flex-wrap gap-2 text-xs text-[#4B5563]"
+                        class="mt-1 flex flex-wrap gap-2 text-xs text-[#94A3B8]"
                       >
-                        <span class="rounded-full bg-[#F3F4F6] px-2.5 py-1"
+                        <span class="rounded-full bg-[#0F172A] px-2.5 py-1"
                           >{{ itinerary.durationMinutes ?? "-" }} min</span
                         >
-                        <span class="rounded-full bg-[#F3F4F6] px-2.5 py-1"
+                        <span class="rounded-full bg-[#0F172A] px-2.5 py-1"
                           >{{ itinerary.transfers ?? 0 }} transfers</span
                         >
-                        <span class="rounded-full bg-[#F3F4F6] px-2.5 py-1">{{
+                        <span class="rounded-full bg-[#0F172A] px-2.5 py-1">{{
                           moneyLabel(itinerary.totalFare)
                         }}</span>
                         <span
                           v-if="itinerary.totalDistanceMeters"
-                          class="rounded-full bg-[#F3F4F6] px-2.5 py-1"
+                          class="rounded-full bg-[#0F172A] px-2.5 py-1"
                         >
                           {{ distanceLabel(itinerary.totalDistanceMeters) }}
                         </span>
                       </div>
                     </div>
                     <span
-                      class="rounded-full border border-[#D9C98F] px-3 py-1 text-xs font-semibold text-[#2B2A27]"
+                      class="rounded-full border border-white/10 px-3 py-1 text-xs font-semibold text-[#FFC400]"
                     >
                       {{ itinerary.itineraryId || `route-${index + 1}` }}
                     </span>
@@ -712,15 +712,15 @@ const DetailsHeader = defineComponent({
         "div",
         {
           class:
-            "p-4 md:p-5 border-b border-[#E6DEC8] flex items-center justify-between gap-4",
+            "p-4 md:p-5 border-b border-white/10 flex items-center justify-between gap-4",
         },
         [
-          h("h3", { class: "text-lg font-bold text-[#2B2A27]" }, props.title),
+          h("h3", { class: "text-lg font-bold text-[#F8FAFC]" }, props.title),
           h(
             "button",
             {
               class:
-                "rounded-lg border border-[#D9C98F] px-3 py-1.5 text-sm font-semibold transition-all hover:border-[#FFC400] hover:bg-[#FFF8D9]",
+                "rounded-xl border border-white/10 px-3 py-1.5 text-sm font-semibold text-[#F8FAFC] transition-all hover:border-[#FFC400] hover:text-[#FFC400]",
               onClick: () => emit("close"),
             },
             "Close",
@@ -734,11 +734,11 @@ const Info = defineComponent({
   props: { label: String, value: [String, Number] },
   setup(props) {
     return () =>
-      h("div", { class: "rounded-xl border border-[#E6DEC8] p-3" }, [
-        h("div", { class: "text-xs text-[#6B7280]" }, props.label),
+      h("div", { class: "rounded-xl border border-white/10 bg-[#0F172A] p-3" }, [
+        h("div", { class: "text-xs text-[#94A3B8]" }, props.label),
         h(
           "div",
-          { class: "mt-1 font-semibold text-[#111827]" },
+          { class: "mt-1 font-semibold text-[#F8FAFC]" },
           String(props.value ?? "-"),
         ),
       ]);

@@ -1,56 +1,63 @@
 <template>
   <div
-    class="max-w-[1440px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 py-5 md:py-8 flex flex-col gap-5 md:gap-6 pb-20 lg:pb-8"
+    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5 pb-20 lg:pb-8"
   >
+    <div>
+      <h2 class="text-[28px] font-bold leading-tight text-[#F8FAFC]">Dashboard</h2>
+      <p class="mt-1 text-sm text-[#94A3B8]">
+        Overview of transport operations
+      </p>
+    </div>
+
     <Card v-if="error" className="border-[#FCA5A5] bg-[#FEF2F2]">
       <div class="p-4 text-sm font-medium text-[#B91C1C]">{{ error }}</div>
     </Card>
 
-    <div class="grid grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
       <StatCard
-        className="bg-[#1F2937] rounded-xl border border-[#374151]"
+        className="bg-[#1E293B] rounded-2xl p-4 border border-white/10 min-h-[104px] flex flex-col justify-between"
         label="Total Tickets"
         :value="cardValue('tickets')"
         color="#FF7A1A"
       />
       <StatCard
-        className="bg-[#1F2937] rounded-xl border border-[#374151]"
+        className="bg-[#1E293B] rounded-2xl p-4 border border-white/10 min-h-[104px] flex flex-col justify-between"
         label="Active Tickets"
         :value="cardValue('activeTickets')"
         color="#00B86B"
       />
       <StatCard
-        className="bg-[#1F2937] rounded-xl border border-[#374151]"
+        className="bg-[#1E293B] rounded-2xl p-4 border border-white/10 min-h-[104px] flex flex-col justify-between"
         label="Refund Issues"
         :value="cardValue('refundIssues')"
         color="#E63946"
       />
       <StatCard
-        className="bg-[#1F2937] rounded-xl border border-[#374151]"
+        className="bg-[#1E293B] rounded-2xl p-4 border border-white/10 min-h-[104px] flex flex-col justify-between"
         label="Open Support Tickets"
         :value="cardValue('openSupportTickets')"
         color="#0EA5E9"
       />
       <StatCard
-        className="bg-[#1F2937] rounded-xl border border-[#374151]"
+        className="bg-[#1E293B] rounded-2xl p-4 border border-white/10 min-h-[104px] flex flex-col justify-between"
         label="Total Users"
         :value="cardValue('users')"
         color="#7C3AED"
       />
       <StatCard
-        className="bg-[#1F2937] rounded-xl border border-[#374151]"
+        className="bg-[#1E293B] rounded-2xl p-4 border border-white/10 min-h-[104px] flex flex-col justify-between"
         label="Blocked Users"
         :value="cardValue('blockedUsers')"
         color="#E63946"
       />
       <StatCard
-        className="bg-[#1F2937] rounded-xl border border-[#374151]"
+        className="bg-[#1E293B] rounded-2xl p-4 border border-white/10 min-h-[104px] flex flex-col justify-between"
         label="Total Routes"
         :value="cardValue('transitRoutes')"
-        color="#2B2A27"
+        color="#38BDF8"
       />
       <StatCard
-        className="bg-[#1F2937] rounded-xl border border-[#374151]"
+        className="bg-[#1E293B] rounded-2xl p-4 border border-white/10 min-h-[104px] flex flex-col justify-between"
         label="Total Stops"
         :value="cardValue('transitStops')"
         color="#00B86B"
@@ -79,8 +86,8 @@
         <Bar :data="ticketsByStatusData" :options="chartOptions" />
       </ChartCard>
 
-      <Card className="bg-[#1F2937] rounded-xl border border-[#374151]">
-        <div class="px-5 py-4 border-b border-[#374151]">
+      <Card className="bg-[#1E293B] rounded-2xl border border-white/10">
+        <div class="px-5 py-4 border-b border-white/10">
           <h2
             class="text-base font-bold text-white"
             style="font-family: &quot;DM Sans&quot;, sans-serif"
@@ -94,7 +101,7 @@
         >
           No data yet
         </div>
-        <div v-else class="p-5 flex flex-col gap-3">
+        <div v-else class="p-5 flex flex-col gap-4">
           <div
             v-for="route in stats.topSearchedRoutes"
             :key="`${route.from_label}-${route.to_label}`"
@@ -105,7 +112,7 @@
               </span>
               <span class="font-bold text-white">{{ route.search_count }}</span>
             </div>
-            <div class="mt-2 h-2 rounded-full bg-[#111827] overflow-hidden">
+            <div class="mt-2 h-2 rounded-full bg-[#0F172A] overflow-hidden">
               <div
                 class="h-full rounded-full bg-[#FFC400]"
                 :style="{ width: topRouteWidth(route.search_count) }"
@@ -116,8 +123,8 @@
       </Card>
     </div>
 
-    <Card className="bg-[#1F2937] rounded-xl border border-[#374151]">
-      <div class="px-5 py-4 border-b border-[#374151]">
+    <Card className="bg-[#1E293B] rounded-2xl border border-white/10">
+      <div class="px-5 py-4 border-b border-white/10">
         <h2
           class="text-base font-bold text-white"
           style="font-family: &quot;DM Sans&quot;, sans-serif"
@@ -134,7 +141,7 @@
       </div>
       <div v-else class="overflow-x-auto">
         <table class="w-full min-w-[720px] text-left text-sm table-fixed">
-          <thead class="bg-[#111827] border-b border-[#374151]">
+          <thead class="sticky top-0 bg-[#111827] border-b border-white/10">
             <tr>
               <th
                 class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
@@ -158,11 +165,11 @@
               </th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-[#374151]">
+          <tbody class="divide-y divide-white/10">
             <tr
               v-for="item in stats.recentRouteSearches"
               :key="`${item.from_label}-${item.to_label}-${item.created_at}`"
-              class="hover:bg-[#111827] transition-colors"
+              class="hover:bg-[#0F172A] transition-colors"
             >
               <td class="px-4 py-3 font-semibold text-white">
                 {{ item.from_label || "-" }}
@@ -251,15 +258,15 @@ const chartOptions = {
   maintainAspectRatio: false,
   plugins: { legend: { display: false }, tooltip: { mode: "index" } },
   scales: {
-    x: { ticks: { color: "#9CA3AF" }, grid: { color: "#374151" } },
-    y: { ticks: { color: "#9CA3AF" }, grid: { color: "#374151" } },
+    x: { ticks: { color: "#94A3B8" }, grid: { color: "rgba(255,255,255,0.08)" } },
+    y: { ticks: { color: "#94A3B8" }, grid: { color: "rgba(255,255,255,0.08)" } },
   },
 };
 
 const doughnutOptions = {
   responsive: true,
   maintainAspectRatio: false,
-  plugins: { legend: { position: "bottom", labels: { color: "#9CA3AF" } } },
+  plugins: { legend: { position: "bottom", labels: { color: "#94A3B8" } } },
 };
 
 const ChartCard = defineComponent({
@@ -271,10 +278,10 @@ const ChartCard = defineComponent({
     return () =>
       h(
         Card,
-        { className: "bg-[#1F2937] rounded-xl border border-[#374151]" },
+        { className: "bg-[#1E293B] rounded-2xl border border-white/10" },
         {
           default: () => [
-            h("div", { class: "px-5 py-4 border-b border-[#374151]" }, [
+            h("div", { class: "px-5 py-4 border-b border-white/10" }, [
               h(
                 "h2",
                 {
@@ -290,7 +297,7 @@ const ChartCard = defineComponent({
                   { class: "p-8 text-center text-sm text-[#9CA3AF]" },
                   "No data yet",
                 )
-              : h("div", { class: "h-72 p-5" }, slots.default?.()),
+              : h("div", { class: "h-64 p-5" }, slots.default?.()),
           ],
         },
       );

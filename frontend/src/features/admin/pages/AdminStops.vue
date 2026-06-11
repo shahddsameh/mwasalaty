@@ -1,16 +1,16 @@
 <template>
   <div
-    class="max-w-[1440px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 py-5 md:py-8 flex flex-col gap-4 md:gap-6"
+    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5"
   >
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-      <StatCard label="Total Stops" :value="stops.length" color="#2B2A27" />
+      <StatCard label="Total Stops" :value="stops.length" color="#38BDF8" />
       <StatCard label="With Location" :value="locatedStops" color="#00B86B" />
       <StatCard
         label="Missing Location"
         :value="stops.length - locatedStops"
         color="#E63946"
       />
-      <StatCard label="Visible" :value="filteredStops.length" color="#111827" />
+      <StatCard label="Visible" :value="filteredStops.length" color="#FFC107" />
     </div>
 
     <Card v-if="error" className="border-[#FCA5A5] bg-[#FEF2F2]">
@@ -18,20 +18,20 @@
     </Card>
 
     <Card>
-      <div class="p-4 md:p-5 border-b border-[#E6DEC8] flex items-center gap-3">
+      <div class="p-4 md:p-5 border-b border-white/10 flex items-center gap-3">
         <div class="relative flex-1">
           <Search
-            class="w-4 h-4 text-[#6B7280] absolute left-3 top-1/2 -translate-y-1/2"
+            class="w-4 h-4 text-[#94A3B8] absolute left-3 top-1/2 -translate-y-1/2"
           />
           <input
             v-model="search"
             placeholder="Search stops..."
-            class="w-full pl-9 pr-4 py-2 border-2 border-[#E6DEC8] rounded-xl text-sm text-[#2B2A27] placeholder-[#6B7280] focus:outline-none focus:border-[#FFC400] bg-white"
+            class="w-full pl-9 pr-4 py-2 border border-white/10 rounded-xl text-sm text-[#F8FAFC] placeholder-[#64748B] focus:outline-none focus:border-[#FFC400] bg-[#0F172A]"
           />
         </div>
         <button
           @click="loadStops"
-          class="p-2 rounded-xl border-2 border-[#E6DEC8] text-[#6B7280] hover:border-[#FFC400] hover:text-[#111827] transition-all flex-shrink-0"
+          class="p-2 rounded-xl border border-white/10 text-[#94A3B8] hover:border-[#FFC400] hover:text-[#FFC400] transition-all flex-shrink-0"
           title="Refresh"
         >
           <RefreshCw class="w-4 h-4" />
@@ -40,14 +40,14 @@
 
       <div
         v-if="loading"
-        class="flex items-center justify-center py-16 text-[#6B7280] text-sm"
+        class="flex items-center justify-center py-16 text-[#94A3B8] text-sm"
       >
         Loading stops...
       </div>
 
       <div
         v-else-if="filteredStops.length > 0"
-        class="bg-[#1F2937] rounded-xl overflow-hidden border border-[#374151]"
+        class="bg-[#1E293B] rounded-xl overflow-hidden border border-white/10"
       >
         <div class="overflow-x-auto">
           <table class="w-full min-w-[920px] table-fixed text-left text-sm">
@@ -58,7 +58,7 @@
               <col class="w-[22%]" />
               <col class="w-[16%]" />
             </colgroup>
-            <thead class="bg-[#111827] border-b border-[#374151]">
+            <thead class="sticky top-0 bg-[#111827] border-b border-white/10">
               <tr>
                 <th
                   class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
@@ -87,27 +87,27 @@
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-[#374151]">
+            <tbody class="divide-y divide-white/10">
               <tr
                 v-for="stop in filteredStops"
                 :key="stopKey(stop)"
-                class="hover:bg-[#111827] transition-colors"
+                class="hover:bg-[#0F172A] transition-colors"
               >
-                <td class="px-4 py-4 font-medium text-white truncate">
+                <td class="px-4 py-3 font-medium text-white truncate">
                   {{ stop.name || "Unnamed stop" }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF] whitespace-nowrap">
+                <td class="px-4 py-3 text-[#94A3B8] whitespace-nowrap">
                   {{ formatCoord(stop.lat) }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF] whitespace-nowrap">
+                <td class="px-4 py-3 text-[#94A3B8] whitespace-nowrap">
                   {{ formatCoord(stop.lng ?? stop.lon) }}
                 </td>
-                <td class="px-4 py-4 text-[#9CA3AF] truncate">
+                <td class="px-4 py-3 text-[#94A3B8] truncate">
                   {{ stop.id || "-" }}
                 </td>
-                <td class="px-4 py-4 text-right">
+                <td class="px-4 py-3 text-right">
                   <button
-                    class="rounded-lg border border-[#111827] bg-[#111827] px-3 py-1.5 font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#2B2A27] active:bg-[#374151]"
+                    class="inline-flex h-9 min-w-[112px] items-center justify-center whitespace-nowrap rounded-xl border border-white/10 bg-[#0F172A] px-4 text-sm font-semibold leading-none text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#111827]"
                     :disabled="detailsLoading && selectedStop?.id === stop.id"
                     @click="openStopDetails(stop)"
                   >
@@ -128,9 +128,9 @@
         v-else
         class="flex flex-col items-center justify-center py-16 px-4 gap-3"
       >
-        <MapPin class="w-10 h-10 text-[#6B7280]" />
-        <p class="text-base font-bold text-[#2B2A27]">No stops found</p>
-        <p class="text-sm text-[#6B7280] text-center">
+        <MapPin class="w-10 h-10 text-[#64748B]" />
+        <p class="text-base font-bold text-[#F8FAFC]">No stops found</p>
+        <p class="text-sm text-[#94A3B8] text-center">
           Start OTP and backend so the startup sync can load transit stops.
         </p>
       </div>
@@ -146,17 +146,17 @@
           className="w-full max-w-5xl max-h-[88vh] overflow-y-auto shadow-2xl"
         >
           <div
-            class="p-4 md:p-5 flex items-start justify-between gap-4 border-b border-[#E6DEC8]"
+            class="p-4 md:p-5 flex items-start justify-between gap-4 border-b border-white/10"
           >
             <div>
-              <h3 class="text-lg font-bold text-[#2B2A27]">
+              <h3 class="text-lg font-bold text-[#F8FAFC]">
                 {{
                   stopDetails?.stop.name || selectedStop.name || "Stop details"
                 }}
               </h3>
             </div>
             <button
-              class="rounded-lg border border-[#D9C98F] px-3 py-1.5 text-sm font-semibold transition-all hover:border-[#FFC400] hover:bg-[#FFF8D9]"
+              class="rounded-xl border border-white/10 px-3 py-1.5 text-sm font-semibold text-[#F8FAFC] transition-all hover:border-[#FFC400] hover:text-[#FFC400]"
               @click="selectedStop = null"
             >
               Close
@@ -234,23 +234,23 @@
             />
           </div>
           <div class="px-4 pb-4 md:px-5 md:pb-5">
-            <div class="rounded-xl border border-[#E6DEC8] overflow-hidden">
+            <div class="rounded-xl border border-white/10 overflow-hidden">
               <div
-                class="flex items-center justify-between gap-3 border-b border-[#E6DEC8] bg-[#FFF8D9] px-4 py-3"
+                class="flex items-center justify-between gap-3 border-b border-white/10 bg-[#111827] px-4 py-3"
               >
-                <h4 class="font-bold text-[#2B2A27]">Related Routes</h4>
+                <h4 class="font-bold text-[#F8FAFC]">Related Routes</h4>
                 <span
                   class="rounded-full bg-[#111827] px-3 py-1 text-xs font-bold text-[#FFC400]"
                 >
                   {{ relatedRoutes.length }}
                 </span>
               </div>
-              <div v-if="detailsLoading" class="p-4 text-sm text-[#6B7280]">
+              <div v-if="detailsLoading" class="p-4 text-sm text-[#94A3B8]">
                 Loading related routes...
               </div>
               <div
                 v-else-if="relatedRoutes.length === 0"
-                class="p-4 text-sm text-[#6B7280]"
+                class="p-4 text-sm text-[#94A3B8]"
               >
                 No related routes found for this stop.
               </div>
@@ -354,11 +354,11 @@ const Info = defineComponent({
   props: { label: String, value: [String, Number] },
   setup(props) {
     return () =>
-      h("div", { class: "rounded-xl border border-[#E6DEC8] p-3" }, [
-        h("div", { class: "text-xs text-[#6B7280]" }, props.label),
+      h("div", { class: "rounded-xl border border-white/10 bg-[#0F172A] p-3" }, [
+        h("div", { class: "text-xs text-[#94A3B8]" }, props.label),
         h(
           "div",
-          { class: "mt-1 font-semibold text-[#111827]" },
+          { class: "mt-1 font-semibold text-[#F8FAFC]" },
           String(props.value ?? "-"),
         ),
       ]);

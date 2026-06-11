@@ -104,6 +104,26 @@ export async function getSupportTickets() {
   return rows.map((ticket) => mapTicket(ticket, repliesByTicket.get(ticket.id) || []));
 }
 
+export async function getAdminNotifications() {
+  const tickets = await getSupportTickets();
+  const isOpen = (ticket) => ['new', 'in_progress', 'open'].includes(String(ticket.status || '').toLowerCase());
+  const recentTickets = tickets.slice(0, 10);
+
+  return {
+    unreadCount: tickets.filter(isOpen).length,
+    notifications: recentTickets.map((ticket) => ({
+      id: ticket.id,
+      type: 'support_ticket',
+      title: ticket.subject || 'New support ticket',
+      message: ticket.message || '',
+      user_email: ticket.email || '',
+      status: isOpen(ticket) ? 'open' : 'done',
+      created_at: ticket.createdAt,
+      targetUrl: '/admin/support',
+    })),
+  };
+}
+
 export async function getSupportTicketById(id) {
   const row = await getTicketRow(id);
   if (!row) throw notFoundError();

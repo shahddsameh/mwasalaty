@@ -4,6 +4,7 @@ import {
   adminDashboardStatsHandler,
   adminActivateTicketHandler,
   adminMarkRefundedHandler,
+  adminNotificationsHandler,
   adminRefundFailedHandler,
   adminTicketHandler,
   adminTicketsHandler,
@@ -42,6 +43,7 @@ router.patch("/admin/users/:id", adminUpdateUserHandler);
 router.post("/admin/users/:id/block", adminBlockUserHandler);
 router.post("/admin/users/:id/unblock", adminUnblockUserHandler);
 router.get("/admin/dashboard/stats", adminDashboardStatsHandler);
+router.get("/admin/notifications", adminNotificationsHandler);
 router.get("/admin/tickets", adminTicketsHandler);
 router.get("/admin/tickets/:id", adminTicketHandler);
 router.patch("/admin/tickets/:id/status", adminTicketStatusHandler);

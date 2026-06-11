@@ -16,6 +16,7 @@ import {
 import {
   getSupportTickets,
   getSupportTicketById,
+  getAdminNotifications,
   updateSupportTicketData,
   createSupportTicket,
   replyToSupportTicket,
@@ -98,6 +99,14 @@ export async function adminGetSupportTicketsHandler(req, res) {
   try {
     const tickets = await getSupportTickets();
     res.json({ tickets });
+  } catch (err) {
+    sendError(res, err);
+  }
+}
+
+export async function adminNotificationsHandler(req, res) {
+  try {
+    res.json(await getAdminNotifications());
   } catch (err) {
     sendError(res, err);
   }

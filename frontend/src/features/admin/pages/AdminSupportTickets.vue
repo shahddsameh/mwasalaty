@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 md:p-6 space-y-6">
+  <div class="px-4 sm:px-6 lg:px-8 py-6 lg:py-8 space-y-5 max-w-[1440px] mx-auto">
     <!-- Filters -->
     <div class="flex flex-wrap gap-3">
       <button
@@ -10,7 +10,7 @@
           'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
           statusFilter === filterOption.value
             ? 'bg-[#FFC400] text-[#111827]'
-            : 'bg-[#1F2937] text-[#9CA3AF] hover:bg-[#374151] hover:text-white',
+            : 'bg-[#1E293B] border border-white/10 text-[#94A3B8] hover:bg-[#111827] hover:text-white',
         ]"
       >
         {{ filterOption.label }}
@@ -41,7 +41,7 @@
     <!-- Error State -->
     <div
       v-else-if="error"
-      class="bg-red-900/20 border-2 border-red-700 rounded-xl p-6 text-center"
+      class="bg-red-500/10 border border-red-500/30 rounded-2xl p-6 text-center"
     >
       <p class="text-red-200 mb-4">{{ error }}</p>
       <button
@@ -55,9 +55,9 @@
     <!-- Empty State -->
     <div
       v-else-if="filteredTickets.length === 0"
-      class="bg-[#1F2937] rounded-xl p-12 text-center"
+      class="bg-[#1E293B] border border-white/10 rounded-2xl p-12 text-center"
     >
-      <MessageSquare class="w-16 h-16 text-[#6B7280] mx-auto mb-4" />
+      <MessageSquare class="w-16 h-16 text-[#64748B] mx-auto mb-4" />
       <h3 class="text-xl font-bold text-white mb-2">No support tickets</h3>
       <p class="text-[#9CA3AF]">
         {{
@@ -69,7 +69,7 @@
     </div>
 
     <!-- Tickets Table -->
-    <div v-else class="bg-[#1F2937] rounded-xl overflow-hidden border border-[#374151]">
+    <div v-else class="bg-[#1E293B] rounded-2xl overflow-hidden border border-white/10">
       <div class="overflow-x-auto">
         <table class="w-full min-w-[920px] table-fixed">
           <colgroup>
@@ -80,7 +80,7 @@
             <col class="w-[11%]" />
             <col class="w-[8%]" />
           </colgroup>
-          <thead class="bg-[#111827] border-b border-[#374151]">
+          <thead class="sticky top-0 bg-[#111827] border-b border-white/10">
             <tr>
               <th
                 class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
@@ -114,13 +114,13 @@
               </th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-[#374151]">
+          <tbody class="divide-y divide-white/10">
             <tr
               v-for="ticket in filteredTickets"
               :key="ticket.id"
-              class="hover:bg-[#111827] transition-colors"
+              class="hover:bg-[#0F172A] transition-colors"
             >
-              <td class="px-4 py-4 align-top">
+              <td class="px-4 py-3 align-top">
                 <div class="truncate font-medium text-white">{{ ticket.name }}</div>
                 <div
                   v-if="ticket.subject"
@@ -129,21 +129,21 @@
                   {{ ticket.subject }}
                 </div>
               </td>
-              <td class="px-4 py-4 align-top">
+              <td class="px-4 py-3 align-top">
                 <div class="truncate text-sm text-[#9CA3AF]">{{ ticket.email }}</div>
                 <div v-if="ticket.phone" class="truncate text-sm text-[#9CA3AF]">
                   {{ ticket.phone }}
                 </div>
               </td>
-              <td class="px-4 py-4 align-top">
+              <td class="px-4 py-3 align-top">
                 <div class="truncate text-sm text-[#9CA3AF]">
                   {{ ticket.message }}
                 </div>
               </td>
-              <td class="px-4 py-4 align-top text-sm text-[#9CA3AF] whitespace-nowrap">
+              <td class="px-4 py-3 align-top text-sm text-[#94A3B8] whitespace-nowrap">
                 {{ formatDate(ticket.createdAt) }}
               </td>
-              <td class="px-4 py-4 align-top">
+              <td class="px-4 py-3 align-top">
                 <span
                   :class="[
                     'inline-flex whitespace-nowrap px-3 py-1 rounded-full text-xs font-medium',
@@ -153,10 +153,10 @@
                   {{ statusLabels[ticket.status] }}
                 </span>
               </td>
-              <td class="px-4 py-4 align-top text-right">
+              <td class="px-4 py-3 align-top text-right">
                 <button
                   @click="openTicket(ticket)"
-                  class="whitespace-nowrap rounded-lg border border-[#111827] bg-[#111827] px-3 py-1.5 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#2B2A27] active:bg-[#374151]"
+                  class="whitespace-nowrap rounded-xl border border-white/10 bg-[#0F172A] px-3 py-1.5 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#111827]"
                 >
                   View
                 </button>
@@ -175,11 +175,11 @@
         @click.self="closeTicket"
       >
         <div
-          class="bg-[#1F2937] rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+          class="bg-[#1E293B] rounded-2xl border border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
         >
           <!-- Modal Header -->
           <div
-            class="sticky top-0 bg-[#111827] px-6 py-4 border-b border-[#374151] flex items-center justify-between"
+            class="sticky top-0 bg-[#111827] px-6 py-4 border-b border-white/10 flex items-center justify-between"
           >
             <div>
               <h2 class="text-xl font-bold text-white">Support Ticket</h2>
@@ -525,6 +525,7 @@ async function updateStatus(status: SupportTicket["status"]) {
 
     // Update selected ticket
     selectedTicket.value = updated;
+    window.dispatchEvent(new CustomEvent("admin-notifications-refresh"));
   } catch (err) {
     alert(err instanceof Error ? err.message : "Failed to update status");
     console.error("Failed to update status:", err);
@@ -575,6 +576,7 @@ async function sendReply() {
     replyInput.value = "";
     replyOk.value = true;
     replyMessage.value = "Reply sent and ticket resolved.";
+    window.dispatchEvent(new CustomEvent("admin-notifications-refresh"));
   } catch (err) {
     const maybeTicket = (err as Error & { ticket?: SupportTicket }).ticket;
     if (maybeTicket) {

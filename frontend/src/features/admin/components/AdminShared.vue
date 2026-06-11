@@ -12,7 +12,7 @@ export const StatCard = defineComponent({
     label: { type: String, required: true },
     value: { type: [String, Number], required: true },
     sub: String,
-    color: { type: String, default: "#2B2A27" },
+    color: { type: String, default: "#FFC107" },
     className: { type: String, default: "" },
   },
   setup(props) {
@@ -20,20 +20,26 @@ export const StatCard = defineComponent({
       h(
         "div",
         {
-          class: `${props.className || "bg-white rounded-2xl p-4 md:p-5 border-2 border-[#E6DEC8]"}`,
+          class: `${props.className || "bg-[#1E293B] rounded-2xl p-4 border border-white/10 min-h-[104px] flex flex-col justify-between shadow-sm"}`,
         },
         [
-          h("p", { class: "text-sm text-[#6B7280] mb-1" }, props.label),
+          h("div", { class: "flex items-center justify-between gap-3" }, [
+            h("p", { class: "text-sm font-medium leading-tight text-[#94A3B8]" }, props.label),
+            h("span", {
+              class: "h-2.5 w-2.5 rounded-full flex-shrink-0",
+              style: { background: props.color },
+            }),
+          ]),
           h(
             "p",
             {
-              class: "text-2xl md:text-3xl font-bold",
+              class: "mt-2 text-[28px] font-bold leading-none",
               style: { color: props.color, fontFamily: "DM Sans, sans-serif" },
             },
             props.value,
           ),
           props.sub &&
-            h("p", { class: "text-xs text-[#9CA3AF] mt-1" }, props.sub),
+            h("p", { class: "text-xs text-[#94A3B8] mt-2" }, props.sub),
         ],
       );
   },
@@ -50,7 +56,7 @@ export const Card = defineComponent({
       h(
         "div",
         {
-          class: `bg-white rounded-2xl border-2 border-[#E6DEC8] overflow-hidden ${props.className || ""}`,
+          class: `bg-[#1E293B] rounded-2xl border border-white/10 overflow-hidden shadow-sm ${props.className || ""}`,
         },
         slots.default?.(),
       );
@@ -72,14 +78,14 @@ export const StatusBadge = defineComponent({
           class:
             "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold",
           style: {
-            background: isActive ? "#ECFDF5" : "#FEF2F2",
-            color: isActive ? "#059669" : "#E63946",
+            background: isActive ? "rgba(16,185,129,0.12)" : "rgba(239,68,68,0.12)",
+            color: isActive ? "#10B981" : "#EF4444",
           },
         },
         [
           h("span", {
             class: "w-1.5 h-1.5 rounded-full",
-            style: { background: isActive ? "#10B981" : "#E63946" },
+            style: { background: isActive ? "#10B981" : "#EF4444" },
           }),
           props.status,
         ],
@@ -99,11 +105,11 @@ export const Field = defineComponent({
       h("div", { class: "flex flex-col gap-2" }, [
         h(
           "label",
-          { class: "text-sm font-semibold text-[#2B2A27]" },
+          { class: "text-sm font-semibold text-[#F8FAFC]" },
           props.label,
         ),
         slots.default?.(),
-        props.hint && h("p", { class: "text-xs text-[#6B7280]" }, props.hint),
+        props.hint && h("p", { class: "text-xs text-[#94A3B8]" }, props.hint),
       ]);
   },
 });

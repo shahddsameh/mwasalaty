@@ -63,11 +63,11 @@ export async function getTicketHandler(req, res) {
   }
 }
 
-export function streamTicketHandler(req, res) {
+export async function streamTicketHandler(req, res) {
   // EventSource can't send headers, so the SSE stream also accepts the token as
   // an `?access_token=` query param. Same local JWT verification either way.
   const token = bearerToken(req) || String(req.query.access_token ?? '');
-  const result = verifyAccessToken(token);
+  const result = await verifyAccessToken(token);
   if (result.error) {
     return res.status(result.error.status).json(makeError(result.error.code, result.error.message));
   }

@@ -16,3 +16,7 @@ backend/dist/
 .playwright-mcp/
 frontend/dev-dist/
 operator/tsconfig.tsbuildinfo
+
+specs/
+.specify/
+.agents/

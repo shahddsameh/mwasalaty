@@ -37,18 +37,18 @@ function makeRes() {
   };
 }
 
-test('SSE stream rejects a request with no token', () => {
+test('SSE stream rejects a request with no token', async () => {
   const ticket = seedTicket('streamer-1');
   const res = makeRes();
-  streamTicketHandler({ params: { id: ticket.ticketId }, query: {}, get: () => null }, res);
+  await streamTicketHandler({ params: { id: ticket.ticketId }, query: {}, get: () => null }, res);
   assert.equal(res.statusCode, 401);
   assert.equal(res.body.error.code, 'AUTH_REQUIRED');
 });
 
-test('SSE stream hides another user\'s ticket behind a 404', () => {
+test('SSE stream hides another user\'s ticket behind a 404', async () => {
   const ticket = seedTicket('streamer-2');
   const res = makeRes();
-  streamTicketHandler(
+  await streamTicketHandler(
     { params: { id: ticket.ticketId }, query: { access_token: tokenFor('attacker') }, get: () => null },
     res
   );
@@ -56,11 +56,11 @@ test('SSE stream hides another user\'s ticket behind a 404', () => {
   assert.equal(res.body.error.code, 'TICKET_NOT_FOUND');
 });
 
-test('SSE stream serves the owner via an access_token query param', () => {
+test('SSE stream serves the owner via an access_token query param', async () => {
   const ticket = seedTicket('streamer-3');
   const res = makeRes();
   let closeHandler;
-  streamTicketHandler(
+  await streamTicketHandler(
     {
       params: { id: ticket.ticketId },
       query: { access_token: tokenFor('streamer-3') },

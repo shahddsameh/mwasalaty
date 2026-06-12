@@ -2,8 +2,8 @@
   <main class="min-h-screen pb-20 bg-background">
     <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-12">
       <PageTitle
-        title="AI Assistant"
-        subtitle="Ask me anything about your journey in natural language"
+        :title="t('aiAssistant.title')"
+        :subtitle="t('aiAssistant.subtitle')"
       />
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         <section
@@ -12,18 +12,17 @@
           <div class="flex items-center gap-3 mb-4">
             <Sparkles class="w-8 h-8 text-primary" />
             <h2 class="font-display text-2xl text-foreground">
-              Describe Your Journey
+              {{ t("aiAssistant.formTitle") }}
             </h2>
           </div>
           <p class="text-muted-foreground mb-6">
-            Tell us where you want to go and your preferences. We'll find the
-            best routes for you.
+            {{ t("aiAssistant.formCopy") }}
           </p>
           <textarea
             v-model="input"
             rows="6"
             class="w-full p-4 border border-border rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-ring resize-none"
-            placeholder="Example: I need the fastest route from Nasr City to Cairo Airport with minimal walking."
+            :placeholder="t('aiAssistant.placeholder')"
           />
           <AppButton
             class="mt-4 w-full md:w-auto flex items-center gap-2"
@@ -39,15 +38,20 @@
         </section>
 
         <aside class="space-y-6">
-          <section class="bg-card rounded-xl p-6 border-2 border-border">
+          <section
+            class="bg-card rounded-xl p-6 border-2 border-border"
+            :dir="isArabic ? 'rtl' : 'ltr'"
+            :class="isArabic ? 'text-right' : 'text-left'"
+          >
             <h3 class="font-display text-xl text-foreground mb-4">
-              Try asking:
+              {{ t("aiAssistant.tryAsking") }}
             </h3>
             <div class="space-y-2">
               <button
                 v-for="example in examples"
                 :key="example"
-                class="w-full p-3 text-left rounded-lg border border-border hover:border-primary hover:bg-primary-soft transition-all text-sm"
+                class="w-full p-3 rounded-lg border border-border hover:border-primary hover:bg-primary-soft transition-all text-sm"
+                :class="isArabic ? 'text-right' : 'text-left'"
                 @click="input = example"
               >
                 {{ example }}
@@ -57,7 +61,7 @@
 
           <section class="bg-card rounded-xl p-6 border-2 border-border">
             <h3 class="font-display text-xl text-foreground mb-4">
-              I can help with:
+              {{ t("aiAssistant.helpWith") }}
             </h3>
             <Feature v-for="item in features" :key="item.title" v-bind="item" />
           </section>
@@ -75,7 +79,7 @@
               class="w-full"
               @click="router.push('/ai-trip-planner')"
             >
-              Try Trip Planner
+              {{ t("aiAssistant.tryTripPlanner") }}
             </AppButton>
           </section>
         </aside>
@@ -85,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, h, onMounted, ref } from "vue";
+import { computed, defineComponent, h, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { Clock, MapPin, Send, Sparkles, TrendingUp } from "@lucide/vue";
@@ -97,10 +101,11 @@ import { setPlaceCoords } from "@/features/trip-planner/services/routeSearch";
 import type { FavoritePlace } from "@/db/appDb";
 
 const router = useRouter();
-const { t } = useI18n();
+const { locale, t } = useI18n();
 const input = ref("");
 const loading = ref(false);
 const message = ref("");
+const isArabic = computed(() => locale.value === "ar");
 
 // Cached saved places (home / work / school / named favorites). The AI parser
 // emits the literal token "home"/"work"/"school" — we swap in the user's saved
@@ -196,26 +201,34 @@ function goToResults(
     },
   });
 }
-const examples = [
-  "Get me to Cairo Airport in under an hour",
-  "What's the cheapest way to reach Giza Pyramids?",
-  "Find a comfortable route to New Cairo",
-  "How do I get to City Stars Mall?",
-];
-const features = [
+const examples = computed(() => [
+  t("aiAssistant.examples.airport"),
+  t("aiAssistant.examples.pyramids"),
+  t("aiAssistant.examples.newCairo"),
+  t("aiAssistant.examples.cityStars"),
+]);
+const features = computed(() => [
   {
-    title: "Route Planning",
-    copy: "Find the best way to get anywhere",
+    title: t("aiAssistant.features.routePlanning.title"),
+    copy: t("aiAssistant.features.routePlanning.copy"),
     icon: MapPin,
   },
-  { title: "Time & Cost", copy: "Balance speed and budget", icon: Clock },
   {
-    title: "Smart Suggestions",
-    copy: "Personalized recommendations",
+    title: t("aiAssistant.features.timeCost.title"),
+    copy: t("aiAssistant.features.timeCost.copy"),
+    icon: Clock,
+  },
+  {
+    title: t("aiAssistant.features.smartSuggestions.title"),
+    copy: t("aiAssistant.features.smartSuggestions.copy"),
     icon: TrendingUp,
   },
-  { title: "Trip Planning", copy: "Full day itineraries", icon: Sparkles },
-];
+  {
+    title: t("aiAssistant.features.tripPlanning.title"),
+    copy: t("aiAssistant.features.tripPlanning.copy"),
+    icon: Sparkles,
+  },
+]);
 
 const Feature = defineComponent({
   props: {
@@ -253,7 +266,7 @@ async function search() {
     // Referenced a personal place that hasn't been saved yet.
     if (fromRes?.missing || toRes?.missing) {
       const which = fromRes?.missing ? intent.from : intent.to;
-      message.value = `You haven't saved a "${which}" place yet. Add it under Saved places first.`;
+      message.value = t("aiAssistant.errors.personalPlaceMissing", { place: which });
       return;
     }
 
@@ -290,7 +303,7 @@ async function search() {
     }
 
     if (!startLabel || !destLabel) {
-      message.value = "Please include both a starting point and a destination.";
+      message.value = t("home.validation.bothRequired");
       return;
     }
 

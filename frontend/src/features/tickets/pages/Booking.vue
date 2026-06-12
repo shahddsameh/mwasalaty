@@ -95,7 +95,7 @@
                   securely.
                 </p>
                 <span
-                  class="inline-block mt-2 px-2.5 py-1 rounded-full bg-warning-soft text-xs text-foreground"
+                  class="inline-block mt-2 px-2.5 py-1 rounded-full bg-secondary text-xs text-foreground"
                 >
                   Test / Sandbox payment — MVP
                 </span>
@@ -169,7 +169,9 @@
     >
       <div class="space-y-4">
         <p class="p-4 bg-secondary rounded-lg text-sm text-foreground">
-          You must log in or create an account before completing this booking and payment. We saved your selected trip and will bring you back here after authentication.
+          You must log in or create an account before completing this booking
+          and payment. We saved your selected trip and will bring you back here
+          after authentication.
         </p>
         <div class="flex gap-3">
           <AppButton class="flex-1" @click="redirectToAuth('/login')"

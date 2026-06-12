@@ -141,7 +141,8 @@ router.beforeEach(async (to) => {
 
   if (["login", "signup", "auth"].includes(String(to.name))) {
     if (isAuthenticated.value) {
-      return { path: "/profile" };
+      const redirect = to.query.redirect;
+      return typeof redirect === "string" && redirect ? redirect : { path: "/profile" };
     }
   }
 

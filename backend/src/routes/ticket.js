@@ -4,7 +4,7 @@ import { createTicketHandler, getTicketHandler, listTicketsHandler, validateLegH
 
 const router = Router();
 router.get('/scanner-profiles', getScannerProfilesHandler);
-router.post('/tickets', createTicketHandler);
+router.post('/tickets', requireSupabaseUser, createTicketHandler);
 // Rider-owned routes: authenticated, and scoped to the signed-in user's tickets.
 router.get('/tickets', requireSupabaseUser, listTicketsHandler);
 router.post('/tickets/scan/validate', scanValidateHandler);

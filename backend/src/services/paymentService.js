@@ -27,11 +27,15 @@ function normalizePhone(phone) {
   return '01000000000';
 }
 
-export async function createCheckoutSession(body) {
+export async function createCheckoutSession(body, authUser) {
   const errors = [];
   if (!body?.planId) errors.push('planId is required');
   if (!body?.itineraryId) errors.push('itineraryId is required');
   if (!body?.passenger?.userId) errors.push('passenger.userId is required');
+  if (!authUser?.id) errors.push('Authentication is required');
+  if (authUser?.id && body?.passenger?.userId && body.passenger.userId !== authUser.id) {
+    errors.push('passenger.userId must match the authenticated user');
+  }
   if (typeof body?.paymentBreakdown?.totalAmount !== 'number') errors.push('paymentBreakdown.totalAmount is required and must be a number');
   if (!body?.paymentBreakdown?.currency) errors.push('paymentBreakdown.currency is required');
   if (!body?.itinerary) errors.push('itinerary is required');
@@ -40,7 +44,12 @@ export async function createCheckoutSession(body) {
     throw { code: ErrorCodes.PAYMENT_SESSION_FAILED, message: 'Checkout session validation failed', details: { fields: errors } };
   }
 
-  const { planId, itineraryId, passenger, paymentBreakdown, itinerary, departureAt } = body;
+  const { planId, itineraryId, paymentBreakdown, itinerary, departureAt } = body;
+  const passenger = {
+    ...body.passenger,
+    userId: authUser.id,
+    email: body.passenger.email || authUser.email,
+  };
   const clientUrl = normalizeUrl(process.env.CLIENT_URL, 'http://localhost:5173');
   const backendUrl = normalizeUrl(process.env.BACKEND_URL, 'http://localhost:3000');
 

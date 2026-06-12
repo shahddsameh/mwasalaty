@@ -84,14 +84,14 @@
             <component :is="item.icon" class="w-5 h-5" />
             <span>{{ t(item.labelKey) }}</span>
           </RouterLink>
-          <button
+          <!-- <button
             type="button"
             class="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-xs text-sidebar-foreground hover:text-primary"
             @click="toggleLanguage"
           >
             <Globe2 class="w-5 h-5" />
             <span>{{ t("language.current") }}</span>
-          </button>
+          </button> -->
         </div>
       </nav>
     </div>
@@ -124,14 +124,14 @@ const active = (path: string) => currentPath.value === path;
 
 const desktopLinks = [
   { to: "/", labelKey: "nav.routePlanner" },
-  { to: "/ai-trip-planner", labelKey: "nav.aiTripPlanner", icon: Brain },
+  // { to: "/ai-trip-planner", labelKey: "nav.aiTripPlanner", icon: Brain },
   { to: "/saved", labelKey: "nav.saved", icon: BookmarkCheck },
   { to: "/all-tickets", labelKey: "nav.allTickets", icon: Ticket },
 ];
 
 const mobileLinks = computed(() => [
   { to: "/", labelKey: "nav.routePlanner", icon: MapPin },
-  { to: "/ai-trip-planner", labelKey: "nav.aiTrip", icon: Brain },
+  // { to: "/ai-trip-planner", labelKey: "nav.aiTrip", icon: Brain },
   { to: "/saved", labelKey: "nav.saved", icon: BookmarkCheck },
   { to: "/all-tickets", labelKey: "nav.tickets", icon: Ticket },
   isAuthenticated.value

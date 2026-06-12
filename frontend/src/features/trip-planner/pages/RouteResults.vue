@@ -20,6 +20,14 @@
         </div>
       </section>
 
+      <div
+        v-if="bookingNotice"
+        class="mb-6 rounded-xl border-2 border-warning bg-warning-soft p-4 text-sm text-foreground"
+        role="status"
+      >
+        {{ bookingNotice }}
+      </div>
+
       <div class="lg:hidden grid grid-cols-2 gap-3 mb-4">
         <Stat :label="t('routeResults.distance')" value="~28 km" />
         <Stat :label="t('routeResults.routesFound')" :value="t('routeResults.optionsCount', { count: routes.length })" />
@@ -179,6 +187,11 @@ const destination =
   "Cairo Airport";
 const displayStart = computed(() => localizePlaceName(start));
 const displayDestination = computed(() => localizePlaceName(destination));
+const bookingNotice = computed(() =>
+  queryString(currentRoute.query.notice) === "booking-state-expired"
+    ? "Your saved booking details expired or could not be restored. Please choose the trip again to continue booking."
+    : "",
+);
 
 const timeMode = ((queryString(currentRoute.query.timeMode) ??
   state.timeMode ??

@@ -115,7 +115,7 @@
         <button
           class="text-primary"
           type="button"
-          @click="router.push('/login')"
+          @click="router.push({ path: '/login', query: redirectQuery })"
         >
           Sign In
         </button>
@@ -125,8 +125,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, h, ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed, defineComponent, h, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { Eye, EyeOff, Lock, Mail, Phone, User } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import AppInput from "@/components/ui/AppInput.vue";
@@ -135,6 +135,7 @@ import { signInWithGoogle, signUp } from "@/services/supabaseAuth";
 import { setAuthSession } from "@/services/authState";
 
 const router = useRouter();
+const route = useRoute();
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const fullName = ref("");
@@ -152,6 +153,17 @@ const fieldErrors = ref<{
   password?: string;
   confirmPassword?: string;
 }>({});
+
+function resolveRedirect() {
+  const redirect = route.query.redirect;
+  return typeof redirect === "string" && redirect ? redirect : "/profile";
+}
+
+const redirectQuery = computed(() => ({ redirect: resolveRedirect() }));
+
+function googleCallbackPath() {
+  return `/auth/callback?redirect=${encodeURIComponent(resolveRedirect())}`;
+}
 
 const PasswordField = defineComponent({
   props: {
@@ -234,7 +246,7 @@ async function handleSignUp() {
 
     if (result.session) {
       setAuthSession(result.session);
-      await router.push("/profile");
+      await router.push(resolveRedirect());
       return;
     }
 
@@ -252,7 +264,7 @@ async function handleSignUp() {
 
 async function handleGoogleSignUp() {
   errorMessage.value = "";
-  const result = await signInWithGoogle();
+  const result = await signInWithGoogle(googleCallbackPath());
   if (result.error) {
     errorMessage.value = result.error;
   }

@@ -76,11 +76,11 @@ export async function login(email: string, password: string): Promise<AuthResult
   };
 }
 
-export async function signInWithGoogle(): Promise<{ error: string | null }> {
+export async function signInWithGoogle(redirectPath = "/auth/callback"): Promise<{ error: string | null }> {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: browserRedirectTo("/auth/callback"),
+      redirectTo: browserRedirectTo(redirectPath),
     },
   });
 

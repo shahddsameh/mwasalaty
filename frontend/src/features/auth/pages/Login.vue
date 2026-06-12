@@ -98,7 +98,7 @@
         <button
           class="text-primary"
           type="button"
-          @click="router.push('/signup')"
+          @click="router.push({ path: '/signup', query: redirectQuery })"
         >
           Create Account
         </button>
@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Eye, EyeOff, Lock, Mail } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
@@ -130,6 +130,12 @@ const fieldErrors = ref<{ email?: string; password?: string }>({});
 function resolveRedirect() {
   const redirect = route.query.redirect;
   return typeof redirect === "string" && redirect ? redirect : "/profile";
+}
+
+const redirectQuery = computed(() => ({ redirect: resolveRedirect() }));
+
+function googleCallbackPath() {
+  return `/auth/callback?redirect=${encodeURIComponent(resolveRedirect())}`;
 }
 
 async function handleLogin() {
@@ -169,7 +175,7 @@ async function handleLogin() {
 
 async function handleGoogleLogin() {
   errorMessage.value = "";
-  const result = await signInWithGoogle();
+  const result = await signInWithGoogle(googleCallbackPath());
   if (result.error) {
     errorMessage.value = result.error;
   }

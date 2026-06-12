@@ -137,7 +137,7 @@
         />
       </section>
 
-      <section
+      <!-- <section
         v-else-if="activeTab === 'ai'"
         class="space-y-4"
       >
@@ -153,7 +153,7 @@
             @click="router.push('/ai-plan')"
           />
         </div>
-      </section>
+      </section> -->
 
       <section v-else class="space-y-4">
         <SectionHeader
@@ -302,7 +302,7 @@ const { favoritePlaces, saveFavoritePlace, removeFavoritePlace } =
 const { savedTrips } = useSavedTrips();
 const { recentSearches } = useRecentSearches(20);
 const { cachedRoutes, removeCachedRoute } = useCachedRoutes();
-const activeTab = ref<"places" | "routes" | "history" | "ai" | "offline">(
+const activeTab = ref<"places" | "routes" | "history" | "offline">(
   "places",
 );
 const addPlaceModalOpen = ref(false);
@@ -327,7 +327,7 @@ const tabs = computed(() => [
   { value: "places" as const, labelKey: "saved.tabs.places", count: savedPlaces.value.length },
   { value: "routes" as const, labelKey: "saved.tabs.routes", count: savedRoutes.value.length },
   { value: "history" as const, labelKey: "saved.tabs.trips", count: recentTrips.value.length },
-  { value: "ai" as const, labelKey: "saved.tabs.aiPlans", count: aiPlans.length },
+  // { value: "ai" as const, labelKey: "saved.tabs.aiPlans", count: aiPlans.length },
   { value: "offline" as const, labelKey: "saved.tabs.offline", count: offlineRoutes.value.length },
 ]);
 

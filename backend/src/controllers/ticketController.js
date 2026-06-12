@@ -46,6 +46,13 @@ function handleServiceError(res, err) {
 
 export async function createTicketHandler(req, res) {
   try {
+    if (req.body?.passenger?.userId !== req.auth?.user?.id) {
+      return res.status(400).json(makeError(
+        ErrorCodes.VALIDATION_ERROR,
+        'Request validation failed',
+        { fields: ['passenger.userId must match the authenticated user'] },
+      ));
+    }
     const ticket = createTicket(req.body);
     return res.status(201).json(ticket);
   } catch (err) {

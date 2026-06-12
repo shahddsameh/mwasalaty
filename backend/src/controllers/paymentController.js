@@ -24,7 +24,7 @@ function handleServiceError(res, err) {
 
 export async function createCheckoutSessionHandler(req, res) {
   try {
-    const result = await createCheckoutSession(req.body);
+    const result = await createCheckoutSession(req.body, req.auth?.user);
     return res.status(200).json(result);
   } catch (err) {
     return handleServiceError(res, err);

@@ -411,7 +411,7 @@ export async function createCheckoutSession(
 ): Promise<CheckoutSessionResponse> {
   const res = await fetch('/api/payments/checkout-session', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...(await authHeader()) },
     body: JSON.stringify(payload),
   });
   if (!res.ok) throw new Error(await readApiError(res));

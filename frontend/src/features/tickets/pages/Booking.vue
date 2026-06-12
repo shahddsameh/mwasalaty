@@ -47,20 +47,25 @@
                 </div>
 
                 <!-- Metro journey: keep each line step + interchange, one fare. -->
-                <div v-else :key="group.key" class="p-3 bg-secondary rounded-lg">
+                <div
+                  v-else
+                  :key="group.key"
+                  class="p-3 bg-secondary rounded-lg"
+                >
                   <div class="flex items-center justify-between gap-3">
-                    <div class="font-display text-foreground">Metro journey</div>
+                    <div class="font-display text-foreground">
+                      Metro journey
+                    </div>
                     <div class="font-display text-foreground whitespace-nowrap">
                       {{ group.amount }} {{ currency }}
                     </div>
                   </div>
                   <div class="mt-2 space-y-1">
-                    <div
-                      v-for="(leg, i) in group.legs"
-                      :key="leg.legId ?? i"
-                    >
+                    <div v-for="(leg, i) in group.legs" :key="leg.legId ?? i">
                       <div class="text-sm text-muted-foreground truncate">
-                        <span class="text-foreground">{{ group.lineNames[i] }}</span>
+                        <span class="text-foreground">{{
+                          group.lineNames[i]
+                        }}</span>
                         &middot; {{ leg.from?.name }} -> {{ leg.to?.name }}
                       </div>
                       <div
@@ -164,22 +169,19 @@
     >
       <div class="space-y-4">
         <p class="p-4 bg-secondary rounded-lg text-sm text-foreground">
-          You need to log in or create an account to book and save your tickets.
+          You must log in or create an account before completing this booking and payment. We saved your selected trip and will bring you back here after authentication.
         </p>
         <div class="flex gap-3">
-          <AppButton class="flex-1" @click="router.push('/login')"
+          <AppButton class="flex-1" @click="redirectToAuth('/login')"
             >Login</AppButton
           >
           <AppButton
             variant="outline"
             class="flex-1"
-            @click="router.push('/signup')"
+            @click="redirectToAuth('/signup')"
             >Sign Up</AppButton
           >
         </div>
-        <AppButton variant="ghost" class="w-full" @click="payAsGuest"
-          >Continue as Guest</AppButton
-        >
       </div>
     </Modal>
   </main>
@@ -187,7 +189,7 @@
 
 <script setup lang="ts">
 import { computed, defineComponent, h, ref, watch } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { CloudOff, CreditCard, Loader2, ShieldCheck } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
@@ -197,15 +199,20 @@ import {
   getSelectedRoute,
   getPlaceCoords,
   normalizeFilter,
+  saveSelectedRoute,
+  type SelectedRoute,
 } from "@/features/trip-planner/services/routeSearch";
 import { useAuthState } from "@/services/authState";
 import { useNetworkStatus } from "@/core/offline/networkStatus";
 
 const router = useRouter();
+const currentRoute = useRoute();
 const { user, isAuthenticated, ensureAuthInitialized } = useAuthState();
 const { isOnline } = useNetworkStatus();
 
 const CHECKOUT_SESSION_KEY = "mwasalaty:checkout-session-id";
+const PENDING_BOOKING_KEY = "mwasalaty:pending-booking";
+const PENDING_BOOKING_TTL_MS = 30 * 60 * 1000;
 
 // A demo itinerary so /booking always works even without a planned route.
 const DEMO_ROUTE: ApiRouteOption = {
@@ -250,6 +257,74 @@ const DEMO_ROUTE: ApiRouteOption = {
   steps: [],
   detailSteps: [],
 };
+
+type PendingBookingState = {
+  savedAt: number;
+  selection: SelectedRoute;
+  trip: {
+    fromLabel: string;
+    toLabel: string;
+    filter: "fastest" | "cheapest" | "comfortable";
+    departureAt?: string;
+    fromCache: boolean;
+  };
+  payment: {
+    currency: string;
+    total: number;
+    fareLines: Array<{ key: string; label: string; amount: number }>;
+  };
+  checkout: {
+    planId: string;
+    itineraryId: string;
+  };
+};
+
+function isRouteOption(value: unknown): value is ApiRouteOption {
+  const route = value as Partial<ApiRouteOption>;
+  return Boolean(route?.itineraryId && Array.isArray(route.legs));
+}
+
+function readPendingBookingState(): PendingBookingState | null {
+  try {
+    const raw = sessionStorage.getItem(PENDING_BOOKING_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<PendingBookingState>;
+    if (
+      typeof parsed.savedAt !== "number" ||
+      Date.now() - parsed.savedAt > PENDING_BOOKING_TTL_MS ||
+      !parsed.selection ||
+      !isRouteOption(parsed.selection.route)
+    ) {
+      return null;
+    }
+    return parsed as PendingBookingState;
+  } catch {
+    return null;
+  }
+}
+
+function clearPendingBookingState() {
+  try {
+    sessionStorage.removeItem(PENDING_BOOKING_KEY);
+  } catch {
+    // Ignore storage failures.
+  }
+}
+
+const restoreRequested = currentRoute.query.restoreBooking === "1";
+const pendingBooking = restoreRequested ? readPendingBookingState() : null;
+
+if (restoreRequested) {
+  if (pendingBooking) {
+    saveSelectedRoute(pendingBooking.selection);
+  } else {
+    clearPendingBookingState();
+    void router.replace({
+      path: "/route-results",
+      query: { notice: "booking-state-expired" },
+    });
+  }
+}
 
 const selection = getSelectedRoute();
 const route = (selection.route as ApiRouteOption) ?? DEMO_ROUTE;
@@ -342,7 +417,8 @@ const legGroups = computed<LegGroup[]>(() => {
 const fareLines = computed(() =>
   legGroups.value.map((g) => ({
     key: g.key,
-    label: g.kind === "metro" ? `Metro ${g.lineNames.join(" → ")}` : g.fareLabel,
+    label:
+      g.kind === "metro" ? `Metro ${g.lineNames.join(" → ")}` : g.fareLabel,
     amount: g.amount,
   })),
 );
@@ -371,7 +447,9 @@ function pickByFilter(options: ApiRouteOption[]): ApiRouteOption {
     );
   }
   if (filter === "comfortable") {
-    return options.reduce((best, r) => (r.transfers < best.transfers ? r : best));
+    return options.reduce((best, r) =>
+      r.transfers < best.transfers ? r : best,
+    );
   }
   return options.reduce((best, r) =>
     r.durationMinutes < best.durationMinutes ? r : best,
@@ -384,7 +462,8 @@ function pickByFilter(options: ApiRouteOption[]): ApiRouteOption {
 // cardholder name separately at checkout.
 function resolvePassengerName(): string | undefined {
   const meta = user.value?.user_metadata as Record<string, unknown> | undefined;
-  const fullName = typeof meta?.full_name === "string" ? meta.full_name.trim() : "";
+  const fullName =
+    typeof meta?.full_name === "string" ? meta.full_name.trim() : "";
   if (fullName) return fullName;
   const email = user.value?.email;
   return email ? email.split("@")[0] : undefined;
@@ -394,8 +473,7 @@ async function startCheckout() {
   errorMessage.value = "";
   // A ticket may never be purchased from a cached/offline route preview.
   if (!isOnline.value) {
-    errorMessage.value =
-      "You are offline. Reconnect before buying a ticket.";
+    errorMessage.value = "You are offline. Reconnect before buying a ticket.";
     return;
   }
   processing.value = true;
@@ -413,7 +491,11 @@ async function startCheckout() {
           toCoords: getPlaceCoords(toLabel),
         },
         departureAt
-          ? { mode: "depart", date: departureAt.slice(0, 10), time: departureAt.slice(11, 16) }
+          ? {
+              mode: "depart",
+              date: departureAt.slice(0, 10),
+              time: departureAt.slice(11, 16),
+            }
           : { mode: "now" },
       );
       if (!fresh.length) {
@@ -424,7 +506,9 @@ async function startCheckout() {
       effectiveRoute = pickByFilter(fresh);
     }
 
-    const freshLegs = (effectiveRoute.legs ?? []).filter((l) => l.mode !== "WALK");
+    const freshLegs = (effectiveRoute.legs ?? []).filter(
+      (l) => l.mode !== "WALK",
+    );
     const freshCurrency = effectiveRoute.totalFare?.currency ?? "EGP";
     const freshTotal =
       effectiveRoute.totalFare?.amount ??
@@ -473,6 +557,7 @@ async function startCheckout() {
     } catch {
       // sessionStorage may be unavailable; success page falls back to the URL param.
     }
+    clearPendingBookingState();
     window.location.href = res.checkoutUrl;
   } catch (err) {
     errorMessage.value =
@@ -487,9 +572,52 @@ function proceed() {
   void handleProceed();
 }
 
-function payAsGuest() {
+function savePendingBookingState() {
+  const selectionToSave: SelectedRoute = {
+    route,
+    start: fromLabel,
+    destination: toLabel,
+    filter,
+    steps: route.detailSteps,
+    departureAt,
+    fromCache,
+  };
+
+  const pending: PendingBookingState = {
+    savedAt: Date.now(),
+    selection: selectionToSave,
+    trip: {
+      fromLabel,
+      toLabel,
+      filter,
+      departureAt,
+      fromCache,
+    },
+    payment: {
+      currency: currency.value,
+      total: total.value,
+      fareLines: fareLines.value,
+    },
+    checkout: {
+      planId: `plan_${route.itineraryId}`,
+      itineraryId: route.itineraryId,
+    },
+  };
+
+  saveSelectedRoute(selectionToSave);
+  try {
+    sessionStorage.setItem(PENDING_BOOKING_KEY, JSON.stringify(pending));
+  } catch {
+    // Existing routeSearch session state still preserves the selected trip.
+  }
+}
+
+function redirectToAuth(path: "/login" | "/signup") {
   loginModalOpen.value = false;
-  startCheckout();
+  router.push({
+    path,
+    query: { redirect: "/booking?restoreBooking=1" },
+  });
 }
 
 async function handleProceed() {
@@ -500,6 +628,7 @@ async function handleProceed() {
     return;
   }
 
+  savePendingBookingState();
   loginModalOpen.value = true;
 }
 

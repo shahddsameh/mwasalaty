@@ -90,7 +90,7 @@
         </section>
 
         <aside class="space-y-5 md:space-y-6 lg:sticky lg:top-8 h-fit">
-          <Card :title="t('settings.account')">
+          <!-- <Card :title="t('settings.account')">
             <MenuButton
               :label="t('settings.profileSettings')"
               :description="t('settings.profileDescription')"
@@ -102,7 +102,7 @@
               :description="t('settings.logoutDescription')"
               @click="logoutModalOpen = true"
             />
-          </Card>
+          </Card> -->
           <Card :title="t('settings.privacyLegal')">
             <MenuButton
               :label="t('settings.privacyPolicy')"

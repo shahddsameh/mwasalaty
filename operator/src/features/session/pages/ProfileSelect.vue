@@ -1,10 +1,10 @@
 <template>
   <main class="app-shell bg-background">
     <section class="mx-auto w-full max-w-5xl">
-      <header class="mb-6 rounded-lg bg-surface-dark p-5 text-white shadow-lg">
+      <header class="mb-6">
         <p class="text-sm font-bold text-primary">{{ $t("common.appName") }}</p>
-        <h1 class="mt-2 text-3xl font-black">{{ $t("profile.title") }}</h1>
-        <p class="mt-2 text-white/75">{{ $t("profile.subtitle") }}</p>
+        <h1 class="mt-2 text-2xl font-black text-foreground md:text-3xl">{{ $t("profile.title") }}</h1>
+        <p class="mt-2 text-sm text-muted-foreground md:text-base">{{ $t("profile.subtitle") }}</p>
       </header>
 
       <StateView :state="state" :partial="partial" :title="stateTitle" :support="stateSupport">
@@ -26,7 +26,7 @@
           <button
             v-for="profile in profiles"
             :key="profile.scannerProfileId"
-            class="tap-target rounded-lg border border-border bg-card p-4 text-start shadow-sm transition hover:border-primary hover:bg-primary-soft focus-ring"
+            class="tap-target rounded-xl border border-border bg-card p-4 text-start shadow-sm transition hover:border-primary hover:bg-secondary focus-ring"
             @click="selectProfile(profile)"
           >
             <span class="text-xs font-bold uppercase text-muted-foreground">{{ profile.scannerProfileId }}</span>
@@ -34,7 +34,7 @@
             <span class="mt-3 inline-flex rounded-full bg-muted px-3 py-1 text-sm font-bold">
               {{ displayMode(profile.mode) }} / {{ profile.routeShortName || $t("profile.genericRoute") }}
             </span>
-            <span class="mt-4 block text-sm font-bold text-primary-hover">{{ $t("profile.select") }}</span>
+            <span class="mt-4 block text-sm font-bold text-primary">{{ $t("profile.select") }}</span>
           </button>
         </div>
       </StateView>

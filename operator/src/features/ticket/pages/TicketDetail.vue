@@ -13,7 +13,7 @@
       <StateView :state="state" :title="stateTitle" :support="stateSupport">
         <template #action>
           <AppButton v-if="state === 'error'" class="mt-5" variant="danger" @click="loadTicket">{{ $t("common.retry") }}</AppButton>
-          <RouterLink v-if="state === 'empty'" to="/scan" class="tap-target mt-5 inline-flex items-center justify-center rounded-lg bg-primary px-4 py-3 font-bold text-white focus-ring">
+          <RouterLink v-if="state === 'empty'" to="/scan" class="tap-target mt-5 inline-flex items-center justify-center rounded-lg bg-primary px-4 py-3 font-bold text-primary-foreground focus-ring">
             {{ $t("common.scan") }}
           </RouterLink>
         </template>

@@ -2,15 +2,15 @@
   <main class="app-shell bottom-nav-offset">
     <AppNav />
     <section class="mx-auto grid w-full max-w-5xl gap-4">
-      <header class="rounded-lg bg-surface-dark p-5 text-white shadow-lg">
+      <header class="mb-2">
         <p class="text-sm font-bold text-primary">{{ $t("dashboard.title") }}</p>
-        <h1 class="mt-2 text-3xl font-black">{{ displayProfile(profile) }}</h1>
-        <p class="mt-2 text-white/75">
+        <h1 class="mt-2 text-2xl font-black text-foreground md:text-3xl">{{ displayProfile(profile) }}</h1>
+        <p class="mt-2 text-sm text-muted-foreground md:text-base">
           {{ session ? $t("dashboard.startedAt", { time: formatDateTime(session.startedAt) }) : $t("dashboard.empty") }}
         </p>
       </header>
 
-      <RouterLink to="/scan" class="tap-target flex min-h-28 items-center justify-center rounded-lg bg-success p-5 text-center text-3xl font-black text-white shadow-lg focus-ring">
+      <RouterLink to="/scan" class="tap-target flex min-h-24 items-center justify-center rounded-xl bg-primary p-5 text-center text-2xl font-black text-primary-foreground shadow-sm transition hover:bg-primary-hover focus-ring md:text-3xl">
         {{ $t("dashboard.scanCta") }}
       </RouterLink>
 
@@ -21,16 +21,16 @@
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <article v-for="outcome in outcomes" :key="outcome" class="field-panel p-4">
           <p class="text-sm font-bold text-muted-foreground">{{ $t(`dashboard.counts.${outcome}`) }}</p>
-          <strong class="mt-2 block text-3xl">{{ session?.tally[outcome] ?? 0 }}</strong>
+          <strong class="mt-2 block text-2xl text-foreground md:text-3xl">{{ session?.tally[outcome] ?? 0 }}</strong>
         </article>
       </div>
 
       <div class="grid gap-3 sm:grid-cols-2">
-        <RouterLink to="/sync" class="field-panel tap-target p-4 focus-ring">
+        <RouterLink to="/sync" class="field-panel tap-target p-4 transition hover:border-primary hover:bg-secondary focus-ring">
           <span class="text-sm font-bold text-muted-foreground">{{ $t("common.queue") }}</span>
           <strong class="mt-1 block text-2xl">{{ queuedCount }}</strong>
         </RouterLink>
-        <RouterLink to="/history" class="field-panel tap-target p-4 focus-ring">
+        <RouterLink to="/history" class="field-panel tap-target p-4 transition hover:border-primary hover:bg-secondary focus-ring">
           <span class="text-sm font-bold text-muted-foreground">{{ $t("common.history") }}</span>
           <strong class="mt-1 block text-2xl">{{ totalScans }}</strong>
         </RouterLink>

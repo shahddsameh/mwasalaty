@@ -18,8 +18,8 @@ const props = withDefaults(
 const variants = {
   primary: "bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-hover",
   ghost: "text-foreground hover:bg-surface-hover active:bg-surface-pressed",
-  outline: "border-2 border-primary text-foreground bg-secondary hover:bg-primary-soft",
-  secondary: "text-foreground border-2 border-border bg-muted hover:bg-secondary active:bg-muted",
+  outline: "border border-primary text-foreground bg-secondary hover:bg-primary-soft",
+  secondary: "text-foreground border border-border bg-card hover:bg-secondary active:bg-muted",
   success: "bg-success text-success-foreground hover:bg-success-hover active:bg-success-active",
   danger: "bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active",
   warning: "bg-warning text-white hover:bg-primary-hover active:bg-primary-hover",
@@ -35,6 +35,6 @@ const sizes = {
 
 const buttonClass = computed(
   () =>
-    `tap-target inline-flex items-center justify-center rounded-lg transition-colors duration-150 focus-ring disabled:cursor-not-allowed disabled:opacity-50 ${variants[props.variant]} ${sizes[props.size]}`
+    `tap-target inline-flex items-center justify-center rounded-lg font-semibold transition-colors duration-150 focus-ring disabled:cursor-not-allowed disabled:opacity-50 ${variants[props.variant]} ${sizes[props.size]}`
 );
 </script>

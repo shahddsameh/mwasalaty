@@ -1,9 +1,9 @@
 <template>
-  <main class="app-shell bg-surface-dark text-white">
+  <main class="app-shell bg-background">
     <section class="mx-auto grid w-full max-w-4xl gap-4">
-      <header class="rounded-lg border border-white/15 bg-white/10 p-5">
+      <header class="mb-2">
         <p class="text-sm font-bold text-primary">{{ $t("result.ambiguous.headline") }}</p>
-        <h1 class="mt-2 text-3xl font-black">{{ $t("result.ambiguous.support") }}</h1>
+        <h1 class="mt-2 text-2xl font-black text-foreground md:text-3xl">{{ $t("result.ambiguous.support") }}</h1>
       </header>
 
       <StateView :state="state" :title="stateTitle" :support="stateSupport">
@@ -15,13 +15,13 @@
           <button
             v-for="leg in candidates"
             :key="leg.ticketLegId"
-            class="tap-target rounded-lg border border-white/20 bg-card p-4 text-start text-card-foreground shadow-lg transition hover:border-primary hover:bg-primary-soft focus-ring"
+            class="tap-target rounded-xl border border-border bg-card p-4 text-start text-card-foreground shadow-sm transition hover:border-primary hover:bg-secondary focus-ring"
             :disabled="validating === leg.ticketLegId"
             @click="chooseLeg(leg.ticketLegId)"
           >
             <span class="text-xs font-bold uppercase text-muted-foreground">{{ leg.ticketLegId }}</span>
             <strong class="mt-2 block text-2xl">{{ displayLeg(leg) }}</strong>
-            <span class="mt-4 block text-sm font-bold text-primary-hover">
+            <span class="mt-4 block text-sm font-bold text-primary">
               {{ validating === leg.ticketLegId ? $t("scanner.processing") : $t("result.ambiguous.validate") }}
             </span>
           </button>

@@ -12,7 +12,7 @@
     <RouterLink
       v-if="outcome?.ticketId"
       :to="{ name: 'ticket-detail', params: { id: outcome.ticketId } }"
-      class="mt-6 rounded-lg border border-white/40 bg-white/10 px-4 py-3 font-bold text-white transition hover:bg-white/20 focus-ring"
+      class="mt-6 rounded-lg border border-border bg-card px-4 py-3 font-bold text-foreground transition hover:border-primary hover:bg-secondary focus-ring"
     >
       {{ $t("ticket.title") }}
     </RouterLink>

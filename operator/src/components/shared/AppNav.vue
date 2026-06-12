@@ -1,14 +1,14 @@
 <template>
   <nav
-    class="bottom-nav-safe fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card shadow-[0_-2px_12px_rgba(15,23,42,0.08)] md:static md:mx-auto md:mb-5 md:w-full md:max-w-5xl md:rounded-lg md:border md:p-2 md:shadow-sm"
+    class="bottom-nav-safe fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card shadow-[0_-2px_12px_rgba(15,23,42,0.08)] md:static md:mx-auto md:mb-5 md:w-full md:max-w-5xl md:rounded-xl md:border md:p-2 md:shadow-sm"
     aria-label="Operator navigation"
   >
     <ul class="mx-auto flex w-full max-w-5xl items-stretch md:items-center md:gap-1">
       <li v-for="item in items" :key="item.to" class="flex-1">
         <RouterLink
           :to="item.to"
-          class="tap-target flex h-full flex-col items-center justify-center gap-1 px-1 py-2 text-muted-foreground transition-colors hover:text-foreground md:flex-row md:gap-2 md:rounded-lg md:px-3 md:py-2 md:hover:bg-surface-hover"
-          active-class="text-primary"
+          class="tap-target flex h-full flex-col items-center justify-center gap-1 px-1 py-2 text-muted-foreground transition-colors hover:text-foreground md:flex-row md:gap-2 md:rounded-lg md:px-3 md:py-2 md:hover:bg-secondary"
+          active-class="text-primary bg-primary-soft"
         >
           <svg
             class="h-6 w-6 md:h-5 md:w-5"

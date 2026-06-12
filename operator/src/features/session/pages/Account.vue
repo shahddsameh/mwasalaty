@@ -32,7 +32,7 @@
               <button
                 type="button"
                 class="tap-target rounded-md px-3 py-2 text-base font-bold transition-colors focus-ring"
-                :class="locale === 'ar' ? 'bg-surface-dark text-white' : 'text-muted-foreground hover:bg-surface-hover'"
+                :class="locale === 'ar' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-secondary'"
                 :aria-pressed="locale === 'ar'"
                 @click="selectLocale('ar')"
               >
@@ -41,7 +41,7 @@
               <button
                 type="button"
                 class="tap-target rounded-md px-3 py-2 text-base font-bold transition-colors focus-ring"
-                :class="locale === 'en' ? 'bg-surface-dark text-white' : 'text-muted-foreground hover:bg-surface-hover'"
+                :class="locale === 'en' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-secondary'"
                 :aria-pressed="locale === 'en'"
                 @click="selectLocale('en')"
               >
@@ -55,7 +55,7 @@
               <button
                 type="button"
                 class="tap-target rounded-md px-3 py-2 text-base font-bold transition-colors focus-ring"
-                :class="theme === 'light' ? 'bg-surface-dark text-white' : 'text-muted-foreground hover:bg-surface-hover'"
+                :class="theme === 'light' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-secondary'"
                 :aria-pressed="theme === 'light'"
                 @click="selectTheme('light')"
               >
@@ -64,7 +64,7 @@
               <button
                 type="button"
                 class="tap-target rounded-md px-3 py-2 text-base font-bold transition-colors focus-ring"
-                :class="theme === 'dark' ? 'bg-surface-dark text-white' : 'text-muted-foreground hover:bg-surface-hover'"
+                :class="theme === 'dark' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-secondary'"
                 :aria-pressed="theme === 'dark'"
                 @click="selectTheme('dark')"
               >

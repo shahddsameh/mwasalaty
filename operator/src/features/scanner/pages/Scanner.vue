@@ -1,38 +1,38 @@
 <template>
-  <main class="app-shell bottom-nav-offset bg-surface-dark text-white">
+  <main class="app-shell bottom-nav-offset">
     <AppNav />
     <section class="mx-auto flex w-full max-w-5xl flex-col gap-4">
       <header class="flex items-center justify-between gap-3">
         <div>
           <p class="text-sm font-bold text-primary">{{ $t("scanner.title") }}</p>
-          <h1 class="text-2xl font-black">{{ displayProfile(profile) }}</h1>
+          <h1 class="text-2xl font-black text-foreground">{{ displayProfile(profile) }}</h1>
         </div>
-        <RouterLink to="/dashboard" class="tap-target rounded-lg border border-white/20 px-3 py-2 text-sm font-bold focus-ring">
+        <RouterLink to="/dashboard" class="tap-target rounded-lg border border-border bg-card px-3 py-2 text-sm font-bold text-foreground transition hover:bg-secondary focus-ring">
           {{ $t("common.dashboard") }}
         </RouterLink>
       </header>
 
-      <section class="relative min-h-[62dvh] overflow-hidden rounded-lg border border-white/20 bg-black shadow-xl">
+      <section class="relative min-h-[62dvh] overflow-hidden rounded-xl border border-border bg-black shadow-sm">
         <video ref="videoRef" class="h-full min-h-[62dvh] w-full object-cover" muted playsinline />
 
         <div v-if="status === 'live'" class="pointer-events-none absolute inset-0 scanner-grid">
           <div class="absolute inset-[12%] rounded-lg border-4 border-white shadow-[0_0_0_999px_rgba(0,0,0,0.24)]">
-            <span class="absolute -top-12 start-0 rounded-lg bg-black/70 px-3 py-2 text-sm font-bold">
+            <span class="absolute -top-12 start-0 rounded-lg bg-card px-3 py-2 text-sm font-bold text-card-foreground shadow-sm">
               {{ $t("scanner.empty") }}
             </span>
           </div>
         </div>
 
-        <div v-if="status !== 'live'" class="absolute inset-0 grid place-items-center bg-surface-dark p-6 text-center">
+        <div v-if="status !== 'live'" class="absolute inset-0 grid place-items-center bg-card p-6 text-center text-card-foreground">
           <div class="max-w-sm">
-            <div class="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-lg bg-white/10 text-3xl" aria-hidden="true">
+            <div class="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-lg bg-muted text-3xl" aria-hidden="true">
               {{ status === "starting" ? "..." : "!" }}
             </div>
             <h2 class="text-2xl font-black">{{ statusText }}</h2>
-            <p v-if="status === 'denied'" class="mt-3 text-white/75">{{ $t("scanner.denied") }}</p>
+            <p v-if="status === 'denied'" class="mt-3 text-muted-foreground">{{ $t("scanner.denied") }}</p>
             <div v-if="status !== 'starting'" class="mt-5 flex flex-wrap justify-center gap-3">
               <AppButton variant="secondary" @click="start">{{ $t("scanner.tryAgain") }}</AppButton>
-              <RouterLink to="/camera-help" class="tap-target inline-flex items-center justify-center rounded-lg border border-white/30 px-4 py-2.5 font-bold focus-ring">
+              <RouterLink to="/camera-help" class="tap-target inline-flex items-center justify-center rounded-lg border border-border bg-card px-4 py-2.5 font-bold text-foreground transition hover:bg-secondary focus-ring">
                 {{ $t("scanner.help") }}
               </RouterLink>
             </div>

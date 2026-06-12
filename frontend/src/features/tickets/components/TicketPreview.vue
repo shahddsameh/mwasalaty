@@ -1,13 +1,16 @@
 <template>
   <div class="space-y-5">
     <div
-      class="flex items-center justify-between gap-3 rounded-lg bg-gradient-to-br from-primary-soft via-warning-soft to-primary p-4"
+      class="flex items-center justify-between gap-3 rounded-lg bg-gradient-to-br from-primary-soft via-warning-soft to-primary text-gradient-foreground p-4"
     >
       <div>
-        <div class="font-display text-lg text-foreground">Mwasalaty</div>
-        <div class="text-sm text-foreground">Digital Transport Ticket</div>
+        <div class="font-display text-lg">Mwasalaty</div>
+        <div class="text-sm">Digital Transport Ticket</div>
       </div>
-      <span class="flex items-center gap-1 rounded-full px-3 py-1 text-sm" :class="statusBadgeClass">
+      <span
+        class="flex items-center gap-1 rounded-full px-3 py-1 text-sm"
+        :class="statusBadgeClass"
+      >
         <component :is="statusIcon" class="h-4 w-4" />
         {{ statusLabel }}
       </span>
@@ -25,12 +28,20 @@
         />
         <QrCode v-else class="h-48 w-48 text-foreground" />
       </div>
-      <div class="break-all text-center font-mono text-sm">{{ ticket.ticketId }}</div>
+      <div class="break-all text-center font-mono text-sm">
+        {{ ticket.ticketId }}
+      </div>
     </div>
 
     <div class="grid grid-cols-2 gap-3">
-      <PreviewField label="Passenger" :value="ticket.passenger?.name || 'Guest'" />
-      <PreviewField label="Total Fare" :value="`${ticket.payment.amount} ${ticket.payment.currency}`" />
+      <PreviewField
+        label="Passenger"
+        :value="ticket.passenger?.name || 'Guest'"
+      />
+      <PreviewField
+        label="Total Fare"
+        :value="`${ticket.payment.amount} ${ticket.payment.currency}`"
+      />
       <PreviewField label="Payment" :value="paymentLabel" />
       <PreviewField label="Valid Until" :value="validUntil" />
     </div>
@@ -44,12 +55,18 @@
           class="flex items-center justify-between gap-3 rounded-lg bg-secondary p-3"
         >
           <div class="min-w-0">
-            <div class="font-display text-sm text-foreground">{{ legLabel(leg) }}</div>
+            <div class="font-display text-sm text-foreground">
+              {{ legLabel(leg) }}
+            </div>
             <div class="truncate text-xs text-muted-foreground">
-              {{ leg.from?.name || "Start" }} -> {{ leg.to?.name || "Destination" }}
+              {{ leg.from?.name || "Start" }} ->
+              {{ leg.to?.name || "Destination" }}
             </div>
           </div>
-          <span class="whitespace-nowrap rounded-full px-2.5 py-1 text-xs capitalize" :class="legStatusClass(leg.status)">
+          <span
+            class="whitespace-nowrap rounded-full px-2.5 py-1 text-xs capitalize"
+            :class="legStatusClass(leg.status)"
+          >
             {{ leg.status }}
           </span>
         </div>
@@ -126,22 +143,26 @@ const statusBadgeClass = computed(() => {
 });
 
 const statusIcon = computed(() =>
-  props.ticket.status === "refunded" || props.ticket.status === "partially_refunded"
+  props.ticket.status === "refunded" ||
+  props.ticket.status === "partially_refunded"
     ? RotateCcw
     : Check,
 );
 
 const paymentLabel = computed(() => {
-  const method = props.ticket.payment.method === "PAYMOB_TEST"
-    ? "PayMob (test)"
-    : props.ticket.payment.method;
+  const method =
+    props.ticket.payment.method === "PAYMOB_TEST"
+      ? "PayMob (test)"
+      : props.ticket.payment.method;
   return `${method} - ${props.ticket.payment.status}`;
 });
 
 const validUntil = computed(() => {
   if (!props.ticket.expiresAt) return "24h from booking";
   const date = new Date(props.ticket.expiresAt);
-  return Number.isNaN(date.getTime()) ? "24h from booking" : date.toLocaleString();
+  return Number.isNaN(date.getTime())
+    ? "24h from booking"
+    : date.toLocaleString();
 });
 
 function legLabel(leg: TicketLeg) {
@@ -166,7 +187,11 @@ const PreviewField = defineComponent({
   setup: (fieldProps) => () =>
     h("div", { class: "rounded-lg bg-secondary p-3" }, [
       h("div", { class: "text-xs text-muted-foreground" }, fieldProps.label),
-      h("div", { class: "break-words font-display text-sm text-foreground" }, fieldProps.value),
+      h(
+        "div",
+        { class: "break-words font-display text-sm text-foreground" },
+        fieldProps.value,
+      ),
     ]),
 });
 </script>

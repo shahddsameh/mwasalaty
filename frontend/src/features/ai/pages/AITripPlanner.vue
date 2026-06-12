@@ -13,13 +13,13 @@
             </h2>
             <div class="space-y-6">
               <label class="block">
-                <span class="block text-sm text-foreground mb-2"
-                  >{{ t("aiTripPlanner.tripKind") }}</span
-                >
+                <span class="block text-sm text-foreground mb-2">{{
+                  t("aiTripPlanner.tripKind")
+                }}</span>
                 <textarea
                   v-model="tripType"
                   rows="4"
-                  class="w-full px-4 py-3 bg-card border border-border  rounded-lg focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+                  class="w-full px-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring resize-none"
                   :placeholder="t('aiTripPlanner.tripPlaceholder')"
                 />
               </label>
@@ -42,9 +42,9 @@
                 </AppInput>
               </div>
               <div>
-                <label class="block text-sm text-foreground mb-3"
-                  >{{ t("aiTripPlanner.interests") }}</label
-                >
+                <label class="block text-sm text-foreground mb-3">{{
+                  t("aiTripPlanner.interests")
+                }}</label>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     v-for="option in interestOptions"
@@ -89,7 +89,7 @@
               <button
                 v-for="idea in ideas"
                 :key="idea.name"
-                class="p-4 text-start rounded-lg border border-border hover:border-primary hover:bg-primary-soft transition-all"
+                class="p-4 text-start rounded-lg border border-border hover:border-primary hover:bg-secondary transition-all"
                 @click="useIdea(idea)"
               >
                 <component
@@ -123,17 +123,21 @@
               :title="t('aiTripPlanner.steps.create.title')"
               :copy="t('aiTripPlanner.steps.create.copy')"
             />
-            <Step n="3" :title="t('aiTripPlanner.steps.save.title')" :copy="t('aiTripPlanner.steps.save.copy')" />
+            <Step
+              n="3"
+              :title="t('aiTripPlanner.steps.save.title')"
+              :copy="t('aiTripPlanner.steps.save.copy')"
+            />
           </section>
 
           <section
-            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary rounded-xl p-6 border-2 border-primary"
+            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary text-gradient-foreground rounded-xl p-6 border-2 border-primary"
           >
-            <Sparkles class="w-8 h-8 text-foreground mb-3" />
-            <h3 class="font-display text-xl text-foreground mb-2">
+            <Sparkles class="w-8 h-8 mb-3" />
+            <h3 class="font-display text-xl mb-2">
               {{ t("aiTripPlanner.included") }}
             </h3>
-            <ul class="space-y-2 text-sm text-foreground">
+            <ul class="space-y-2 text-sm">
               <li>{{ t("aiTripPlanner.includedItems.itineraries") }}</li>
               <li>{{ t("aiTripPlanner.includedItems.activities") }}</li>
               <li>{{ t("aiTripPlanner.includedItems.restaurants") }}</li>
@@ -280,7 +284,7 @@ function interestClass(id: string) {
   return [
     "p-4 rounded-lg border-2 transition-all text-start",
     interests.value.includes(id)
-      ? "border-primary bg-primary-soft"
+      ? "border-primary bg-secondary"
       : "border-border hover:border-primary",
   ];
 }

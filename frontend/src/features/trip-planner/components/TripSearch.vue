@@ -20,7 +20,9 @@
           @click="useCurrentLocation"
         >
           <MapPinned class="w-4 h-4" />
-          {{ locating ? t("home.gettingLocation") : t("home.useCurrentLocation") }}
+          {{
+            locating ? t("home.gettingLocation") : t("home.useCurrentLocation")
+          }}
         </button>
       </div>
 
@@ -54,8 +56,13 @@
         :class="filterClass(option.value)"
         @click="store.filter = option.value"
       >
-        <component :is="option.icon" class="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1" />
-        <div class="text-xs md:text-sm font-medium">{{ t(option.labelKey) }}</div>
+        <component
+          :is="option.icon"
+          class="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1"
+        />
+        <div class="text-xs md:text-sm font-medium">
+          {{ t(option.labelKey) }}
+        </div>
       </button>
     </div>
 
@@ -110,9 +117,8 @@
         {{ t("home.searchRoutes") }}
       </AppButton>
       <AppButton
-        variant="outline"
         size="lg"
-        class="w-full flex items-center justify-center gap-2"
+        class="w-full flex items-center justify-center gap-2 bg-gradient-to-br from-primary-soft via-warning-soft to-primary text-primary-hover border-2 border-primary hover:border-primary-hover hover:text-primary-hover"
         @click="router.push('/ai-assistant')"
       >
         <Sparkles class="w-5 h-5" /> {{ t("home.askAi") }}
@@ -123,7 +129,8 @@
     <div v-if="recentSearches.length" class="mt-6 pt-6 border-t border-border">
       <div class="flex items-center justify-between mb-3">
         <span class="text-sm text-foreground flex items-center gap-2">
-          <History class="w-4 h-4 text-primary" /> {{ t("home.recentSearches") }}
+          <History class="w-4 h-4 text-primary" />
+          {{ t("home.recentSearches") }}
         </span>
         <button
           type="button"
@@ -193,8 +200,12 @@ import {
 const router = useRouter();
 const { t } = useI18n();
 const store = useTripSearchStore();
-const { recentSearches, addRecentSearch, removeRecentSearch, clearRecentSearches } =
-  useRecentSearches();
+const {
+  recentSearches,
+  addRecentSearch,
+  removeRecentSearch,
+  clearRecentSearches,
+} = useRecentSearches();
 
 function removeRecent(recent: { id?: number }) {
   if (typeof recent.id === "number") void removeRecentSearch(recent.id);
@@ -210,12 +221,22 @@ function localDateValue(date: Date) {
 }
 
 const todayDate = localDateValue(new Date());
-const minimumTime = computed(() => (store.date === todayDate ? currentTimeValue() : undefined));
+const minimumTime = computed(() =>
+  store.date === todayDate ? currentTimeValue() : undefined,
+);
 
 const filters = [
   { value: "fastest" as const, labelKey: "home.filters.fastest", icon: Clock },
-  { value: "cheapest" as const, labelKey: "home.filters.cheapest", icon: DollarSign },
-  { value: "comfortable" as const, labelKey: "home.filters.comfortable", icon: Star },
+  {
+    value: "cheapest" as const,
+    labelKey: "home.filters.cheapest",
+    icon: DollarSign,
+  },
+  {
+    value: "comfortable" as const,
+    labelKey: "home.filters.comfortable",
+    icon: Star,
+  },
 ];
 
 const timeModes = [
@@ -228,7 +249,7 @@ function filterClass(value: string) {
   return [
     "py-2.5 md:py-3 rounded-lg border-2 transition-all",
     store.filter === value
-      ? "border-primary bg-secondary text-primary"
+      ? "border-primary text-foreground bg-secondary"
       : "border-border text-muted-foreground hover:border-primary",
   ];
 }
@@ -237,7 +258,7 @@ function timeModeClass(value: string) {
   return [
     "py-2 rounded-lg border-2 text-sm transition-all",
     store.timeMode === value
-      ? "border-primary bg-secondary text-primary"
+      ? "border-primary bg-secondary text-foreground"
       : "border-border text-muted-foreground hover:border-primary",
   ];
 }
@@ -256,7 +277,9 @@ function scheduledTimeIsFuture() {
   if (!store.date || !store.time) return false;
 
   const scheduledAt = new Date(`${store.date}T${store.time}`);
-  return !Number.isNaN(scheduledAt.getTime()) && scheduledAt.getTime() > Date.now();
+  return (
+    !Number.isNaN(scheduledAt.getTime()) && scheduledAt.getTime() > Date.now()
+  );
 }
 
 function setTimeMode(mode: TripTimeMode) {

@@ -2,30 +2,35 @@
   <main class="min-h-screen pb-20 bg-background">
     <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-12">
       <!-- Header -->
-      <header class="relative overflow-hidden rounded-2xl border-2 border-border bg-card mb-8">
+      <header
+        class="relative overflow-hidden rounded-2xl border-2 border-border bg-card mb-8"
+      >
         <div
           class="absolute inset-0 opacity-90"
           style="
-            background-image: radial-gradient(
+            background-image:
+              radial-gradient(
                 circle at 0% 0%,
-                var(--primary-soft),
+                var(--secondary),
                 transparent 45%
               ),
-              radial-gradient(circle at 100% 100%, var(--secondary), transparent 55%);
+              radial-gradient(circle at 100% 100%, var(--card), transparent 55%);
           "
         />
         <div class="relative px-6 py-8 md:px-10 md:py-12">
           <span
-            class="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1 text-xs font-medium text-foreground border border-primary/30 mb-4"
+            class="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-medium text-foreground border border-primary/30 mb-4"
           >
             <Headphones class="w-3.5 h-3.5" /> Support · We're online
           </span>
-          <h1 class="font-display text-3xl md:text-5xl font-bold text-foreground mb-3">
+          <h1
+            class="font-display text-3xl md:text-5xl font-bold text-foreground mb-3"
+          >
             Contact Us
           </h1>
           <p class="text-muted-foreground max-w-xl text-sm md:text-base">
-            We're here to help. Reach out and our team will get back to you within
-            24 hours.
+            We're here to help. Reach out and our team will get back to you
+            within 24 hours.
           </p>
         </div>
       </header>
@@ -42,11 +47,17 @@
             class="flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-105"
             :style="{ backgroundColor: m.soft }"
           >
-            <component :is="m.icon" class="w-5 h-5" :style="{ color: m.color }" />
+            <component
+              :is="m.icon"
+              class="w-5 h-5"
+              :style="{ color: m.color }"
+            />
           </span>
           <div>
             <div class="font-display text-foreground">{{ m.label }}</div>
-            <div class="text-sm text-muted-foreground" dir="ltr">{{ m.value }}</div>
+            <div class="text-sm text-muted-foreground" dir="ltr">
+              {{ m.value }}
+            </div>
           </div>
         </a>
       </div>
@@ -141,7 +152,8 @@
                 class="w-full flex items-center justify-center gap-2"
                 :disabled="sending"
               >
-                <Send class="w-5 h-5" /> {{ sending ? "Sending..." : "Send Message" }}
+                <Send class="w-5 h-5" />
+                {{ sending ? "Sending..." : "Send Message" }}
               </AppButton>
               <p class="text-sm text-muted-foreground text-center">
                 We typically respond within 24 hours
@@ -160,7 +172,9 @@
                 <button
                   type="button"
                   class="w-full flex items-center justify-between gap-3 p-4 text-start hover:bg-muted transition-colors"
-                  @click="activeQuestion = activeQuestion === index ? null : index"
+                  @click="
+                    activeQuestion = activeQuestion === index ? null : index
+                  "
                 >
                   <span class="font-display text-foreground">{{
                     faq.question
@@ -191,17 +205,22 @@
             <div
               class="relative h-36 -mx-6 -mt-2 mb-4 overflow-hidden border-y border-border"
               style="
-                background-image: linear-gradient(
-                    var(--border) 1px,
-                    transparent 1px
-                  ),
+                background-image:
+                  linear-gradient(var(--border) 1px, transparent 1px),
                   linear-gradient(to right, var(--border) 1px, transparent 1px),
                   linear-gradient(135deg, var(--primary-soft), var(--secondary));
-                background-size: 28px 28px, 28px 28px, cover;
+                background-size:
+                  28px 28px,
+                  28px 28px,
+                  cover;
               "
             >
-              <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                <span class="relative flex h-12 w-12 items-center justify-center">
+              <span
+                class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+              >
+                <span
+                  class="relative flex h-12 w-12 items-center justify-center"
+                >
                   <span
                     class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/40"
                   />
@@ -286,16 +305,12 @@
           </Card>
 
           <section
-            class="rounded-xl p-6 border-2 border-primary bg-gradient-to-br from-primary-soft via-warning-soft to-primary"
+            class="rounded-xl text-gradient-foreground p-6 border-2 border-primary bg-gradient-to-br from-primary-soft via-warning-soft to-primary"
           >
-            <MessageCircle class="w-8 h-8 text-foreground mb-3" />
-            <h3 class="font-display text-xl text-foreground mb-2">
-              Need urgent help?
-            </h3>
-            <p class="text-sm text-foreground/80 mb-4">
-              Our support team is available 24/7.
-            </p>
-            <div class="space-y-2 text-sm text-foreground">
+            <MessageCircle class="w-8 h-8 mb-3" />
+            <h3 class="font-display text-xl mb-2">Need urgent help?</h3>
+            <p class="text-sm mb-4">Our support team is available 24/7.</p>
+            <div class="space-y-2 text-sm">
               <a
                 href="mailto:support@mwasalaty.com"
                 class="flex items-center gap-2 hover:underline"
@@ -489,7 +504,9 @@ async function submit() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        ...(session?.access_token
+          ? { Authorization: `Bearer ${session.access_token}` }
+          : {}),
       },
       body: JSON.stringify({
         userId: currentUserId.value || undefined,
@@ -500,10 +517,12 @@ async function submit() {
       }),
     });
     const data = await response.json().catch(() => null);
-    if (!response.ok) throw new Error(data?.error?.message || "Failed to send message");
+    if (!response.ok)
+      throw new Error(data?.error?.message || "Failed to send message");
     submitted.value = true;
   } catch (err) {
-    errorMessage.value = err instanceof Error ? err.message : "Failed to send message";
+    errorMessage.value =
+      err instanceof Error ? err.message : "Failed to send message";
   } finally {
     sending.value = false;
   }

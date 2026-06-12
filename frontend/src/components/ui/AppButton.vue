@@ -26,7 +26,7 @@ const variants = {
     "bg-primary text-button-primary-text hover:bg-button-hover active:bg-primary-hover",
   ghost: "text-foreground hover:bg-surface-hover active:bg-surface-pressed",
   outline:
-    "border-2 border-primary text-foreground bg-secondary hover:bg-primary-soft",
+    "border-2 border-primary text-gradient-foreground bg-primary-soft hover:text-primary-hover",
   secondary:
     "text-foreground border-2 border-border bg-muted hover:bg-secondary active:bg-muted",
   success:

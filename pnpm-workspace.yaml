@@ -1,0 +1,6 @@
+packages:
+  - 'frontend'
+  - 'operator'
+allowBuilds:
+  '@tailwindcss/oxide': false
+  esbuild: false

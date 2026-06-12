@@ -1,0 +1,491 @@
+{
+  "app": {
+    "name": "مواصلاتي"
+  },
+  "nav": {
+    "routePlanner": "مخطط الرحلات",
+    "aiTripPlanner": "مخطط الذكاء الاصطناعي",
+    "aiTrip": "رحلة ذكية",
+    "saved": "المحفوظات",
+    "allTickets": "كل التذاكر",
+    "tickets": "التذاكر",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "login": "تسجيل الدخول"
+  },
+  "language": {
+    "toggle": "English",
+    "current": "العربية"
+  },
+  "tripSearch": {
+    "leaveNow": "انطلق الآن",
+    "departAt": "المغادرة في",
+    "arriveBy": "الوصول قبل",
+    "when": "موعد الرحلة",
+    "date": "التاريخ",
+    "time": "الوقت",
+    "swap": "تبديل نقطة البداية والوجهة",
+    "clear": "مسح",
+    "removeRecent": "إزالة هذا البحث الأخير"
+  },
+  "home": {
+    "title": "إلى أين تريد الذهاب؟",
+    "subtitle": "خطط رحلتك داخل القاهرة الكبرى مع أكثر من وسيلة نقل",
+    "startingPoint": "نقطة البداية",
+    "whereTo": "إلى أين؟",
+    "currentLocation": "موقعي الحالي",
+    "useCurrentLocation": "استخدم موقعي الحالي",
+    "gettingLocation": "جاري تحديد موقعك...",
+    "searchRoutes": "ابحث عن المسارات",
+    "askAi": "اسأل الذكاء الاصطناعي",
+    "recentSearches": "عمليات البحث الأخيرة",
+    "recentEmpty": "ستظهر رحلاتك الأخيرة هنا.",
+    "savedPlaces": "الأماكن المحفوظة",
+    "saveDestination": "احفظ الوجهة",
+    "removePlace": "إزالة هذا المكان المحفوظ",
+    "saveStartingPoint": "احفظ نقطة البداية",
+    "placeName": "اسم المكان",
+    "addressOrLocation": "العنوان أو الموقع",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "popularDestinations": "وجهات شائعة",
+    "deleteRecentSearch": "حذف البحث الأخير",
+    "validation": {
+      "locationUnavailable": "الموقع غير متاح على هذا الجهاز.",
+      "permissionDenied": "تم رفض إذن الموقع. اكتب نقطة البداية بدلاً من ذلك.",
+      "locationFailed": "تعذر تحديد موقعك. اكتب نقطة البداية بدلاً من ذلك.",
+      "placeAddressRequired": "اكتب عنوان المكان أولاً.",
+      "startRequired": "من فضلك اكتب نقطة البداية.",
+      "destinationRequired": "من فضلك اكتب الوجهة.",
+      "futureTimeRequired": "اختر وقت مغادرة أو وصول في المستقبل.",
+      "bothRequired": "من فضلك اكتب نقطة البداية والوجهة."
+    },
+    "filters": {
+      "fastest": "الأسرع",
+      "cheapest": "الأرخص",
+      "comfortable": "الأكثر راحة"
+    },
+    "placeTypes": {
+      "home": "المنزل",
+      "work": "العمل",
+      "school": "الدراسة",
+      "gym": "النادي",
+      "other": "أخرى"
+    },
+    "time": {
+      "justNow": "الآن",
+      "minute": "دقيقة",
+      "minutes": "دقائق",
+      "hour": "ساعة",
+      "hours": "ساعات",
+      "day": "يوم",
+      "days": "أيام",
+      "ago": "منذ"
+    },
+    "popular": {
+      "cairoAirport": {
+        "name": "مطار القاهرة",
+        "area": "مصر الجديدة"
+      },
+      "egyptianMuseum": {
+        "name": "المتحف المصري",
+        "area": "وسط البلد"
+      },
+      "cityStars": {
+        "name": "سيتي ستارز مول",
+        "area": "مدينة نصر"
+      },
+      "cairoTower": {
+        "name": "برج القاهرة",
+        "area": "الزمالك"
+      },
+      "khanElKhalili": {
+        "name": "خان الخليلي",
+        "area": "القاهرة الإسلامية"
+      },
+      "gizaPyramids": {
+        "name": "أهرامات الجيزة",
+        "area": "الجيزة"
+      }
+    }
+  },
+  "ticket": {
+    "status": {
+      "active": "نشطة",
+      "used": "مستخدمة",
+      "refunded": "مستردة",
+      "partially_refunded": "مستردة جزئياً",
+      "expired": "منتهية",
+      "pending": "قيد الانتظار"
+    }
+  },
+  "account": {
+    "profileTitle": "الملف الشخصي والحساب",
+    "profileSubtitle": "إدارة حسابك وتفضيلاتك",
+    "memberSince": "عضو منذ {date}",
+    "yourStats": "إحصائياتك",
+    "totalTrips": "إجمالي الرحلات",
+    "savedRoutes": "المسارات المحفوظة",
+    "personalInformation": "المعلومات الشخصية",
+    "savedPaymentMethods": "طرق الدفع المحفوظة",
+    "transactionHistory": "سجل المعاملات",
+    "noTransactions": "لا توجد معاملات بعد. ستظهر هنا مشترياتك من التذاكر والمبالغ المستردة.",
+    "refundLabel": "استرداد",
+    "editProfile": "تعديل الملف الشخصي",
+    "saveChanges": "حفظ التغييرات",
+    "saving": "جارٍ الحفظ…",
+    "emailChangeHint": "تغيير بريدك الإلكتروني يتطلب تأكيد رابط سنرسله إلى العنوان الجديد.",
+    "emailChangePending": "أرسلنا رابط تأكيد إلى بريدك الإلكتروني الجديد. سيتم تطبيق التغيير بعد التأكيد.",
+    "nameRequired": "لا يمكن ترك الاسم فارغًا.",
+    "invalidEmail": "أدخل بريدًا إلكترونيًا صالحًا.",
+    "updateFailed": "تعذّر حفظ تغييراتك.",
+    "changePassword": "تغيير كلمة المرور",
+    "changePasswordDescription": "تحديث كلمة مرور حسابك",
+    "currentPassword": "كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور الجديدة",
+    "passwordChanged": "تم تحديث كلمة المرور.",
+    "passwordMismatch": "كلمتا المرور غير متطابقتين.",
+    "passwordTooShort": "يجب أن تكون كلمة المرور 6 أحرف على الأقل.",
+    "currentPasswordRequired": "أدخل كلمة المرور الحالية.",
+    "fullName": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "primary": "أساسي",
+    "tabs": {
+      "personalInfo": "المعلومات الشخصية",
+      "payments": "المدفوعات",
+      "transactions": "المعاملات"
+    }
+  },
+  "tickets": {
+    "allTitle": "كل التذاكر",
+    "allSubtitle": "اعرض تذاكرك واطلب استرداد المقاطع غير المستخدمة.",
+    "offlineNotice": "أنت غير متصل بالإنترنت. يتم عرض التذاكر المحفوظة.",
+    "loading": "جاري تحميل تذاكرك...",
+    "loadErrorTitle": "تعذر تحميل التذاكر",
+    "loadError": "تعذر تحميل تذاكرك.",
+    "tryAgain": "حاول مرة أخرى",
+    "emptyTitle": "لا توجد تذاكر بعد",
+    "emptyCopy": "احجز مساراً وستظهر تذكرتك هنا.",
+    "planTrip": "خطط رحلة",
+    "activeSection": "التذاكر النشطة",
+    "historySection": "سجل التذاكر",
+    "noActive": "لا توجد تذاكر نشطة.",
+    "noHistory": "لا يوجد سجل تذاكر بعد.",
+    "digitalTicket": "تذكرة رقمية",
+    "route": "المسار",
+    "totalFare": "إجمالي الأجرة",
+    "validUntil": "صالحة حتى",
+    "notAvailable": "غير متاح",
+    "start": "البداية",
+    "destination": "الوجهة",
+    "legsAvailable": "{count} من {total} مقطع متاح للاسترداد",
+    "viewDetails": "عرض التفاصيل",
+    "requestRefund": "طلب استرداد",
+    "nothingToRefund": "لا شيء للاسترداد",
+    "legStatus": {
+      "unused": "غير مستخدم",
+      "used": "مستخدم",
+      "refunded": "مسترد"
+    },
+    "refund": {
+      "title": "طلب استرداد",
+      "total": "استرداد كامل",
+      "totalDesc": "استرداد كل المقاطع. متاح فقط قبل استخدام أو استرداد أي مقطع.",
+      "partial": "استرداد جزئي",
+      "partialDesc": "اختر المقاطع غير المستخدمة. لا يمكن اختيار المقاطع المستخدمة أو المستردة.",
+      "amount": "مبلغ الاسترداد",
+      "note": "تتم إعادة المبالغ المستردة عبر وسيلة الدفع الأصلية.",
+      "cancel": "إلغاء",
+      "processing": "جاري معالجة الاسترداد...",
+      "confirm": "تأكيد الاسترداد",
+      "successTitle": "تم الاسترداد",
+      "successMessage": "تم استرداد {amount} لعدد {count} مقطع.",
+      "failed": "تعذر إتمام الاسترداد."
+    }
+  },
+  "saved": {
+    "title": "المحفوظات والسجل",
+    "subtitle": "أماكنك ومساراتك وسجل رحلاتك المحفوظة",
+    "tabs": {
+      "places": "الأماكن",
+      "routes": "المسارات",
+      "trips": "الرحلات",
+      "aiPlans": "خطط الذكاء",
+      "offline": "بدون إنترنت"
+    },
+    "places": {
+      "title": "الأماكن المحفوظة",
+      "subtitle": "وجهات سريعة يمكنك إعادة استخدامها في تخطيط المسارات.",
+      "addNewPlace": "إضافة مكان جديد",
+      "addPlace": "إضافة مكان",
+      "emptyTitle": "لا توجد أماكن محفوظة بعد",
+      "emptyCopy": "أضف المنزل أو العمل أو الدراسة أو وجهاتك المتكررة لتخطيط أسرع.",
+      "modalCopy": "احفظ الوجهات المتكررة لتكون قريبة دائماً عند تخطيط المسارات.",
+      "searchPlaceholder": "ابحث عن محطة أو منطقة أو معلم...",
+      "searchHelp": "اختر من مواقع القاهرة المقترحة للحصول على نتائج مسارات أفضل.",
+      "namePlaceholder": "المنزل، العمل، النادي...",
+      "placeType": "نوع المكان",
+      "savePlace": "حفظ المكان",
+      "planRoute": "خطط المسار",
+      "actions": "إجراءات المكان المحفوظ",
+      "quickRoute": "مسار سريع",
+      "deletePlace": "حذف المكان"
+    },
+    "routes": {
+      "title": "المسارات المحفوظة",
+      "subtitle": "مسارات وضعتها للاستخدام السريع.",
+      "meta": "{duration} - {cost} - آخر استخدام {lastUsed}",
+      "useRoute": "استخدم المسار",
+      "emptyTitle": "لا توجد مسارات محفوظة بعد",
+      "emptyCopy": "احفظ مساراً من صفحة تفاصيله لإعادة استخدامه هنا.",
+      "justNow": "الآن",
+      "minutesAgo": "منذ {count} دقيقة",
+      "hoursAgo": "منذ {count} ساعة",
+      "daysAgo": "منذ {count} يوم"
+    },
+    "history": {
+      "title": "الرحلات الأخيرة",
+      "subtitle": "رحلات سابقة يمكنك تكرارها أو مراجعتها.",
+      "completed": "مكتملة",
+      "repeatTrip": "كرر الرحلة",
+      "emptyTitle": "لا توجد رحلات بعد",
+      "emptyCopy": "ستظهر هنا المسارات التي تبحث عنها."
+    },
+    "ai": {
+      "title": "خطط الذكاء الاصطناعي",
+      "subtitle": "أفكار برامج محفوظة.",
+      "created": "تم الإنشاء {date}",
+      "meta": "{budget} - {count} وجهات",
+      "openPlan": "فتح الخطة"
+    },
+    "offline": {
+      "title": "مسارات بدون إنترنت",
+      "subtitle": "مسارات تم تنزيلها ومتاحة بدون إنترنت.",
+      "downloaded": "{size} - تم التنزيل {date}",
+      "remove": "إزالة",
+      "emptyTitle": "لا توجد مسارات دون اتصال",
+      "emptyCopy": "يتم حفظ المسارات التي تعرضها أثناء الاتصال هنا لاستخدامها دون إنترنت."
+    }
+  },
+  "operatorScan": {
+    "title": "مسح المشغّل",
+    "subtitle": "تحقق من رمز QR الخاص بتذكرة الراكب من جهاز المشغّل.",
+    "qrPayload": "بيانات رمز QR",
+    "qrPlaceholder": "{\"ticketId\":\"ticket_demo\",\"signature\":\"demo_signature\"}",
+    "scannerProfile": "ملف الماسح",
+    "profileFilter": "ابحث بالخط أو رقم المسار، مثل M2 أو 108",
+    "subway": "المترو",
+    "bus": "الحافلات",
+    "stationsTraveled": "عدد المحطات المقطوعة (المترو)",
+    "stationsPlaceholder": "مثال: 12",
+    "stationsHelp": "أدخل العدد عند مسح الخروج. سيتم الرفض إذا تجاوز فئة التذكرة المدفوعة. اتركه فارغًا عند الدخول أو للحافلات.",
+    "validating": "جارٍ التحقق...",
+    "validate": "تحقق من التذكرة",
+    "results": {
+      "valid": "تم التحقق من التذكرة بنجاح.",
+      "status": "نتيجة المسح: {status}"
+    },
+    "errors": {
+      "profiles": "تعذر تحميل ملفات الماسح.",
+      "validate": "تعذر التحقق من التذكرة.",
+      "invalidQr": "بيانات رمز QR غير صالحة.",
+      "ticketNotFound": "لم يتم العثور على التذكرة.",
+      "expired": "انتهت صلاحية هذه التذكرة.",
+      "alreadyUsed": "تم استخدام هذا الجزء من التذكرة من قبل.",
+      "refunded": "تم استرداد قيمة هذا الجزء من التذكرة.",
+      "noMatch": "لا تحتوي التذكرة على جزء مطابق للماسح المحدد.",
+      "ambiguous": "يوجد أكثر من جزء مطابق. اختر ملف ماسح أكثر تحديدًا.",
+      "stationLimit": "عدد المحطات المقطوعة يتجاوز حد التذكرة.",
+      "profileNotFound": "لم يتم العثور على ملف الماسح المحدد.",
+      "validation": "أكمل بيانات المسح المطلوبة."
+    }
+  },
+  "routeResults": {
+    "title": "خيارات المسارات",
+    "backToSearch": "الرجوع للبحث",
+    "mapOverview": "نظرة عامة على الخريطة",
+    "interactiveMap": "خريطة تفاعلية",
+    "showingAllRoutes": "تعرض كل المسارات",
+    "fastest": "الأسرع",
+    "cheapest": "الأرخص",
+    "comfortable": "الأكثر راحة",
+    "mostComfortable": "الأكثر راحة",
+    "totalDuration": "المدة الإجمالية",
+    "totalCost": "التكلفة الإجمالية",
+    "free": "مجاني",
+    "transfers": "التحويلات",
+    "walking": "المشي",
+    "viewDetails": "عرض التفاصيل",
+    "distance": "المسافة",
+    "routesFound": "المسارات الموجودة",
+    "optionsCount": "{count} خيارات",
+    "planning": "جاري تخطيط المسار...",
+    "noRoutesTitle": "لم نعثر على مسارات",
+    "noRoutesBody": "لم نتمكن من إيجاد مسار بين {start} و{destination}. جرّب أماكن مختلفة أو وقتاً آخر.",
+    "errors": {
+      "placeNotFound": "لم يتم العثور على المكان: {place}. اختر مكاناً معروفاً من الاقتراحات.",
+      "planFailed": "تعذر تخطيط هذا المسار."
+    },
+    "preview": {
+      "title": "أنت غير متصل بالإنترنت. يتم عرض مسار محفوظ مسبقاً. قد يكون التوافر قد تغيّر.",
+      "subtitle": "أعد الاتصال قبل بدء الرحلة أو شراء التذكرة."
+    }
+  },
+  "routeDetails": {
+    "backToResults": "الرجوع للنتائج",
+    "title": "تفاصيل المسار",
+    "routeMap": "خريطة المسار",
+    "interactiveMap": "خريطة مسار تفاعلية",
+    "liveTracking": "مع تتبع مباشر",
+    "saveDestination": "حفظ الوجهة",
+    "aiExplanation": "شرح المسار بالذكاء الاصطناعي",
+    "walking": "المشي",
+    "transfers": "التحويلات",
+    "totalCost": "التكلفة الإجمالية",
+    "duration": "المدة",
+    "stepByStep": "خطوة بخطوة",
+    "bookPay": "احجز وادفع",
+    "reconnectToBuy": "أعد الاتصال قبل شراء التذكرة.",
+    "saveRoute": "حفظ المسار",
+    "startNavigation": "بدء الملاحة",
+    "stops": "{count} محطات",
+    "saveRouteCopy": "احفظ هذا المسار للوصول السريع لاحقاً.",
+    "routeNamePlaceholder": "اسم المسار (اختياري)",
+    "explanationBasic": "هذا المسار يأخذك من {start} إلى {destination}.",
+    "explanationWithSteps": "هذا المسار يأخذك من {start} إلى {destination}: {steps}."
+  },
+  "aiAssistant": {
+    "title": "مساعد الذكاء الاصطناعي",
+    "subtitle": "اسألني عن رحلتك بأي صيغة طبيعية",
+    "formTitle": "صف رحلتك",
+    "formCopy": "أخبرنا إلى أين تريد الذهاب وما تفضيلاتك، وسنقترح أفضل المسارات لك.",
+    "placeholder": "مثال: أريد أسرع مسار من مدينة نصر إلى مطار القاهرة مع أقل مسافة مشي.",
+    "understanding": "جاري فهم الطلب...",
+    "searchRoute": "ابحث عن المسار",
+    "tryAsking": "جرّب أن تسأل:",
+    "helpWith": "يمكنني مساعدتك في:",
+    "tripPlanTitle": "تحتاج إلى خطة رحلة كاملة؟",
+    "tripPlanCopy": "استخدم مخطط الرحلات الذكي لإنشاء برنامج يوم كامل بالمزارات والمطاعم والمواصلات.",
+    "tryTripPlanner": "جرّب مخطط الرحلات",
+    "examples": {
+      "airport": "ما الطريق الأسرع من السادات إلى حلوان",
+      "pyramids": "ما الطريق الأرخص من العتبة إلى المعادي",
+      "newCairo": "عايز أروح من شبرا الخيمة إلى المنيب",
+      "cityStars": "ابحث عن مسار مريح من العباسية إلى السادات"
+    },
+    "features": {
+      "routePlanning": {
+        "title": "تخطيط المسارات",
+        "copy": "اعثر على أفضل طريقة للوصول إلى أي مكان"
+      },
+      "timeCost": {
+        "title": "الوقت والتكلفة",
+        "copy": "وازن بين السرعة والميزانية"
+      },
+      "smartSuggestions": {
+        "title": "اقتراحات ذكية",
+        "copy": "ترشيحات مخصصة لك"
+      },
+      "tripPlanning": {
+        "title": "تخطيط الرحلات",
+        "copy": "برامج كاملة لليوم"
+      }
+    },
+    "errors": {
+      "personalPlaceMissing": "لم تحفظ مكان \"{place}\" بعد. أضفه أولاً من الأماكن المحفوظة.",
+      "parseFailed": "تعذر فهم طلب المسار."
+    }
+  },
+  "aiTripPlanner": {
+    "title": "مخطط الرحلات الذكي",
+    "subtitle": "دع الذكاء الاصطناعي ينشئ برنامج يوم كامل بالمزارات والمطاعم والمواصلات",
+    "formTitle": "أخبرني عن رحلتك",
+    "tripKind": "ما نوع الرحلة التي تخطط لها؟",
+    "tripPlaceholder": "مثال: جولة ثقافية في القاهرة في عطلة نهاية الأسبوع...",
+    "duration": "مدة الرحلة",
+    "durationPlaceholder": "عدد الأيام",
+    "budget": "إجمالي الميزانية (جنيه)",
+    "budgetPlaceholder": "ميزانيتك",
+    "interests": "اختر اهتماماتك",
+    "generate": "أنشئ خطة رحلتي",
+    "popularIdeas": "أفكار رحلات شائعة",
+    "howItWorks": "كيف يعمل",
+    "included": "الموجود في خطتك",
+    "interest": {
+      "culture": "أماكن ثقافية",
+      "food": "طعام ومطاعم",
+      "shopping": "تسوق",
+      "nature": "حدائق وطبيعة",
+      "history": "تاريخي",
+      "modern": "القاهرة الحديثة"
+    },
+    "ideas": {
+      "ancient": "استكشاف القاهرة القديمة",
+      "food": "جولة لعشاق الطعام",
+      "modern": "تجربة القاهرة الحديثة",
+      "weekend": "جولة ثقافية في عطلة نهاية الأسبوع"
+    },
+    "steps": {
+      "preferences": {
+        "title": "أخبرنا بتفضيلاتك",
+        "copy": "المدة والميزانية والاهتمامات"
+      },
+      "create": {
+        "title": "الذكاء الاصطناعي ينشئ خطتك",
+        "copy": "مزارات وطعام ومواصلات"
+      },
+      "save": {
+        "title": "احفظ رحلتك",
+        "copy": "افتحها في أي وقت"
+      }
+    },
+    "includedItems": {
+      "itineraries": "برامج يومية منشأة بالذكاء الاصطناعي",
+      "activities": "اقتراحات أنشطة مخصصة",
+      "restaurants": "ترشيحات مطاعم ومقاه",
+      "cost": "تفصيل دقيق للتكلفة"
+    }
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "subtitle": "إدارة تفضيلات التطبيق والحساب",
+    "preferences": "التفضيلات",
+    "language": "اللغة",
+    "languageDescription": "اختر لغة التطبيق للتنقل والتسميات وتفاصيل الرحلات.",
+    "english": "الإنجليزية",
+    "arabic": "العربية",
+    "theme": "المظهر",
+    "themeDescription": "بدل بين المظهر الفاتح والوضع الداكن.",
+    "light": "فاتح",
+    "dark": "داكن",
+    "notifications": "الإشعارات",
+    "pushNotifications": "إشعارات فورية",
+    "pushDescription": "تحديثات المسارات وتنبيهات الرحلة",
+    "dataStorage": "البيانات والتخزين",
+    "clearOfflineData": "حذف بيانات بدون إنترنت",
+    "clearOfflineDescription": "إزالة المسارات المحملة وبيانات الرحلات المخزنة.",
+    "account": "الحساب",
+    "profileSettings": "إعدادات الملف الشخصي",
+    "profileDescription": "تعديل البيانات الشخصية وطرق الدفع",
+    "logout": "تسجيل الخروج",
+    "logoutDescription": "تسجيل الخروج من هذا الجهاز",
+    "privacyLegal": "الخصوصية والقانون",
+    "privacyPolicy": "سياسة الخصوصية",
+    "privacyDescription": "كيف يتم استخدام بياناتك",
+    "terms": "شروط الخدمة",
+    "termsDescription": "قواعد استخدام التطبيق",
+    "helpSupport": "المساعدة والدعم",
+    "contactSupport": "تواصل مع الدعم",
+    "supportDescription": "احصل على مساعدة في المسارات والتذاكر والمدفوعات",
+    "version": "الإصدار 1.0.0",
+    "rights": "2024 جميع الحقوق محفوظة",
+    "logoutConfirm": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+    "loggingOut": "جاري تسجيل الخروج..."
+  },
+  "example": {
+    "ticketStatusTitle": "حالة التذكرة",
+    "ticketStatusDescription": "هذا المثال يستخدم vue-i18n ومسافات Tailwind المنطقية."
+  }
+}

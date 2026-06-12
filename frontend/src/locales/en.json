@@ -158,6 +158,90 @@
       "transactions": "Transactions"
     }
   },
+  "support": {
+    "badge": "Support · We're online",
+    "title": "Contact Us",
+    "subtitle": "We're here to help. Reach out and our team will get back to you within 24 hours.",
+    "methods": {
+      "email": { "label": "Email us", "value": "support@mwasalaty.com" },
+      "call": { "label": "Call us", "value": "+20 2 1234 5678" },
+      "visit": { "label": "Visit us", "value": "Smart Village, Giza" },
+      "chat": { "label": "Live chat", "value": "Available 24/7" }
+    },
+    "form": {
+      "title": "Send us a message",
+      "successTitle": "Message sent!",
+      "successBody": "Thanks for reaching out. Our support team will reply within 24 hours.",
+      "sendAnother": "Send another",
+      "topicLabel": "What can we help with?",
+      "name": "Your Name",
+      "namePlaceholder": "Enter your name",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "How can we help?",
+      "message": "Message",
+      "messagePlaceholder": "Describe your issue or question...",
+      "send": "Send Message",
+      "sending": "Sending...",
+      "responseTime": "We typically respond within 24 hours"
+    },
+    "topics": {
+      "general": "General",
+      "booking": "Booking",
+      "payment": "Payment",
+      "feedback": "Feedback"
+    },
+    "errors": {
+      "name": "Please enter your name",
+      "email": "Please enter a valid email",
+      "message": "Please enter a message",
+      "failed": "Failed to send message"
+    },
+    "faqTitle": "Frequently Asked Questions",
+    "faqs": {
+      "book": {
+        "q": "How do I book a ticket?",
+        "a": "Search for your route, select your preferred option, and click Book & Pay. You will receive a digital QR ticket valid for 24 hours."
+      },
+      "payment": {
+        "q": "What payment methods are accepted?",
+        "a": "We accept InstaPay, credit/debit cards, Apple Pay, and cash payment on board for select routes."
+      },
+      "offline": {
+        "q": "Can I use the app offline?",
+        "a": "Yes. Download routes for offline use from the Saved & History section."
+      },
+      "aiPlanner": {
+        "q": "What is AI Trip Planner?",
+        "a": "AI Trip Planner creates complete day itineraries based on your budget and interests."
+      }
+    },
+    "office": {
+      "title": "Our office",
+      "addressLine1": "Smart Village, Building B12",
+      "addressLine2": "Giza, Egypt",
+      "directions": "Get directions"
+    },
+    "hours": {
+      "title": "Office hours",
+      "weekdays": "Sunday – Thursday",
+      "weekdaysHours": "9:00 AM – 9:00 PM",
+      "weekend": "Friday – Saturday",
+      "weekendHours": "10:00 AM – 6:00 PM",
+      "open": "Open now",
+      "closed": "Closed"
+    },
+    "social": {
+      "title": "Follow us",
+      "subtitle": "Stay updated on new routes and features."
+    },
+    "urgent": {
+      "title": "Need urgent help?",
+      "subtitle": "Our support team is available 24/7.",
+      "available": "Available 24/7"
+    }
+  },
   "tickets": {
     "allTitle": "All Tickets",
     "allSubtitle": "View your tickets and request refunds for unused journeys.",

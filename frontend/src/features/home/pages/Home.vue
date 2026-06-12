@@ -16,7 +16,11 @@
         </div>
 
         <div class="space-y-6">
-          <Panel :title="t('home.savedPlaces')" :icon="Star">
+          <Panel
+            v-if="isAuthenticated"
+            :title="t('home.savedPlaces')"
+            :icon="Star"
+          >
             <div class="flex gap-2">
               <button
                 type="button"
@@ -180,9 +184,11 @@ import {
   type SavedPlaceType,
 } from "@/features/home/services/savedPlaces";
 import { useFavoritePlaces } from "@/composables/useFavoritePlaces";
+import { useAuthState } from "@/services/authState";
 
 const { t } = useI18n();
 const store = useTripSearchStore();
+const { isAuthenticated } = useAuthState();
 const { favoritePlaces, saveFavoritePlace, removeFavoritePlace } =
   useFavoritePlaces();
 

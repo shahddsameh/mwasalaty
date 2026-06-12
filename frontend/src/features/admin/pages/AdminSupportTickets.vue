@@ -1,7 +1,7 @@
 <template>
   <div class="px-4 sm:px-6 lg:px-8 py-6 lg:py-8 space-y-5 max-w-[1440px] mx-auto">
     <!-- Filters -->
-    <div class="flex flex-wrap gap-3">
+    <div class="flex flex-wrap items-center gap-3">
       <button
         v-for="filterOption in filterOptions"
         :key="filterOption.value"
@@ -26,10 +26,17 @@
           {{ filterOption.count }}
         </span>
       </button>
+      <button
+        @click="loadTickets"
+        :disabled="loading || updating"
+        class="ml-auto px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-[#1E293B] border border-white/10 text-[#94A3B8] hover:bg-[#111827] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {{ loading && tickets.length ? "Refreshing..." : "Refresh" }}
+      </button>
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="flex items-center justify-center py-20">
+    <div v-if="loading && tickets.length === 0" class="flex items-center justify-center py-20">
       <div class="text-center">
         <div
           class="animate-spin rounded-full h-12 w-12 border-4 border-[#FFC400] border-t-transparent mx-auto mb-4"
@@ -40,7 +47,7 @@
 
     <!-- Error State -->
     <div
-      v-else-if="error"
+      v-else-if="error && tickets.length === 0"
       class="bg-red-500/10 border border-red-500/30 rounded-2xl p-6 text-center"
     >
       <p class="text-red-200 mb-4">{{ error }}</p>
@@ -50,6 +57,20 @@
       >
         Retry
       </button>
+    </div>
+
+    <div
+      v-else-if="error"
+      class="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+    >
+      {{ error }}
+    </div>
+
+    <div
+      v-else-if="loading"
+      class="rounded-xl border border-white/10 bg-[#1E293B] px-4 py-3 text-sm text-[#9CA3AF]"
+    >
+      Refreshing support tickets...
     </div>
 
     <!-- Empty State -->
@@ -362,7 +383,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { MessageSquare, X, User, Mail, Phone, Calendar } from "@lucide/vue";
 import {
   getSupportTickets,
@@ -381,7 +402,6 @@ const adminNoteInput = ref("");
 const replyInput = ref("");
 const replyMessage = ref("");
 const replyOk = ref(false);
-let refreshInterval: ReturnType<typeof setInterval> | null = null;
 
 const statusOptions = [
   { value: "new", label: "New" },
@@ -451,35 +471,27 @@ const replyHistory = computed(() => {
 
 onMounted(() => {
   loadTickets();
-
-  // Auto-refresh tickets every 5 seconds
-  refreshInterval = setInterval(() => {
-    if (!loading.value && !updating.value) {
-      loadTickets().catch((err) => {
-        console.error("[AdminSupportTickets] Auto-refresh failed:", err);
-      });
-    }
-  }, 5000);
-});
-
-onUnmounted(() => {
-  if (refreshInterval) {
-    clearInterval(refreshInterval);
-  }
 });
 
 async function loadTickets() {
+  if (loading.value) return;
   loading.value = true;
   error.value = "";
   try {
     console.log("[AdminSupportTickets] Loading support tickets...");
-    tickets.value = await getSupportTickets();
-    console.log("[AdminSupportTickets] Loaded tickets:", tickets.value.length);
+    const nextTickets = await getSupportTickets();
+    console.log("[AdminSupportTickets] Loaded tickets:", nextTickets.length);
     // Sort by date, newest first
-    tickets.value.sort(
+    nextTickets.sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
+    tickets.value = nextTickets;
+    if (selectedTicket.value) {
+      selectedTicket.value =
+        nextTickets.find((ticket) => ticket.id === selectedTicket.value?.id) ??
+        selectedTicket.value;
+    }
   } catch (err) {
     error.value =
       err instanceof Error ? err.message : "Failed to load support tickets";

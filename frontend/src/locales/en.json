@@ -356,6 +356,48 @@
     "explanationBasic": "This route takes you from {start} to {destination}.",
     "explanationWithSteps": "This route takes you from {start} to {destination}: {steps}."
   },
+  "aiAssistant": {
+    "title": "AI Assistant",
+    "subtitle": "Ask me anything about your journey in natural language",
+    "formTitle": "Describe Your Journey",
+    "formCopy": "Tell us where you want to go and your preferences. We'll find the best routes for you.",
+    "placeholder": "Example: I need the fastest route from Nasr City to Cairo Airport with minimal walking.",
+    "understanding": "Understanding request...",
+    "searchRoute": "Search Route",
+    "tryAsking": "Try asking:",
+    "helpWith": "I can help with:",
+    "tripPlanTitle": "Need a full trip plan?",
+    "tripPlanCopy": "Use AI Trip Planner for complete day itineraries with attractions, restaurants, and transport.",
+    "tryTripPlanner": "Try Trip Planner",
+    "examples": {
+      "airport": "What is the fastest route from Sadat to Helwan?",
+      "pyramids": "What is the cheapest route from Attaba to Maadi?",
+      "newCairo": "I want to go from Shubra El-Kheima to El-Mounib",
+      "cityStars": "Find a comfortable route from Abbassiya to Sadat"
+    },
+    "features": {
+      "routePlanning": {
+        "title": "Route Planning",
+        "copy": "Find the best way to get anywhere"
+      },
+      "timeCost": {
+        "title": "Time & Cost",
+        "copy": "Balance speed and budget"
+      },
+      "smartSuggestions": {
+        "title": "Smart Suggestions",
+        "copy": "Personalized recommendations"
+      },
+      "tripPlanning": {
+        "title": "Trip Planning",
+        "copy": "Full day itineraries"
+      }
+    },
+    "errors": {
+      "personalPlaceMissing": "You haven't saved a \"{place}\" place yet. Add it under Saved places first.",
+      "parseFailed": "Could not understand that route request."
+    }
+  },
   "aiTripPlanner": {
     "title": "AI Trip Planner",
     "subtitle": "Let AI create a complete day itinerary with attractions, restaurants, and transport",

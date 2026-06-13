@@ -656,9 +656,35 @@ function recenterMap() {
   recenter(currentStepIndex.value);
 }
 
+// The backend itineraryId is positional (`itin_001`, …) and reused across
+// searches, so it can't tell journeys apart. Match on journey content instead:
+// the ordered, normalized sequence of ticketable (non-WALK) legs. The ticket's
+// legs are built from the route's legs at checkout, so the same trip lines up.
+function legSignature(
+  legs?: Array<{
+    mode?: string;
+    route?: { shortName?: string; longName?: string } | null;
+    from?: { name?: string };
+    to?: { name?: string };
+  }>,
+): string {
+  return (legs ?? [])
+    .filter((l) => (l.mode ?? "").toUpperCase() !== "WALK")
+    .map((l) =>
+      [
+        (l.mode ?? "").toUpperCase(),
+        (l.route?.shortName ?? l.route?.longName ?? "").trim().toLowerCase(),
+        (l.from?.name ?? "").trim().toLowerCase(),
+        (l.to?.name ?? "").trim().toLowerCase(),
+      ].join("|"),
+    )
+    .join(" >> ");
+}
+
 function matchingNavigationTicket(ticket: TicketData | null): TicketData | null {
-  if (!ticket?.sourceItineraryId || !route.itineraryId) return null;
-  return ticket.sourceItineraryId === route.itineraryId ? ticket : null;
+  if (!ticket) return null;
+  const routeSig = legSignature(route.legs);
+  return routeSig && routeSig === legSignature(ticket.legs) ? ticket : null;
 }
 
 async function openTicketModal() {

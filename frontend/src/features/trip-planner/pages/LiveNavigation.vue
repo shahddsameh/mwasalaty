@@ -366,17 +366,7 @@
           {{ t("liveNav.endConfirm") }}
         </p>
         <div class="flex gap-3">
-          <AppButton
-            variant="danger"
-            class="flex-1"
-            @click="
-              router.push({
-                path: '/route-details',
-                query: { start, destination, filter },
-                state: { route, steps, start, destination, filter },
-              })
-            "
-          >
+          <AppButton variant="danger" class="flex-1" @click="endNavigation">
             {{ t("liveNav.endNavigation") }}
           </AppButton>
           <AppButton
@@ -524,6 +514,8 @@ const destination =
   state.destination ?? savedSearch.destination ?? "Unknown destination";
 const filter = normalizeFilter(state.filter ?? savedSearch.filter);
 const progressKey = `mwasalaty:live-nav-step:${route.id || start}:${destination}`;
+// Resume an interrupted trip within this window; ignore (start fresh) past it.
+const LIVE_NAV_PROGRESS_TTL_MS = 3 * 60 * 60 * 1000;
 
 saveRouteSearch({ start, destination, filter });
 
@@ -612,7 +604,14 @@ onMounted(async () => {
 // Re-focus map whenever the active step changes
 watch(currentStepIndex, (idx) => {
   fitStep(idx);
-  localStorage.setItem(progressKey, String(idx));
+  try {
+    localStorage.setItem(
+      progressKey,
+      JSON.stringify({ stepIndex: idx, savedAt: Date.now() }),
+    );
+  } catch {
+    // Ignore storage failures.
+  }
 });
 
 watch(location, (nextLocation) => {
@@ -637,7 +636,20 @@ function prev() {
 
 function next() {
   if (currentStepIndex.value < steps.length - 1) currentStepIndex.value += 1;
-  else feedbackModalOpen.value = true;
+  else {
+    // Trip complete — don't resume this route on the next visit.
+    clearNavigationProgress();
+    feedbackModalOpen.value = true;
+  }
+}
+
+function endNavigation() {
+  clearNavigationProgress();
+  router.push({
+    path: "/route-details",
+    query: { start, destination, filter },
+    state: { route, steps, start, destination, filter },
+  });
 }
 
 function recenterMap() {
@@ -746,9 +758,42 @@ function maybeAutoAdvance(userLocation: { lat: number; lng: number; accuracy: nu
 }
 
 function readSavedStepIndex() {
-  const saved = Number.parseInt(localStorage.getItem(progressKey) ?? "0", 10);
-  if (!Number.isFinite(saved)) return 0;
-  return Math.min(Math.max(saved, 0), Math.max(steps.length - 1, 0));
+  let raw: string | null = null;
+  try {
+    raw = localStorage.getItem(progressKey);
+  } catch {
+    return 0;
+  }
+  if (!raw) return 0;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return 0;
+  }
+
+  // Only accept the timestamped shape; ignore legacy bare-number values.
+  if (!parsed || typeof parsed !== "object") return 0;
+  const { stepIndex, savedAt } = parsed as {
+    stepIndex?: unknown;
+    savedAt?: unknown;
+  };
+  if (typeof stepIndex !== "number" || typeof savedAt !== "number") return 0;
+
+  // Resume only an interrupted trip within the window; otherwise start fresh.
+  if (Date.now() - savedAt > LIVE_NAV_PROGRESS_TTL_MS) return 0;
+
+  if (!Number.isFinite(stepIndex)) return 0;
+  return Math.min(Math.max(stepIndex, 0), Math.max(steps.length - 1, 0));
+}
+
+function clearNavigationProgress() {
+  try {
+    localStorage.removeItem(progressKey);
+  } catch {
+    // Ignore storage failures.
+  }
 }
 
 // ── Inline sub-components (unchanged from original) ───────────────────────────

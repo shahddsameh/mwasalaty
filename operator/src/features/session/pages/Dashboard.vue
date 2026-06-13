@@ -1,38 +1,36 @@
 <template>
   <main class="app-shell bottom-nav-offset">
     <AppNav />
-    <section class="mx-auto grid w-full max-w-5xl gap-4">
-      <header class="mb-2">
-        <p class="text-sm font-bold text-primary">{{ $t("dashboard.title") }}</p>
-        <h1 class="mt-2 text-2xl font-black text-foreground md:text-3xl">{{ displayProfile(profile) }}</h1>
-        <p class="mt-2 text-sm text-muted-foreground md:text-base">
-          {{ session ? $t("dashboard.startedAt", { time: formatDateTime(session.startedAt) }) : $t("dashboard.empty") }}
-        </p>
-      </header>
+    <section class="mx-auto grid w-full max-w-5xl gap-5">
+      <OperatorHeader
+        :eyebrow="$t('dashboard.title')"
+        :title="displayProfile(profile)"
+        :subtitle="$t('dashboard.selectedRoute', { mode: displayMode(profile?.mode), route: profile?.routeShortName || $t('profile.genericRoute') })"
+        :status="$t('common.synced')"
+        :meta="session ? $t('dashboard.startedAt', { time: formatDateTime(session.startedAt) }) : $t('dashboard.empty')"
+        icon="dashboard"
+      />
 
-      <RouterLink to="/scan" class="tap-target flex min-h-24 items-center justify-center rounded-xl bg-primary p-5 text-center text-2xl font-black text-primary-foreground shadow-sm transition hover:bg-primary-hover focus-ring md:text-3xl">
-        {{ $t("dashboard.scanCta") }}
+      <RouterLink to="/scan" class="group tap-target flex min-h-24 items-center justify-between gap-4 rounded-2xl bg-primary p-5 text-slate-950 shadow-[0_14px_32px_rgba(234,179,8,0.24)] transition-all hover:-translate-y-0.5 hover:bg-primary-hover hover:text-white focus-ring md:min-h-28 md:p-6">
+        <span class="flex items-center gap-4 text-start"><span class="grid h-14 w-14 place-items-center rounded-2xl bg-white/50"><AppIcon name="scan" class="h-7 w-7" /></span><span><small class="block text-xs font-extrabold uppercase opacity-70">{{ $t("common.appName") }}</small><strong class="mt-1 block text-xl font-black md:text-2xl">{{ $t("dashboard.scanCta") }}</strong></span></span>
+        <AppIcon name="chevron" class="h-6 w-6 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
       </RouterLink>
 
-      <p v-if="totalScans === 0" class="rounded-lg border border-border bg-card p-4 text-center font-semibold text-muted-foreground">
+      <p v-if="totalScans === 0" class="soft-alert border-border bg-card text-muted-foreground">
+        <AppIcon name="history" class="h-5 w-5 shrink-0 text-primary" />
         {{ $t("dashboard.empty") }}
       </p>
 
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <article v-for="outcome in outcomes" :key="outcome" class="field-panel p-4">
-          <p class="text-sm font-bold text-muted-foreground">{{ $t(`dashboard.counts.${outcome}`) }}</p>
-          <strong class="mt-2 block text-2xl text-foreground md:text-3xl">{{ session?.tally[outcome] ?? 0 }}</strong>
-        </article>
+      <div class="grid grid-cols-2 gap-3 lg:grid-cols-3">
+        <OutcomeCard v-for="outcome in outcomes" :key="outcome" :outcome="outcome" :label="$t(`dashboard.counts.${outcome}`)" :value="session?.tally[outcome] ?? 0" />
       </div>
 
       <div class="grid gap-3 sm:grid-cols-2">
-        <RouterLink to="/sync" class="field-panel tap-target p-4 transition hover:border-primary hover:bg-secondary focus-ring">
-          <span class="text-sm font-bold text-muted-foreground">{{ $t("common.queue") }}</span>
-          <strong class="mt-1 block text-2xl">{{ queuedCount }}</strong>
+        <RouterLink to="/sync" class="field-panel group tap-target flex items-center gap-4 p-5 transition-all hover:-translate-y-0.5 hover:border-primary focus-ring">
+          <span class="grid h-12 w-12 place-items-center rounded-xl bg-primary-soft text-primary-hover"><AppIcon name="queueWaiting" class="h-6 w-6" /></span><span><span class="text-sm font-bold text-muted-foreground">{{ $t("common.queue") }}</span><strong class="mt-1 block text-2xl">{{ queuedCount }}</strong></span>
         </RouterLink>
-        <RouterLink to="/history" class="field-panel tap-target p-4 transition hover:border-primary hover:bg-secondary focus-ring">
-          <span class="text-sm font-bold text-muted-foreground">{{ $t("common.history") }}</span>
-          <strong class="mt-1 block text-2xl">{{ totalScans }}</strong>
+        <RouterLink to="/history" class="field-panel group tap-target flex items-center gap-4 p-5 transition-all hover:-translate-y-0.5 hover:border-primary focus-ring">
+          <span class="grid h-12 w-12 place-items-center rounded-xl bg-muted text-foreground"><AppIcon name="recentActivity" class="h-6 w-6" /></span><span><span class="text-sm font-bold text-muted-foreground">{{ $t("common.history") }}</span><strong class="mt-1 block text-2xl">{{ totalScans }}</strong></span>
         </RouterLink>
       </div>
     </section>
@@ -42,10 +40,13 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import AppNav from "@/components/shared/AppNav.vue";
+import OperatorHeader from "@/components/shared/OperatorHeader.vue";
+import OutcomeCard from "@/components/shared/OutcomeCard.vue";
+import AppIcon from "@/components/ui/AppIcon.vue";
 import { OUTCOMES } from "@/services/outcome";
 import { count } from "@/services/queue";
 import { getSelectedProfile, getSession, startShift } from "@/services/session";
-import { displayProfile, formatDateTime } from "@/services/format";
+import { displayMode, displayProfile, formatDateTime } from "@/services/format";
 
 const outcomes = OUTCOMES;
 const profile = getSelectedProfile();

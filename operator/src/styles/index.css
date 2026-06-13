@@ -46,7 +46,7 @@
   --transport-walking-soft: #fee9ef;
   --outcome-neutral: #0f172a;
   --outcome-slate: #475569;
-  --radius: 0.5rem;
+  --radius: 1rem;
 }
 
 .dark {
@@ -135,7 +135,11 @@
     @apply bg-background text-foreground;
     min-width: 320px;
     margin: 0;
-    font-family: Tahoma, "Segoe UI", system-ui, sans-serif;
+    font-family: Inter, Tahoma, "Segoe UI", system-ui, sans-serif;
+    background-image:
+      radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--primary) 10%, transparent) 0, transparent 24rem),
+      linear-gradient(180deg, color-mix(in srgb, var(--background) 94%, white) 0%, var(--background) 100%);
+    background-attachment: fixed;
   }
 
   button,
@@ -154,12 +158,12 @@
 @layer utilities {
   .app-shell {
     min-height: 100dvh;
-    background: var(--background);
-    padding: max(1.5rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+    padding: max(1rem, env(safe-area-inset-top)) max(0.875rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(0.875rem, env(safe-area-inset-left));
   }
 
   .field-panel {
-    @apply rounded-xl border border-border bg-card shadow-sm;
+    @apply rounded-2xl border border-border bg-card;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
   }
 
   .bottom-nav-offset {
@@ -194,6 +198,60 @@
       linear-gradient(rgba(248, 250, 252, 0.1) 1px, transparent 1px),
       linear-gradient(90deg, rgba(248, 250, 252, 0.1) 1px, transparent 1px);
     background-size: 28px 28px;
+  }
+
+  .operator-hero {
+    @apply relative overflow-hidden rounded-3xl border border-slate-700 bg-slate-950 p-5 shadow-xl sm:p-7;
+    background-image: linear-gradient(135deg, #07152f 0%, #0f172a 62%, #172554 100%);
+  }
+
+  .operator-hero__glow {
+    @apply pointer-events-none absolute -end-12 -top-16 h-52 w-52 rounded-full bg-primary/20 blur-3xl;
+  }
+
+  .section-card {
+    @apply rounded-2xl border border-border bg-card p-4 shadow-[0_12px_32px_rgba(15,23,42,0.06)] sm:p-5;
+  }
+
+  .section-heading {
+    @apply text-lg font-black text-foreground sm:text-xl;
+  }
+
+  .soft-alert {
+    @apply flex items-start gap-3 rounded-2xl border p-4 text-sm font-semibold leading-6;
+  }
+
+  .outcome-card {
+    @apply relative flex min-h-28 items-center gap-3 overflow-hidden rounded-2xl border bg-card p-4 shadow-[0_10px_28px_rgba(15,23,42,0.05)];
+  }
+
+  .outcome-card::after {
+    content: "";
+    @apply absolute inset-y-0 start-0 w-1;
+    background: currentColor;
+  }
+
+  .outcome-card__icon {
+    @apply grid h-11 w-11 shrink-0 place-items-center rounded-xl;
+    background: color-mix(in srgb, currentColor 12%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .outcome-card--success { @apply border-emerald-200 text-success; }
+  .outcome-card--warning { @apply border-amber-200 text-warning; }
+  .outcome-card--danger { @apply border-red-200 text-destructive; }
+  .outcome-card--neutral { @apply border-slate-200 text-slate-500; }
+  .outcome-card--primary { @apply border-yellow-200 text-primary-hover; }
+  .outcome-card--slate { @apply border-slate-300 text-slate-600; }
+
+  .empty-state {
+    @apply mx-auto grid w-full max-w-lg place-items-center rounded-3xl border border-dashed border-border bg-card/80 px-6 py-10 text-center shadow-sm sm:py-14;
+  }
+
+  @media (min-width: 768px) {
+    .app-shell {
+      padding: max(1.5rem, env(safe-area-inset-top)) max(1.5rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(1.5rem, env(safe-area-inset-left));
+    }
   }
 }
 

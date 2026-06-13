@@ -1,28 +1,17 @@
 <template>
   <nav
-    class="bottom-nav-safe fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card shadow-[0_-2px_12px_rgba(15,23,42,0.08)] md:static md:mx-auto md:mb-5 md:w-full md:max-w-5xl md:rounded-xl md:border md:p-2 md:shadow-sm"
+    class="operator-nav bottom-nav-safe fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card/95 px-1 shadow-[0_-8px_30px_rgba(15,23,42,0.12)] backdrop-blur-xl md:static md:mx-auto md:mb-5 md:w-full md:max-w-5xl md:rounded-2xl md:border md:p-2 md:shadow-[0_12px_32px_rgba(15,23,42,0.06)]"
     aria-label="Operator navigation"
   >
     <ul class="mx-auto flex w-full max-w-5xl items-stretch md:items-center md:gap-1">
       <li v-for="item in items" :key="item.to" class="flex-1">
         <RouterLink
           :to="item.to"
-          class="tap-target flex h-full flex-col items-center justify-center gap-1 px-1 py-2 text-muted-foreground transition-colors hover:text-foreground md:flex-row md:gap-2 md:rounded-lg md:px-3 md:py-2 md:hover:bg-secondary"
-          active-class="text-primary bg-primary-soft"
+          class="operator-nav-link group tap-target relative flex h-full flex-col items-center justify-center gap-1 px-0.5 py-2 text-muted-foreground transition-all hover:text-foreground md:flex-row md:gap-2 md:rounded-xl md:px-3 md:py-2.5 md:hover:bg-secondary"
+          active-class="operator-nav-active"
         >
-          <svg
-            class="h-6 w-6 md:h-5 md:w-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path :d="icons[item.icon]" />
-          </svg>
-          <span class="text-[0.7rem] font-bold leading-none md:text-sm">{{ item.label }}</span>
+          <AppIcon :name="item.icon" class="h-5 w-5 transition-transform group-hover:-translate-y-0.5 md:h-5 md:w-5" />
+          <span class="max-w-full truncate text-[0.62rem] font-extrabold leading-none sm:text-[0.7rem] md:text-sm">{{ item.label }}</span>
         </RouterLink>
       </li>
     </ul>
@@ -32,19 +21,12 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import AppIcon from "@/components/ui/AppIcon.vue";
+import type { AppIconName } from "@/components/ui/AppIcon.vue";
 
 const { t } = useI18n();
 
-const icons: Record<string, string> = {
-  dashboard: "M4 4h7v7H4zM13 4h7v4h-7zM13 11h7v9h-7zM4 13h7v7H4z",
-  scan: "M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M4 12h16",
-  history: "M3 12a9 9 0 1 0 3-6.7L3 8M3 4v4h4M12 7v5l3 2",
-  sync: "M21 12a9 9 0 0 1-15 6.7L3 16M3 12a9 9 0 0 1 15-6.7L21 8M21 4v4h-4M3 20v-4h4",
-  summary: "M9 4h6a1 1 0 0 1 1 1v0a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v0a1 1 0 0 1 1-1zM7 5H5a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2M9 13v3M12 11v5M15 14v2",
-  account: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM5 20a7 7 0 0 1 14 0"
-};
-
-const items = computed(() => [
+const items = computed<Array<{ to: string; label: string; icon: AppIconName }>>(() => [
   { to: "/dashboard", label: t("common.dashboard"), icon: "dashboard" },
   { to: "/scan", label: t("common.scan"), icon: "scan" },
   { to: "/history", label: t("common.history"), icon: "history" },
@@ -53,3 +35,103 @@ const items = computed(() => [
   { to: "/account", label: t("common.account"), icon: "account" }
 ]);
 </script>
+
+<style scoped>
+.operator-nav-active {
+  color: #0f172a;
+}
+
+.operator-nav-active::before {
+  content: "";
+  position: absolute;
+  inset-inline: 18%;
+  top: 0;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+@media (max-width: 767px) {
+  :global(.dark .operator-nav) {
+    border-color: #3b4b63;
+    background: #172033;
+    box-shadow: 0 -10px 30px rgba(2, 6, 23, 0.42);
+  }
+
+  :global(.dark .operator-nav-link) {
+    color: #cbd5e1;
+  }
+
+  :global(.dark .operator-nav-link:hover) {
+    color: #ffffff;
+    background: #28364d;
+  }
+
+  :global(.dark .operator-nav-link:focus-visible) {
+    color: #ffffff;
+    background: #28364d;
+    outline: 2px solid #fbbf24;
+    outline-offset: -2px;
+  }
+
+  :global(.dark .operator-nav-active),
+  :global(.dark .operator-nav-active:hover),
+  :global(.dark .operator-nav-active:focus-visible) {
+    color: #facc15 !important;
+    background: rgba(250, 204, 21, 0.1) !important;
+  }
+
+  :global(.dark .operator-nav-active::before) {
+    background: #facc15;
+    box-shadow: 0 0 12px rgba(250, 204, 21, 0.5);
+  }
+}
+
+@media (min-width: 768px) {
+  .operator-nav-active {
+    background: var(--primary-soft);
+  }
+
+  :global(.dark .operator-nav) {
+    border-color: #3b4b63;
+    background: #172033;
+    box-shadow: 0 14px 36px rgba(2, 6, 23, 0.38);
+  }
+
+  :global(.dark .operator-nav-link) {
+    color: #d8e1ee;
+  }
+
+  :global(.dark .operator-nav-link:hover) {
+    color: #ffffff;
+    background: #28364d;
+  }
+
+  :global(.dark .operator-nav-link:focus-visible) {
+    color: #ffffff;
+    background: #28364d;
+    outline: 2px solid #fbbf24;
+    outline-offset: 2px;
+  }
+
+  :global(.dark .operator-nav-active),
+  :global(.dark .operator-nav-active:hover),
+  :global(.dark .operator-nav-active:focus-visible) {
+    color: #111827 !important;
+    background: linear-gradient(135deg, #facc15, #eab308) !important;
+    box-shadow: 0 8px 20px rgba(234, 179, 8, 0.24);
+  }
+
+  :global(.dark .operator-nav-active::before) {
+    background: #fff7cc;
+  }
+
+  .operator-nav-active::before {
+    inset-block: 25%;
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+    width: 3px;
+    height: auto;
+  }
+}
+</style>

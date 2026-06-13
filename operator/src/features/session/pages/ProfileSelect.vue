@@ -1,40 +1,57 @@
 <template>
   <main class="app-shell bg-background">
     <section class="mx-auto w-full max-w-5xl">
-      <header class="mb-6">
-        <p class="text-sm font-bold text-primary">{{ $t("common.appName") }}</p>
-        <h1 class="mt-2 text-2xl font-black text-foreground md:text-3xl">{{ $t("profile.title") }}</h1>
-        <p class="mt-2 text-sm text-muted-foreground md:text-base">{{ $t("profile.subtitle") }}</p>
-      </header>
+      <OperatorHeader
+        :eyebrow="$t('common.appName')"
+        :title="$t('profile.title')"
+        :subtitle="$t('profile.subtitle')"
+        icon="route"
+      >
+        <div class="relative mt-6 grid grid-cols-3 gap-2 border-t border-white/10 pt-5 text-center sm:max-w-md sm:text-start">
+          <div><p class="text-[0.65rem] font-bold uppercase text-slate-400">{{ $t("common.mode") }}</p><p class="mt-1 text-sm font-black text-white">{{ $t("profile.genericRoute") }}</p></div>
+          <div><p class="text-[0.65rem] font-bold uppercase text-slate-400">{{ $t("common.profile") }}</p><p class="mt-1 text-sm font-black text-white">{{ profiles.length || $t("common.dash") }}</p></div>
+          <div><p class="text-[0.65rem] font-bold uppercase text-slate-400">{{ $t("common.queue") }}</p><p class="mt-1 text-sm font-black text-emerald-400">{{ isOnline ? $t("common.synced") : $t("common.pending") }}</p></div>
+        </div>
+      </OperatorHeader>
 
-      <StateView :state="state" :partial="partial" :title="stateTitle" :support="stateSupport">
+      <StateView class="mt-6" :state="state" :partial="partial" :title="stateTitle" :support="stateSupport">
         <template #action>
           <AppButton v-if="state === 'error'" class="mt-5" variant="danger" @click="loadProfiles">
             {{ $t("common.retry") }}
           </AppButton>
         </template>
 
-        <div v-if="partial" class="mb-4 rounded-lg border border-primary bg-primary-soft p-3 text-sm font-semibold text-foreground">
+        <div v-if="partial" class="soft-alert mb-4 border-primary bg-primary-soft text-foreground">
           {{ $t("profile.partial") }}
         </div>
 
-        <div v-if="!isOnline" class="mb-4 rounded-lg border border-border bg-muted p-3 text-sm font-semibold text-muted-foreground">
+        <div v-if="!isOnline" class="soft-alert mb-4 border-border bg-muted text-muted-foreground">
           {{ $t("profile.offline") }}
         </div>
 
-        <div class="grid gap-3 sm:grid-cols-2">
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <button
             v-for="profile in profiles"
             :key="profile.scannerProfileId"
-            class="tap-target rounded-xl border border-border bg-card p-4 text-start shadow-sm transition hover:border-primary hover:bg-secondary focus-ring"
+            class="group tap-target relative overflow-hidden rounded-2xl border border-border bg-card p-5 text-start shadow-[0_12px_32px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-1 hover:border-primary hover:shadow-[0_18px_40px_rgba(15,23,42,0.1)] focus-ring"
             @click="selectProfile(profile)"
           >
-            <span class="text-xs font-bold uppercase text-muted-foreground">{{ profile.scannerProfileId }}</span>
-            <strong class="mt-2 block text-2xl">{{ displayProfile(profile) }}</strong>
-            <span class="mt-3 inline-flex rounded-full bg-muted px-3 py-1 text-sm font-bold">
-              {{ displayMode(profile.mode) }} / {{ profile.routeShortName || $t("profile.genericRoute") }}
+            <span class="absolute inset-x-0 top-0 h-1 bg-primary opacity-0 transition-opacity group-hover:opacity-100" />
+            <div class="flex items-start justify-between gap-3">
+              <span :class="profile.mode === 'SUBWAY' ? 'bg-red-100 text-red-800' : 'bg-orange-100 text-orange-700'" class="grid h-12 w-12 place-items-center rounded-2xl">
+                <AppIcon :name="profile.mode === 'SUBWAY' ? 'metro' : 'bus'" class="h-6 w-6" />
+              </span>
+              <span class="rounded-full bg-muted px-2.5 py-1 font-mono text-[0.65rem] font-bold uppercase text-muted-foreground">{{ profile.scannerProfileId }}</span>
+            </div>
+            <strong class="mt-5 block text-xl font-black leading-snug text-foreground">{{ displayProfile(profile) }}</strong>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span class="inline-flex rounded-full bg-secondary px-3 py-1 text-xs font-extrabold text-foreground">{{ displayMode(profile.mode) }}</span>
+              <span class="inline-flex rounded-full bg-primary-soft px-3 py-1 text-xs font-extrabold text-primary-hover">{{ profile.routeShortName || $t("profile.genericRoute") }}</span>
+            </div>
+            <span class="mt-6 flex items-center justify-between rounded-xl bg-slate-950 px-4 py-3 text-sm font-black text-white transition-colors group-hover:bg-primary group-hover:text-slate-950">
+              {{ $t("profile.select") }}
+              <AppIcon name="chevron" class="h-4 w-4 rtl:rotate-180" />
             </span>
-            <span class="mt-4 block text-sm font-bold text-primary">{{ $t("profile.select") }}</span>
           </button>
         </div>
       </StateView>
@@ -48,6 +65,8 @@ import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import AppButton from "@/components/ui/AppButton.vue";
 import StateView from "@/components/shared/StateView.vue";
+import OperatorHeader from "@/components/shared/OperatorHeader.vue";
+import AppIcon from "@/components/ui/AppIcon.vue";
 import { useOnline } from "@/composables/useOnline";
 import { getScannerProfiles, type ScannerProfile } from "@/services/api";
 import { getSelectedProfile, setSelectedProfile, startShift } from "@/services/session";

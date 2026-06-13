@@ -20,6 +20,7 @@ import ResetPassword from "../features/auth/pages/ResetPassword.vue";
 import Profile from "../features/account/pages/Profile.vue";
 import Settings from "../features/account/pages/Settings.vue";
 import Support from "../features/account/pages/Support.vue";
+import About from "../features/info/pages/About.vue";
 import AllTickets from "../features/tickets/pages/AllTickets.vue";
 import OperatorScan from "../features/operator/pages/OperatorScan.vue";
 import AdminDashboard from "../features/admin/pages/AdminDashboard.vue";
@@ -93,6 +94,7 @@ const router = createRouter({
       component: Settings,
     },
     { path: "/support", name: "support", component: Support },
+    { path: "/about", name: "about", component: About },
     { path: "/admin/login", name: "admin-login", component: AdminLogin },
     { path: "/admin", name: "admin", component: AdminDashboard, meta: { requiresAdmin: true } },
     { path: "/admin/:section", name: "admin-section", component: AdminDashboard, meta: { requiresAdmin: true } },

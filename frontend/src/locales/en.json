@@ -576,7 +576,78 @@
     "version": "Version 1.0.0",
     "rights": "2024 All rights reserved",
     "logoutConfirm": "Are you sure you want to logout?",
-    "loggingOut": "Logging out..."
+    "loggingOut": "Logging out...",
+    "about": "About Us",
+    "aboutDescription": "Our mission, features, and the team behind Mwasalaty"
+  },
+  "about": {
+    "badge": "About Mwasalaty",
+    "title": "Moving Cairo, one smarter trip at a time",
+    "subtitle": "Mwasalaty brings Greater Cairo's buses and metro into a single app — plan a route, pay, and ride with a digital QR ticket, online or off.",
+    "mission": {
+      "title": "Our Mission",
+      "problemHeading": "The problem",
+      "problem": "Getting around Greater Cairo means juggling buses, the metro, and guesswork. Schedules, fares, and connections are scattered, and there's no simple way to plan a full door-to-door trip or pay for it in one place.",
+      "statementHeading": "What we're building",
+      "statement": "We unify Cairo's public transport into one clear journey — combining bus and metro into door-to-door routes you can compare, pay for, and carry as a digital ticket. Our goal is to make public transport the easy, obvious choice for everyone in the city."
+    },
+    "offer": {
+      "title": "What we offer",
+      "items": {
+        "route": {
+          "title": "Multi-modal route planning",
+          "desc": "Door-to-door journeys that combine bus and metro across Greater Cairo, built on real OpenStreetMap and GTFS transit data."
+        },
+        "filters": {
+          "title": "Routes that fit you",
+          "desc": "Compare every trip by fastest, cheapest, or most comfortable, and pick the option that matches how you want to travel."
+        },
+        "ai": {
+          "title": "Ask in your own words",
+          "desc": "Tell our AI assistant where you're going in plain Arabic or English, and it finds the route — no forms, just a sentence."
+        },
+        "ticket": {
+          "title": "Digital QR ticketing",
+          "desc": "Buy once and get a QR ticket valid for 24 hours, with per-leg scanning and refunds for journeys you don't take."
+        },
+        "offline": {
+          "title": "Works offline",
+          "desc": "An installable PWA that caches your routes and tickets, so your trip keeps working even when the signal drops."
+        },
+        "operator": {
+          "title": "Built for operators too",
+          "desc": "A dedicated scanner app lets bus and metro operators validate tickets in real time — fully bilingual in Arabic and English."
+        }
+      }
+    },
+    "how": {
+      "title": "How it works",
+      "steps": {
+        "plan": {
+          "title": "Plan",
+          "desc": "Search your start and destination, or just ask the AI, and compare bus and metro routes side by side."
+        },
+        "pay": {
+          "title": "Pay",
+          "desc": "Check out securely and get a digital QR ticket valid for 24 hours from your trip."
+        },
+        "ride": {
+          "title": "Ride & scan",
+          "desc": "Follow live step-by-step navigation and show your QR to the operator's scanner on each leg."
+        }
+      }
+    },
+    "team": {
+      "title": "The team",
+      "subtitle": "Mwasalaty was built as a graduation project at ITI (Information Technology Institute) by a team passionate about transport and technology.",
+      "role": "Team Member"
+    },
+    "cta": {
+      "title": "Ready to move smarter?",
+      "subtitle": "Plan your next trip across Cairo, or reach out if you have a question.",
+      "plan": "Plan a trip",
+      "contact": "Contact us"
+    }
   },
   "auth": {
     "common": {

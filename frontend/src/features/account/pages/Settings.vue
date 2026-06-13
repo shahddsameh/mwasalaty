@@ -119,6 +119,11 @@
               :description="t('settings.supportDescription')"
               @click="router.push('/support')"
             />
+            <MenuButton
+              :label="t('settings.about')"
+              :description="t('settings.aboutDescription')"
+              @click="router.push('/about')"
+            />
           </Card>
 
           <section

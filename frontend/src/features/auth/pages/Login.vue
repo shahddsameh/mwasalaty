@@ -1,5 +1,5 @@
 <template>
-  <AuthForm title="Welcome Back" subtitle="Sign in to your Mwasalaty account">
+  <AuthForm :title="t('auth.login.title')" :subtitle="t('auth.login.subtitle')">
     <form class="space-y-4" @submit.prevent="handleLogin">
       <p
         v-if="errorMessage"
@@ -20,23 +20,23 @@
           alt="Google"
           class="w-5 h-5"
         />
-        Continue with Google
+        {{ t("auth.common.continueWithGoogle") }}
       </AppButton>
 
       <div class="flex items-center gap-3">
         <div class="h-px flex-1 bg-border"></div>
         <span class="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          or
+          {{ t("auth.common.or") }}
         </span>
         <div class="h-px flex-1 bg-border"></div>
       </div>
 
       <AppInput
         v-model="email"
-        label="Email Address"
+        :label="t('auth.common.emailAddress')"
         type="email"
         autocomplete="email"
-        placeholder="your@email.com"
+        :placeholder="t('auth.common.emailPlaceholder')"
         :error="fieldErrors.email"
       >
         <template #icon><Mail class="w-5 h-5" /></template>
@@ -45,10 +45,10 @@
       <div class="relative">
         <AppInput
           v-model="password"
-          label="Password"
+          :label="t('auth.common.password')"
           :type="showPassword ? 'text' : 'password'"
           autocomplete="current-password"
-          placeholder="Enter your password"
+          :placeholder="t('auth.login.passwordPlaceholder')"
           :error="fieldErrors.password"
         >
           <template #icon><Lock class="w-5 h-5" /></template>
@@ -70,19 +70,21 @@
             type="checkbox"
             class="w-4 h-4 rounded border-border"
           />
-          <span class="text-sm text-muted-foreground">Remember me</span>
+          <span class="text-sm text-muted-foreground">{{
+            t("auth.login.rememberMe")
+          }}</span>
         </label>
         <button
           class="text-sm text-primary"
           type="button"
           @click="router.push('/forgot-password')"
         >
-          Forgot password?
+          {{ t("auth.login.forgotPassword") }}
         </button>
       </div>
 
       <AppButton size="lg" class="w-full" type="submit" :disabled="loading">
-        {{ loading ? "Signing In..." : "Sign In" }}
+        {{ loading ? t("auth.login.signingIn") : t("auth.login.signIn") }}
       </AppButton>
       <AppButton
         variant="outline"
@@ -90,17 +92,17 @@
         type="button"
         @click="router.push('/')"
       >
-        Continue as Guest
+        {{ t("auth.login.continueAsGuest") }}
       </AppButton>
 
       <p class="text-center text-sm text-muted-foreground">
-        Don't have an account?
+        {{ t("auth.login.noAccount") }}
         <button
           class="text-primary"
           type="button"
           @click="router.push({ path: '/signup', query: redirectQuery })"
         >
-          Create Account
+          {{ t("auth.login.createAccount") }}
         </button>
       </p>
     </form>
@@ -110,6 +112,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { Eye, EyeOff, Lock, Mail } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import AppInput from "@/components/ui/AppInput.vue";
@@ -119,6 +122,7 @@ import { setAuthSession } from "@/services/authState";
 
 const router = useRouter();
 const route = useRoute();
+const { t } = useI18n();
 const showPassword = ref(false);
 const email = ref("");
 const password = ref("");
@@ -143,11 +147,11 @@ async function handleLogin() {
   fieldErrors.value = {};
 
   if (!email.value.trim()) {
-    fieldErrors.value.email = "Email is required.";
+    fieldErrors.value.email = t("auth.errors.emailRequired");
   }
 
   if (!password.value) {
-    fieldErrors.value.password = "Password is required.";
+    fieldErrors.value.password = t("auth.errors.passwordRequired");
   }
 
   if (Object.keys(fieldErrors.value).length) return;
@@ -167,7 +171,7 @@ async function handleLogin() {
     await router.push(resolveRedirect());
   } catch (error) {
     errorMessage.value =
-      error instanceof Error ? error.message : "Could not sign in right now.";
+      error instanceof Error ? error.message : t("auth.errors.signInFailed");
   } finally {
     loading.value = false;
   }

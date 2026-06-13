@@ -326,7 +326,7 @@
     <!-- Mobile: Bottom sheet for all steps -->
     <Modal
       :open="showStepsSheet"
-      title="All Navigation Steps"
+      :title="t('liveNav.allStepsTitle')"
       @close="showStepsSheet = false"
     >
       <div class="space-y-2 max-h-[60vh] overflow-y-auto">
@@ -358,12 +358,12 @@
     <!-- End navigation modal -->
     <Modal
       :open="endModalOpen"
-      title="End Navigation"
+      :title="t('liveNav.endTitle')"
       @close="endModalOpen = false"
     >
       <div class="space-y-4">
         <p class="text-muted-foreground">
-          Are you sure you want to end navigation? Your progress will be saved.
+          {{ t("liveNav.endConfirm") }}
         </p>
         <div class="flex gap-3">
           <AppButton
@@ -377,13 +377,13 @@
               })
             "
           >
-            End Navigation
+            {{ t("liveNav.endNavigation") }}
           </AppButton>
           <AppButton
             variant="outline"
             class="flex-1"
             @click="endModalOpen = false"
-            >Continue</AppButton
+            >{{ t("liveNav.continue") }}</AppButton
           >
         </div>
       </div>
@@ -392,7 +392,7 @@
     <!-- Arrived modal -->
     <Modal
       :open="feedbackModalOpen"
-      title="You've Arrived!"
+      :title="t('liveNav.arrivedTitle')"
       @close="feedbackModalOpen = false"
     >
       <div class="space-y-4 text-center">
@@ -402,9 +402,9 @@
           <ThumbsUp class="w-8 h-8 text-success-foreground" />
         </div>
         <h3 class="font-display text-2xl text-foreground">
-          Welcome to {{ destination }}!
+          {{ t("liveNav.welcomeTo", { destination }) }}
         </h3>
-        <p class="text-muted-foreground">How was your journey?</p>
+        <p class="text-muted-foreground">{{ t("liveNav.howWasJourney") }}</p>
         <div class="grid grid-cols-2 gap-3">
           <button
             type="button"
@@ -413,7 +413,7 @@
             @click="feedbackRating = 'good'"
           >
             <Smile class="w-6 h-6" />
-            <span class="font-medium text-sm">Good Route</span>
+            <span class="font-medium text-sm">{{ t("liveNav.goodRoute") }}</span>
           </button>
           <button
             type="button"
@@ -422,14 +422,14 @@
             @click="feedbackRating = 'bad'"
           >
             <Frown class="w-6 h-6" />
-            <span class="font-medium text-sm">Issues / Bad</span>
+            <span class="font-medium text-sm">{{ t("liveNav.issuesBad") }}</span>
           </button>
         </div>
         <p v-if="feedbackRating" class="text-sm text-success animate-fade-in font-display font-medium">
-          Thank you! Your feedback helps improve Cairo's transit routes.
+          {{ t("liveNav.feedbackThanks") }}
         </p>
         <AppButton class="w-full" @click="router.push('/')"
-          >Return Home</AppButton
+          >{{ t("liveNav.returnHome") }}</AppButton
         >
       </div>
     </Modal>
@@ -437,7 +437,7 @@
     <!-- Ticket modal -->
     <Modal
       :open="ticketModalOpen"
-      title="Digital Ticket"
+      :title="t('liveNav.digitalTicketTitle')"
       @close="ticketModalOpen = false"
     >
       <TicketPreview
@@ -452,6 +452,7 @@
 <script setup lang="ts">
 import { computed, defineComponent, h, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import {
   ArrowLeft,
   ArrowRight,
@@ -485,6 +486,7 @@ import { useLiveLocation } from "@/composables/useLiveLocation";
 
 // ── Route state (exactly as original) ────────────────────────────────────────
 const router = useRouter();
+const { t } = useI18n();
 const state = history.state ?? {};
 const savedSearch = getSavedRouteSearch();
 const selectedRoute = getSelectedRoute();
@@ -507,7 +509,7 @@ const route = (state.route ??
 
 const fallbackStep: RouteDetailStep = {
   type: "walking",
-  instruction: "No navigation steps available.",
+  instruction: t("liveNav.noStepsAvailable"),
   duration: "N/A",
   color: "var(--transport-walking)",
   softColor: "var(--transport-walking-soft)",
@@ -537,26 +539,26 @@ const showStepsSheet = ref(false);
 const feedbackRating = ref<"good" | "bad" | null>(null);
 const lastAutoAdvanceAt = ref(0);
 let stopTicketUpdates: (() => void) | undefined;
-const labels = {
-  liveNavigation: "Live Navigation",
-  online: "Online",
-  offlineDemo: "Offline demo (TODO: not real offline)",
-  exit: "Exit",
-  noGeometry: "Map route shape is not available for this step yet.",
-  step: "Step",
-  of: "of",
-  next: "Next",
-  prev: "Prev",
-  nextStep: "Next Step",
-  arrive: "Arrive",
-  recenter: "Recenter",
-  recenterMap: "Recenter Map",
-  allSteps: "All Steps",
-  currentStep: "Current Step",
-  remainingTime: "Remaining Time",
-  distanceLeft: "Distance Left",
-  viewTicket: "View Digital Ticket",
-};
+const labels = computed(() => ({
+  liveNavigation: t("liveNav.liveNavigation"),
+  online: t("liveNav.online"),
+  offlineDemo: t("liveNav.offlineDemo"),
+  exit: t("liveNav.exit"),
+  noGeometry: t("liveNav.noGeometry"),
+  step: t("liveNav.step"),
+  of: t("liveNav.of"),
+  next: t("liveNav.next"),
+  prev: t("liveNav.prev"),
+  nextStep: t("liveNav.nextStep"),
+  arrive: t("liveNav.arrive"),
+  recenter: t("liveNav.recenter"),
+  recenterMap: t("liveNav.recenterMap"),
+  allSteps: t("liveNav.allSteps"),
+  currentStep: t("liveNav.currentStep"),
+  remainingTime: t("liveNav.remainingTime"),
+  distanceLeft: t("liveNav.distanceLeft"),
+  viewTicket: t("liveNav.viewTicket"),
+}));
 
 const currentStep = computed(
   () => steps[currentStepIndex.value] ?? fallbackStep,
@@ -668,7 +670,11 @@ async function openTicketModal() {
 }
 
 function modeLabel(type: string) {
-  return type === "walking" ? "Walk" : type === "metro" ? "Metro" : "Bus";
+  return type === "walking"
+    ? t("liveNav.modeWalk")
+    : type === "metro"
+      ? t("liveNav.modeMetro")
+      : t("liveNav.modeBus");
 }
 
 type NavPoint = { lat: number; lng: number } | [number, number];

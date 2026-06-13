@@ -1,7 +1,7 @@
 <template>
   <AuthForm
-    title="Create Account"
-    subtitle="Join Mwasalaty and start your journey"
+    :title="t('auth.signup.title')"
+    :subtitle="t('auth.signup.subtitle')"
   >
     <form class="space-y-4" @submit.prevent="handleSignUp">
       <p
@@ -30,21 +30,21 @@
           alt="Google"
           class="w-5 h-5"
         />
-        Continue with Google
+        {{ t("auth.common.continueWithGoogle") }}
       </AppButton>
 
       <div class="flex items-center gap-3">
         <div class="h-px flex-1 bg-border"></div>
         <span class="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          or
+          {{ t("auth.common.or") }}
         </span>
         <div class="h-px flex-1 bg-border"></div>
       </div>
 
       <AppInput
         v-model="fullName"
-        label="Full Name"
-        placeholder="Enter your full name"
+        :label="t('auth.signup.fullName')"
+        :placeholder="t('auth.signup.fullNamePlaceholder')"
         autocomplete="name"
         :error="fieldErrors.fullName"
       >
@@ -53,9 +53,9 @@
 
       <AppInput
         v-model="email"
-        label="Email Address"
+        :label="t('auth.common.emailAddress')"
         type="email"
-        placeholder="your@email.com"
+        :placeholder="t('auth.common.emailPlaceholder')"
         autocomplete="email"
         :error="fieldErrors.email"
       >
@@ -64,9 +64,9 @@
 
       <AppInput
         v-model="phone"
-        label="Phone Number"
+        :label="t('auth.signup.phoneNumber')"
         type="tel"
-        placeholder="+20 XXX XXX XXXX"
+        :placeholder="t('auth.signup.phonePlaceholder')"
         autocomplete="tel"
       >
         <template #icon><Phone class="w-5 h-5" /></template>
@@ -75,16 +75,16 @@
       <PasswordField
         v-model:show="showPassword"
         v-model="password"
-        label="Password"
-        placeholder="Create a password"
+        :label="t('auth.common.password')"
+        :placeholder="t('auth.signup.passwordPlaceholder')"
         :error="fieldErrors.password"
       />
 
       <PasswordField
         v-model:show="showConfirmPassword"
         v-model="confirmPassword"
-        label="Confirm Password"
-        placeholder="Confirm your password"
+        :label="t('auth.signup.confirmPassword')"
+        :placeholder="t('auth.signup.confirmPasswordPlaceholder')"
         :error="fieldErrors.confirmPassword"
       />
 
@@ -95,10 +95,14 @@
           class="w-4 h-4 mt-1 rounded border-border"
         />
         <span class="text-sm text-muted-foreground">
-          I agree to the
-          <button class="text-primary" type="button">Terms of Service</button>
-          and
-          <button class="text-primary" type="button">Privacy Policy</button>
+          {{ t("auth.signup.agreePrefix") }}
+          <button class="text-primary" type="button">
+            {{ t("auth.signup.termsOfService") }}
+          </button>
+          {{ t("auth.signup.and") }}
+          <button class="text-primary" type="button">
+            {{ t("auth.signup.privacyPolicy") }}
+          </button>
         </span>
       </label>
 
@@ -108,16 +112,20 @@
         type="submit"
         :disabled="loading"
       >
-        {{ loading ? "Creating Account..." : "Create Account" }}
+        {{
+          loading
+            ? t("auth.signup.creatingAccount")
+            : t("auth.signup.createAccount")
+        }}
       </AppButton>
       <p class="text-center text-sm text-muted-foreground">
-        Already have an account?
+        {{ t("auth.signup.haveAccount") }}
         <button
           class="text-primary"
           type="button"
           @click="router.push({ path: '/login', query: redirectQuery })"
         >
-          Sign In
+          {{ t("auth.signup.signIn") }}
         </button>
       </p>
     </form>
@@ -127,6 +135,7 @@
 <script setup lang="ts">
 import { computed, defineComponent, h, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { Eye, EyeOff, Lock, Mail, Phone, User } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import AppInput from "@/components/ui/AppInput.vue";
@@ -136,6 +145,7 @@ import { setAuthSession } from "@/services/authState";
 
 const router = useRouter();
 const route = useRoute();
+const { t } = useI18n();
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const fullName = ref("");
@@ -210,24 +220,23 @@ async function handleSignUp() {
   fieldErrors.value = {};
 
   if (!fullName.value.trim()) {
-    fieldErrors.value.fullName = "Full name is required.";
+    fieldErrors.value.fullName = t("auth.errors.fullNameRequired");
   }
 
   if (!email.value.trim()) {
-    fieldErrors.value.email = "Email is required.";
+    fieldErrors.value.email = t("auth.errors.emailRequired");
   }
 
   if (!password.value) {
-    fieldErrors.value.password = "Password is required.";
+    fieldErrors.value.password = t("auth.errors.passwordRequired");
   }
 
   if (password.value !== confirmPassword.value) {
-    fieldErrors.value.confirmPassword = "Passwords do not match.";
+    fieldErrors.value.confirmPassword = t("auth.errors.passwordMismatch");
   }
 
   if (!agreedToTerms.value) {
-    errorMessage.value =
-      "You need to agree to the Terms of Service and Privacy Policy.";
+    errorMessage.value = t("auth.errors.agreeRequired");
   }
 
   if (Object.keys(fieldErrors.value).length || errorMessage.value) return;
@@ -250,13 +259,10 @@ async function handleSignUp() {
       return;
     }
 
-    successMessage.value =
-      "Account created. Check your email to confirm your account, then sign in.";
+    successMessage.value = t("auth.success.accountCreated");
   } catch (error) {
     errorMessage.value =
-      error instanceof Error
-        ? error.message
-        : "Could not create your account right now.";
+      error instanceof Error ? error.message : t("auth.errors.signUpFailed");
   } finally {
     loading.value = false;
   }

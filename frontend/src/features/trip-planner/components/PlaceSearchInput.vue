@@ -54,7 +54,7 @@
           @mousedown.prevent="choose(place)"
         >
           <MapPin class="w-4 h-4 shrink-0 text-muted-foreground" />
-          <span class="block text-sm font-medium truncate">{{ place.label }}</span>
+          <span class="block text-sm font-medium truncate">{{ displayLabel(place) }}</span>
         </button>
       </div>
     </div>
@@ -64,6 +64,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { MapPin } from "@lucide/vue";
 import { usePlacesSearch } from "@/composables/usePlacesSearch";
 import type { PlaceResult } from "@/services/api";
@@ -82,6 +83,11 @@ const emit = defineEmits<{
 }>();
 
 const { results, search, clear } = usePlacesSearch();
+const { locale } = useI18n();
+
+function displayLabel(place: PlaceResult) {
+  return locale.value === "ar" ? (place.arLabel ?? place.label) : place.label;
+}
 
 const inputRef = ref<HTMLInputElement | null>(null);
 const isFocused = ref(false);
@@ -137,7 +143,7 @@ function selectActive() {
 }
 
 function choose(place: PlaceResult) {
-  emit("update:modelValue", place.label);
+  emit("update:modelValue", displayLabel(place));
   emit("select", place);
   isFocused.value = false;
   clear();

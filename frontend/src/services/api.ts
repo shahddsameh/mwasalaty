@@ -147,6 +147,7 @@ export type PlaceCoords = { lat: number; lng: number };
 
 export type PlaceResult = {
   label: string;
+  arLabel?: string | null;
   lat: number;
   lng: number;
   source: string;

@@ -54,7 +54,7 @@ export function outcomeTone(outcome: Outcome): string {
     invalid: "bg-danger-soft text-destructive",
     no_match: "bg-muted text-foreground",
     ambiguous: "bg-primary-soft text-primary-hover",
-    unverified: "bg-slate-100 text-slate-700"
+    unverified: "bg-muted text-muted-foreground"
   };
   return tones[outcome];
 }

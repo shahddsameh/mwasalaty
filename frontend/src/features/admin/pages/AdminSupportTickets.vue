@@ -424,7 +424,8 @@ const statusLabels: Record<string, string> = {
 const statusColors: Record<string, string> = {
   new: "bg-blue-900/30 text-blue-300",
   in_progress: "bg-yellow-900/30 text-yellow-300",
-  resolved: "bg-green-900/30 text-green-300",
+  resolved:
+    "border border-success/30 bg-success-soft text-success dark:border-green-300/20 dark:bg-green-900/30 dark:text-green-300",
   closed: "bg-gray-700 text-gray-300",
 };
 

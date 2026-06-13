@@ -1,11 +1,11 @@
 <template>
-  <div class="flex h-screen overflow-hidden bg-[#0F172A]">
+  <div class="admin-theme flex h-screen overflow-hidden bg-background text-foreground">
     <AdminSidebar :active="activePage" @nav="goToPage" />
 
     <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
       <!-- Top header -->
       <header
-        class="flex-shrink-0 bg-[#111827] text-white border-b border-white/10"
+        class="flex-shrink-0 border-b border-border bg-card text-card-foreground"
       >
         <div class="flex items-center justify-between px-4 md:px-6 py-3 gap-4">
           <div class="min-w-0">
@@ -21,6 +21,17 @@
           </div>
 
           <div class="flex items-center gap-2 flex-shrink-0">
+            <button
+              type="button"
+              class="rounded-lg border border-border bg-muted p-2 text-muted-foreground transition-colors hover:bg-surface-hover hover:text-foreground"
+              :aria-label="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+              :title="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+              @click="toggleTheme"
+            >
+              <Sun v-if="theme === 'dark'" class="h-5 w-5" />
+              <Moon v-else class="h-5 w-5" />
+            </button>
+
             <div ref="notificationMenuRef" class="relative">
               <button
                 class="relative p-2 rounded-lg hover:bg-[#1F2937] transition-colors"
@@ -127,7 +138,7 @@
       </header>
 
       <!-- Page content -->
-      <main class="flex-1 overflow-auto bg-[#0F172A] pb-20 lg:pb-0">
+      <main class="flex-1 overflow-auto bg-background pb-20 lg:pb-0">
         <component :is="currentComponent" @nav="goToPage" />
       </main>
     </div>
@@ -137,7 +148,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Bell, LogOut, ChevronDown } from "@lucide/vue";
+import { Bell, LogOut, ChevronDown, Moon, Sun } from "@lucide/vue";
 import AdminSidebar from "../components/AdminSidebar.vue";
 import AdminDashboardHome from "./AdminDashboardHome.vue";
 import AdminRoutes from "./AdminRoutes.vue";
@@ -147,10 +158,13 @@ import AdminUsers from "./AdminUsers.vue";
 import AdminSupportTickets from "./AdminSupportTickets.vue";
 import AdminSettings from "./AdminSettings.vue";
 import { adminLogout, getAdminNotifications, type AdminNotification } from "../services/adminApi";
+import { applyTheme, getSavedTheme, type AppTheme } from "../../../services/theme";
+import "../styles/admin-theme.css";
 
 const route = useRoute();
 const router = useRouter();
 const activePage = ref("dashboard");
+const theme = ref<AppTheme>(getSavedTheme());
 const notificationMenuRef = ref<HTMLElement | null>(null);
 const notificationsOpen = ref(false);
 const notificationsLoading = ref(false);
@@ -214,12 +228,14 @@ watch(
 );
 
 onMounted(() => {
+  document.documentElement.classList.add("admin-theme-active");
   loadNotifications();
   document.addEventListener("click", closeNotificationsOnOutsideClick);
   window.addEventListener("admin-notifications-refresh", loadNotifications);
 });
 
 onBeforeUnmount(() => {
+  document.documentElement.classList.remove("admin-theme-active");
   document.removeEventListener("click", closeNotificationsOnOutsideClick);
   window.removeEventListener("admin-notifications-refresh", loadNotifications);
 });
@@ -228,6 +244,11 @@ function goToPage(page: string) {
   const nextPage = validPages.has(page) ? page : "dashboard";
   activePage.value = nextPage;
   router.push(nextPage === "dashboard" ? "/admin" : `/admin/${nextPage}`);
+}
+
+function toggleTheme() {
+  theme.value = theme.value === "dark" ? "light" : "dark";
+  applyTheme(theme.value);
 }
 
 async function loadNotifications() {

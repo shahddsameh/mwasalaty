@@ -34,7 +34,7 @@
               <button
                 type="button"
                 class="tap-target rounded-lg px-3 py-2 text-base font-bold transition-colors focus-ring"
-                :class="locale === 'ar' ? 'bg-slate-950 text-white shadow-sm' : 'text-muted-foreground hover:bg-secondary'"
+                :class="locale === 'ar' ? 'bg-primary text-primary-contrast shadow-sm' : 'text-muted-foreground hover:bg-surface-hover hover:text-foreground'"
                 :aria-pressed="locale === 'ar'"
                 @click="selectLocale('ar')"
               >
@@ -43,7 +43,7 @@
               <button
                 type="button"
                 class="tap-target rounded-lg px-3 py-2 text-base font-bold transition-colors focus-ring"
-                :class="locale === 'en' ? 'bg-slate-950 text-white shadow-sm' : 'text-muted-foreground hover:bg-secondary'"
+                :class="locale === 'en' ? 'bg-primary text-primary-contrast shadow-sm' : 'text-muted-foreground hover:bg-surface-hover hover:text-foreground'"
                 :aria-pressed="locale === 'en'"
                 @click="selectLocale('en')"
               >
@@ -57,7 +57,7 @@
               <button
                 type="button"
                 class="tap-target rounded-lg px-3 py-2 text-base font-bold transition-colors focus-ring"
-                :class="theme === 'light' ? 'bg-slate-950 text-white shadow-sm' : 'text-muted-foreground hover:bg-secondary'"
+                :class="theme === 'light' ? 'bg-primary text-primary-contrast shadow-sm' : 'text-muted-foreground hover:bg-surface-hover hover:text-foreground'"
                 :aria-pressed="theme === 'light'"
                 @click="selectTheme('light')"
               >
@@ -66,7 +66,7 @@
               <button
                 type="button"
                 class="tap-target rounded-lg px-3 py-2 text-base font-bold transition-colors focus-ring"
-                :class="theme === 'dark' ? 'bg-slate-950 text-white shadow-sm' : 'text-muted-foreground hover:bg-secondary'"
+                :class="theme === 'dark' ? 'bg-primary text-primary-contrast shadow-sm' : 'text-muted-foreground hover:bg-surface-hover hover:text-foreground'"
                 :aria-pressed="theme === 'dark'"
                 @click="selectTheme('dark')"
               >
@@ -88,7 +88,7 @@
           <AppIcon name="offline" class="h-5 w-5 shrink-0" />{{ $t("account.offline") }}
         </p>
 
-        <section class="section-card border-red-100">
+        <section class="section-card border-destructive/20">
           <AppButton class="w-full gap-2" size="lg" variant="danger" @click="signOut"><AppIcon name="logout" class="h-5 w-5" />{{ $t("account.signOut") }}</AppButton>
         </section>
       </template>

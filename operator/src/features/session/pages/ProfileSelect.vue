@@ -7,10 +7,10 @@
         :subtitle="$t('profile.subtitle')"
         icon="route"
       >
-        <div class="relative mt-6 grid grid-cols-3 gap-2 border-t border-white/10 pt-5 text-center sm:max-w-md sm:text-start">
-          <div><p class="text-[0.65rem] font-bold uppercase text-slate-400">{{ $t("common.mode") }}</p><p class="mt-1 text-sm font-black text-white">{{ $t("profile.genericRoute") }}</p></div>
-          <div><p class="text-[0.65rem] font-bold uppercase text-slate-400">{{ $t("common.profile") }}</p><p class="mt-1 text-sm font-black text-white">{{ profiles.length || $t("common.dash") }}</p></div>
-          <div><p class="text-[0.65rem] font-bold uppercase text-slate-400">{{ $t("common.queue") }}</p><p class="mt-1 text-sm font-black text-emerald-400">{{ isOnline ? $t("common.synced") : $t("common.pending") }}</p></div>
+        <div class="relative mt-6 grid grid-cols-3 gap-2 border-t border-surface-dark-border pt-5 text-center sm:max-w-md sm:text-start">
+          <div><p class="text-[0.65rem] font-bold uppercase text-surface-dark-foreground/60">{{ $t("common.mode") }}</p><p class="mt-1 text-sm font-black text-surface-dark-foreground">{{ $t("profile.genericRoute") }}</p></div>
+          <div><p class="text-[0.65rem] font-bold uppercase text-surface-dark-foreground/60">{{ $t("common.profile") }}</p><p class="mt-1 text-sm font-black text-surface-dark-foreground">{{ profiles.length || $t("common.dash") }}</p></div>
+          <div><p class="text-[0.65rem] font-bold uppercase text-surface-dark-foreground/60">{{ $t("common.queue") }}</p><p class="mt-1 text-sm font-black text-success">{{ isOnline ? $t("common.synced") : $t("common.pending") }}</p></div>
         </div>
       </OperatorHeader>
 
@@ -48,7 +48,7 @@
               <span class="inline-flex rounded-full bg-secondary px-3 py-1 text-xs font-extrabold text-foreground">{{ displayMode(profile.mode) }}</span>
               <span class="inline-flex rounded-full bg-primary-soft px-3 py-1 text-xs font-extrabold text-primary-hover">{{ profile.routeShortName || $t("profile.genericRoute") }}</span>
             </div>
-            <span class="mt-6 flex items-center justify-between rounded-xl bg-slate-950 px-4 py-3 text-sm font-black text-white transition-colors group-hover:bg-primary group-hover:text-slate-950">
+            <span class="mt-6 flex items-center justify-between rounded-xl bg-surface-dark px-4 py-3 text-sm font-black text-surface-dark-foreground transition-colors group-hover:bg-primary group-hover:text-primary-contrast">
               {{ $t("profile.select") }}
               <AppIcon name="chevron" class="h-4 w-4 rtl:rotate-180" />
             </span>

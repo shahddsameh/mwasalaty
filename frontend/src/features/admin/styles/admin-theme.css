@@ -1,0 +1,125 @@
+.admin-theme {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="bg-[#0F172A]"],
+:where(.admin-theme, .admin-theme-active) [class~="bg-[#111827]"] {
+  background-color: var(--muted) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) input[class~="bg-[#0F172A]"],
+:where(.admin-theme, .admin-theme-active) input[class~="bg-[#111827]"],
+:where(.admin-theme, .admin-theme-active) select[class~="bg-[#0F172A]"],
+:where(.admin-theme, .admin-theme-active) select[class~="bg-[#111827]"],
+:where(.admin-theme, .admin-theme-active) textarea[class~="bg-[#0F172A]"],
+:where(.admin-theme, .admin-theme-active) textarea[class~="bg-[#111827]"] {
+  background-color: var(--input-background) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="bg-[#1E293B]"],
+:where(.admin-theme, .admin-theme-active) [class~="bg-[#1F2937]"] {
+  background-color: var(--card) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="bg-gray-700"] {
+  background-color: var(--muted) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="text-white"],
+:where(.admin-theme, .admin-theme-active) [class~="text-[#F8FAFC]"],
+:where(.admin-theme, .admin-theme-active) [class~="text-[#CBD5E1]"] {
+  color: var(--foreground) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="text-[#94A3B8]"],
+:where(.admin-theme, .admin-theme-active) [class~="text-[#9CA3AF]"],
+:where(.admin-theme, .admin-theme-active) [class~="text-[#6B7280]"],
+:where(.admin-theme, .admin-theme-active) [class~="text-[#64748B]"],
+:where(.admin-theme, .admin-theme-active) [class~="text-[#4B5563]"] {
+  color: var(--muted-foreground) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="text-gray-300"] {
+  color: var(--muted-foreground) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="border-white/10"],
+:where(.admin-theme, .admin-theme-active) [class~="border-[#374151]"] {
+  border-color: var(--border) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="bg-[#FFC400]"] {
+  background-color: var(--primary) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="text-[#FFC400]"] {
+  color: var(--primary) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="border-[#FFC400]"] {
+  border-color: var(--primary) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="bg-[#FEF2F2]"] {
+  background-color: var(--danger-soft) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="bg-[#B91C1C]"] {
+  background-color: var(--destructive) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="text-[#B91C1C]"] {
+  color: var(--destructive) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="border-[#FCA5A5]"] {
+  border-color: color-mix(in srgb, var(--destructive) 45%, var(--border)) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="hover:bg-[#0F172A]"]:hover,
+:where(.admin-theme, .admin-theme-active) [class~="hover:bg-[#111827]"]:hover,
+:where(.admin-theme, .admin-theme-active) [class~="hover:bg-[#1F2937]"]:hover,
+:where(.admin-theme, .admin-theme-active) [class~="hover:bg-[#374151]"]:hover {
+  background-color: var(--surface-hover) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) [class~="hover:text-white"]:hover,
+:where(.admin-theme, .admin-theme-active) [class~="hover:text-[#F8FAFC]"]:hover {
+  color: var(--foreground) !important;
+}
+
+:where(.admin-theme, .admin-theme-active) input,
+:where(.admin-theme, .admin-theme-active) select,
+:where(.admin-theme, .admin-theme-active) textarea {
+  color: var(--foreground);
+  color-scheme: light;
+}
+
+.dark.admin-theme-active input,
+.dark.admin-theme-active select,
+.dark.admin-theme-active textarea,
+.dark .admin-theme input,
+.dark .admin-theme select,
+.dark .admin-theme textarea {
+  color-scheme: dark;
+}
+
+:where(.admin-theme, .admin-theme-active) input::placeholder,
+:where(.admin-theme, .admin-theme-active) textarea::placeholder {
+  color: var(--muted-foreground);
+}
+
+:where(.admin-theme, .admin-theme-active) input:focus-visible,
+:where(.admin-theme, .admin-theme-active) select:focus-visible,
+:where(.admin-theme, .admin-theme-active) textarea:focus-visible,
+:where(.admin-theme, .admin-theme-active) button:focus-visible,
+:where(.admin-theme, .admin-theme-active) a:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+:where(.admin-theme, .admin-theme-active) table thead[class~="bg-[#0F172A]"],
+:where(.admin-theme, .admin-theme-active) table thead[class~="bg-[#111827]"] {
+  background-color: var(--muted) !important;
+}

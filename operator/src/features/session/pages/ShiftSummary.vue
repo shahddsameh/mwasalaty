@@ -21,7 +21,7 @@
         <OutcomeCard v-for="outcome in outcomes" :key="outcome" :outcome="outcome" :label="$t(`dashboard.counts.${outcome}`)" :value="session?.tally[outcome] ?? 0" />
       </div>
 
-      <section class="section-card border-red-100">
+      <section class="section-card border-destructive/20">
         <h2 class="section-heading">{{ $t("shift.end") }}</h2>
         <p class="mt-2 text-sm leading-6 text-muted-foreground">{{ $t("shift.offline") }}</p>
         <AppButton class="mt-5 w-full gap-2" size="lg" variant="danger" @click="finishShift"><AppIcon name="logout" class="h-5 w-5" />{{ $t("shift.end") }}</AppButton>

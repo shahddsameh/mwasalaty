@@ -27,7 +27,7 @@
                 <h2 class="mt-2 text-xl font-black">{{ $t(`dashboard.counts.${item.kind}`) }}</h2>
                 <p class="mt-2 truncate text-sm font-semibold">{{ item.route ?? item.ticketLegId ?? $t("common.detailsUnavailable") }}</p>
               </div>
-              <span v-if="item.kind === 'unverified'" class="rounded-full bg-white/70 px-3 py-1 text-xs font-bold">
+              <span v-if="item.kind === 'unverified'" class="rounded-full border border-border bg-card/80 px-3 py-1 text-xs font-bold text-foreground">
                 {{ $t("history.scannedOffline") }}
               </span>
             </div>

@@ -11,8 +11,8 @@
         icon="dashboard"
       />
 
-      <RouterLink to="/scan" class="group tap-target flex min-h-24 items-center justify-between gap-4 rounded-2xl bg-primary p-5 text-slate-950 shadow-[0_14px_32px_rgba(234,179,8,0.24)] transition-all hover:-translate-y-0.5 hover:bg-primary-hover hover:text-white focus-ring md:min-h-28 md:p-6">
-        <span class="flex items-center gap-4 text-start"><span class="grid h-14 w-14 place-items-center rounded-2xl bg-white/50"><AppIcon name="scan" class="h-7 w-7" /></span><span><small class="block text-xs font-extrabold uppercase opacity-70">{{ $t("common.appName") }}</small><strong class="mt-1 block text-xl font-black md:text-2xl">{{ $t("dashboard.scanCta") }}</strong></span></span>
+      <RouterLink to="/scan" class="group tap-target flex min-h-24 items-center justify-between gap-4 rounded-2xl bg-primary p-5 text-primary-contrast shadow-[0_14px_32px_rgba(234,179,8,0.24)] transition-all hover:-translate-y-0.5 hover:bg-primary-hover hover:text-white focus-ring md:min-h-28 md:p-6">
+        <span class="flex items-center gap-4 text-start"><span class="grid h-14 w-14 place-items-center rounded-2xl bg-card/50"><AppIcon name="scan" class="h-7 w-7" /></span><span><small class="block text-xs font-extrabold uppercase opacity-70">{{ $t("common.appName") }}</small><strong class="mt-1 block text-xl font-black md:text-2xl">{{ $t("dashboard.scanCta") }}</strong></span></span>
         <AppIcon name="chevron" class="h-6 w-6 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
       </RouterLink>
 

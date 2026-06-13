@@ -38,7 +38,7 @@ const items = computed<Array<{ to: string; label: string; icon: AppIconName }>>(
 
 <style scoped>
 .operator-nav-active {
-  color: #0f172a;
+  color: var(--primary-contrast);
 }
 
 .operator-nav-active::before {
@@ -53,37 +53,37 @@ const items = computed<Array<{ to: string; label: string; icon: AppIconName }>>(
 
 @media (max-width: 767px) {
   :global(.dark .operator-nav) {
-    border-color: #3b4b63;
-    background: #172033;
+    border-color: var(--border);
+    background: color-mix(in srgb, var(--card) 95%, transparent);
     box-shadow: 0 -10px 30px rgba(2, 6, 23, 0.42);
   }
 
   :global(.dark .operator-nav-link) {
-    color: #cbd5e1;
+    color: var(--muted-foreground);
   }
 
   :global(.dark .operator-nav-link:hover) {
-    color: #ffffff;
-    background: #28364d;
+    color: var(--foreground);
+    background: var(--surface-hover);
   }
 
   :global(.dark .operator-nav-link:focus-visible) {
-    color: #ffffff;
-    background: #28364d;
-    outline: 2px solid #fbbf24;
+    color: var(--foreground);
+    background: var(--surface-hover);
+    outline: 2px solid var(--ring);
     outline-offset: -2px;
   }
 
   :global(.dark .operator-nav-active),
   :global(.dark .operator-nav-active:hover),
   :global(.dark .operator-nav-active:focus-visible) {
-    color: #facc15 !important;
-    background: rgba(250, 204, 21, 0.1) !important;
+    color: var(--primary) !important;
+    background: color-mix(in srgb, var(--primary) 12%, transparent) !important;
   }
 
   :global(.dark .operator-nav-active::before) {
-    background: #facc15;
-    box-shadow: 0 0 12px rgba(250, 204, 21, 0.5);
+    background: var(--primary);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--primary) 50%, transparent);
   }
 }
 
@@ -93,37 +93,37 @@ const items = computed<Array<{ to: string; label: string; icon: AppIconName }>>(
   }
 
   :global(.dark .operator-nav) {
-    border-color: #3b4b63;
-    background: #172033;
+    border-color: var(--border);
+    background: var(--card);
     box-shadow: 0 14px 36px rgba(2, 6, 23, 0.38);
   }
 
   :global(.dark .operator-nav-link) {
-    color: #d8e1ee;
+    color: var(--muted-foreground);
   }
 
   :global(.dark .operator-nav-link:hover) {
-    color: #ffffff;
-    background: #28364d;
+    color: var(--foreground);
+    background: var(--surface-hover);
   }
 
   :global(.dark .operator-nav-link:focus-visible) {
-    color: #ffffff;
-    background: #28364d;
-    outline: 2px solid #fbbf24;
+    color: var(--foreground);
+    background: var(--surface-hover);
+    outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
 
   :global(.dark .operator-nav-active),
   :global(.dark .operator-nav-active:hover),
   :global(.dark .operator-nav-active:focus-visible) {
-    color: #111827 !important;
-    background: linear-gradient(135deg, #facc15, #eab308) !important;
+    color: var(--primary-contrast) !important;
+    background: var(--primary) !important;
     box-shadow: 0 8px 20px rgba(234, 179, 8, 0.24);
   }
 
   :global(.dark .operator-nav-active::before) {
-    background: #fff7cc;
+    background: var(--primary-contrast);
   }
 
   .operator-nav-active::before {

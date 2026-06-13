@@ -16,14 +16,14 @@ const props = withDefaults(
 );
 
 const variants = {
-  primary: "bg-primary text-slate-950 shadow-[0_8px_20px_rgba(234,179,8,0.2)] hover:bg-primary-hover hover:text-white active:bg-primary-hover",
+  primary: "bg-primary text-primary-contrast shadow-[0_8px_20px_rgba(234,179,8,0.2)] hover:bg-primary-hover hover:text-white active:bg-primary-hover",
   ghost: "text-foreground hover:bg-surface-hover active:bg-surface-pressed",
   outline: "border border-primary text-foreground bg-card hover:bg-primary-soft",
   secondary: "text-foreground border border-border bg-card hover:bg-secondary active:bg-muted",
   success: "bg-success text-success-foreground hover:bg-success-hover active:bg-success-active",
   danger: "bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active",
   warning: "bg-warning text-white hover:bg-primary-hover active:bg-primary-hover",
-  slate: "bg-slate-700 text-white hover:bg-slate-800 active:bg-slate-900"
+  slate: "bg-surface-dark-muted text-surface-dark-foreground hover:bg-surface-hover active:bg-surface-pressed"
 };
 
 const sizes = {

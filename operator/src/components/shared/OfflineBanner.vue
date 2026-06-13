@@ -1,12 +1,12 @@
 <template>
   <div
     v-if="!isOnline"
-    class="sticky top-0 z-[60] border-b border-amber-300/30 bg-slate-950 px-4 py-2.5 text-white shadow-lg"
+    class="sticky top-0 z-[60] border-b border-surface-dark-border bg-surface-dark px-4 py-2.5 text-surface-dark-foreground shadow-lg"
     aria-live="polite"
   >
     <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3">
       <p class="flex items-center gap-2 text-sm font-semibold"><AppIcon name="offline" class="h-4 w-4 text-primary" />{{ $t("offline.banner") }}</p>
-      <span class="rounded-full bg-primary px-3 py-1 text-xs font-black text-slate-950">
+      <span class="rounded-full bg-primary px-3 py-1 text-xs font-black text-primary-contrast">
         {{ queuedLabel }}
       </span>
     </div>

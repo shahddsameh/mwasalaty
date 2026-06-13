@@ -1,9 +1,9 @@
 <template>
   <aside
-    class="hidden lg:flex flex-col w-64 xl:w-72 bg-[#111827] text-white border-r border-[#374151] flex-shrink-0"
+    class="hidden lg:flex flex-col w-64 xl:w-72 bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex-shrink-0"
   >
     <!-- Logo -->
-    <div class="px-6 py-6 border-b border-[#374151]">
+    <div class="px-6 py-6 border-b border-sidebar-border">
       <div class="flex items-center gap-3">
         <div
           class="w-10 h-10 rounded-xl bg-[#FFC400] flex items-center justify-center text-[#111827] text-xl font-bold"
@@ -12,12 +12,12 @@
         </div>
         <div>
           <p
-            class="text-lg font-bold text-white"
+            class="text-lg font-bold text-sidebar-foreground"
             style="font-family: &quot;DM Sans&quot;, sans-serif"
           >
             Mwaslaty
           </p>
-          <p class="text-xs text-[#6B7280]">Admin Panel</p>
+          <p class="text-xs text-sidebar-foreground/60">Admin Panel</p>
         </div>
       </div>
     </div>
@@ -32,8 +32,8 @@
           :class="[
             'w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all',
             active === item.page
-              ? 'bg-[#FFC400] text-[#111827]'
-              : 'text-[#9CA3AF] hover:bg-[#1F2937] hover:text-white',
+              ? 'bg-sidebar-primary text-[#111827] shadow-sm'
+              : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
           ]"
         >
           <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
@@ -43,9 +43,9 @@
     </nav>
 
     <!-- Footer -->
-    <div class="px-6 py-4 border-t border-[#374151]">
-      <p class="text-xs text-[#6B7280]">Mwaslaty Admin v1.0.0</p>
-      <p class="text-xs text-[#4B5563] mt-0.5">Cairo Transport System</p>
+    <div class="px-6 py-4 border-t border-sidebar-border">
+      <p class="text-xs text-sidebar-foreground/60">Mwaslaty Admin v1.0.0</p>
+      <p class="text-xs text-sidebar-foreground/45 mt-0.5">Cairo Transport System</p>
     </div>
   </aside>
 </template>

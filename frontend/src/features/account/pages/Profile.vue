@@ -517,16 +517,7 @@ const totalTrips = computed(() => tickets.value.length);
 // ticket, plus a refund row whenever any amount has been refunded.
 const transactions = computed(() =>
   tickets.value.flatMap((ticket) => {
-<<<<<<< HEAD
     const rows: TransactionRow[] = [];
-=======
-    const rows: {
-      id: string;
-      description: string;
-      amount: string;
-      date: string;
-    }[] = [];
->>>>>>> a85c50b2bd1e661bd0672eb239927d02e7b39f28
     const description = ticketRouteSummary(ticket);
     const currency = ticket.payment.currency ?? "EGP";
     const paymentTimestamp = ticket.createdAt ?? ticket.departureAt;

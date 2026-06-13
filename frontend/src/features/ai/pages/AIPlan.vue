@@ -130,13 +130,11 @@
             </div>
           </section>
           <section
-            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary rounded-xl p-6 border-2 border-primary"
+            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary text-gradient-foreground rounded-xl p-6 border-2 border-primary"
           >
-            <Sparkles class="w-6 h-6 text-foreground mb-2" />
-            <h3 class="font-display text-lg text-foreground mb-2">
-              AI Recommendations
-            </h3>
-            <p class="text-sm text-foreground">
+            <Sparkles class="w-6 h-6 mb-2" />
+            <h3 class="font-display text-lg mb-2">AI Recommendations</h3>
+            <p class="text-sm">
               This itinerary balances cultural exploration with authentic local
               cuisine. Transport is optimized for time and cost.
             </p>

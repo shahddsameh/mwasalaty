@@ -1,7 +1,10 @@
 <template>
   <main class="min-h-screen bg-background pb-20">
     <div class="mx-auto max-w-[1440px] px-4 py-6 md:px-6 md:py-12 lg:px-8">
-      <PageTitle :title="t('tickets.allTitle')" :subtitle="t('tickets.allSubtitle')">
+      <PageTitle
+        :title="t('tickets.allTitle')"
+        :subtitle="t('tickets.allSubtitle')"
+      >
         <template #icon><TicketIcon class="h-10 w-10 text-primary" /></template>
       </PageTitle>
 
@@ -17,13 +20,21 @@
       <div
         v-if="notice"
         class="mb-6 flex items-start justify-between gap-4 rounded-xl border p-4"
-        :class="notice.type === 'success' ? 'border-success bg-success-soft text-success' : 'border-destructive bg-destructive/10 text-destructive'"
+        :class="
+          notice.type === 'success'
+            ? 'border-success bg-success-soft text-success'
+            : 'border-destructive bg-destructive/10 text-destructive'
+        "
       >
         <div>
           <div class="font-display">{{ notice.title }}</div>
           <p class="mt-1 text-sm">{{ notice.message }}</p>
         </div>
-        <button type="button" class="shrink-0 rounded p-1 hover:bg-black/5" @click="notice = null">
+        <button
+          type="button"
+          class="shrink-0 rounded p-1 hover:bg-black/5"
+          @click="notice = null"
+        >
           <X class="h-4 w-4" />
         </button>
       </div>
@@ -41,8 +52,12 @@
         class="rounded-2xl border-2 border-border bg-card p-12 text-center"
       >
         <AlertTriangle class="mx-auto mb-4 h-8 w-8 text-destructive" />
-        <h2 class="font-display text-xl text-foreground">{{ t("tickets.loadErrorTitle") }}</h2>
-        <p class="mx-auto mb-6 mt-2 max-w-lg text-muted-foreground">{{ errorMessage }}</p>
+        <h2 class="font-display text-xl text-foreground">
+          {{ t("tickets.loadErrorTitle") }}
+        </h2>
+        <p class="mx-auto mb-6 mt-2 max-w-lg text-muted-foreground">
+          {{ errorMessage }}
+        </p>
         <AppButton @click="loadTickets">{{ t("tickets.tryAgain") }}</AppButton>
       </section>
 
@@ -51,16 +66,28 @@
         class="rounded-2xl border-2 border-dashed border-border bg-card p-12 text-center"
       >
         <TicketIcon class="mx-auto mb-4 h-10 w-10 text-muted-foreground" />
-        <h2 class="font-display text-xl text-foreground">{{ t("tickets.emptyTitle") }}</h2>
-        <p class="mb-6 mt-2 text-muted-foreground">{{ t("tickets.emptyCopy") }}</p>
-        <AppButton @click="router.push('/plan')">{{ t("tickets.planTrip") }}</AppButton>
+        <h2 class="font-display text-xl text-foreground">
+          {{ t("tickets.emptyTitle") }}
+        </h2>
+        <p class="mb-6 mt-2 text-muted-foreground">
+          {{ t("tickets.emptyCopy") }}
+        </p>
+        <AppButton @click="router.push('/plan')">{{
+          t("tickets.planTrip")
+        }}</AppButton>
       </section>
 
       <section v-else class="space-y-10">
-        <TicketSection :title="t('tickets.activeSection')" :tickets="activeTickets">
+        <TicketSection
+          :title="t('tickets.activeSection')"
+          :tickets="activeTickets"
+        >
           <template #empty>{{ t("tickets.noActive") }}</template>
         </TicketSection>
-        <TicketSection :title="t('tickets.historySection')" :tickets="historyTickets">
+        <TicketSection
+          :title="t('tickets.historySection')"
+          :tickets="historyTickets"
+        >
           <template #empty>{{ t("tickets.noHistory") }}</template>
         </TicketSection>
       </section>
@@ -74,8 +101,12 @@
     >
       <div v-if="refundTicketTarget" class="space-y-5">
         <div class="rounded-lg bg-secondary p-4">
-          <div class="font-mono text-sm text-muted-foreground">{{ refundTicketTarget.ticketId }}</div>
-          <div class="mt-1 font-display text-lg text-foreground">{{ ticketRoute(refundTicketTarget) }}</div>
+          <div class="font-mono text-sm text-muted-foreground">
+            {{ refundTicketTarget.ticketId }}
+          </div>
+          <div class="mt-1 font-display text-lg text-foreground">
+            {{ ticketRoute(refundTicketTarget) }}
+          </div>
         </div>
 
         <div
@@ -89,13 +120,22 @@
           <button
             type="button"
             class="rounded-xl border-2 p-4 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-50"
-            :class="refundMode === 'total' ? 'border-primary bg-primary-soft' : 'border-border hover:border-primary'"
+            :class="
+              refundMode === 'total'
+                ? 'border-primary bg-secondary'
+                : 'border-border hover:border-primary'
+            "
             :disabled="!canFullyRefund(refundTicketTarget)"
             @click="selectTotalRefund"
           >
             <div class="flex items-center justify-between gap-3">
-              <span class="font-display text-foreground">{{ t("tickets.refund.total") }}</span>
-              <CheckCircle2 v-if="refundMode === 'total'" class="h-5 w-5 text-primary" />
+              <span class="font-display text-foreground">{{
+                t("tickets.refund.total")
+              }}</span>
+              <CheckCircle2
+                v-if="refundMode === 'total'"
+                class="h-5 w-5 text-primary"
+              />
             </div>
             <p class="mt-2 text-sm text-muted-foreground">
               {{ t("tickets.refund.totalDesc") }}
@@ -105,12 +145,21 @@
           <button
             type="button"
             class="rounded-xl border-2 p-4 text-left transition-colors"
-            :class="refundMode === 'partial' ? 'border-primary bg-primary-soft' : 'border-border hover:border-primary'"
+            :class="
+              refundMode === 'partial'
+                ? 'border-primary bg-secondary'
+                : 'border-border hover:border-primary'
+            "
             @click="refundMode = 'partial'"
           >
             <div class="flex items-center justify-between gap-3">
-              <span class="font-display text-foreground">{{ t("tickets.refund.partial") }}</span>
-              <CheckCircle2 v-if="refundMode === 'partial'" class="h-5 w-5 text-primary" />
+              <span class="font-display text-foreground">{{
+                t("tickets.refund.partial")
+              }}</span>
+              <CheckCircle2
+                v-if="refundMode === 'partial'"
+                class="h-5 w-5 text-primary"
+              />
             </div>
             <p class="mt-2 text-sm text-muted-foreground">
               {{ t("tickets.refund.partialDesc") }}
@@ -130,27 +179,47 @@
           >
             <span
               class="flex h-5 w-5 shrink-0 items-center justify-center rounded border"
-              :class="selectedLegIds.includes(leg.ticketLegId) ? 'border-primary bg-primary text-button-primary-text' : 'border-border bg-card'"
+              :class="
+                selectedLegIds.includes(leg.ticketLegId)
+                  ? 'border-primary bg-primary text-button-primary-text'
+                  : 'border-border bg-card'
+              "
             >
-              <Check v-if="selectedLegIds.includes(leg.ticketLegId)" class="h-3.5 w-3.5" />
+              <Check
+                v-if="selectedLegIds.includes(leg.ticketLegId)"
+                class="h-3.5 w-3.5"
+              />
             </span>
             <span class="min-w-0 flex-1">
-              <span class="block font-display text-foreground">{{ legLabel(leg) }}</span>
+              <span class="block font-display text-foreground">{{
+                legLabel(leg)
+              }}</span>
               <span class="block truncate text-sm text-muted-foreground">
-                {{ leg.from?.name || t("tickets.start") }} -> {{ leg.to?.name || t("tickets.destination") }}
+                {{ leg.from?.name || t("tickets.start") }} ->
+                {{ leg.to?.name || t("tickets.destination") }}
               </span>
             </span>
             <span class="text-right">
-              <span class="block font-display text-foreground">{{ money(leg.fareAmount, refundTicketTarget.payment.currency) }}</span>
-              <span class="block text-xs" :class="legStatusTextClass(leg.status)">{{ t(`tickets.legStatus.${leg.status}`) }}</span>
+              <span class="block font-display text-foreground">{{
+                money(leg.fareAmount, refundTicketTarget.payment.currency)
+              }}</span>
+              <span
+                class="block text-xs"
+                :class="legStatusTextClass(leg.status)"
+                >{{ t(`tickets.legStatus.${leg.status}`) }}</span
+              >
             </span>
           </button>
         </div>
 
-        <div class="rounded-lg border border-primary/30 bg-primary-soft p-4">
+        <div class="rounded-lg border border-primary/30 bg-secondary p-4">
           <div class="flex items-center justify-between gap-3">
-            <span class="text-sm text-foreground">{{ t("tickets.refund.amount") }}</span>
-            <strong class="font-display text-xl text-foreground">{{ money(refundAmount, refundTicketTarget.payment.currency) }}</strong>
+            <span class="text-sm text-foreground">{{
+              t("tickets.refund.amount")
+            }}</span>
+            <strong class="font-display text-xl text-foreground">{{
+              money(refundAmount, refundTicketTarget.payment.currency)
+            }}</strong>
           </div>
           <p class="mt-2 text-xs text-muted-foreground">
             {{ t("tickets.refund.note") }}
@@ -158,7 +227,12 @@
         </div>
 
         <div class="flex flex-col-reverse gap-3 sm:flex-row">
-          <AppButton variant="secondary" class="flex-1" :disabled="refunding" @click="closeRefundModal">
+          <AppButton
+            variant="secondary"
+            class="flex-1"
+            :disabled="refunding"
+            @click="closeRefundModal"
+          >
             {{ t("tickets.refund.cancel") }}
           </AppButton>
           <AppButton
@@ -168,7 +242,11 @@
             @click="confirmRefund"
           >
             <Loader2 v-if="refunding" class="h-4 w-4 animate-spin" />
-            {{ refunding ? t("tickets.refund.processing") : t("tickets.refund.confirm") }}
+            {{
+              refunding
+                ? t("tickets.refund.processing")
+                : t("tickets.refund.confirm")
+            }}
           </AppButton>
         </div>
       </div>
@@ -194,7 +272,10 @@ import Modal from "@/components/ui/Modal.vue";
 import PageTitle from "@/components/shared/PageTitle.vue";
 import type { Ticket, TicketLeg, TicketLegStatus } from "@/services/api";
 import { getTicket, getTickets, refundTicket } from "@/services/api";
-import { readCurrentTicket, storeCurrentTicket } from "@/services/currentTicket";
+import {
+  readCurrentTicket,
+  storeCurrentTicket,
+} from "@/services/currentTicket";
 import { useAuthState } from "@/services/authState";
 import { db } from "@/db/appDb";
 
@@ -210,7 +291,11 @@ const selectedLegIds = ref<string[]>([]);
 const refunding = ref(false);
 const refundError = ref("");
 const offlineNotice = ref(false);
-const notice = ref<{ type: "success" | "error"; title: string; message: string } | null>(null);
+const notice = ref<{
+  type: "success" | "error";
+  title: string;
+  message: string;
+} | null>(null);
 
 const activeTickets = computed(() =>
   tickets.value.filter((ticket) => canRefund(ticket)),
@@ -246,7 +331,9 @@ async function loadTickets() {
     tickets.value = fresh;
     // Keep the offline store in sync for the next offline visit.
     try {
-      await db.tickets.bulkPut(fresh.map((t) => ({ ...t, savedAt: Date.now() })));
+      await db.tickets.bulkPut(
+        fresh.map((t) => ({ ...t, savedAt: Date.now() })),
+      );
     } catch {
       // Best-effort persistence.
     }
@@ -272,7 +359,9 @@ function openRefundModal(ticket: Ticket) {
     selectedLegIds.value = ticket.legs.map((leg) => leg.ticketLegId);
   } else {
     refundMode.value = "partial";
-    selectedLegIds.value = ticket.legs.filter((leg) => leg.status === "unused").map((leg) => leg.ticketLegId);
+    selectedLegIds.value = ticket.legs
+      .filter((leg) => leg.status === "unused")
+      .map((leg) => leg.ticketLegId);
   }
 }
 
@@ -284,9 +373,12 @@ function closeRefundModal() {
 }
 
 function selectTotalRefund() {
-  if (!refundTicketTarget.value || !canFullyRefund(refundTicketTarget.value)) return;
+  if (!refundTicketTarget.value || !canFullyRefund(refundTicketTarget.value))
+    return;
   refundMode.value = "total";
-  selectedLegIds.value = refundTicketTarget.value.legs.map((leg) => leg.ticketLegId);
+  selectedLegIds.value = refundTicketTarget.value.legs.map(
+    (leg) => leg.ticketLegId,
+  );
 }
 
 function toggleLeg(leg: TicketLeg) {
@@ -308,8 +400,11 @@ async function confirmRefund() {
       refundMode.value === "total" ? undefined : selectedLegIds.value,
     );
     const updated = await getTicket(target.ticketId);
-    tickets.value = tickets.value.map((ticket) => ticket.ticketId === updated.ticketId ? updated : ticket);
-    if (readCurrentTicket()?.ticketId === updated.ticketId) storeCurrentTicket(updated);
+    tickets.value = tickets.value.map((ticket) =>
+      ticket.ticketId === updated.ticketId ? updated : ticket,
+    );
+    if (readCurrentTicket()?.ticketId === updated.ticketId)
+      storeCurrentTicket(updated);
     notice.value = {
       type: "success",
       title: t("tickets.refund.successTitle"),
@@ -321,7 +416,8 @@ async function confirmRefund() {
     refundTicketTarget.value = null;
     selectedLegIds.value = [];
   } catch (error) {
-    refundError.value = error instanceof Error ? error.message : t("tickets.refund.failed");
+    refundError.value =
+      error instanceof Error ? error.message : t("tickets.refund.failed");
   } finally {
     refunding.value = false;
   }
@@ -332,7 +428,10 @@ function refundableLegs(ticket: Ticket) {
 }
 
 function canFullyRefund(ticket: Ticket) {
-  return ticket.legs.length > 0 && ticket.legs.every((leg) => leg.status === "unused");
+  return (
+    ticket.legs.length > 0 &&
+    ticket.legs.every((leg) => leg.status === "unused")
+  );
 }
 
 function canRefund(ticket: Ticket) {
@@ -362,30 +461,42 @@ function money(amount: number, currency: string) {
 function dateLabel(value?: string) {
   if (!value) return t("tickets.notAvailable");
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? t("tickets.notAvailable") : date.toLocaleString();
+  return Number.isNaN(date.getTime())
+    ? t("tickets.notAvailable")
+    : date.toLocaleString();
 }
 
 function statusLabel(ticket: Ticket) {
   switch (ticket.status) {
-    case "used": return t("ticket.status.used");
-    case "refunded": return t("ticket.status.refunded");
-    case "partially_refunded": return t("ticket.status.partially_refunded");
-    default: return t("ticket.status.active");
+    case "used":
+      return t("ticket.status.used");
+    case "refunded":
+      return t("ticket.status.refunded");
+    case "partially_refunded":
+      return t("ticket.status.partially_refunded");
+    default:
+      return t("ticket.status.active");
   }
 }
 
 function statusClass(ticket: Ticket) {
   switch (ticket.status) {
-    case "used": return "bg-secondary text-muted-foreground";
-    case "refunded": return "bg-destructive/10 text-destructive";
-    case "partially_refunded": return "bg-warning-soft text-warning";
-    default: return "bg-success text-success-foreground";
+    case "used":
+      return "bg-secondary text-muted-foreground";
+    case "refunded":
+      return "bg-destructive/10 text-destructive";
+    case "partially_refunded":
+      return "bg-warning-soft text-warning";
+    default:
+      return "bg-success text-success-foreground";
   }
 }
 
 function legSelectionClass(leg: TicketLeg) {
-  if (leg.status !== "unused") return "cursor-not-allowed border-border bg-muted opacity-70";
-  if (selectedLegIds.value.includes(leg.ticketLegId)) return "border-primary bg-primary-soft";
+  if (leg.status !== "unused")
+    return "cursor-not-allowed border-border bg-muted opacity-70";
+  if (selectedLegIds.value.includes(leg.ticketLegId))
+    return "border-primary bg-secondary";
   return "border-border bg-card hover:border-primary";
 }
 
@@ -403,55 +514,163 @@ const TicketSection = defineComponent({
   setup(props, { slots }) {
     return () =>
       h("div", [
-        h("h2", { class: "mb-6 font-display text-2xl text-foreground" }, `${props.title} (${props.tickets.length})`),
+        h(
+          "h2",
+          { class: "mb-6 font-display text-2xl text-foreground" },
+          `${props.title} (${props.tickets.length})`,
+        ),
         props.tickets.length === 0
-          ? h("div", { class: "rounded-xl border-2 border-dashed border-border bg-card p-8 text-center text-muted-foreground" }, slots.empty?.())
-          : h("div", { class: "grid grid-cols-1 gap-6 lg:grid-cols-2" },
+          ? h(
+              "div",
+              {
+                class:
+                  "rounded-xl border-2 border-dashed border-border bg-card p-8 text-center text-muted-foreground",
+              },
+              slots.empty?.(),
+            )
+          : h(
+              "div",
+              { class: "grid grid-cols-1 gap-6 lg:grid-cols-2" },
               props.tickets.map((ticket) =>
-                h("article", { class: "overflow-hidden rounded-xl border-2 border-border bg-card shadow-sm" }, [
-                  h("div", { class: "flex items-start justify-between gap-3 bg-secondary px-5 py-4" }, [
-                    h("div", { class: "min-w-0" }, [
-                      h("div", { class: "font-display text-lg text-foreground" }, t("tickets.digitalTicket")),
-                      h("div", { class: "truncate font-mono text-sm text-muted-foreground" }, ticket.ticketId),
-                    ]),
-                    h("span", { class: ["shrink-0 rounded-full px-3 py-1 text-sm", statusClass(ticket)] }, statusLabel(ticket)),
-                  ]),
-                  h("div", { class: "space-y-4 p-5" }, [
-                    h("div", [
-                      h("div", { class: "text-sm text-muted-foreground" }, t("tickets.route")),
-                      h("div", { class: "font-display text-lg text-foreground" }, ticketRoute(ticket)),
-                    ]),
-                    h("div", { class: "flex flex-wrap gap-2" },
-                      ticketModes(ticket).map((mode) => h("span", { class: "rounded-full border border-border bg-muted px-2.5 py-1 text-xs text-foreground" }, mode)),
+                h(
+                  "article",
+                  {
+                    class:
+                      "overflow-hidden rounded-xl border-2 border-border bg-card shadow-sm",
+                  },
+                  [
+                    h(
+                      "div",
+                      {
+                        class:
+                          "flex items-start justify-between gap-3 bg-secondary px-5 py-4",
+                      },
+                      [
+                        h("div", { class: "min-w-0" }, [
+                          h(
+                            "div",
+                            { class: "font-display text-lg text-foreground" },
+                            t("tickets.digitalTicket"),
+                          ),
+                          h(
+                            "div",
+                            {
+                              class:
+                                "truncate font-mono text-sm text-muted-foreground",
+                            },
+                            ticket.ticketId,
+                          ),
+                        ]),
+                        h(
+                          "span",
+                          {
+                            class: [
+                              "shrink-0 rounded-full px-3 py-1 text-sm",
+                              statusClass(ticket),
+                            ],
+                          },
+                          statusLabel(ticket),
+                        ),
+                      ],
                     ),
-                    h("div", { class: "grid grid-cols-2 gap-3" }, [
-                      h("div", { class: "rounded-lg bg-secondary p-3" }, [
-                        h("div", { class: "text-xs text-muted-foreground" }, t("tickets.totalFare")),
-                        h("div", { class: "font-display text-foreground" }, money(ticket.payment.amount, ticket.payment.currency)),
+                    h("div", { class: "space-y-4 p-5" }, [
+                      h("div", [
+                        h(
+                          "div",
+                          { class: "text-sm text-muted-foreground" },
+                          t("tickets.route"),
+                        ),
+                        h(
+                          "div",
+                          { class: "font-display text-lg text-foreground" },
+                          ticketRoute(ticket),
+                        ),
                       ]),
-                      h("div", { class: "rounded-lg bg-secondary p-3" }, [
-                        h("div", { class: "text-xs text-muted-foreground" }, t("tickets.validUntil")),
-                        h("div", { class: "font-display text-sm text-foreground" }, dateLabel(ticket.expiresAt)),
+                      h(
+                        "div",
+                        { class: "flex flex-wrap gap-2" },
+                        ticketModes(ticket).map((mode) =>
+                          h(
+                            "span",
+                            {
+                              class:
+                                "rounded-full border border-border bg-muted px-2.5 py-1 text-xs text-foreground",
+                            },
+                            mode,
+                          ),
+                        ),
+                      ),
+                      h("div", { class: "grid grid-cols-2 gap-3" }, [
+                        h("div", { class: "rounded-lg bg-secondary p-3" }, [
+                          h(
+                            "div",
+                            { class: "text-xs text-muted-foreground" },
+                            t("tickets.totalFare"),
+                          ),
+                          h(
+                            "div",
+                            { class: "font-display text-foreground" },
+                            money(
+                              ticket.payment.amount,
+                              ticket.payment.currency,
+                            ),
+                          ),
+                        ]),
+                        h("div", { class: "rounded-lg bg-secondary p-3" }, [
+                          h(
+                            "div",
+                            { class: "text-xs text-muted-foreground" },
+                            t("tickets.validUntil"),
+                          ),
+                          h(
+                            "div",
+                            { class: "font-display text-sm text-foreground" },
+                            dateLabel(ticket.expiresAt),
+                          ),
+                        ]),
                       ]),
+                      h(
+                        "div",
+                        { class: "text-sm text-muted-foreground" },
+                        t("tickets.legsAvailable", {
+                          count: refundableLegs(ticket).length,
+                          total: ticket.legs.length,
+                        }),
+                      ),
+                      h(
+                        "div",
+                        { class: "grid grid-cols-1 gap-2 sm:grid-cols-2" },
+                        [
+                          h(
+                            AppButton,
+                            {
+                              variant: "outline",
+                              class: "w-full",
+                              onClick: () =>
+                                router.push(
+                                  `/ticket/${encodeURIComponent(ticket.ticketId)}`,
+                                ),
+                            },
+                            () => t("tickets.viewDetails"),
+                          ),
+                          h(
+                            AppButton,
+                            {
+                              variant: "danger",
+                              class: "w-full",
+                              disabled: !canRefund(ticket),
+                              onClick: () => openRefundModal(ticket),
+                            },
+                            () =>
+                              canRefund(ticket)
+                                ? t("tickets.requestRefund")
+                                : t("tickets.nothingToRefund"),
+                          ),
+                        ],
+                      ),
                     ]),
-                    h("div", { class: "text-sm text-muted-foreground" },
-                      t("tickets.legsAvailable", { count: refundableLegs(ticket).length, total: ticket.legs.length }),
-                    ),
-                    h("div", { class: "grid grid-cols-1 gap-2 sm:grid-cols-2" }, [
-                      h(AppButton, {
-                        variant: "outline",
-                        class: "w-full",
-                        onClick: () => router.push(`/ticket/${encodeURIComponent(ticket.ticketId)}`),
-                      }, () => t("tickets.viewDetails")),
-                      h(AppButton, {
-                        variant: "danger",
-                        class: "w-full",
-                        disabled: !canRefund(ticket),
-                        onClick: () => openRefundModal(ticket),
-                      }, () => canRefund(ticket) ? t("tickets.requestRefund") : t("tickets.nothingToRefund")),
-                    ]),
-                  ]),
-                ]),
+                  ],
+                ),
               ),
             ),
       ]);

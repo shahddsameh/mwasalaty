@@ -67,7 +67,9 @@
                   </span>
                 </span>
 
-                <ChevronRight class="w-5 h-5 shrink-0 text-muted-foreground rtl:rotate-180" />
+                <ChevronRight
+                  class="w-5 h-5 shrink-0 text-muted-foreground rtl:rotate-180"
+                />
               </button>
 
               <button
@@ -84,7 +86,9 @@
                   </span>
                 </span>
 
-                <ChevronRight class="w-5 h-5 shrink-0 text-muted-foreground rtl:rotate-180" />
+                <ChevronRight
+                  class="w-5 h-5 shrink-0 text-muted-foreground rtl:rotate-180"
+                />
               </button>
 
               <button
@@ -92,21 +96,25 @@
                 @click="logoutModalOpen = true"
               >
                 <span class="min-w-0">
-                  <span class="block font-display">{{ t("settings.logout") }}</span>
+                  <span class="block font-display">{{
+                    t("settings.logout")
+                  }}</span>
                   <span class="block text-sm text-muted-foreground">
                     {{ t("settings.logoutDescription") }}
                   </span>
                 </span>
 
-                <ChevronRight class="w-5 h-5 shrink-0 text-muted-foreground rtl:rotate-180" />
+                <ChevronRight
+                  class="w-5 h-5 shrink-0 text-muted-foreground rtl:rotate-180"
+                />
               </button>
             </div>
           </section>
 
           <section
-            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary rounded-xl p-6 border-2 border-primary"
+            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary text-sidebar rounded-xl p-6 border-2 border-primary"
           >
-            <h3 class="font-display text-xl text-foreground mb-4">
+            <h3 class="font-display text-xl mb-4">
               {{ t("account.yourStats") }}
             </h3>
             <div class="flex justify-between mb-3">
@@ -132,7 +140,10 @@
             </button>
           </div>
 
-          <Card v-if="activeTab === 'info'" :title="t('account.personalInformation')">
+          <Card
+            v-if="activeTab === 'info'"
+            :title="t('account.personalInformation')"
+          >
             <Info :label="t('account.fullName')" :value="userInfo.name" />
             <Info :label="t('account.email')" :value="userInfo.email" />
             <Info :label="t('account.phone')" :value="userInfo.phone" />
@@ -245,7 +256,9 @@
     >
       <div class="space-y-4">
         <label class="flex flex-col gap-1.5">
-          <span class="text-sm text-foreground">{{ t("account.fullName") }}</span>
+          <span class="text-sm text-foreground">{{
+            t("account.fullName")
+          }}</span>
           <input
             v-model="editName"
             class="w-full px-4 py-2.5 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
@@ -286,7 +299,9 @@
           {{ editNotice }}
         </p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-border pt-4">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-border pt-4"
+        >
           <AppButton
             class="w-full"
             :disabled="savingProfile"
@@ -313,7 +328,9 @@
     >
       <div class="space-y-4">
         <label class="flex flex-col gap-1.5">
-          <span class="text-sm text-foreground">{{ t("account.currentPassword") }}</span>
+          <span class="text-sm text-foreground">{{
+            t("account.currentPassword")
+          }}</span>
           <input
             v-model="currentPassword"
             type="password"
@@ -323,7 +340,9 @@
         </label>
 
         <label class="flex flex-col gap-1.5">
-          <span class="text-sm text-foreground">{{ t("account.newPassword") }}</span>
+          <span class="text-sm text-foreground">{{
+            t("account.newPassword")
+          }}</span>
           <input
             v-model="newPassword"
             type="password"
@@ -333,7 +352,9 @@
         </label>
 
         <label class="flex flex-col gap-1.5">
-          <span class="text-sm text-foreground">{{ t("account.confirmPassword") }}</span>
+          <span class="text-sm text-foreground">{{
+            t("account.confirmPassword")
+          }}</span>
           <input
             v-model="confirmPassword"
             type="password"
@@ -355,13 +376,17 @@
           {{ passwordNotice }}
         </p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-border pt-4">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-border pt-4"
+        >
           <AppButton
             class="w-full"
             :disabled="changingPassword"
             @click="handleChangePassword"
           >
-            {{ changingPassword ? t("account.saving") : t("account.saveChanges") }}
+            {{
+              changingPassword ? t("account.saving") : t("account.saveChanges")
+            }}
           </AppButton>
           <AppButton
             variant="outline"
@@ -492,7 +517,16 @@ const totalTrips = computed(() => tickets.value.length);
 // ticket, plus a refund row whenever any amount has been refunded.
 const transactions = computed(() =>
   tickets.value.flatMap((ticket) => {
+<<<<<<< HEAD
     const rows: TransactionRow[] = [];
+=======
+    const rows: {
+      id: string;
+      description: string;
+      amount: string;
+      date: string;
+    }[] = [];
+>>>>>>> a85c50b2bd1e661bd0672eb239927d02e7b39f28
     const description = ticketRouteSummary(ticket);
     const currency = ticket.payment.currency ?? "EGP";
     const paymentTimestamp = ticket.createdAt ?? ticket.departureAt;

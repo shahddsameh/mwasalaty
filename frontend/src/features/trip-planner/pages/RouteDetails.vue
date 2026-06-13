@@ -5,7 +5,8 @@
         class="flex items-center gap-2 text-foreground hover:text-primary mb-6 transition-colors"
         @click="backToResults"
       >
-        <ArrowLeft class="w-5 h-5 rtl:rotate-180" /> {{ t("routeDetails.backToResults") }}
+        <ArrowLeft class="w-5 h-5 rtl:rotate-180" />
+        {{ t("routeDetails.backToResults") }}
       </button>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -17,26 +18,31 @@
             <div
               class="flex items-center gap-2 text-sm md:text-base text-muted-foreground"
             >
-              <MapPin class="w-4 h-4" /> {{ displayStart }} -> {{ displayDestination }}
+              <MapPin class="w-4 h-4" /> {{ displayStart }} ->
+              {{ displayDestination }}
             </div>
           </section>
 
           <div
-            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary rounded-xl p-4 md:p-6 mb-6 border-2 border-primary flex items-start gap-3"
+            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary text-gradient-foreground rounded-xl p-4 md:p-6 mb-6 border-2 border-primary flex items-start gap-3"
           >
-            <Sparkles class="w-6 h-6 text-foreground flex-shrink-0 mt-1" />
+            <Sparkles class="w-6 h-6 flex-shrink-0 mt-1" />
             <div>
-              <h3 class="font-display text-lg text-foreground mb-2">
+              <h3 class="font-display text-lg mb-2">
                 {{ t("routeDetails.aiExplanation") }}
               </h3>
-              <p class="text-sm md:text-base text-foreground">
+              <p class="text-sm md:text-base">
                 {{ routeExplanation }}
               </p>
             </div>
           </div>
 
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-6">
-            <Summary :icon="Clock" :label="t('routeDetails.duration')" :value="formatUnit(route.duration)" />
+            <Summary
+              :icon="Clock"
+              :label="t('routeDetails.duration')"
+              :value="formatUnit(route.duration)"
+            />
             <Summary
               :icon="DollarSign"
               :label="t('routeDetails.totalCost')"
@@ -83,7 +89,10 @@
                   <div class="text-sm text-muted-foreground">
                     {{ step.duration
                     }}<span v-if="step.distance"> - {{ step.distance }}</span
-                    ><span v-if="step.stops"> - {{ t("routeDetails.stops", { count: step.stops }) }}</span>
+                    ><span v-if="step.stops">
+                      -
+                      {{ t("routeDetails.stops", { count: step.stops }) }}</span
+                    >
                   </div>
                   <div
                     v-if="step.from || step.to"
@@ -108,7 +117,8 @@
                 })
               "
             >
-              <Navigation class="w-5 h-5" /> {{ t("routeDetails.startNavigation") }}
+              <Navigation class="w-5 h-5" />
+              {{ t("routeDetails.startNavigation") }}
             </AppButton>
             <AppButton
               variant="outline"
@@ -141,7 +151,9 @@
 
         <aside class="lg:sticky lg:top-8 h-fit space-y-4 md:space-y-6">
           <div class="bg-card rounded-xl p-6 border-2 border-border">
-            <h3 class="font-display text-xl text-foreground mb-4">{{ t("routeDetails.routeMap") }}</h3>
+            <h3 class="font-display text-xl text-foreground mb-4">
+              {{ t("routeDetails.routeMap") }}
+            </h3>
             <div
               class="aspect-square overflow-hidden rounded-lg border-2 border-border"
             >
@@ -153,7 +165,8 @@
             class="w-full flex items-center justify-center gap-2"
             @click="savePlaceModalOpen = true"
           >
-            <BookmarkPlus class="w-5 h-5" /> {{ t("routeDetails.saveDestination") }}
+            <BookmarkPlus class="w-5 h-5" />
+            {{ t("routeDetails.saveDestination") }}
           </AppButton>
         </aside>
       </div>
@@ -174,9 +187,9 @@
           :placeholder="t('routeDetails.routeNamePlaceholder')"
         />
         <div class="flex gap-3">
-          <AppButton class="flex-1" @click="saveCurrentRoute"
-            >{{ t("routeDetails.saveRoute") }}</AppButton
-          >
+          <AppButton class="flex-1" @click="saveCurrentRoute">{{
+            t("routeDetails.saveRoute")
+          }}</AppButton>
           <AppButton
             variant="outline"
             class="flex-1"
@@ -196,7 +209,9 @@
         <p class="text-sm text-muted-foreground">
           {{ t("saved.places.modalCopy") }}
         </p>
-        <div class="flex items-center gap-2 rounded-lg bg-secondary p-3 text-sm text-foreground">
+        <div
+          class="flex items-center gap-2 rounded-lg bg-secondary p-3 text-sm text-foreground"
+        >
           <MapPin class="w-4 h-4 flex-shrink-0 text-primary" />
           <span class="truncate">{{ displayDestination }}</span>
         </div>
@@ -217,15 +232,12 @@
           :placeholder="t('saved.places.namePlaceholder')"
         />
         <div class="flex gap-3">
-          <AppButton class="flex-1" @click="saveCurrentDestination"
-            >{{ t("saved.places.savePlace") }}</AppButton
-          >
-          <AppButton
-            variant="outline"
-            class="flex-1"
-            @click="closeSavePlace"
-            >{{ t("home.cancel") }}</AppButton
-          >
+          <AppButton class="flex-1" @click="saveCurrentDestination">{{
+            t("saved.places.savePlace")
+          }}</AppButton>
+          <AppButton variant="outline" class="flex-1" @click="closeSavePlace">{{
+            t("home.cancel")
+          }}</AppButton>
         </div>
       </div>
     </Modal>
@@ -262,7 +274,10 @@ import {
   type SavedPlaceType,
 } from "@/features/home/services/savedPlaces";
 import type { ApiRouteOption, RouteDetailStep } from "@/services/api";
-import { localizePlaceName, localizeRouteInstruction } from "@/services/placeLocalization";
+import {
+  localizePlaceName,
+  localizeRouteInstruction,
+} from "@/services/placeLocalization";
 import {
   getSavedRouteSearch,
   getSelectedRoute,
@@ -314,7 +329,9 @@ const destination =
   savedSearch.destination ??
   "Unknown destination";
 const displayStart = computed(() => localizePlaceName(start, locale.value));
-const displayDestination = computed(() => localizePlaceName(destination, locale.value));
+const displayDestination = computed(() =>
+  localizePlaceName(destination, locale.value),
+);
 // A walk-only itinerary has no ticketable transit leg, so there is nothing to
 // book or pay for — hide the Book & Pay action in that case.
 const isWalkOnly = computed(

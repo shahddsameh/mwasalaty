@@ -30,7 +30,7 @@
             @click="search"
           >
             <Send class="w-5 h-5" />
-            {{ loading ? t("aiAssistant.understanding") : t("aiAssistant.searchRoute") }}
+            {{ loading ? "Understanding request..." : "Search Route" }}
           </AppButton>
           <p v-if="message" class="mt-4 text-sm text-destructive" role="alert">
             {{ message }}
@@ -67,13 +67,12 @@
           </section>
 
           <section
-            class="bg-gradient-to-br from-primary to-secondary rounded-xl p-6 border-2 border-primary"
+            class="bg-gradient-to-br from-primary to-primary-soft text-gradient-foreground rounded-xl p-6 border-2 border-primary"
           >
-            <h3 class="font-display text-xl text-foreground mb-2">
-              {{ t("aiAssistant.tripPlanTitle") }}
-            </h3>
-            <p class="text-foreground text-sm mb-4">
-              {{ t("aiAssistant.tripPlanCopy") }}
+            <h3 class="font-display text-xl mb-2">Need a full trip plan?</h3>
+            <p class="text-sm mb-4">
+              Use AI Trip Planner for complete day itineraries with attractions,
+              restaurants, and transport.
             </p>
             <AppButton
               variant="outline"
@@ -132,7 +131,11 @@ const PERSONAL_TYPES: Record<string, string> = {
   university: "school",
 };
 
-type ResolvedPlace = { label: string; coords?: { lat: number; lng: number }; missing?: boolean };
+type ResolvedPlace = {
+  label: string;
+  coords?: { lat: number; lng: number };
+  missing?: boolean;
+};
 
 // Resolve a parser place token against the user's favorites. Returns null when the
 // label is an ordinary place, `{ missing: true }` when a personal place is referenced
@@ -142,7 +145,8 @@ function resolvePersonal(label: string | null): ResolvedPlace | null {
   const key = label.trim().toLowerCase();
   const type = PERSONAL_TYPES[key];
   let fav = type ? favorites.value.find((f) => f.type === type) : undefined;
-  if (!fav) fav = favorites.value.find((f) => f.name.trim().toLowerCase() === key);
+  if (!fav)
+    fav = favorites.value.find((f) => f.name.trim().toLowerCase() === key);
   if (type && !fav) return { label, missing: true };
   if (!fav) return null;
   const coords =
@@ -161,14 +165,21 @@ function getCurrentCoords(): Promise<{ lat: number; lng: number }> {
     }
     navigator.geolocation.getCurrentPosition(
       (position) =>
-        resolve({ lat: position.coords.latitude, lng: position.coords.longitude }),
+        resolve({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        }),
       (error) => reject(error),
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 },
     );
   });
 }
 
-function goToResults(startLabel: string, destLabel: string, intent: AiRouteIntent) {
+function goToResults(
+  startLabel: string,
+  destLabel: string,
+  intent: AiRouteIntent,
+) {
   router.push({
     path: "/route-results",
     query: {
@@ -182,7 +193,12 @@ function goToResults(startLabel: string, destLabel: string, intent: AiRouteInten
         ? { maxDurationMinutes: String(intent.maxDurationMinutes) }
         : {}),
     },
-    state: { aiPrompt: input.value.trim(), ...intent, from: startLabel, to: destLabel },
+    state: {
+      aiPrompt: input.value.trim(),
+      ...intent,
+      from: startLabel,
+      to: destLabel,
+    },
   });
 }
 const examples = computed(() => [
@@ -260,7 +276,12 @@ async function search() {
     if (result.status === "needs_clarification") {
       // Destination is known (e.g. "go home") but the origin is missing — use the
       // rider's current location, asking the browser for geolocation permission.
-      if (result.missingFields.includes("from") && toRes && !fromRes && destLabel) {
+      if (
+        result.missingFields.includes("from") &&
+        toRes &&
+        !fromRes &&
+        destLabel
+      ) {
         message.value = t("home.gettingLocation");
         try {
           const coords = await getCurrentCoords();
@@ -294,7 +315,9 @@ async function search() {
     goToResults(startLabel, destLabel, intent);
   } catch (error) {
     message.value =
-      error instanceof Error ? error.message : t("aiAssistant.errors.parseFailed");
+      error instanceof Error
+        ? error.message
+        : "Could not understand that route request.";
   } finally {
     loading.value = false;
   }

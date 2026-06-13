@@ -2,10 +2,7 @@
   <Transition name="slide-down">
     <div
       v-if="shouldShow"
-      :class="[
-        'offline-indicator',
-        `offline-indicator--${statusType}`,
-      ]"
+      :class="['offline-indicator', `offline-indicator--${statusType}`]"
       role="status"
       aria-live="polite"
     >
@@ -16,7 +13,7 @@
           <AlertCircle v-else-if="syncError" :size="16" />
           <Cloud v-else :size="16" />
         </div>
-        
+
         <div class="offline-indicator__text">
           <template v-if="isOffline">
             {{ offlineMessage }}
@@ -41,9 +38,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { WifiOff, RefreshCw, AlertCircle, Cloud } from '@lucide/vue';
-import { useOffline } from '@/composables/useOffline';
+import { computed } from "vue";
+import { WifiOff, RefreshCw, AlertCircle, Cloud } from "@lucide/vue";
+import { useOffline } from "@/composables/useOffline";
 
 const {
   isOnline,
@@ -59,15 +56,19 @@ const {
 // Show indicator if offline, has pending changes, or there's an error.
 // Routine background syncing (e.g. right after a page refresh) stays invisible.
 const shouldShow = computed(() => {
-  return isOffline.value || syncError.value || (hasPendingChanges.value && !isSyncing.value);
+  return (
+    isOffline.value ||
+    syncError.value ||
+    (hasPendingChanges.value && !isSyncing.value)
+  );
 });
 
 const statusType = computed(() => {
-  if (isOffline.value) return 'offline';
-  if (syncError.value) return 'error';
-  if (isSyncing.value) return 'syncing';
-  if (hasPendingChanges.value) return 'pending';
-  return 'online';
+  if (isOffline.value) return "offline";
+  if (syncError.value) return "error";
+  if (isSyncing.value) return "syncing";
+  if (hasPendingChanges.value) return "pending";
+  return "online";
 });
 
 async function handleSync() {
@@ -134,7 +135,7 @@ async function handleSync() {
 
 /* Status variants */
 .offline-indicator--offline {
-  background: var(--color-warning-soft, #fef3c7);
+  background: var(--color-secondary, #fef7e3);
   border-bottom-color: var(--color-warning, #f59e0b);
 }
 
@@ -191,7 +192,9 @@ async function handleSync() {
 
 .slide-down-enter-active,
 .slide-down-leave-active {
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .slide-down-enter-from {

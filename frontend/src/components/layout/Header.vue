@@ -122,18 +122,26 @@ const { isAuthenticated } = useAuthState();
 const currentPath = computed(() => route.path);
 const active = (path: string) => currentPath.value === path;
 
-const desktopLinks = [
-  { to: "/", labelKey: "nav.routePlanner" },
+const desktopLinks = computed(() => [
+  { to: "/", labelKey: "nav.routePlanner", icon: MapPin },
   // { to: "/ai-trip-planner", labelKey: "nav.aiTripPlanner", icon: Brain },
-  { to: "/saved", labelKey: "nav.saved", icon: BookmarkCheck },
-  { to: "/all-tickets", labelKey: "nav.allTickets", icon: Ticket },
-];
+  ...(isAuthenticated.value
+    ? [
+        { to: "/saved", labelKey: "nav.saved", icon: BookmarkCheck },
+        { to: "/all-tickets", labelKey: "nav.allTickets", icon: Ticket },
+      ]
+    : []),
+]);
 
 const mobileLinks = computed(() => [
   { to: "/", labelKey: "nav.routePlanner", icon: MapPin },
   // { to: "/ai-trip-planner", labelKey: "nav.aiTrip", icon: Brain },
-  { to: "/saved", labelKey: "nav.saved", icon: BookmarkCheck },
-  { to: "/all-tickets", labelKey: "nav.tickets", icon: Ticket },
+  ...(isAuthenticated.value
+    ? [
+        { to: "/saved", labelKey: "nav.saved", icon: BookmarkCheck },
+        { to: "/all-tickets", labelKey: "nav.tickets", icon: Ticket },
+      ]
+    : []),
   isAuthenticated.value
     ? { to: "/profile", labelKey: "nav.profile", icon: User }
     : { to: "/auth", labelKey: "nav.login", icon: LogIn },

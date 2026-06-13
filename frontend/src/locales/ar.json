@@ -131,6 +131,16 @@
     "transactionHistory": "سجل المعاملات",
     "noTransactions": "لا توجد معاملات بعد. ستظهر هنا مشترياتك من التذاكر والمبالغ المستردة.",
     "refundLabel": "استرداد",
+    "transactionFilters": {
+      "all": "الكل",
+      "payments": "المدفوعات / الرحلات",
+      "refunds": "المبالغ المستردة",
+      "date": "تاريخ المعاملة",
+      "clearDate": "مسح التاريخ",
+      "showMore": "عرض المزيد",
+      "resultCount": "يتم عرض {shown} من أصل {total} معاملة",
+      "noMatches": "لا توجد معاملات تطابق عوامل التصفية."
+    },
     "editProfile": "تعديل الملف الشخصي",
     "saveChanges": "حفظ التغييرات",
     "saving": "جارٍ الحفظ…",

@@ -48,14 +48,26 @@
           {{ loading ? "Loading..." : "Refresh" }}
         </button>
       </div>
+      <div class="grid gap-3 border-b border-white/10 p-4 md:grid-cols-2 lg:grid-cols-4">
+        <input v-model="search" type="search" placeholder="Search ticket, user, or route..." class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-[#F8FAFC] placeholder:text-[#64748B] focus:border-[#FFC400] focus:outline-none" />
+        <select v-model="statusFilter" class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-[#F8FAFC] focus:border-[#FFC400] focus:outline-none">
+          <option value="all">All statuses</option>
+          <option v-for="status in statusOptions" :key="status" :value="status">{{ status }}</option>
+        </select>
+        <select v-model="paymentMethodFilter" class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-[#F8FAFC] focus:border-[#FFC400] focus:outline-none">
+          <option value="all">All payment methods</option>
+          <option v-for="method in paymentMethodOptions" :key="method" :value="method">{{ method }}</option>
+        </select>
+        <input v-model="dateFilter" type="date" class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-[#F8FAFC] focus:border-[#FFC400] focus:outline-none" />
+      </div>
       <div v-if="loading" class="py-16 text-center text-sm text-[#94A3B8]">
         Loading tickets...
       </div>
       <div
-        v-else-if="!tickets.length"
+        v-else-if="!filteredTickets.length"
         class="py-16 text-center text-sm text-[#94A3B8]"
       >
-        No tickets yet.
+        No matching transactions.
       </div>
       <div
         v-else
@@ -119,7 +131,7 @@
             </thead>
             <tbody class="divide-y divide-white/10">
               <tr
-                v-for="ticket in tickets"
+                v-for="ticket in paginatedTickets"
                 :key="ticket.id"
                 class="hover:bg-[#0F172A] transition-colors"
               >
@@ -175,6 +187,7 @@
             </tbody>
           </table>
         </div>
+        <AdminPagination v-model:page="page" :total-items="filteredTickets.length" :page-size="pageSize" />
       </div>
     </Card>
 
@@ -183,8 +196,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { Card, StatCard } from "../components/AdminShared.vue";
+import AdminPagination from "../components/AdminPagination.vue";
 import {
   activateAdminTicket,
   listAdminTickets,
@@ -195,6 +209,52 @@ const tickets = ref<AdminTicket[]>([]);
 const loading = ref(false);
 const error = ref("");
 const busyId = ref<string | null>(null);
+const search = ref("");
+const statusFilter = ref("all");
+const paymentMethodFilter = ref("all");
+const dateFilter = ref("");
+const page = ref(1);
+const pageSize = 10;
+
+function paymentMethod(ticket: AdminTicket) {
+  const direct = ticket["paymentMethod"];
+  const raw = ticket.raw as { payment?: { method?: unknown } } | undefined;
+  return String(direct || raw?.payment?.method || "Unknown");
+}
+
+function transactionStatus(ticket: AdminTicket) {
+  return String(ticket.paymentStatus || ticket.status || "Unknown");
+}
+
+function createdDate(ticket: AdminTicket) {
+  if (!ticket.created_at) return "";
+  const date = new Date(ticket.created_at);
+  return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10);
+}
+
+const statusOptions = computed(() =>
+  [...new Set(tickets.value.map(transactionStatus))].sort(),
+);
+const paymentMethodOptions = computed(() =>
+  [...new Set(tickets.value.map(paymentMethod))].sort(),
+);
+const filteredTickets = computed(() => {
+  const query = search.value.trim().toLowerCase();
+  return tickets.value.filter((ticket) => {
+    const status = transactionStatus(ticket);
+    const searchable = [ticket.ticketId, ticket.userName, ticket.userId, ticket.route, ticket.from, ticket.to, ticket.status, ticket.paymentStatus, paymentMethod(ticket)].join(" ").toLowerCase();
+    return (!query || searchable.includes(query)) &&
+      (statusFilter.value === "all" || status === statusFilter.value) &&
+      (paymentMethodFilter.value === "all" || paymentMethod(ticket) === paymentMethodFilter.value) &&
+      (!dateFilter.value || createdDate(ticket) === dateFilter.value);
+  });
+});
+const paginatedTickets = computed(() => filteredTickets.value.slice((page.value - 1) * pageSize, page.value * pageSize));
+
+watch([search, statusFilter, paymentMethodFilter, dateFilter], () => { page.value = 1; });
+watch(() => filteredTickets.value.length, () => {
+  page.value = Math.min(page.value, Math.max(1, Math.ceil(filteredTickets.value.length / pageSize)));
+});
 
 function formatDateParts(value?: string) {
   if (!value) return ["-", ""];

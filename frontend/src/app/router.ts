@@ -125,8 +125,8 @@ router.beforeEach(async (to) => {
   if (isAuthenticated.value && !to.path.startsWith("/admin") && !allowsBlockedUser) {
     const status = await getUserStatus();
     if (status.blocked === true) {
-      alert("Your account has been blocked due to suspicious activity or policy violations. You can contact support if you believe this is a mistake.");
-      return { path: "/support" };
+      window.dispatchEvent(new CustomEvent("mwasalaty:user-blocked"));
+      return false;
     }
   }
 

@@ -3,6 +3,7 @@ export type SavedPlaceIconKey =
   | "home"
   | "work"
   | "school"
+  | "gym"
   | "airport"
   | "shopping"
   | "landmark"
@@ -160,6 +161,14 @@ function inferIconKey(
   if (type === "school") return "school";
 
   const text = normalize(`${name} ${address}`);
+  if (
+    text.includes("gym") ||
+    text.includes("fitness") ||
+    text.includes("نادي") ||
+    text.includes("جيم")
+  ) {
+    return "gym";
+  }
   if (text.includes("airport")) return "airport";
   if (text.includes("mall") || text.includes("market") || text.includes("khan")) {
     return "shopping";

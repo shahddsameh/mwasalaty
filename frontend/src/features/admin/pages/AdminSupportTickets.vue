@@ -137,7 +137,7 @@
           </thead>
           <tbody class="divide-y divide-white/10">
             <tr
-              v-for="ticket in filteredTickets"
+              v-for="ticket in paginatedTickets"
               :key="ticket.id"
               class="hover:bg-[#0F172A] transition-colors"
             >
@@ -186,6 +186,7 @@
           </tbody>
         </table>
       </div>
+      <AdminPagination v-model:page="page" :total-items="filteredTickets.length" :page-size="pageSize" />
     </div>
 
     <!-- Ticket Detail Modal -->
@@ -383,7 +384,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
+import AdminPagination from "../components/AdminPagination.vue";
 import { MessageSquare, X, User, Mail, Phone, Calendar } from "@lucide/vue";
 import {
   getSupportTickets,
@@ -396,6 +398,8 @@ const loading = ref(false);
 const error = ref("");
 const tickets = ref<SupportTicket[]>([]);
 const statusFilter = ref<string>("all");
+const page = ref(1);
+const pageSize = 10;
 const selectedTicket = ref<SupportTicket | null>(null);
 const updating = ref(false);
 const adminNoteInput = ref("");
@@ -451,6 +455,12 @@ const filterOptions = computed(() => [
 const filteredTickets = computed(() => {
   if (statusFilter.value === "all") return tickets.value;
   return tickets.value.filter((t) => t.status === statusFilter.value);
+});
+const paginatedTickets = computed(() => filteredTickets.value.slice((page.value - 1) * pageSize, page.value * pageSize));
+
+watch(statusFilter, () => { page.value = 1; });
+watch(() => filteredTickets.value.length, () => {
+  page.value = Math.min(page.value, Math.max(1, Math.ceil(filteredTickets.value.length / pageSize)));
 });
 
 const replyHistory = computed(() => {

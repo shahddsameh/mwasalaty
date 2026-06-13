@@ -131,6 +131,16 @@
     "transactionHistory": "Transaction History",
     "noTransactions": "No transactions yet. Your ticket purchases and refunds will appear here.",
     "refundLabel": "Refund",
+    "transactionFilters": {
+      "all": "All",
+      "payments": "Payments / Trips",
+      "refunds": "Refunds",
+      "date": "Transaction date",
+      "clearDate": "Clear date",
+      "showMore": "Show more",
+      "resultCount": "Showing {shown} of {total} transactions",
+      "noMatches": "No transactions match these filters."
+    },
     "editProfile": "Edit Profile",
     "saveChanges": "Save changes",
     "saving": "Saving…",

@@ -82,7 +82,7 @@
                 </td>
               </tr>
               <tr
-                v-for="user in users"
+                v-for="user in paginatedUsers"
                 :key="user.id"
                 class="hover:bg-[#0F172A] transition-colors"
               >
@@ -134,6 +134,7 @@
             </tbody>
           </table>
         </div>
+        <AdminPagination v-model:page="page" :total-items="users.length" :page-size="pageSize" />
       </div>
     </Card>
     <!-- View Details removed to simplify actions; Block/Unblock unchanged -->
@@ -141,8 +142,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { Card } from "../components/AdminShared.vue";
+import AdminPagination from "../components/AdminPagination.vue";
 import {
   blockUser,
   listUsers,
@@ -154,6 +156,13 @@ const users = ref<AdminUser[]>([]);
 const loading = ref(false);
 const error = ref("");
 const busyId = ref<string | null>(null);
+const page = ref(1);
+const pageSize = 10;
+const paginatedUsers = computed(() => users.value.slice((page.value - 1) * pageSize, page.value * pageSize));
+
+watch(() => users.value.length, () => {
+  page.value = Math.min(page.value, Math.max(1, Math.ceil(users.value.length / pageSize)));
+});
 
 function formatDate(value?: string | null) {
   if (!value) return "-";

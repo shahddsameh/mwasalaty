@@ -155,6 +155,7 @@ import { useI18n } from "vue-i18n";
 import {
   Briefcase,
   Building2,
+  Dumbbell,
   CastleIcon,
   Home as HomeIcon,
   Landmark,
@@ -308,6 +309,7 @@ function savedPlaceIcon(iconKey: SavedPlaceIconKey) {
   if (iconKey === "home") return HomeIcon;
   if (iconKey === "work") return Briefcase;
   if (iconKey === "school") return Building2;
+  if (iconKey === "gym") return Dumbbell;
   if (iconKey === "airport") return Plane;
   if (iconKey === "shopping") return ShoppingBag;
   if (iconKey === "landmark") return Landmark;

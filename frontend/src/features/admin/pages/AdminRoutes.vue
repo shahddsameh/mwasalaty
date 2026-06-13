@@ -121,7 +121,7 @@
             </thead>
             <tbody class="divide-y divide-white/10">
               <tr
-                v-for="route in filteredRoutes"
+                v-for="route in paginatedRoutes"
                 :key="routeKey(route)"
                 class="hover:bg-[#0F172A] transition-colors"
               >
@@ -151,6 +151,7 @@
             </tbody>
           </table>
         </div>
+        <AdminPagination v-model:page="routePage" :total-items="filteredRoutes.length" :page-size="pageSize" />
       </div>
 
       <div
@@ -210,7 +211,7 @@
             </thead>
             <tbody class="divide-y divide-white/10">
               <tr
-                v-for="item in filteredSearches"
+                v-for="item in paginatedSearches"
                 :key="searchKey(item)"
                 class="hover:bg-[#0F172A] transition-colors"
               >
@@ -246,6 +247,7 @@
             </tbody>
           </table>
         </div>
+        <AdminPagination v-model:page="searchPage" :total-items="filteredSearches.length" :page-size="pageSize" />
       </div>
 
       <div
@@ -635,9 +637,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, onMounted, ref } from "vue";
+import { computed, defineComponent, h, onMounted, ref, watch } from "vue";
 import { RefreshCw, Route as RouteIcon, Search } from "@lucide/vue";
 import { Card, StatCard } from "../components/AdminShared.vue";
+import AdminPagination from "../components/AdminPagination.vue";
 import {
   getTransitRouteDetails,
   listRouteSearches,
@@ -691,6 +694,9 @@ const loading = ref(true);
 const detailsLoading = ref(false);
 const detailsError = ref("");
 const error = ref("");
+const routePage = ref(1);
+const searchPage = ref(1);
+const pageSize = 10;
 
 const routeTabs = [
   { value: "transit", label: "Transit Routes" },
@@ -985,6 +991,17 @@ const filteredSearches = computed(() => {
         .includes(q),
     ),
   );
+});
+const paginatedRoutes = computed(() => filteredRoutes.value.slice((routePage.value - 1) * pageSize, routePage.value * pageSize));
+const paginatedSearches = computed(() => filteredSearches.value.slice((searchPage.value - 1) * pageSize, searchPage.value * pageSize));
+
+watch([search, selectedMode], () => {
+  routePage.value = 1;
+  searchPage.value = 1;
+});
+watch(activeTab, () => {
+  routePage.value = 1;
+  searchPage.value = 1;
 });
 
 async function loadData() {

@@ -145,26 +145,94 @@
             >
               {{ t("account.noTransactions") }}
             </p>
-            <div
-              v-for="tx in transactions"
-              :key="tx.id"
-              class="flex items-center justify-between p-4 border-b border-border last:border-0"
-            >
-              <div>
-                <div class="text-foreground">{{ tx.description }}</div>
-                <div class="text-sm text-muted-foreground">{{ tx.date }}</div>
+            <template v-else>
+              <div class="mb-4 space-y-3 border-b border-border pb-4">
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    v-for="filter in transactionFilters"
+                    :key="filter.value"
+                    type="button"
+                    class="min-h-10 rounded-full border px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    :class="
+                      transactionTypeFilter === filter.value
+                        ? 'border-primary bg-primary text-primary-foreground'
+                        : 'border-border bg-card text-muted-foreground hover:border-primary hover:bg-secondary hover:text-foreground'
+                    "
+                    :aria-pressed="transactionTypeFilter === filter.value"
+                    @click="transactionTypeFilter = filter.value"
+                  >
+                    {{ t(filter.labelKey) }}
+                  </button>
+                </div>
+
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                  <label class="flex min-w-0 flex-1 flex-col gap-1.5 sm:max-w-xs">
+                    <span class="text-sm font-semibold text-foreground">
+                      {{ t("account.transactionFilters.date") }}
+                    </span>
+                    <input
+                      v-model="transactionDateFilter"
+                      type="date"
+                      dir="ltr"
+                      class="min-h-10 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </label>
+                  <button
+                    v-if="transactionDateFilter"
+                    type="button"
+                    class="min-h-10 self-start rounded-lg px-3 py-2 text-sm font-semibold text-primary hover:bg-primary-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:self-auto"
+                    @click="transactionDateFilter = ''"
+                  >
+                    {{ t("account.transactionFilters.clearDate") }}
+                  </button>
+                </div>
+
+                <p class="text-xs text-muted-foreground">
+                  {{
+                    t("account.transactionFilters.resultCount", {
+                      shown: visibleTransactions.length,
+                      total: filteredTransactions.length,
+                    })
+                  }}
+                </p>
               </div>
-              <div
-                :class="[
-                  'font-display text-lg',
-                  tx.amount.startsWith('+')
-                    ? 'text-success'
-                    : 'text-foreground',
-                ]"
+
+              <p
+                v-if="filteredTransactions.length === 0"
+                class="rounded-lg border border-dashed border-border bg-muted p-5 text-center text-sm text-muted-foreground"
               >
-                {{ tx.amount }}
-              </div>
-            </div>
+                {{ t("account.transactionFilters.noMatches") }}
+              </p>
+
+              <template v-else>
+                <div
+                  v-for="tx in visibleTransactions"
+                  :key="tx.id"
+                  class="flex items-center justify-between gap-4 p-4 border-b border-border last:border-0"
+                >
+                  <div class="min-w-0">
+                    <div class="text-foreground">{{ tx.description }}</div>
+                    <div class="text-sm text-muted-foreground">{{ tx.date }}</div>
+                  </div>
+                  <div
+                    :class="[
+                      'shrink-0 font-display text-lg',
+                      tx.amount.startsWith('+')
+                        ? 'text-success'
+                        : 'text-foreground',
+                    ]"
+                  >
+                    {{ tx.amount }}
+                  </div>
+                </div>
+
+                <div v-if="hasMoreTransactions" class="border-t border-border pt-4 text-center">
+                  <AppButton variant="outline" @click="visibleTransactionCount += transactionPageSize">
+                    {{ t("account.transactionFilters.showMore") }}
+                  </AppButton>
+                </div>
+              </template>
+            </template>
           </Card>
         </section>
       </div>
@@ -344,7 +412,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, onMounted, reactive, ref } from "vue";
+import { computed, defineComponent, h, onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { ChevronRight, Edit, Settings, User } from "@lucide/vue";
@@ -395,6 +463,25 @@ const userInfo = reactive({
 
 const { savedTrips } = useSavedTrips();
 const tickets = ref<Ticket[]>([]);
+type TransactionType = "all" | "payment" | "refund";
+type TransactionRow = {
+  id: string;
+  description: string;
+  amount: string;
+  date: string;
+  dateKey: string;
+  type: Exclude<TransactionType, "all">;
+};
+
+const transactionTypeFilter = ref<TransactionType>("all");
+const transactionDateFilter = ref("");
+const transactionPageSize = 8;
+const visibleTransactionCount = ref(transactionPageSize);
+const transactionFilters = [
+  { value: "all" as const, labelKey: "account.transactionFilters.all" },
+  { value: "payment" as const, labelKey: "account.transactionFilters.payments" },
+  { value: "refund" as const, labelKey: "account.transactionFilters.refunds" },
+];
 
 // Live count of locally saved routes (offline-first store shared with Saved.vue).
 const savedRoutesCount = computed(() => savedTrips.value.length);
@@ -405,31 +492,55 @@ const totalTrips = computed(() => tickets.value.length);
 // ticket, plus a refund row whenever any amount has been refunded.
 const transactions = computed(() =>
   tickets.value.flatMap((ticket) => {
-    const rows: { id: string; description: string; amount: string; date: string }[] =
-      [];
+    const rows: TransactionRow[] = [];
     const description = ticketRouteSummary(ticket);
     const currency = ticket.payment.currency ?? "EGP";
-    const date = formatTxDate(ticket.createdAt ?? ticket.departureAt);
+    const paymentTimestamp = ticket.createdAt ?? ticket.departureAt;
 
     rows.push({
       id: ticket.ticketId,
       description,
       amount: `-${ticket.payment.amount} ${currency}`,
-      date,
+      date: formatTxDate(paymentTimestamp),
+      dateKey: formatTxDateKey(paymentTimestamp),
+      type: "payment",
     });
 
     if ((ticket.payment.refundedAmount ?? 0) > 0) {
+      const refundTimestamp = ticket.payment.refundedAt ?? ticket.createdAt;
       rows.push({
         id: `${ticket.ticketId}-refund`,
         description: `${t("account.refundLabel")} · ${description}`,
         amount: `+${ticket.payment.refundedAmount} ${currency}`,
-        date: formatTxDate(ticket.payment.refundedAt ?? ticket.createdAt),
+        date: formatTxDate(refundTimestamp),
+        dateKey: formatTxDateKey(refundTimestamp),
+        type: "refund",
       });
     }
 
     return rows;
   }),
 );
+
+const filteredTransactions = computed(() =>
+  transactions.value.filter(
+    (transaction) =>
+      (transactionTypeFilter.value === "all" ||
+        transaction.type === transactionTypeFilter.value) &&
+      (!transactionDateFilter.value ||
+        transaction.dateKey === transactionDateFilter.value),
+  ),
+);
+const visibleTransactions = computed(() =>
+  filteredTransactions.value.slice(0, visibleTransactionCount.value),
+);
+const hasMoreTransactions = computed(
+  () => visibleTransactionCount.value < filteredTransactions.value.length,
+);
+
+watch([transactionTypeFilter, transactionDateFilter], () => {
+  visibleTransactionCount.value = transactionPageSize;
+});
 
 function ticketRouteSummary(ticket: Ticket): string {
   const from = ticket.legs[0]?.from?.name;
@@ -446,6 +557,16 @@ function formatTxDate(value?: string): string {
     day: "numeric",
     year: "numeric",
   }).format(parsed);
+}
+
+function formatTxDateKey(value?: string): string {
+  if (!value) return "";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return "";
+  const year = parsed.getFullYear();
+  const month = String(parsed.getMonth() + 1).padStart(2, "0");
+  const day = String(parsed.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 onMounted(async () => {

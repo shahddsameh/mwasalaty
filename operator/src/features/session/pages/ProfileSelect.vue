@@ -8,9 +8,9 @@
         icon="route"
       >
         <div class="relative mt-6 grid grid-cols-3 gap-2 border-t border-surface-dark-border pt-5 text-center sm:max-w-md sm:text-start">
-          <div><p class="text-[0.65rem] font-bold uppercase text-surface-dark-foreground/60">{{ $t("common.mode") }}</p><p class="mt-1 text-sm font-black text-surface-dark-foreground">{{ $t("profile.genericRoute") }}</p></div>
-          <div><p class="text-[0.65rem] font-bold uppercase text-surface-dark-foreground/60">{{ $t("common.profile") }}</p><p class="mt-1 text-sm font-black text-surface-dark-foreground">{{ profiles.length || $t("common.dash") }}</p></div>
-          <div><p class="text-[0.65rem] font-bold uppercase text-surface-dark-foreground/60">{{ $t("common.queue") }}</p><p class="mt-1 text-sm font-black text-success">{{ isOnline ? $t("common.synced") : $t("common.pending") }}</p></div>
+          <div><p class="text-[0.65rem] font-medium uppercase text-muted-foreground">{{ $t("common.mode") }}</p><p class="mt-1 text-sm font-semibold text-foreground">{{ $t("profile.genericRoute") }}</p></div>
+          <div><p class="text-[0.65rem] font-medium uppercase text-muted-foreground">{{ $t("common.profile") }}</p><p class="mt-1 text-sm font-semibold text-foreground">{{ profiles.length || $t("common.dash") }}</p></div>
+          <div><p class="text-[0.65rem] font-medium uppercase text-muted-foreground">{{ $t("common.queue") }}</p><p class="mt-1 text-sm font-semibold text-success">{{ isOnline ? $t("common.synced") : $t("common.pending") }}</p></div>
         </div>
       </OperatorHeader>
 
@@ -33,7 +33,7 @@
           <button
             v-for="profile in profiles"
             :key="profile.scannerProfileId"
-            class="group tap-target relative overflow-hidden rounded-2xl border border-border bg-card p-5 text-start shadow-[0_12px_32px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-1 hover:border-primary hover:shadow-[0_18px_40px_rgba(15,23,42,0.1)] focus-ring"
+            class="group tap-target relative overflow-hidden rounded-2xl border border-border bg-card p-5 text-start shadow-sm transition-colors hover:border-primary focus-ring"
             @click="selectProfile(profile)"
           >
             <span class="absolute inset-x-0 top-0 h-1 bg-primary opacity-0 transition-opacity group-hover:opacity-100" />
@@ -41,14 +41,14 @@
               <span :class="profile.mode === 'SUBWAY' ? 'bg-red-100 text-red-800' : 'bg-orange-100 text-orange-700'" class="grid h-12 w-12 place-items-center rounded-2xl">
                 <AppIcon :name="profile.mode === 'SUBWAY' ? 'metro' : 'bus'" class="h-6 w-6" />
               </span>
-              <span class="rounded-full bg-muted px-2.5 py-1 font-mono text-[0.65rem] font-bold uppercase text-muted-foreground">{{ profile.scannerProfileId }}</span>
+              <span class="rounded-full bg-muted px-2.5 py-1 font-mono text-[0.65rem] font-medium uppercase text-muted-foreground">{{ profile.scannerProfileId }}</span>
             </div>
-            <strong class="mt-5 block text-xl font-black leading-snug text-foreground">{{ displayProfile(profile) }}</strong>
+            <strong class="mt-5 block text-xl font-semibold leading-snug text-foreground">{{ displayProfile(profile) }}</strong>
             <div class="mt-3 flex flex-wrap gap-2">
-              <span class="inline-flex rounded-full bg-secondary px-3 py-1 text-xs font-extrabold text-foreground">{{ displayMode(profile.mode) }}</span>
-              <span class="inline-flex rounded-full bg-primary-soft px-3 py-1 text-xs font-extrabold text-primary-hover">{{ profile.routeShortName || $t("profile.genericRoute") }}</span>
+              <span class="inline-flex rounded-full bg-secondary px-3 py-1 text-xs font-medium text-foreground">{{ displayMode(profile.mode) }}</span>
+              <span class="inline-flex rounded-full bg-primary-soft px-3 py-1 text-xs font-medium text-primary-hover">{{ profile.routeShortName || $t("profile.genericRoute") }}</span>
             </div>
-            <span class="mt-6 flex items-center justify-between rounded-xl bg-surface-dark px-4 py-3 text-sm font-black text-surface-dark-foreground transition-colors group-hover:bg-primary group-hover:text-primary-contrast">
+            <span class="mt-6 flex items-center justify-between rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-contrast transition-colors group-hover:bg-primary-hover group-hover:text-white">
               {{ $t("profile.select") }}
               <AppIcon name="chevron" class="h-4 w-4 rtl:rotate-180" />
             </span>

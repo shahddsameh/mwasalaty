@@ -4,8 +4,8 @@
       <AppIcon :name="icon" class="h-6 w-6" />
     </span>
     <div>
-      <p class="text-xs font-extrabold text-muted-foreground sm:text-sm">{{ label }}</p>
-      <strong class="mt-1 block text-2xl font-black leading-none text-foreground sm:text-3xl">{{ value }}</strong>
+      <p class="text-xs font-medium text-muted-foreground sm:text-sm">{{ label }}</p>
+      <strong class="mt-1 block text-2xl font-semibold leading-none text-foreground sm:text-3xl">{{ value }}</strong>
     </div>
   </article>
 </template>

@@ -3,14 +3,14 @@
     <AppNav />
     <section class="mx-auto grid w-full max-w-3xl gap-4">
       <header class="field-panel p-5">
-        <p class="text-sm font-bold text-muted-foreground">{{ $t("cameraHelp.title") }}</p>
-        <h1 class="mt-2 text-3xl font-black">{{ $t("cameraHelp.default") }}</h1>
+        <p class="text-sm font-medium text-muted-foreground">{{ $t("cameraHelp.title") }}</p>
+        <h1 class="mt-2 text-3xl font-semibold">{{ $t("cameraHelp.default") }}</h1>
       </header>
 
       <ol class="grid gap-3">
-        <li class="field-panel p-4 font-bold">{{ $t("cameraHelp.step1") }}</li>
-        <li class="field-panel p-4 font-bold">{{ $t("cameraHelp.step2") }}</li>
-        <li class="field-panel p-4 font-bold">{{ $t("cameraHelp.step3") }}</li>
+        <li class="field-panel p-4 font-normal">{{ $t("cameraHelp.step1") }}</li>
+        <li class="field-panel p-4 font-normal">{{ $t("cameraHelp.step2") }}</li>
+        <li class="field-panel p-4 font-normal">{{ $t("cameraHelp.step3") }}</li>
       </ol>
 
       <p v-if="!isOnline" class="rounded-lg border border-border bg-muted p-4 font-semibold text-muted-foreground">
@@ -19,7 +19,7 @@
 
       <div class="grid gap-3 sm:grid-cols-2">
         <AppButton size="lg" @click="tryCamera">{{ $t("cameraHelp.enable") }}</AppButton>
-        <RouterLink to="/scan" class="tap-target inline-flex items-center justify-center rounded-lg border border-border bg-card px-4 py-3 font-bold focus-ring">
+        <RouterLink to="/scan" class="tap-target inline-flex items-center justify-center rounded-xl border border-border bg-card px-4 py-3 font-semibold transition-colors hover:bg-surface-hover focus-ring">
           {{ $t("common.back") }}
         </RouterLink>
       </div>

@@ -6,7 +6,7 @@
   >
     <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3">
       <p class="flex items-center gap-2 text-sm font-semibold"><AppIcon name="offline" class="h-4 w-4 text-primary" />{{ $t("offline.banner") }}</p>
-      <span class="rounded-full bg-primary px-3 py-1 text-xs font-black text-primary-contrast">
+      <span class="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-contrast">
         {{ queuedLabel }}
       </span>
     </div>

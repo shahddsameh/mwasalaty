@@ -7,10 +7,10 @@
       </header>
 
       <section class="flex flex-1 flex-col items-center justify-center text-center" aria-live="assertive">
-        <div :class="toneClass" class="mb-8 grid h-24 w-24 place-items-center rounded-full text-5xl font-black shadow-sm sm:h-28 sm:w-28 sm:text-6xl">
+        <div :class="toneClass" class="mb-8 grid h-24 w-24 place-items-center rounded-full text-5xl font-semibold shadow-sm sm:h-28 sm:w-28 sm:text-6xl">
           {{ icon }}
         </div>
-        <h1 class="max-w-2xl text-balance text-4xl font-black leading-tight text-foreground sm:text-6xl">
+        <h1 class="max-w-2xl text-balance text-4xl font-semibold leading-tight text-foreground sm:text-6xl">
           {{ headline }}
         </h1>
         <p class="mt-5 max-w-xl text-pretty text-lg leading-8 text-muted-foreground sm:text-2xl">

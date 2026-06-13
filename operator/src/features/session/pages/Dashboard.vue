@@ -11,8 +11,8 @@
         icon="dashboard"
       />
 
-      <RouterLink to="/scan" class="group tap-target flex min-h-24 items-center justify-between gap-4 rounded-2xl bg-primary p-5 text-primary-contrast shadow-[0_14px_32px_rgba(234,179,8,0.24)] transition-all hover:-translate-y-0.5 hover:bg-primary-hover hover:text-white focus-ring md:min-h-28 md:p-6">
-        <span class="flex items-center gap-4 text-start"><span class="grid h-14 w-14 place-items-center rounded-2xl bg-card/50"><AppIcon name="scan" class="h-7 w-7" /></span><span><small class="block text-xs font-extrabold uppercase opacity-70">{{ $t("common.appName") }}</small><strong class="mt-1 block text-xl font-black md:text-2xl">{{ $t("dashboard.scanCta") }}</strong></span></span>
+      <RouterLink to="/scan" class="group tap-target flex min-h-24 items-center justify-between gap-4 rounded-2xl border border-primary/30 bg-primary p-5 text-primary-contrast shadow-sm transition-colors hover:bg-primary-hover hover:text-white focus-ring md:min-h-28 md:p-6">
+        <span class="flex items-center gap-4 text-start"><span class="grid h-12 w-12 place-items-center rounded-xl bg-card/60"><AppIcon name="scan" class="h-6 w-6" /></span><span><small class="block text-xs font-medium uppercase opacity-70">{{ $t("common.appName") }}</small><strong class="mt-1 block text-xl font-semibold md:text-2xl">{{ $t("dashboard.scanCta") }}</strong></span></span>
         <AppIcon name="chevron" class="h-6 w-6 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
       </RouterLink>
 
@@ -26,11 +26,11 @@
       </div>
 
       <div class="grid gap-3 sm:grid-cols-2">
-        <RouterLink to="/sync" class="field-panel group tap-target flex items-center gap-4 p-5 transition-all hover:-translate-y-0.5 hover:border-primary focus-ring">
-          <span class="grid h-12 w-12 place-items-center rounded-xl bg-primary-soft text-primary-hover"><AppIcon name="queueWaiting" class="h-6 w-6" /></span><span><span class="text-sm font-bold text-muted-foreground">{{ $t("common.queue") }}</span><strong class="mt-1 block text-2xl">{{ queuedCount }}</strong></span>
+        <RouterLink to="/sync" class="field-panel group tap-target flex items-center gap-4 p-5 transition-colors hover:border-primary focus-ring">
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-primary-soft text-primary-hover"><AppIcon name="queueWaiting" class="h-5 w-5" /></span><span><span class="text-sm font-medium text-muted-foreground">{{ $t("common.queue") }}</span><strong class="mt-1 block text-2xl font-semibold">{{ queuedCount }}</strong></span>
         </RouterLink>
-        <RouterLink to="/history" class="field-panel group tap-target flex items-center gap-4 p-5 transition-all hover:-translate-y-0.5 hover:border-primary focus-ring">
-          <span class="grid h-12 w-12 place-items-center rounded-xl bg-muted text-foreground"><AppIcon name="recentActivity" class="h-6 w-6" /></span><span><span class="text-sm font-bold text-muted-foreground">{{ $t("common.history") }}</span><strong class="mt-1 block text-2xl">{{ totalScans }}</strong></span>
+        <RouterLink to="/history" class="field-panel group tap-target flex items-center gap-4 p-5 transition-colors hover:border-primary focus-ring">
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-muted text-foreground"><AppIcon name="recentActivity" class="h-5 w-5" /></span><span><span class="text-sm font-medium text-muted-foreground">{{ $t("common.history") }}</span><strong class="mt-1 block text-2xl font-semibold">{{ totalScans }}</strong></span>
         </RouterLink>
       </div>
     </section>

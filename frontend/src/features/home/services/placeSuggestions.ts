@@ -1,3 +1,5 @@
+import { localizePlaceName } from "@/services/placeLocalization";
+
 export type PlaceSuggestion = {
   label: string;
   area: string;
@@ -76,12 +78,19 @@ const labelAr: Record<string, string> = {
   "New Cairo": "القاهرة الجديدة",
 };
 
+// Prefer the shared route/place translation map (single source of truth) and
+// fall back to the small curated list below for anything it doesn't cover.
+function arabicLabel(label: string): string | undefined {
+  const shared = localizePlaceName(label, "ar");
+  return shared && shared !== label ? shared : labelAr[label];
+}
+
 function suggestion(label: string, area: string, category: string): PlaceSuggestion {
   return {
     label,
     area,
     category,
-    labelAr: labelAr[label],
+    labelAr: arabicLabel(label),
     areaAr: areaAr[area],
     categoryAr: categoryAr[category],
   };

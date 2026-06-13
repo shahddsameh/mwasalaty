@@ -1,0 +1,4126 @@
+{
+  "10th district (al hay al asher) 6th of october": {
+    "en": "10th District (Al Hay Al Asher) - 6th of October",
+    "ar": "الحي العاشر (الحي العاشر) - 6 أكتوبر"
+  },
+  "10th district (al hay al asher) nasr city": {
+    "en": "10th District (Al Hay Al Asher) - Nasr City",
+    "ar": "الحي العاشر (الحي العاشر) - مدينة نصر"
+  },
+  "10th district mini bus stop (al asher) al shorouq": {
+    "en": "10th District Mini Bus Stop (Al Asher) - Al Shorouq",
+    "ar": "الحي العاشر محطة حافلة صغيرة (الحي العاشر) - الشروق"
+  },
+  "10th of ramadan (asher men ramadan) city": {
+    "en": "10th of Ramadan (Asher Men Ramadan) City",
+    "ar": "العاشر من رمضان (الحي العاشر من رمضان) - مدينة"
+  },
+  "10th of ramadan (asher men ramadan) station": {
+    "en": "10th of Ramadan (Asher Men Ramadan) Station",
+    "ar": "العاشر من رمضان (الحي العاشر من رمضان) - محطة"
+  },
+  "10th of ramadan city entrance": {
+    "en": "10th of Ramadan City Entrance",
+    "ar": "العاشر من رمضان - مدخل المدينة"
+  },
+  "10th of ramadan station (asher men ramadan) al hijaz (obour police station)": {
+    "en": "10th of Ramadan Station (Asher Men Ramadan)-Al Hijaz (Obour Police Station)",
+    "ar": "محطة 10 رمضان (أشر من رمضان)-الحجاز (مركز شرطة عبور)"
+  },
+  "10th of ramadan station (asher men ramadan) al shorouq academy (dorra)": {
+    "en": "10th of Ramadan Station (Asher Men Ramadan)-Al Shorouq Academy (Dorra)",
+    "ar": "محطة 10 رمضان (أشر من رمضان)-أكاديمية الشروق (دورة)"
+  },
+  "10th of ramadan station (asher men ramadan) al shorouq water station": {
+    "en": "10th of Ramadan Station (Asher Men Ramadan)-Al Shorouq Water Station",
+    "ar": "محطة 10 رمضان (أشر من رمضان)-محطة مياه الشروق"
+  },
+  "10th of ramadan station (asher men ramadan) rawda mosque obour": {
+    "en": "10th of Ramadan Station (Asher Men Ramadan)-Rawda Mosque Obour",
+    "ar": "محطة 10 رمضان (أشر من رمضان)-مسجد الروضة عبور"
+  },
+  "10th of ramadan station (asher men ramadan) shabab stop obour": {
+    "en": "10th of Ramadan Station (Asher Men Ramadan)-Shabab Stop Obour",
+    "ar": "محطة 10 رمضان (أشر من رمضان)-وقف شباب عبور"
+  },
+  "10th of ramadan station ismailiya desert road": {
+    "en": "10th of Ramadan Station - Ismailiya Desert Road",
+    "ar": "محطة العاشر من رمضان - طريق الإسماعيلية الصحراوي"
+  },
+  "11th district (hay al hadi ashr) 6th of october": {
+    "en": "11th District (Hay Al Hadi Ashr) - 6th of October",
+    "ar": "الحي الحادي عشر (الحي الحادي عشر) - 6 أكتوبر"
+  },
+  "11th district (hay al hadi ashr) exit sheikh zayed": {
+    "en": "11th District (Hay Al Hadi Ashr) Exit - Sheikh Zayed",
+    "ar": "الحي الحادي عشر (الحي الحادي عشر) - مخرج - الشيخ زايد"
+  },
+  "11th district (hay al hadi ashr) sheikh zayed": {
+    "en": "11th District (Hay Al Hadi Ashr) - Sheikh Zayed",
+    "ar": "الحي الحادي عشر (الحي الحادي عشر) - الشيخ زايد"
+  },
+  "15th of may bridge": {
+    "en": "15th of May Bridge",
+    "ar": "كوبري 15 مايو"
+  },
+  "16th district (hay al sades ashr) sheikh zayed": {
+    "en": "16th District (Hay Al Sades Ashr) - Sheikh Zayed",
+    "ar": "الحي 16 (حي السعد عشر) - الشيخ زايد"
+  },
+  "1st settlement (tagamoa awwal)": {
+    "en": "1st Settlement (Tagamoa Awwal)",
+    "ar": "التجمع الأول"
+  },
+  "1st settlement (tagamoa awwal) hospital": {
+    "en": "1st Settlement (Tagamoa Awwal) Hospital",
+    "ar": "مستشفى التجمع الأول (تجمع أول)"
+  },
+  "1st settlement city authority": {
+    "en": "1st Settlement City Authority",
+    "ar": "سلطة المدينة للتجمع الأول"
+  },
+  "26th of july mehwar exit ring road": {
+    "en": "26th of July Mehwar Exit -  Ring Road",
+    "ar": "مخرج مهور 26 يوليو - الطريق الدائري"
+  },
+  "2nd district entrance obour": {
+    "en": "2nd District Entrance - Obour",
+    "ar": "مدخل الحي الثاني - أوبور"
+  },
+  "3rd settlement (tagamoa thaleth)": {
+    "en": "3rd Settlement (Tagamoa Thaleth)",
+    "ar": "التجمع الثالث"
+  },
+  "5th settlement city authority": {
+    "en": "5th Settlement City Authority",
+    "ar": "جهاز التجمع الخامس"
+  },
+  "6th district 6th of october": {
+    "en": "6th District - 6th of October",
+    "ar": "الحي السادس - 6 أكتوبر"
+  },
+  "6th of october city authority": {
+    "en": "6th Of October City Authority",
+    "ar": "جهاز مدينة السادس من أكتوبر"
+  },
+  "6th of october public library": {
+    "en": "6th Of October Public Library",
+    "ar": "مكتبة عامة 6 أكتوبر"
+  },
+  "6th of october university": {
+    "en": "6th Of October University",
+    "ar": "جامعة السادس من أكتوبر"
+  },
+  "7th district (hay al sabea) 6th of october": {
+    "en": "7th District (Hay Al Sabea) - 6th of October",
+    "ar": "الحي السابع - السادس من أكتوبر"
+  },
+  "7th district entrance 6th of october": {
+    "en": "7th District Entrance - 6th of October",
+    "ar": "مدخل الحي السابع - 6 أكتوبر"
+  },
+  "7th district stop (hay al sabea) nasr city": {
+    "en": "7th District Stop (Hay Al Sabea) - Nasr City",
+    "ar": "موقف الحي السابع - مدينة نصر"
+  },
+  "8th district (hay al thamen) 6th of october": {
+    "en": "8th District (Hay Al Thamen) - 6th of October",
+    "ar": "الحي الثامن - السادس من أكتوبر"
+  },
+  "8th district al shorouq": {
+    "en": "8th District - Al Shorouq",
+    "ar": "الحي الثامن - الشروق"
+  },
+  "abageyya bridge": {
+    "en": "Abageyya Bridge",
+    "ar": "جسر أباجيّة"
+  },
+  "abageyya stop": {
+    "en": "Abageyya Stop",
+    "ar": "محطة أباجيّة"
+  },
+  "abbas al akkad mostafa al nahas": {
+    "en": "Abbas Al Akkad - Mostafa Al Nahas",
+    "ar": "عباس العقاد - مصطفى النحاس"
+  },
+  "abbaseya bridge start": {
+    "en": "Abbaseya Bridge - Start",
+    "ar": "جسر أباسيا - البداية"
+  },
+  "abbasseya": {
+    "en": "Abbasseya",
+    "ar": "العباسية"
+  },
+  "abbasseya bridge end": {
+    "en": "Abbasseya Bridge - End",
+    "ar": "جسر أباسيا - النهاية"
+  },
+  "abbasseya hospital": {
+    "en": "Abbasseya Hospital",
+    "ar": "مستشفى أباسيا"
+  },
+  "abbasseya square": {
+    "en": "Abbasseya Square",
+    "ar": "ميدان أباسيا"
+  },
+  "abbassiya": {
+    "en": "Abbassiya",
+    "ar": "العباسية"
+  },
+  "abboud": {
+    "en": "Abboud",
+    "ar": "عبود"
+  },
+  "abd al moneim riad": {
+    "en": "Abd Al Moneim Riad",
+    "ar": "عبد المنعم رياض"
+  },
+  "abd al moneim riad al shorouq": {
+    "en": "Abd Al Moneim Riad-Al Shorouq",
+    "ar": "عبد المنعم رياض - الشروق"
+  },
+  "abd al moneim riad al souk al qadeem": {
+    "en": "Abd Al Moneim Riad-Al Souk Al Qadeem",
+    "ar": "عبد المنعم رياض - السوق القديم"
+  },
+  "abd al moneim riad auc": {
+    "en": "Abd Al Moneim Riad-AUC",
+    "ar": "عبد المنعم رياض - الجامعة الأمريكية"
+  },
+  "abd al moneim riad badr": {
+    "en": "Abd Al Moneim Riad-Badr",
+    "ar": "عبد المنعم رياض - بدر"
+  },
+  "abd al moneim riad el hossary": {
+    "en": "Abd Al Moneim Riad-El Hossary",
+    "ar": "عبد المنعم رياض - الحصري"
+  },
+  "abd al moneim riad obour": {
+    "en": "Abd Al Moneim Riad-Obour",
+    "ar": "عبد المنعم رياض - العبور"
+  },
+  "abd al moneim riad qalyub": {
+    "en": "Abd Al Moneim Riad-Qalyub",
+    "ar": "عبد المنعم رياض - قليوب"
+  },
+  "abd al moneim riad third settlement": {
+    "en": "Abd Al Moneim Riad-Third Settlement",
+    "ar": "عبد المنعم رياض - التجمع الثالث"
+  },
+  "abdeen": {
+    "en": "Abdeen",
+    "ar": "عابدين"
+  },
+  "abdo basha": {
+    "en": "Abdo Basha",
+    "ar": "عبد الباشا"
+  },
+  "abdou pasha": {
+    "en": "Abdou Pasha",
+    "ar": "عبده باشا"
+  },
+  "abou al majd center mostorod": {
+    "en": "Abou Al Majd Center - Mostorod",
+    "ar": "مركز أبو المجد - مستورد"
+  },
+  "abou al reesh": {
+    "en": "Abou Al Reesh",
+    "ar": "أبو الريش"
+  },
+  "abou allaam": {
+    "en": "Abou Allaam",
+    "ar": "أبو الألام"
+  },
+  "abou wafya bridge": {
+    "en": "Abou Wafya Bridge",
+    "ar": "جسر أبو وفيا"
+  },
+  "abu bakr al siddiq mosque 6th of october": {
+    "en": "Abu Bakr Al Siddiq Mosque - 6th of October",
+    "ar": "مسجد أبو بكر الصديق - 6 أكتوبر"
+  },
+  "abu makarem mosque al waili": {
+    "en": "Abu Makarem Mosque - Al Waili",
+    "ar": "مسجد أبو مكارم - الوايل"
+  },
+  "adidas steps ring road": {
+    "en": "Adidas Steps - Ring Road",
+    "ar": "خطوات أديداس - الطريق الدائري"
+  },
+  "adminstration of mobilization and recruitment": {
+    "en": "Adminstration Of Mobilization And Recruitment",
+    "ar": "إدارة التعبئة والتجنيد"
+  },
+  "agouza corniche": {
+    "en": "Agouza Corniche",
+    "ar": "كورنيش أغوزة"
+  },
+  "agouza police hospital": {
+    "en": "Agouza Police Hospital",
+    "ar": "مستشفى شرطة أغوزة"
+  },
+  "ahmed al sallab mall": {
+    "en": "Ahmed Al Sallab Mall",
+    "ar": "مول أحمد السلاعب"
+  },
+  "ahmed badawi street": {
+    "en": "Ahmed Badawi Street",
+    "ar": "شارع أحمد بدوي"
+  },
+  "ahmed galal military passage": {
+    "en": "Ahmed Galal Military Passage",
+    "ar": "ممر أحمد جلال العسكري"
+  },
+  "ahmed helmy": {
+    "en": "Ahmed Helmy",
+    "ar": "أحمد حلمي"
+  },
+  "ahmed helmy kattameyya": {
+    "en": "Ahmed Helmy-Kattameyya",
+    "ar": "أحمد حلمي - القطامية"
+  },
+  "ahmed maher teaching hospital": {
+    "en": "Ahmed Maher Teaching Hospital",
+    "ar": "مستشفى أحمد ماهر التدريسي"
+  },
+  "ahmed oraby ramses": {
+    "en": "Ahmed Oraby - Ramses",
+    "ar": "أحمد أورابي - رمسيس"
+  },
+  "ahmed oraby square obour": {
+    "en": "Ahmed Oraby Square - Obour",
+    "ar": "ميدان أحمد أورابي - عبور"
+  },
+  "ahmed oraby street": {
+    "en": "Ahmed Oraby Street",
+    "ar": "شارع أحمد أورابي"
+  },
+  "ahmed saaed bridge end": {
+    "en": "Ahmed Saaed Bridge - End",
+    "ar": "كوبري أحمد سعيد - نهاية"
+  },
+  "ahram canadian university": {
+    "en": "Ahram Canadian University",
+    "ar": "جامعة أهرام الكندية"
+  },
+  "ahram gardens resort 6th of october": {
+    "en": "Ahram Gardens Resort - 6th of October",
+    "ar": "منتجع أهرام جاردنز - 6 أكتوبر"
+  },
+  "ain helwan": {
+    "en": "Ain Helwan",
+    "ar": "عين حلوان"
+  },
+  "ain shams": {
+    "en": "Ain Shams",
+    "ar": "عين شمس"
+  },
+  "ain shams university": {
+    "en": "Ain Shams University",
+    "ar": "جامعة عين شمس"
+  },
+  "ain shams university obour": {
+    "en": "Ain Shams University - Obour",
+    "ar": "جامعة عين شمس - عبور"
+  },
+  "air force hospital": {
+    "en": "Air Force Hospital",
+    "ar": "مستشفى القوات الجوية"
+  },
+  "air force hospital al waili": {
+    "en": "Air Force Hospital - Al Waili",
+    "ar": "مستشفى القوات الجوية - الوايل"
+  },
+  "akhbar al yom academy": {
+    "en": "Akhbar Al Yom Academy",
+    "ar": "أكاديمية أخبار اليوم"
+  },
+  "akhnaton school": {
+    "en": "Akhnaton School",
+    "ar": "مدرسة أخناتون"
+  },
+  "akhnaton square": {
+    "en": "Akhnaton Square",
+    "ar": "ميدان أخناتون"
+  },
+  "al aalam specialized hospital": {
+    "en": "Al Aalam Specialized Hospital",
+    "ar": "مستشفى العالم المتخصص"
+  },
+  "al abeet steps ring road": {
+    "en": "Al Abeet Steps -Ring Road",
+    "ar": "مراحل الأبيات - الطريق الدائري"
+  },
+  "al ahly sporting club": {
+    "en": "Al Ahly Sporting Club",
+    "ar": "نادي الأهلي الرياضي"
+  },
+  "al ahram": {
+    "en": "Al-Ahram",
+    "ar": "الأهرام"
+  },
+  "al alg exit ring road": {
+    "en": "Al Alg Exit - Ring Road",
+    "ar": "مخرج الألغ - الطريق الدائري"
+  },
+  "al amir steps ring road": {
+    "en": "Al Amir Steps - Ring Road",
+    "ar": "الامير خطوات - الطريق الدائري"
+  },
+  "al andalous specialized hospital": {
+    "en": "Al Andalous Specialized Hospital",
+    "ar": "مستشفى الأندلس المتخصص"
+  },
+  "al areesh haram street": {
+    "en": "Al Areesh - Haram Street",
+    "ar": "العريش - شارع حرم"
+  },
+  "al ashgar district": {
+    "en": "Al Ashgar District",
+    "ar": "الاشجار الحي"
+  },
+  "al azhar pedestrian bridge": {
+    "en": "Al Azhar Pedestrian Bridge",
+    "ar": "جسر الأزهار للمشاة"
+  },
+  "al azhar university north": {
+    "en": "Al Azhar University - North",
+    "ar": "جامعة الأزهر - الشمال"
+  },
+  "al azhar university south": {
+    "en": "Al Azhar University - South",
+    "ar": "جامعة الأزهر - الجنوب"
+  },
+  "al bahr al aazam exit end": {
+    "en": "Al Bahr Al Aazam Exit - End",
+    "ar": "البحر العظمى مخرج - النهاية"
+  },
+  "al bahr al aazam exit start": {
+    "en": "Al Bahr Al Aazam Exit - Start",
+    "ar": "البحر العظمى مخرج - البداية"
+  },
+  "al balloon theatre": {
+    "en": "Al Balloon Theatre",
+    "ar": "مسرح البالون"
+  },
+  "al banat mosque": {
+    "en": "Al Banat Mosque",
+    "ar": "مسجد البنات"
+  },
+  "al barageel entrance": {
+    "en": "Al Barageel Entrance",
+    "ar": "مدخل البراجيل"
+  },
+  "al barageel steps ring road": {
+    "en": "Al Barageel Steps - Ring Road",
+    "ar": "البراجيل خطوات - الطريق الدائري"
+  },
+  "al bassous steps ring road": {
+    "en": "Al Bassous Steps - Ring Road",
+    "ar": "البصوص خطوات - الطريق الدائري"
+  },
+  "al bosta steps ring road": {
+    "en": "Al Bosta Steps - Ring Road",
+    "ar": "البستة خطوات - الطريق الدائري"
+  },
+  "al central laylat al qadr": {
+    "en": "Al Central - Laylat Al Qadr",
+    "ar": "المرج - ليلة القدر"
+  },
+  "al dawagen maadi": {
+    "en": "Al Dawagen - Maadi",
+    "ar": "الدواجن - المعادي"
+  },
+  "al demerdash hospital": {
+    "en": "Al Demerdash Hospital",
+    "ar": "مستشفى الدمرдаш"
+  },
+  "al demerdash metro station": {
+    "en": "Al Demerdash Metro Station",
+    "ar": "محطة الدمرداش"
+  },
+  "al eman mosque": {
+    "en": "Al Eman Mosque",
+    "ar": "مسجد الإيمان"
+  },
+  "al ezaby pharmacy al mehwar al markazi 6th of october": {
+    "en": "Al Ezaby Pharmacy - Al Mehwar Al Markazi - 6th of October",
+    "ar": "الزابي صيدلية - المحور المركزي - 6 أكتوبر"
+  },
+  "al fardous compound entrance 6th of october": {
+    "en": "Al Fardous Compound Entrance - 6th of October",
+    "ar": "مدخل مجمع الفردوس - 6 أكتوبر"
+  },
+  "al fath mosque": {
+    "en": "Al Fath Mosque",
+    "ar": "مسجد الفتح"
+  },
+  "al fath superjet": {
+    "en": "Al Fath Superjet",
+    "ar": "سوبرجيت الفتح"
+  },
+  "al fayoum road": {
+    "en": "Al Fayoum Road",
+    "ar": "طريق الفيوم"
+  },
+  "al fayrouz center 6th of october": {
+    "en": "Al Fayrouz Center - 6th of October",
+    "ar": "مركز الفروّز - 6 أكتوبر"
+  },
+  "al galaa bridge": {
+    "en": "Al Galaa Bridge",
+    "ar": "كوبري الغلاء"
+  },
+  "al gamaia al sharaia": {
+    "en": "Al Gamaia Al Sharaia",
+    "ar": "جامعة الشريعة"
+  },
+  "al gehaz entrance 6th of october": {
+    "en": "Al Gehaz Entrance - 6th of October",
+    "ar": "مدخل الغاز - 6 أكتوبر"
+  },
+  "al geish square": {
+    "en": "Al Geish Square",
+    "ar": "ميدان الجيش"
+  },
+  "al gezira sheikh zayed": {
+    "en": "Al Gezira - Sheikh Zayed",
+    "ar": "الجزيرة - الشيخ زايد"
+  },
+  "al hamd square": {
+    "en": "Al Hamd Square",
+    "ar": "ميدان الحمد"
+  },
+  "al hedaya mosque": {
+    "en": "Al Hedaya Mosque",
+    "ar": "مسجد الهدية"
+  },
+  "al hegaz (obour police station) obour": {
+    "en": "Al Hegaz (Obour Police Station) - Obour",
+    "ar": "مركز الحجاز (مركز شرطة عبور) - عبور"
+  },
+  "al hegaz mall 6th of october": {
+    "en": "Al Hegaz Mall - 6th of October",
+    "ar": "مول الحجاز - 6 أكتوبر"
+  },
+  "al hegaz square": {
+    "en": "Al Hegaz Square",
+    "ar": "ميدان الحجاز"
+  },
+  "al hekma pharmaceutical company 6th of october": {
+    "en": "Al Hekma Pharmaceutical Company - 6th of October",
+    "ar": "شركة الحكمة الصيدلانية - 6 أكتوبر"
+  },
+  "al hennawy furniture airport road": {
+    "en": "Al Hennawy Furniture - Airport Road",
+    "ar": "أثاث الحنوي - طريق المطار"
+  },
+  "al herafyeen gesr al suez": {
+    "en": "Al Herafyeen - Gesr Al Suez",
+    "ar": "الهرفيين - جسر السويس"
+  },
+  "al hijaz (obour police station) salam nahda": {
+    "en": "Al Hijaz (Obour Police Station)-Salam Nahda",
+    "ar": "الحجاز (مركز شرطة عبور)-سلام النهضة"
+  },
+  "al hoda factory 6th of october": {
+    "en": "Al Hoda Factory - 6th of October",
+    "ar": "مصنع الهدى - 6 أكتوبر"
+  },
+  "al horreya square": {
+    "en": "Al Horreya Square",
+    "ar": "ميدان الحرية"
+  },
+  "al hossary": {
+    "en": "Al Hossary",
+    "ar": "الحصري"
+  },
+  "al hossary azhar language school": {
+    "en": "Al Hossary Azhar Language School",
+    "ar": "مدرسة الحصري الأزهر للغات"
+  },
+  "al hossary square": {
+    "en": "Al Hossary Square",
+    "ar": "ميدان الحصري"
+  },
+  "al hossary station": {
+    "en": "Al Hossary Station",
+    "ar": "محطة الحصري"
+  },
+  "al imam al shafei cemetaries autostrad": {
+    "en": "Al Imam Al Shafei Cemetaries - Autostrad",
+    "ar": "مدافن الإمام الشفيع - أوتوسترايد"
+  },
+  "al ismailiya square": {
+    "en": "Al Ismailiya Square",
+    "ar": "ميدان الإسماعيلية"
+  },
+  "al ismailiya stop 10th of ramadan": {
+    "en": "Al Ismailiya Stop - 10th of Ramadan",
+    "ar": "موقف الإسماعيلية - 10 رمضان"
+  },
+  "al itihadeya": {
+    "en": "Al Itihadeya",
+    "ar": "الاتحادية"
+  },
+  "al juman": {
+    "en": "Al Juman",
+    "ar": "الجمان"
+  },
+  "al kabbani furniture 6th of october": {
+    "en": "Al Kabbani Furniture - 6th of October",
+    "ar": "أثاث الكاباني - 6 أكتوبر"
+  },
+  "al kahraba street nasr city": {
+    "en": "Al Kahraba Street - Nasr City",
+    "ar": "شارع الكهرباء - مدينة نصر"
+  },
+  "al karma compound gate sheikh zayed": {
+    "en": "Al Karma Compound Gate - Sheikh Zayed",
+    "ar": "بوابة مجمع الكرم - الشيخ زايد"
+  },
+  "al kasr al aini hospital": {
+    "en": "Al Kasr Al Aini Hospital",
+    "ar": "مستشفى القصر العيني"
+  },
+  "al kersh cars heliopolis": {
+    "en": "Al Kersh Cars - Heliopolis",
+    "ar": "سيارات الكرش - الجيزة"
+  },
+  "al khalafawy square": {
+    "en": "Al Khalafawy Square",
+    "ar": "ميدان الخلفاوي"
+  },
+  "al khazan street": {
+    "en": "Al Khazan Street",
+    "ar": "شارع الخزان"
+  },
+  "al khelaa": {
+    "en": "Al Khelaa",
+    "ar": "الخلا"
+  },
+  "al kholafaa al rashdeen mosque nasr city": {
+    "en": "Al Kholafaa Al Rashdeen Mosque - Nasr City",
+    "ar": "مسجد الخلافة الرشيدين - مدينة نصر"
+  },
+  "al kholafaa al rashedeen mosque 6th of october": {
+    "en": "Al Kholafaa Al Rashedeen Mosque - 6th of October",
+    "ar": "مسجد الخلافة الرشيدين - 6 أكتوبر"
+  },
+  "al khouly steps ring road": {
+    "en": "Al Khouly Steps - Ring Road",
+    "ar": "درجات الخولي - الطريق الدائري"
+  },
+  "al laimoon bridge": {
+    "en": "Al Laimoon Bridge",
+    "ar": "كوبري اللائمون"
+  },
+  "al lewaa steps 26th of july mehwar": {
+    "en": "Al Lewaa Steps - 26th of July Mehwar",
+    "ar": "درجات اللواء - 26 يوليو محوار"
+  },
+  "al maasara for engineering industries": {
+    "en": "Al Maasara For Engineering Industries",
+    "ar": "مصنع المعصرة للصناعات الهندسية"
+  },
+  "al magzar al aali autostrad": {
+    "en": "Al Magzar Al Aali - Autostrad",
+    "ar": "المجرز العالي - أوتوسترايد"
+  },
+  "al mahkama new cairo": {
+    "en": "Al Mahkama - New Cairo",
+    "ar": "المحكمة - القاهرة الجديدة"
+  },
+  "al malek al saleh bridge": {
+    "en": "Al Malek Al Saleh Bridge",
+    "ar": "كوبري الملك صالح"
+  },
+  "al manarah center for international conferences": {
+    "en": "Al Manarah Center For International Conferences",
+    "ar": "المنارة مركز المؤتمرات الدولية"
+  },
+  "al manhal private school": {
+    "en": "Al Manhal Private School",
+    "ar": "المنهل مدرسة خاصة"
+  },
+  "al manial": {
+    "en": "Al Manial",
+    "ar": "المنيل"
+  },
+  "al mansoreya 26th of july mehwar": {
+    "en": "Al Mansoreya - 26th of July Mehwar",
+    "ar": "المنصورية - 26 يوليو مهور"
+  },
+  "al marioteya road 26th of july mehwar": {
+    "en": "Al Marioteya Road - 26th of July Mehwar",
+    "ar": "طريق المريوطية - محور 26 يوليو"
+  },
+  "al masabek steps ring road": {
+    "en": "Al Masabek Steps - Ring Road",
+    "ar": "المسابك خطوات - الطريق الدائري"
+  },
+  "al masah hospital mahdy arafa": {
+    "en": "Al Masah Hospital - Mahdy Arafa",
+    "ar": "المسا مستشفى - مهدي عرفى"
+  },
+  "al massalah": {
+    "en": "Al Massalah",
+    "ar": "المصلاح"
+  },
+  "al matbaa": {
+    "en": "Al Matbaa",
+    "ar": "الطباعة"
+  },
+  "al mazallat metro station": {
+    "en": "Al Mazallat Metro Station",
+    "ar": "محطة المظلات"
+  },
+  "al mazallat shubra": {
+    "en": "Al Mazallat - Shubra",
+    "ar": "المظلات - شبرا"
+  },
+  "al mearag mosque ring road": {
+    "en": "Al Mearag Mosque - Ring Road",
+    "ar": "المعارق مسجد - الطريق الدائري"
+  },
+  "al mehwar desert road": {
+    "en": "Al Mehwar Desert Road",
+    "ar": "المدخل طريق الصحراء"
+  },
+  "al mehwar exit 15th of may bridge": {
+    "en": "Al Mehwar Exit - 15th of May Bridge",
+    "ar": "المدخل مخرج - كوبري 15 مايو"
+  },
+  "al moassasa": {
+    "en": "Al Moassasa",
+    "ar": "المؤسسة"
+  },
+  "al moassasa district 6": {
+    "en": "Al Moassasa-District 6",
+    "ar": "المؤسسة - الحي السادس"
+  },
+  "al moassasa el hossary": {
+    "en": "Al Moassasa-El Hossary",
+    "ar": "المؤسسة - الحصري"
+  },
+  "al moassasa laylat al qadr": {
+    "en": "Al Moassasa-Laylat Al Qadr",
+    "ar": "المؤسسة - ليلة القدر"
+  },
+  "al moassasa mehwar desert rd": {
+    "en": "Al Moassasa-Mehwar Desert Rd",
+    "ar": "المؤسسة - المحور الصحراوي"
+  },
+  "al moassasa obour": {
+    "en": "Al Moassasa-Obour",
+    "ar": "المؤسسة - العبور"
+  },
+  "al moassasa steps ring road": {
+    "en": "Al Moassasa Steps - Ring Road",
+    "ar": "المؤسسة درجات - الطريق الدائري"
+  },
+  "al moemen mosque": {
+    "en": "Al Moemen Mosque",
+    "ar": "مسجد المؤمن"
+  },
+  "al mohandes insurance ramses": {
+    "en": "Al Mohandes Insurance - Ramses",
+    "ar": "شركة المهندس تأمين - رمسيس"
+  },
+  "al mokhayam al daaem al shaheed axis": {
+    "en": "Al Mokhayam Al Daaem - Al Shaheed Axis",
+    "ar": "المخيم الداعم - محور الشهيد"
+  },
+  "al mokhtabar haram street": {
+    "en": "Al Mokhtabar - Haram Street",
+    "ar": "المختبر - شارع حرم"
+  },
+  "al moneeb entrance ring road": {
+    "en": "Al Moneeb Entrance - Ring Road",
+    "ar": "المنيب مدخل - الطريق الدائري"
+  },
+  "al moneeb exit ring road": {
+    "en": "Al Moneeb Exit - Ring Road",
+    "ar": "المنيب مخرج - الطريق الدائري"
+  },
+  "al mosheer tantawy mosque": {
+    "en": "Al Mosheer Tantawy Mosque",
+    "ar": "مسجد المشرّع طنطاوي"
+  },
+  "al moski port said street": {
+    "en": "Al Moski - Port Said Street",
+    "ar": "المرسكي - شارع بورسعيد"
+  },
+  "al mostafa center 6th of october": {
+    "en": "Al Mostafa Center - 6th of October",
+    "ar": "مركز مصطفى - 6 أكتوبر"
+  },
+  "al mostafa mosque 5th settlement": {
+    "en": "Al Mostafa Mosque - 5th Settlement",
+    "ar": "مسجد مصطفى - التجمع الخامس"
+  },
+  "al mostaqbal entrance dolce": {
+    "en": "Al Mostaqbal Entrance - Dolce",
+    "ar": "مدخل المستقبل - دولس"
+  },
+  "al mostaqbal square obour": {
+    "en": "Al Mostaqbal Square - Obour",
+    "ar": "ميدان المستقبل - عبور"
+  },
+  "al motamayez": {
+    "en": "Al Motamayez",
+    "ar": "المتميز"
+  },
+  "al motamayez entrance": {
+    "en": "Al Motamayez Entrance",
+    "ar": "مدخل المتميز"
+  },
+  "al motamayez wahat entrance 1": {
+    "en": "Al Motamayez Wahat Entrance 1",
+    "ar": "مدخل الواحات المتميز 1"
+  },
+  "al motamayez wahat entrance 2": {
+    "en": "Al Motamayez Wahat Entrance 2",
+    "ar": "مدخل الواحات المتميز 2"
+  },
+  "al mothalath ahmed al zomor": {
+    "en": "Al Mothalath - Ahmed Al Zomor",
+    "ar": "المثلث - أحمد الزومر"
+  },
+  "al muluk 6th of october": {
+    "en": "Al Muluk - 6th of October",
+    "ar": "الملوك - 6 أكتوبر"
+  },
+  "al nagda square": {
+    "en": "Al Nagda Square",
+    "ar": "ميدان النغدة"
+  },
+  "al nahda square al shorouq": {
+    "en": "Al Nahda Square - Al Shorouq",
+    "ar": "ميدان النهدة - الشروق"
+  },
+  "al nahda square new cairo": {
+    "en": "Al Nahda Square - New Cairo",
+    "ar": "ميدان النهدة - القاهرة الجديدة"
+  },
+  "al nahyan hospital sheikh zayed": {
+    "en": "Al Nahyan Hospital - Sheikh Zayed",
+    "ar": "مستشفى النهيان - الشيخ زايد"
+  },
+  "al nakheel center 6th of october": {
+    "en": "Al Nakheel Center - 6th of October",
+    "ar": "مركز النخيل - 6 أكتوبر"
+  },
+  "al narges 4 5th settlement": {
+    "en": "Al Narges 4 - 5th Settlement",
+    "ar": "النارجس 4 - التجمع الخامس"
+  },
+  "al narges 7 5th settlement": {
+    "en": "Al Narges 7 - 5th Settlement",
+    "ar": "النارجس 7 - التجمع الخامس"
+  },
+  "al narges 8 5th settlement": {
+    "en": "Al Narges 8 - 5th Settlement",
+    "ar": "النارجس 8 - التجمع الخامس"
+  },
+  "al nasr sporting club heliopolis": {
+    "en": "Al Nasr Sporting Club - Heliopolis",
+    "ar": "نادي النصر الرياضي - هليوبوليس"
+  },
+  "al nour mosque 6th of october": {
+    "en": "Al Nour Mosque - 6th of October",
+    "ar": "مسجد النور - 6 أكتوبر"
+  },
+  "al nour mosque abbasseya": {
+    "en": "Al Nour Mosque - Abbasseya",
+    "ar": "مسجد النور - عباسية"
+  },
+  "al nour mosque nasr city": {
+    "en": "Al Nour Mosque - Nasr City",
+    "ar": "مسجد النور - مدينة النصر"
+  },
+  "al nozha al gadeeda": {
+    "en": "Al Nozha Al Gadeeda",
+    "ar": "النوظة الجديدة"
+  },
+  "al nozha street al horreya sheikh zayed": {
+    "en": "Al Nozha Street - Al Horreya - Sheikh Zayed",
+    "ar": "شارع النوظة - الحرية - الشيخ زايد"
+  },
+  "al nozha street street 30 sheikh zayed": {
+    "en": "Al Nozha Street - Street 30 - Sheikh Zayed",
+    "ar": "شارع النوظة - شارع 30 - الشيخ زايد"
+  },
+  "al orouba tunnel": {
+    "en": "Al Orouba Tunnel",
+    "ar": "نفق الروبة"
+  },
+  "al othman motors ring road": {
+    "en": "Al Othman Motors - Ring Road",
+    "ar": "أوتمان موتورز - الطريق الدائري"
+  },
+  "al rabwa sheikh zayed": {
+    "en": "Al Rabwa - Sheikh Zayed",
+    "ar": "الربوة - الشيخ زايد"
+  },
+  "al rahma mosque airport road": {
+    "en": "Al Rahma Mosque - Airport Road",
+    "ar": "مسجد الرحمة - طريق المطار"
+  },
+  "al rahman mosque 1st settlement": {
+    "en": "Al Rahman Mosque - 1st Settlement",
+    "ar": "مسجد الرحمان - التجمع الأول"
+  },
+  "al rashidi al mizan industrial zone 3": {
+    "en": "Al Rashidi Al Mizan - Industrial Zone 3",
+    "ar": "الراشدي الميزان - المنطقة الصناعية 3"
+  },
+  "al rawda al horreya": {
+    "en": "Al Rawda - Al Horreya",
+    "ar": "الروضة - الحرية"
+  },
+  "al rawda square al manial": {
+    "en": "Al Rawda Square - Al Manial",
+    "ar": "ميدان الروضة - المنيا"
+  },
+  "al remaya square": {
+    "en": "Al Remaya Square",
+    "ar": "ميدان الرماية"
+  },
+  "al safa square sheikh zayed": {
+    "en": "Al Safa Square - Sheikh Zayed",
+    "ar": "ميدان الصفاء - الشيخ زايد"
+  },
+  "al safa wal marwa mosque steps ring road": {
+    "en": "Al Safa Wal Marwa Mosque Steps - Ring Road",
+    "ar": "مراحل مسجد الصفاء والمروا - الطريق الدائري"
+  },
+  "al saff bus station": {
+    "en": "Al Saff Bus Station",
+    "ar": "محطة ساف للقطارات"
+  },
+  "al safwa hospital shubra": {
+    "en": "Al Safwa Hospital - Shubra",
+    "ar": "مستشفى الصفوة - شبرا"
+  },
+  "al safwa mall": {
+    "en": "Al Safwa Mall",
+    "ar": "مول الصفوة"
+  },
+  "al safwa wood trading 6th of october": {
+    "en": "Al Safwa Wood Trading - 6th of October",
+    "ar": "ألف سافوا للخشب - 6 أكتوبر"
+  },
+  "al sahel police department": {
+    "en": "Al Sahel Police Department",
+    "ar": "الساحل شرطة"
+  },
+  "al sahel youth center": {
+    "en": "Al Sahel Youth Center",
+    "ar": "الساحل مركز الشباب"
+  },
+  "al salam": {
+    "en": "Al Salam",
+    "ar": "السلام"
+  },
+  "al salam exit ring road": {
+    "en": "Al Salam Exit - Ring Road",
+    "ar": "مخرج السلام - الطريق الدائري"
+  },
+  "al salam international hospital": {
+    "en": "Al Salam International Hospital",
+    "ar": "مستشفى السلام الدولي"
+  },
+  "al salam mosque haram street": {
+    "en": "Al Salam Mosque - Haram Street",
+    "ar": "مسجد السلام - شارع الحرم"
+  },
+  "al salam mosque nasr city": {
+    "en": "Al Salam Mosque - Nasr City",
+    "ar": "مسجد السلام - مدينة نصر"
+  },
+  "al salam mosque wahat road": {
+    "en": "Al Salam Mosque - Wahat Road",
+    "ar": "مسجد السلام - طريق الواحات"
+  },
+  "al salam tunnel ring road start": {
+    "en": "Al Salam Tunnel Ring Road - Start",
+    "ar": "نفق السلام - الطريق الدائري - البداية"
+  },
+  "al saraya mall 5th settlement": {
+    "en": "Al Saraya Mall - 5th Settlement",
+    "ar": "مركز السرايا مول - التجمع الخامس"
+  },
+  "al sawy culture wheel": {
+    "en": "Al Sawy Culture Wheel",
+    "ar": "عجلة الثقافة السوي"
+  },
+  "al sayeda aisha": {
+    "en": "Al Sayeda Aisha",
+    "ar": "السيدة عائشة"
+  },
+  "al sayeda aisha kattameyya church": {
+    "en": "Al Sayeda Aisha-Kattameyya Church",
+    "ar": "السيدة عائشة - كنيسة كتمية"
+  },
+  "al sayeda khadija mosque al hegaz street": {
+    "en": "Al Sayeda Khadija Mosque - Al Hegaz Street",
+    "ar": "مسجد السيدة خديجة - شارع الحجاز"
+  },
+  "al sayeda zeinab": {
+    "en": "Al-Sayeda Zeinab",
+    "ar": "السيدة زينب"
+  },
+  "al sekka al hadid sporting club nasr city": {
+    "en": "Al Sekka Al Hadid Sporting Club - Nasr City",
+    "ar": "نادي السكّ الحديدي الرياضي - مدينة نصر"
+  },
+  "al sekka ring road": {
+    "en": "Al Sekka - Ring Road",
+    "ar": "السكّ - الطريق الدائري"
+  },
+  "al serag mall": {
+    "en": "Al Serag Mall",
+    "ar": "مركز السرّاج مول"
+  },
+  "al sewedy laylat al qadr": {
+    "en": "Al Sewedy - Laylat Al Qadr",
+    "ar": "السوي - ليلة القدر"
+  },
+  "al shaarawy street shubra al kheima": {
+    "en": "Al Shaarawy Street - Shubra Al Kheima",
+    "ar": "شارع الشارawy - شبرا الخيمة"
+  },
+  "al shabab entrance 1st settlement": {
+    "en": "Al Shabab Entrance - 1st Settlement",
+    "ar": "مدخل الشباب - التجمع الأول"
+  },
+  "al shabab entrance 5th settlement": {
+    "en": "Al Shabab Entrance - 5th Settlement",
+    "ar": "مدخل الشباب - التجمع الخامس"
+  },
+  "al shabab square 1st settlement": {
+    "en": "Al Shabab Square - 1st Settlement",
+    "ar": "ميدان الشباب - التجمع الأول"
+  },
+  "al shabrawy 1st settlement": {
+    "en": "Al Shabrawy - 1st Settlement",
+    "ar": "الشبراوي - التجمع الأول"
+  },
+  "al shabrawy al mansoreya road": {
+    "en": "Al Shabrawy - Al Mansoreya Road",
+    "ar": "الشبراوي - طريق المنصورة"
+  },
+  "al shabrawy haram street": {
+    "en": "Al Shabrawy - Haram Street",
+    "ar": "الشبراوي - شارع حرم"
+  },
+  "al shaheed axis": {
+    "en": "Al Shaheed Axis",
+    "ar": "محور الشهيد"
+  },
+  "al shaheed axis pedestrian bridge": {
+    "en": "Al Shaheed Axis Pedestrian Bridge",
+    "ar": "كوبري المشاة محور الشهيد"
+  },
+  "al shaheed square obour": {
+    "en": "Al Shaheed Square - Obour",
+    "ar": "ميدان الشهيد - عبور"
+  },
+  "al sheikh awad mosque qalyoub": {
+    "en": "Al Sheikh Awad Mosque - Qalyoub",
+    "ar": "مسجد الشيخ عوض - القليوب"
+  },
+  "al sherif mosque al manial": {
+    "en": "Al Sherif Mosque - Al Manial",
+    "ar": "مسجد الشريف - المنيل"
+  },
+  "al shohadaa": {
+    "en": "Al-Shohadaa",
+    "ar": "الشهداء"
+  },
+  "al shorouq": {
+    "en": "Al Shorouq",
+    "ar": "الشروق"
+  },
+  "al shorouq academy (dorra)": {
+    "en": "Al Shorouq Academy (Dorra)",
+    "ar": "أكاديمية الشروق (دورة)"
+  },
+  "al shorouq academy (dorra) 10th of ramdan city": {
+    "en": "Al Shorouq Academy (Dorra)-10th of Ramdan City",
+    "ar": "أكاديمية الشروق (دورة)-مدينة 10 رمضان"
+  },
+  "al shorouq academy (dorra) alf maskan": {
+    "en": "Al Shorouq Academy (Dorra)-Alf Maskan",
+    "ar": "الشروق أكاديمي (دورة)-ألف مسكن"
+  },
+  "al shorouq academy (dorra) awwal makram ebeid": {
+    "en": "Al Shorouq Academy (Dorra)-Awwal Makram Ebeid",
+    "ar": "الشروق أكاديمي (دورة)-أول ماكر أمبيد"
+  },
+  "al shorouq academy (dorra) salam nahda": {
+    "en": "Al Shorouq Academy (Dorra)-Salam Nahda",
+    "ar": "أكاديمية الشروق (دورة)-سلام النهضة"
+  },
+  "al shorouq city authority steps": {
+    "en": "Al Shorouq City Authority Steps",
+    "ar": "خطوات هيئة مدينة الشروق"
+  },
+  "al shorouq school": {
+    "en": "Al Shorouq School",
+    "ar": "مدرسة الشروق"
+  },
+  "al shorouq water station": {
+    "en": "Al Shorouq Water Station",
+    "ar": "محطة شروق للمياه"
+  },
+  "al soltan hassan mosque": {
+    "en": "Al Soltan Hassan Mosque",
+    "ar": "مسجد السلطان حسن"
+  },
+  "al souk al qadeem al moassasa": {
+    "en": "Al Souk Al Qadeem-Al Moassasa",
+    "ar": "السوق القديم - المؤسسة"
+  },
+  "al souk al qadeem daewoo": {
+    "en": "Al Souk Al Qadeem-Daewoo",
+    "ar": "السوق القديم - دايو"
+  },
+  "al souk al qadeem el hossary": {
+    "en": "Al Souk Al Qadeem-El Hossary",
+    "ar": "السوق القديم-الحصري"
+  },
+  "al souk al qadeem giza square": {
+    "en": "Al Souk Al Qadeem-Giza Square",
+    "ar": "السوق القديم - ميدان الجيزة"
+  },
+  "al souk al qadeem hamada imam": {
+    "en": "Al Souk Al Qadeem-Hamada Imam",
+    "ar": "السوق القديم - حمدة الإمام"
+  },
+  "al souk al qadeem industrial zone 3": {
+    "en": "Al Souk Al Qadeem-Industrial Zone 3",
+    "ar": "السوق القديم - المنطقة الصناعية 3"
+  },
+  "al souq al qadeem": {
+    "en": "Al Souq Al Qadeem",
+    "ar": "السوق القديم"
+  },
+  "al sudan steps 26th of july mehwar": {
+    "en": "Al Sudan Steps - 26th of July Mehwar",
+    "ar": "سُدَن - سُلالم 26 يوليو محور"
+  },
+  "al taawon gas station al shabab street obour": {
+    "en": "Al Taawon Gas Station - Al Shabab Street - Obour",
+    "ar": "محطة وقود التعاون - شارع الشباب - عبور"
+  },
+  "al tabba 6th of october": {
+    "en": "Al Tabba - 6th of October",
+    "ar": "الطبّ - 6 أكتوبر"
+  },
+  "al tabba nasr city": {
+    "en": "Al Tabba - Nasr City",
+    "ar": "الطبّ - مدينة نصر"
+  },
+  "al takwa mosque 5th settlement": {
+    "en": "Al Takwa Mosque - 5th Settlement",
+    "ar": "مسجد التّكوى - التجمع الخامس"
+  },
+  "al talbeya steps ring road": {
+    "en": "Al Talbeya Steps - Ring Road",
+    "ar": "سُلالم التّلبية - الطريق الدائري"
+  },
+  "al tawheed mosque 1st settlement": {
+    "en": "Al Tawheed Mosque - 1st Settlement",
+    "ar": "مسجد التّوحيد - التجمع الأول"
+  },
+  "al tawheed mosque al zaytoun": {
+    "en": "Al Tawheed Mosque - Al Zaytoun",
+    "ar": "مسجد التّوحيد - الزيتون"
+  },
+  "al tawheed wal nour 10th of ramadan": {
+    "en": "Al Tawheed Wal Nour - 10th of Ramadan",
+    "ar": "التّوحيد والنور - 10 رمضان"
+  },
+  "al tawheed wal nour al geish street": {
+    "en": "Al Tawheed Wal Nour - Al Geish Street",
+    "ar": "التّوحيد والنور - شارع الجيش"
+  },
+  "al tawheed wal nour al hossary": {
+    "en": "Al Tawheed Wal Nour - Al Hossary",
+    "ar": "التّوحيد والنور - الحصري"
+  },
+  "al tawheed wal nour al nozha street heliopolis": {
+    "en": "Al Tawheed Wal Nour - Al Nozha Street - Heliopolis",
+    "ar": "التّوحيد والنور - شارع النزهة - حلوبوليس"
+  },
+  "al tawheed wal nour al sayeda zeinab": {
+    "en": "Al Tawheed Wal Nour - Al Sayeda Zeinab",
+    "ar": "التّوحيد والنور - السيدة زينب"
+  },
+  "al tawheed wal nour al waili": {
+    "en": "Al Tawheed Wal Nour - Al Waili",
+    "ar": "التوحيد والنور - الوايل"
+  },
+  "al tawheed wal nour mostafa al nahas": {
+    "en": "Al Tawheed Wal Nour - Mostafa Al Nahas",
+    "ar": "التوحيد والنور - مصطفى النحاس"
+  },
+  "al tawheed wal nour obour": {
+    "en": "Al Tawheed Wal Nour - Obour",
+    "ar": "التوحيد والنور - عبور"
+  },
+  "al tayaran mostafa al nahas": {
+    "en": "Al Tayaran - Mostafa Al Nahas",
+    "ar": "الطيران - مصطفى النحاس"
+  },
+  "al thawra hospital": {
+    "en": "Al Thawra Hospital",
+    "ar": "مستشفى الثورة"
+  },
+  "al wafaa wal amal city": {
+    "en": "Al Wafaa Wal Amal City",
+    "ar": "مدينة الوفاء والامان"
+  },
+  "al wagih center 6th of october": {
+    "en": "Al Wagih Center - 6th of October",
+    "ar": "مركز الوغى - 6 أكتوبر"
+  },
+  "al waha compound al shorouq": {
+    "en": "Al Waha Compound - Al Shorouq",
+    "ar": "مجمع الواحة - الشروق"
+  },
+  "al warraq": {
+    "en": "Al Warraq",
+    "ar": "الورق"
+  },
+  "al warraq exit ring road": {
+    "en": "Al Warraq Exit - Ring Road",
+    "ar": "مخرج الورق - الطريق الدائري"
+  },
+  "al wehda square": {
+    "en": "Al Wehda Square",
+    "ar": "ميدان الوحدة"
+  },
+  "al yasmine compound 6th of october": {
+    "en": "Al Yasmine Compound - 6th of October",
+    "ar": "مجمع الياسمين - 6 أكتوبر"
+  },
+  "al yasmine compound gate 3 sheikh zayed": {
+    "en": "Al Yasmine Compound Gate 3 - Sheikh Zayed",
+    "ar": "بوابة 3 مجمع الياسمين - الشيخ زايد"
+  },
+  "al zamalek steps 15th of may bridge": {
+    "en": "Al Zamalek Steps - 15th of May Bridge",
+    "ar": "خطوات الزمالك - كوبري 15 مايو"
+  },
+  "al zawya al hamra": {
+    "en": "Al Zawya Al Hamra",
+    "ar": "الزاوية الحمراء"
+  },
+  "al zohour nursery sheikh zayed": {
+    "en": "Al Zohour Nursery - Sheikh Zayed",
+    "ar": "مزرعة الزهور - الشيخ زايد"
+  },
+  "alexandria desert road exit ring road": {
+    "en": "Alexandria Desert Road Exit - Ring Road",
+    "ar": "مخرج طريق صحراء الإسكندرية - الطريق الدائري"
+  },
+  "alexandria desert road steps 26th of july mehwar": {
+    "en": "Alexandria Desert Road Steps - 26th of July Mehwar",
+    "ar": "خطوات طريق صحراء الإسكندرية - 26 يوليو مهور"
+  },
+  "alf maskan": {
+    "en": "Alf Maskan",
+    "ar": "ألف مسكن"
+  },
+  "alf masnaa": {
+    "en": "Alf Masnaa",
+    "ar": "ألف مصنع"
+  },
+  "ali basha street": {
+    "en": "Ali Basha Street",
+    "ar": "شارع علي باشا"
+  },
+  "american school sheikh zayed": {
+    "en": "American School - Sheikh Zayed",
+    "ar": "المدرسة الأمريكية - الشيخ زايد"
+  },
+  "american university in cairo (auc) new cairo": {
+    "en": "American University in Cairo (AUC) - New Cairo",
+    "ar": "الجامعة الأمريكية في القاهرة (AUC) - القاهرة الجديدة"
+  },
+  "american university in cairo gate 1": {
+    "en": "American University in Cairo Gate 1",
+    "ar": "بوابة الجامعة الأمريكية في القاهرة 1"
+  },
+  "americana plaza sheikh zayed": {
+    "en": "Americana Plaza - Sheikh Zayed",
+    "ar": "مركز أمريكانا - الشيخ زايد"
+  },
+  "amoun fountain obour": {
+    "en": "Amoun Fountain - Obour",
+    "ar": "نافورة أمون - عبور"
+  },
+  "amr ibn al aas school": {
+    "en": "Amr Ibn Al Aas School",
+    "ar": "مدرسة عمرو بن العاص"
+  },
+  "anwar al sadat square": {
+    "en": "Anwar Al Sadat Square",
+    "ar": "ميدان أنور السادات"
+  },
+  "arab african bank haram street": {
+    "en": "Arab African Bank - Haram Street",
+    "ar": "البنك العربي الأفريقي - شارع حرم"
+  },
+  "arab contractors sporting club nasr road": {
+    "en": "Arab Contractors Sporting Club - Nasr Road",
+    "ar": "نادي المقاولون العرب - طريق نصر"
+  },
+  "arab engineering & construction company shubra al kheima": {
+    "en": "Arab Engineering & Construction Company - Shubra Al Kheima",
+    "ar": "شركة الهندسة والبناء العربية - شبرا الخيمة"
+  },
+  "arab specialized hospital gesr al suez": {
+    "en": "Arab Specialized Hospital - Gesr Al Suez",
+    "ar": "مستشفى العرب المتخصص - جسر السويس"
+  },
+  "arabella square": {
+    "en": "Arabella Square",
+    "ar": "ميدان أرابيلا"
+  },
+  "aramex 10th of ramadan": {
+    "en": "Aramex - 10th of Ramadan",
+    "ar": "أرامكس - 10 رمضان"
+  },
+  "ard khedr pedestrian bridge shubra al kheima": {
+    "en": "Ard Khedr Pedestrian Bridge - Shubra Al Kheima",
+    "ar": "كوبري أرد خضر للمشاة - شبرا الخيمة"
+  },
+  "ariel industrial zone 4": {
+    "en": "Ariel - Industrial Zone 4",
+    "ar": "أرييل - المنطقة الصناعية 4"
+  },
+  "arkadia mall": {
+    "en": "Arkadia Mall",
+    "ar": "مول أركاديا"
+  },
+  "armed forces college of medicine": {
+    "en": "Armed Forces College Of Medicine",
+    "ar": "كلية الطب للقوات المسلحة"
+  },
+  "armed forces medical complex kobry al qobba": {
+    "en": "Armed Forces Medical Complex - Kobry Al Qobba",
+    "ar": "مجمع الطب للقوات المسلحة - كوبري القبة"
+  },
+  "asaer al fardous 6th of october": {
+    "en": "Asaer Al Fardous - 6th of October",
+    "ar": "أسير الفردوس - 6 أكتوبر"
+  },
+  "ashrafco tyres nasr city": {
+    "en": "Ashrafco Tyres - Nasr City",
+    "ar": "أشرافكو إطارات - مدينة نصر"
+  },
+  "aswan pedestrian bridge shubra al kheima": {
+    "en": "Aswan Pedestrian Bridge - Shubra Al Kheima",
+    "ar": "جسر المشاة أسوان - شبرا الخيمة"
+  },
+  "aswan square 6th of october": {
+    "en": "Aswan Square - 6th of October",
+    "ar": "ميدان أسوان - 6 أكتوبر"
+  },
+  "ataba": {
+    "en": "Ataba",
+    "ar": "العتبة"
+  },
+  "attaba": {
+    "en": "Attaba",
+    "ar": "العتبة"
+  },
+  "audi bank salah salem": {
+    "en": "Audi Bank - Salah Salem",
+    "ar": "أودي بنك - صلاح سالم"
+  },
+  "autostrad al moneeb axis": {
+    "en": "Autostrad - Al Moneeb Axis",
+    "ar": "أوتوسترايد - محور المنيب"
+  },
+  "awwal abbas al akkad": {
+    "en": "Awwal Abbas Al Akkad",
+    "ar": "أول عباس العقاد"
+  },
+  "awwal makram ebeid": {
+    "en": "Awwal Makram Ebeid",
+    "ar": "أول مكرم عبيد"
+  },
+  "awwal makram ebeid haram mashaal": {
+    "en": "Awwal Makram Ebeid-Haram Mashaal",
+    "ar": "أول مكرم عبيد - هرم مشعل"
+  },
+  "awwal makram ebeid ramses": {
+    "en": "Awwal Makram Ebeid-Ramses",
+    "ar": "أول مكرم عبيد - رمسيس"
+  },
+  "azhar university city for boys": {
+    "en": "Azhar University City for Boys",
+    "ar": "جامعة الأزهر المدينة للذكور"
+  },
+  "azhari institute sheikh zayed": {
+    "en": "Azhari Institute - Sheikh Zayed",
+    "ar": "معهد الأزهر - الشيخ زايد"
+  },
+  "bab al shaaria square": {
+    "en": "Bab Al Shaaria Square",
+    "ar": "ميدان باب الشريعة"
+  },
+  "bab el shaaria": {
+    "en": "Bab El-Shaaria",
+    "ar": "باب الشعرية"
+  },
+  "badr abbaseya": {
+    "en": "Badr-Abbaseya",
+    "ar": "بدر - العباسية"
+  },
+  "badr ahmed helmy": {
+    "en": "Badr-Ahmed Helmy",
+    "ar": "بدر - أحمد حلمي"
+  },
+  "badr azhari institute": {
+    "en": "Badr-Azhari Institute",
+    "ar": "بدّ-معهد الأزهرى"
+  },
+  "badr hyper": {
+    "en": "Badr-Hyper",
+    "ar": "بدر - هايبر"
+  },
+  "badr sheikh zayed": {
+    "en": "Badr - Sheikh Zayed",
+    "ar": "بدر - الشيخ زايد"
+  },
+  "bahteem": {
+    "en": "Bahteem",
+    "ar": "بهتيم"
+  },
+  "bahteem specialized hospital for surgery": {
+    "en": "Bahteem Specialized Hospital For Surgery",
+    "ar": "مستشفى البهتيم المتخصص للطب الجراحي"
+  },
+  "banha university obour": {
+    "en": "Banha University - Obour",
+    "ar": "جامعة بنها - عبور"
+  },
+  "bank al etihad south teseen street": {
+    "en": "Bank Al Etihad - South Teseen Street",
+    "ar": "بنك الاتحاد - شارع جنوب تسين"
+  },
+  "bank area (bonook) 5th settlement": {
+    "en": "Bank Area (Bonook) - 5th Settlement",
+    "ar": "منطقة البنك (بونوك) - التجمع الخامس"
+  },
+  "bank area 6th of october": {
+    "en": "Bank Area - 6th of October",
+    "ar": "منطقة البنك - 6 أكتوبر"
+  },
+  "banque misr abbas al akkad": {
+    "en": "Banque Misr - Abbas Al Akkad",
+    "ar": "بنك مصر - عباس الأقد"
+  },
+  "baron mall pedestrian bridge": {
+    "en": "Baron Mall Pedestrian Bridge",
+    "ar": "جسر المشاة بارون مول"
+  },
+  "basateen": {
+    "en": "Basateen",
+    "ar": "البساتين"
+  },
+  "basateen steps ring road": {
+    "en": "Basateen Steps - Ring Road",
+    "ar": "خطى البساتين - الطريق الدائري"
+  },
+  "basha square": {
+    "en": "Basha Square",
+    "ar": "ميدان باشا"
+  },
+  "bashayer": {
+    "en": "Bashayer",
+    "ar": "البشاير"
+  },
+  "bashayer entrance": {
+    "en": "Bashayer Entrance",
+    "ar": "مدخل باشاير"
+  },
+  "bashayer magda square": {
+    "en": "Bashayer-Magda Square",
+    "ar": "البشاير - ميدان ماجدة"
+  },
+  "bashteel ring road": {
+    "en": "Bashteel - Ring Road",
+    "ar": "باشتيل - الطريق الدائري"
+  },
+  "bavaria egypt gesr al suez": {
+    "en": "Bavaria Egypt- Gesr Al Suez",
+    "ar": "بافاريا مصر - جسر السويس"
+  },
+  "bayt al karam al shamy haram street": {
+    "en": "Bayt Al Karam Al Shamy - Haram Street",
+    "ar": "بيت الكرام الشامي - شارع حرم"
+  },
+  "bisco misr al zaytoun": {
+    "en": "Bisco Misr - Al Zaytoun",
+    "ar": "بيسكو مصر - الزيتون"
+  },
+  "bloom bank south teseen street": {
+    "en": "Bloom Bank - South Teseen Street",
+    "ar": "بلاوم بنك - شارع جنوب تسين"
+  },
+  "blue bells school al motamayez": {
+    "en": "Blue Bells School - Al Motamayez",
+    "ar": "مدرسة بلو بيلز - المتميز"
+  },
+  "board of trustees (magles al omanaa) 6th of october": {
+    "en": "Board of Trustees (Magles Al Omanaa) - 6th of October",
+    "ar": "مجلس الأمناء (مجلس الأمانة) - 6 أكتوبر"
+  },
+  "bohooth": {
+    "en": "Bohooth",
+    "ar": "البحوث"
+  },
+  "bonook 10th of ramadan station (asher men ramadan)": {
+    "en": "Bonook-10th of Ramadan Station (Asher Men Ramadan)",
+    "ar": "بونوك - محطة 10 رمضان (أشر من رمضان)"
+  },
+  "bonook al sayeda aisha": {
+    "en": "Bonook-Al Sayeda Aisha",
+    "ar": "بنوك - السيدة عائشة"
+  },
+  "bonook alf maskan": {
+    "en": "Bonook-Alf Maskan",
+    "ar": "بونوك-ألف مسكن"
+  },
+  "bonook helwan": {
+    "en": "Bonook-Helwan",
+    "ar": "بونوك-الهرم"
+  },
+  "bonook ramses": {
+    "en": "Bonook-Ramses",
+    "ar": "بنوك - رمسيس"
+  },
+  "bonook saqr quraish": {
+    "en": "Bonook-Saqr Quraish",
+    "ar": "بونوك-صقر قريش"
+  },
+  "bostan street": {
+    "en": "Bostan Street",
+    "ar": "شارع البستان"
+  },
+  "boury square 5th settlement": {
+    "en": "Boury Square - 5th Settlement",
+    "ar": "ميدان بوري - التجمع الخامس"
+  },
+  "cairo alexandria agriculture road exit ring road": {
+    "en": "Cairo Alexandria Agriculture Road Exit - Ring Road",
+    "ar": "مخرج طريق القاهرة الإسكندرية الزراعي - الطريق الدائري"
+  },
+  "cairo economic court ring road": {
+    "en": "Cairo Economic Court - Ring Road",
+    "ar": "مخرج المحكمة الاقتصادية القاهرة - الطريق الدائري"
+  },
+  "cairo festival city pedestrian bridge": {
+    "en": "Cairo Festival City Pedestrian Bridge",
+    "ar": "كوبري مدينة مهرجان القاهرة للمشاة"
+  },
+  "cairo festival city ring road": {
+    "en": "Cairo Festival City - Ring Road",
+    "ar": "مخرج مدينة مهرجان القاهرة - الطريق الدائري"
+  },
+  "cairo festival city south teseen street": {
+    "en": "Cairo Festival City - South Teseen Street",
+    "ar": "مدينة مهرجان القاهرة - شارع تسين جنوب"
+  },
+  "cairo security directorate (modereyet amn al qahera)": {
+    "en": "Cairo Security Directorate (Modereyet Amn Al Qahera)",
+    "ar": "مديرية أمن القاهرة (مديرية أمن القاهرة)"
+  },
+  "cairo stadium": {
+    "en": "Cairo Stadium",
+    "ar": "استاد القاهرة"
+  },
+  "cairo uiversity square (ceramica prima) sheikh zayed": {
+    "en": "Cairo Uiversity Square (Ceramica Prima) - Sheikh Zayed",
+    "ar": "ميدان جامعة القاهرة (سيراميكا بريما) - الشيخ زايد"
+  },
+  "cairo university": {
+    "en": "Cairo University",
+    "ar": "جامعة القاهرة"
+  },
+  "cairo university bridge": {
+    "en": "Cairo University Bridge",
+    "ar": "كوبري جامعة القاهرة"
+  },
+  "cairo university commerce gate": {
+    "en": "Cairo University - Commerce Gate",
+    "ar": "جامعة القاهرة - بوابة التجارة"
+  },
+  "cairo university main gate giza": {
+    "en": "Cairo University Main Gate - Giza",
+    "ar": "بوابة جامعة القاهرة الرئيسية - الجيزة"
+  },
+  "cairo universty metro station": {
+    "en": "Cairo Universty Metro Station",
+    "ar": "محطة جامعة القاهرة"
+  },
+  "capmas": {
+    "en": "CAPMAS",
+    "ar": "الجهاز المركزي للتعبئة والإحصاء"
+  },
+  "car market nasr city": {
+    "en": "Car Market - Nasr City",
+    "ar": "سوق السيارات - مدينة نصر"
+  },
+  "carrefour al shorouq": {
+    "en": "Carrefour - Al Shorouq",
+    "ar": "كارفور - الشروق"
+  },
+  "carrefour obour": {
+    "en": "Carrefour - Obour",
+    "ar": "كارفور - عبور"
+  },
+  "carrefour ring road": {
+    "en": "Carrefour - Ring Road",
+    "ar": "كارفور - الطريق الدائري"
+  },
+  "cemeteries maadi": {
+    "en": "Cemeteries - Maadi",
+    "ar": "مدافن - المعادي"
+  },
+  "center cairo governorate information networks": {
+    "en": "Center Cairo Governorate Information Networks",
+    "ar": "مركز شبكات معلومات محافظة القاهرة"
+  },
+  "ceramica cleopatra sheikh zayed": {
+    "en": "Ceramica Cleopatra - Sheikh Zayed",
+    "ar": "سيراميك كليوباترا - الشيخ زايد"
+  },
+  "ceramica square sheikh zayed": {
+    "en": "Ceramica Square - Sheikh Zayed",
+    "ar": "ميدان سيراميك - الشيخ زايد"
+  },
+  "cib south teseen street": {
+    "en": "CIB - South Teseen Street",
+    "ar": "CIB - شارع تسين جنوب"
+  },
+  "cic sheikh zayed": {
+    "en": "CIC - Sheikh Zayed",
+    "ar": "CIC - الشيخ زايد"
+  },
+  "city mall al shorouq": {
+    "en": "City Mall - Al Shorouq",
+    "ar": "مول المدينة - الشروق"
+  },
+  "city scape mall 6th of october": {
+    "en": "City Scape Mall - 6th of October",
+    "ar": "مول سيتي سكيب - 6 أكتوبر"
+  },
+  "city stars mall": {
+    "en": "City Stars Mall",
+    "ar": "سيتي ستارز"
+  },
+  "civil registry haram street": {
+    "en": "Civil Registry - Haram Street",
+    "ar": "سجل المدني - شارع حرم"
+  },
+  "civil registry imbaba": {
+    "en": "Civil Registry - Imbaba",
+    "ar": "سجل المدني - إمبابة"
+  },
+  "concord plaza new cairo": {
+    "en": "Concord Plaza - New Cairo",
+    "ar": "مركز كونكورد - القاهرة الجديدة"
+  },
+  "conrad hotel": {
+    "en": "Conrad Hotel",
+    "ar": "فندق كونراد"
+  },
+  "constitutional court": {
+    "en": "Constitutional Court",
+    "ar": "المحكمة الدستورية"
+  },
+  "coptic hospital": {
+    "en": "Coptic Hospital",
+    "ar": "مستشفى القبطي"
+  },
+  "cottonil factory gesr al suez": {
+    "en": "Cottonil Factory - Gesr Al Suez",
+    "ar": "مصنع كوتونيل - جسر السويس"
+  },
+  "credit agricole al mansoreya road": {
+    "en": "Credit Agricole - Al Mansoreya Road",
+    "ar": "كريدي أجريكول - طريق المنصورية"
+  },
+  "cta garage heliopolis": {
+    "en": "CTA Garage - Heliopolis",
+    "ar": "موقف سي تي إيه - هليوبوليس"
+  },
+  "culture & science city 6th of october": {
+    "en": "Culture & Science City - 6th of October",
+    "ar": "مدينة الثقافة والعلوم - 6 أكتوبر"
+  },
+  "dabsha al zaytoun": {
+    "en": "Dabsha - Al Zaytoun",
+    "ar": "دبشة - الزيتون"
+  },
+  "daewoo 6th of october": {
+    "en": "Daewoo - 6th of October",
+    "ar": "دايو - 6 أكتوبر"
+  },
+  "dandy mall": {
+    "en": "Dandy Mall",
+    "ar": "داندى مول"
+  },
+  "dandy mall mashaal qarya zakeya": {
+    "en": "Dandy Mall-Mashaal Qarya Zakeya",
+    "ar": "داندى مول - مشعل قرية زكيّة"
+  },
+  "dar al foad hospital 6th of october": {
+    "en": "Dar Al Foad Hospital - 6th of October",
+    "ar": "دار الفود مستشفى - 6 أكتوبر"
+  },
+  "dar al mona alexandria desert road": {
+    "en": "Dar Al Mona - Alexandria Desert Road",
+    "ar": "دار المونة - طريق صحراء الإسكندرية"
+  },
+  "dar al moshah heliopolis": {
+    "en": "Dar Al Moshah - Heliopolis",
+    "ar": "دار المشاه - هليوبوليس"
+  },
+  "dar al salam": {
+    "en": "Dar Al Salam",
+    "ar": "دار السلام"
+  },
+  "dar el salam": {
+    "en": "Dar El-Salam",
+    "ar": "دار السلام"
+  },
+  "dar misr square al shorouq": {
+    "en": "Dar Misr Square - Al Shorouq",
+    "ar": "دار مصر ميدان - الشروق"
+  },
+  "dawaran shubra": {
+    "en": "Dawaran Shubra",
+    "ar": "دوران شبرا"
+  },
+  "dawaran shubra al shorouq": {
+    "en": "Dawaran Shubra-Al Shorouq",
+    "ar": "دوران شبرا - الشروق"
+  },
+  "dental hospital al manial": {
+    "en": "Dental Hospital - Al Manial",
+    "ar": "مستشفى الأسنان - المنيل"
+  },
+  "diamonds mall 6th of october": {
+    "en": "Diamonds Mall - 6th of October",
+    "ar": "الماس مول - 6 أكتوبر"
+  },
+  "didi mall 1st settlement": {
+    "en": "Didi Mall - 1st Settlement",
+    "ar": "دي دي مول - التجمع الأول"
+  },
+  "district 10 el hossary": {
+    "en": "District 10-El Hossary",
+    "ar": "الحي 10-الحصري"
+  },
+  "district 11 (6o) magda square": {
+    "en": "District 11 (6O)-Magda Square",
+    "ar": "الحي 11 (6O)-ميدان ماغدا"
+  },
+  "district 11 entrance hyper": {
+    "en": "District 11 Entrance-Hyper",
+    "ar": "الحي 11-مدخل هايبر"
+  },
+  "district 16 sheikh zayed general hospital": {
+    "en": "District 16-Sheikh Zayed General Hospital",
+    "ar": "الحي السادس عشر - مستشفى الشيخ زايد العام"
+  },
+  "district 6 bashayer": {
+    "en": "District 6-Bashayer",
+    "ar": "الحي السادس - البشاير"
+  },
+  "district 6 haram marioteyya": {
+    "en": "District 6-Haram Marioteyya",
+    "ar": "الحي السادس - هرم مريوطية"
+  },
+  "district 6 motamayez": {
+    "en": "District 6-Motamayez",
+    "ar": "الحي السادس - المتميز"
+  },
+  "district 6 ramses": {
+    "en": "District 6-Ramses",
+    "ar": "الحي السادس - رمسيس"
+  },
+  "district 7 mostaqbal entrance": {
+    "en": "District 7-Mostaqbal Entrance",
+    "ar": "الحي 7-مدخل المستقبل"
+  },
+  "district6 district10": {
+    "en": "District6-District10",
+    "ar": "الحي 6 - الحي 10"
+  },
+  "doctors tower nasr city": {
+    "en": "Doctors Tower - Nasr City",
+    "ar": "برج الأطباء - مدينة نصر"
+  },
+  "dokki": {
+    "en": "Dokki",
+    "ar": "الدقي"
+  },
+  "dolce": {
+    "en": "Dolce",
+    "ar": "دولتشي"
+  },
+  "dolce district 10": {
+    "en": "Dolce-District 10",
+    "ar": "دولتشي - الحي العاشر"
+  },
+  "dolce motamayez": {
+    "en": "Dolce-Motamayez",
+    "ar": "دولتشي - المتميز"
+  },
+  "dolphin mall": {
+    "en": "Dolphin Mall",
+    "ar": "دولفين مول"
+  },
+  "downtown mall": {
+    "en": "Downtown Mall",
+    "ar": "مول وسط المدينة"
+  },
+  "dreamland": {
+    "en": "Dreamland",
+    "ar": "دريم لاند"
+  },
+  "durra square": {
+    "en": "Durra Square",
+    "ar": "دورة ميدان"
+  },
+  "dusit hotel": {
+    "en": "Dusit Hotel",
+    "ar": "دوسيت فندق"
+  },
+  "ebny baitak wahat road": {
+    "en": "Ebny Baitak - Wahat Road",
+    "ar": "إبني بيتك - طريق الواحات"
+  },
+  "egypt air steps ring road": {
+    "en": "Egypt Air Steps - Ring Road",
+    "ar": "خطوات مصر للطيران - الطريق الدائري"
+  },
+  "egyptian media production city empc": {
+    "en": "Egyptian Media Production City - EMPC",
+    "ar": "مدينة الإنتاج الإعلامي"
+  },
+  "el demerdash": {
+    "en": "El-Demerdash",
+    "ar": "الدمرداش"
+  },
+  "el geish": {
+    "en": "El-Geish",
+    "ar": "الجيش"
+  },
+  "el giza": {
+    "en": "El-Giza",
+    "ar": "الجيزة"
+  },
+  "el hamd akhnatoun": {
+    "en": "El Hamd-Akhnatoun",
+    "ar": "الحمد - أخناتون"
+  },
+  "el hamd arabella": {
+    "en": "El Hamd-Arabella",
+    "ar": "الحمد - أرابيلا"
+  },
+  "el hamd moneeb konayyesa": {
+    "en": "El Hamd-Moneeb Konayyesa",
+    "ar": "الحمد - المنيب الكنيسة"
+  },
+  "el hossary ahram canadian university": {
+    "en": "El Hossary-Ahram Canadian University",
+    "ar": "الحسري - جامعة أهرام الكندية"
+  },
+  "el hossary al muluk": {
+    "en": "El Hossary-Al Muluk",
+    "ar": "الحسري - الملوك"
+  },
+  "el hossary awwal makram ebeid": {
+    "en": "El Hossary-Awwal Makram Ebeid",
+    "ar": "الحصري-أول ماكر أمبيد"
+  },
+  "el hossary bashayer": {
+    "en": "El Hossary-Bashayer",
+    "ar": "الحصري-بشائر"
+  },
+  "el hossary district 11 (6o)": {
+    "en": "El Hossary-District 11 (6O)",
+    "ar": "الحصري-الحي 11 (6O)"
+  },
+  "el hossary district 6": {
+    "en": "El Hossary-District 6",
+    "ar": "الحصري-الحي 6"
+  },
+  "el hossary district 8": {
+    "en": "El Hossary-District 8",
+    "ar": "الحصري-الحي 8"
+  },
+  "el hossary dolce": {
+    "en": "El Hossary-Dolce",
+    "ar": "الحصري-دولس"
+  },
+  "el hossary giza square": {
+    "en": "El Hossary-Giza Square",
+    "ar": "الحصري - ميدان الجيزة"
+  },
+  "el hossary haram marioteyya": {
+    "en": "El Hossary-Haram Marioteyya",
+    "ar": "الحصري - حرم ماريوتيّة"
+  },
+  "el hossary helwan": {
+    "en": "El Hossary-Helwan",
+    "ar": "الحصري-الهرم"
+  },
+  "el hossary manyal": {
+    "en": "El Hossary-Manyal",
+    "ar": "الحصري-منيال"
+  },
+  "el hossary medan lebnan": {
+    "en": "El Hossary-Medan Lebnan",
+    "ar": "الحصري-مدن لبنان"
+  },
+  "el hossary moneeb": {
+    "en": "El Hossary-Moneeb",
+    "ar": "الحصري-منيب"
+  },
+  "el hossary new marg": {
+    "en": "El Hossary-New Marg",
+    "ar": "الحصري - نيو مارغ"
+  },
+  "el hossary ramses": {
+    "en": "El Hossary-Ramses",
+    "ar": "الحصري - رمسيس"
+  },
+  "el hossary zahraa madinet nasr": {
+    "en": "El Hossary-Zahraa Madinet Nasr",
+    "ar": "الحصري-زهرة مدينة نصر"
+  },
+  "el maasara": {
+    "en": "El-Maasara",
+    "ar": "المعصرة"
+  },
+  "el malek el saleh": {
+    "en": "El-Malek El-Saleh",
+    "ar": "الملك الصالح"
+  },
+  "el marg": {
+    "en": "El-Marg",
+    "ar": "المرج"
+  },
+  "el matareyya": {
+    "en": "El-Matareyya",
+    "ar": "المطرية"
+  },
+  "el mounib": {
+    "en": "El-Mounib",
+    "ar": "المنيب"
+  },
+  "el zahraa": {
+    "en": "El-Zahraa",
+    "ar": "الزهراء"
+  },
+  "emad center 6th of october": {
+    "en": "Emad Center - 6th of October",
+    "ar": "مركز عماد - 6 أكتوبر"
+  },
+  "emerald new cairo": {
+    "en": "Emerald - New Cairo",
+    "ar": "إيميرالد - القاهرة الجديدة"
+  },
+  "enppi": {
+    "en": "ENPPI",
+    "ar": "إنبي"
+  },
+  "epx logistics for transportation and warehousing obour": {
+    "en": "EPx Logistics For Transportation And Warehousing - Obour",
+    "ar": "EPx لوجستيات النقل والتخزين - عبور"
+  },
+  "etaby center": {
+    "en": "Etaby Center",
+    "ar": "مركز إتابي"
+  },
+  "experimental school bahteem": {
+    "en": "Experimental School - Bahteem",
+    "ar": "المدرسة التجريبية - بحثيم"
+  },
+  "export development authority": {
+    "en": "Export Development Authority",
+    "ar": "هيئة تطوير الصادرات"
+  },
+  "ezbet al baydaa steps ring road": {
+    "en": "Ezbet Al Baydaa Steps - Ring Road",
+    "ar": "خطوات عزبة البيضاء - الطريق الدائري"
+  },
+  "ezbet al mofti steps ring road": {
+    "en": "Ezbet Al Mofti Steps - Ring Road",
+    "ar": "خطوات عزبة المفتى - الطريق الدائري"
+  },
+  "ezbet anwar steps ring road": {
+    "en": "Ezbet Anwar Steps - Ring Road",
+    "ar": "خطوات عزبة أنور - الطريق الدائري"
+  },
+  "ezbet el nakhl": {
+    "en": "Ezbet El-Nakhl",
+    "ar": "عزبة النخل"
+  },
+  "ezbet kheirallah steps 1 ring road": {
+    "en": "Ezbet Kheirallah Steps 1 - Ring Road",
+    "ar": "خطوات عزبة خير الله 1 - الطريق الدائري"
+  },
+  "ezbet kheirallah steps 2 ring road": {
+    "en": "Ezbet Kheirallah Steps 2 - Ring Road",
+    "ar": "خطوات عزبة خير الله 2 - الطريق الدائري"
+  },
+  "ezbet kheirallah steps 3 ring road": {
+    "en": "Ezbet Kheirallah Steps 3 - Ring Road",
+    "ar": "خطوات عزبة خير الله 3 - الطريق الدائري"
+  },
+  "faculty of agriculture ain shams university": {
+    "en": "Faculty of Agriculture - Ain Shams University",
+    "ar": "كلية الزراعة - جامعة عين شمس"
+  },
+  "faculty of engineering cairo university sheikh zayed": {
+    "en": "Faculty of Engineering Cairo University - Sheikh Zayed",
+    "ar": "كلية الهندسة جامعة القاهرة - الشيخ زايد"
+  },
+  "faculty of medicine ain shams university": {
+    "en": "Faculty of Medicine - Ain Shams University",
+    "ar": "كلية الطب - جامعة عين شمس"
+  },
+  "fair zone": {
+    "en": "Fair Zone",
+    "ar": "منطقة المعارض"
+  },
+  "faisal": {
+    "en": "Faisal",
+    "ar": "فيصل"
+  },
+  "faisal metro station": {
+    "en": "Faisal Metro Station",
+    "ar": "محطة فيصل"
+  },
+  "faisal street al marioteya road": {
+    "en": "Faisal Street - Al Marioteya Road",
+    "ar": "شارع فيصل - طريق المريوطية"
+  },
+  "falcon school al shorouq": {
+    "en": "Falcon School - Al Shorouq",
+    "ar": "مدرسة الصقر - الشروق"
+  },
+  "family land 6th of october": {
+    "en": "Family Land - 6th of October",
+    "ar": "فاميلي لاند - 6 أكتوبر"
+  },
+  "farghali real estate bashayer": {
+    "en": "Farghali Real Estate - Bashayer",
+    "ar": "فرغالي العقارية - بشائر"
+  },
+  "fatma al sharbatly mosque": {
+    "en": "Fatma Al Sharbatly Mosque",
+    "ar": "مسجد فاطمة الشربتلي"
+  },
+  "fiat service center obour": {
+    "en": "Fiat Service Center - Obour",
+    "ar": "مركز خدمة فيات - عبور"
+  },
+  "first settlement abd al moneim riad": {
+    "en": "First Settlement-Abd Al Moneim Riad",
+    "ar": "التجمع الأول - عبد المنعم رياض"
+  },
+  "first settlement abou al reesh": {
+    "en": "First Settlement-Abou Al Reesh",
+    "ar": "التجمع الأول - أبو الريش"
+  },
+  "first settlement al al mazallat": {
+    "en": "First Settlement-Al Al Mazallat",
+    "ar": "التجمع الأول - المظلات"
+  },
+  "first settlement al zawya al hamra": {
+    "en": "First Settlement-Al Zawya Al Hamra",
+    "ar": "التجمع الأول - الزاوية الحمراء"
+  },
+  "first settlement attaba": {
+    "en": "First Settlement-Attaba",
+    "ar": "التجمع الأول - العتبة"
+  },
+  "first settlement dawaran shubra": {
+    "en": "First Settlement-Dawaran Shubra",
+    "ar": "التجمع الأول - دوران شبرا"
+  },
+  "first settlement el matbaa": {
+    "en": "First Settlement-El Matbaa",
+    "ar": "التجمع الأول - المطبعة"
+  },
+  "first settlement hay asher": {
+    "en": "First Settlement-Hay Asher",
+    "ar": "التجمع الأول - الحي العاشر"
+  },
+  "first settlement isko": {
+    "en": "First Settlement-Isko",
+    "ar": "التجمع الأول - إسكو"
+  },
+  "first settlement madinat al talaba": {
+    "en": "First Settlement-Madinat Al Talaba",
+    "ar": "التجمع الأول - مدينة الطلبة"
+  },
+  "first settlement mamaleek": {
+    "en": "First Settlement-Mamaleek",
+    "ar": "التجمع الأول - المماليك"
+  },
+  "first settlement masaken ain shams": {
+    "en": "First Settlement-Masaken Ain Shams",
+    "ar": "التجمع الأول - مساكن عين شمس"
+  },
+  "first settlement masaken zainhom": {
+    "en": "First Settlement-Masaken Zainhom",
+    "ar": "التجمع الأول - مساكن زينهم"
+  },
+  "first settlement masalla gedeeda matareya": {
+    "en": "First Settlement-Masalla Gedeeda Matareya",
+    "ar": "التجمع الأول - المصلى الجديدة - المطرية"
+  },
+  "first settlement zahraa madinet nasr": {
+    "en": "First Settlement-Zahraa Madinet Nasr",
+    "ar": "التجمع الأول - زهراء مدينة نصر"
+  },
+  "fom al khalig": {
+    "en": "Fom Al Khalig",
+    "ar": "فوم الخليج"
+  },
+  "free zone nasr city": {
+    "en": "Free Zone - Nasr City",
+    "ar": "المنطقة الحرة - مدينة نصر"
+  },
+  "fue 10th of ramadan station (asher men ramadan)": {
+    "en": "FUE-10th of Ramadan Station (Asher Men Ramadan)",
+    "ar": "FUE-محطة 10 رمضان (أشر من رمضان)"
+  },
+  "future school nasr city": {
+    "en": "Future School - Nasr City",
+    "ar": "مدرسة المستقبل - مدينة نصر"
+  },
+  "future university in egypt (fue)": {
+    "en": "Future University in Egypt (FUE)",
+    "ar": "جامعة المستقبل في مصر (FUE)"
+  },
+  "galleria 40": {
+    "en": "Galleria 40",
+    "ar": "غاليريا 40"
+  },
+  "gamaa street obour": {
+    "en": "Gamaa Street - Obour",
+    "ar": "شارع جاما - عبور"
+  },
+  "gamal abd al nasser metro station": {
+    "en": "Gamal Abd Al Nasser Metro Station",
+    "ar": "محطة جمال عبد الناصر"
+  },
+  "gamal abd al nasser square 5th settlement": {
+    "en": "Gamal Abd Al Nasser Square - 5th Settlement",
+    "ar": "ميدان جمال عبد الناصر - التجمع الخامس"
+  },
+  "gamal abd al nasser steps ring road": {
+    "en": "Gamal Abd Al Nasser Steps - Ring Road",
+    "ar": "خطى جمال عبد الناصر - الطريق الدائري"
+  },
+  "gamal abd al nasser street bashayer": {
+    "en": "Gamal Abd Al Nasser Street - Bashayer",
+    "ar": "شارع جمال عبد الناصر - بشائر"
+  },
+  "gardenia heights new cairo": {
+    "en": "Gardenia Heights - New Cairo",
+    "ar": "جاردينيا هيتس - القاهرة الجديدة"
+  },
+  "gas 5th settlement": {
+    "en": "Gas - 5th Settlement",
+    "ar": "محطة الوقود - التجمع الخامس"
+  },
+  "gas al mostafa mosque": {
+    "en": "Gas-Al Mostafa Mosque",
+    "ar": "محطة وقود-مسجد مصطفى"
+  },
+  "gas el hamd": {
+    "en": "Gas-El Hamd",
+    "ar": "محطة الوقود - الحمد"
+  },
+  "gas fue": {
+    "en": "Gas-FUE",
+    "ar": "محطة وقود-فيو"
+  },
+  "gas haram marioteyya": {
+    "en": "Gas-Haram Marioteyya",
+    "ar": "محطة الوقود - هرم مريوطية"
+  },
+  "gas mahmoudeyya": {
+    "en": "Gas-Mahmoudeyya",
+    "ar": "محطة الوقود - المحمودية"
+  },
+  "gas metro zahraa": {
+    "en": "Gas-Metro Zahraa",
+    "ar": "محطة وقود-مترو زهرة"
+  },
+  "gas moroor katameyya": {
+    "en": "Gas-Moroor Katameyya",
+    "ar": "محطة وقود-مروور كاتاميا"
+  },
+  "gas omaal square": {
+    "en": "Gas-Omaal Square",
+    "ar": "محطة الوقود - ميدان العمال"
+  },
+  "gas saqr quraish": {
+    "en": "Gas-Saqr Quraish",
+    "ar": "محطة الوقود - صقر قريش"
+  },
+  "gas shabab entrance": {
+    "en": "Gas-Shabab Entrance",
+    "ar": "محطة وقود-مدخل شباب"
+  },
+  "general administration of topographic maps": {
+    "en": "General Administration Of Topographic Maps",
+    "ar": "الإدارة العامة للخرائط الطوبوغرافية"
+  },
+  "gesr al suez al qobba": {
+    "en": "Gesr Al Suez - Al Qobba",
+    "ar": "جسر السويس - القبة"
+  },
+  "ghamra": {
+    "en": "Ghamra",
+    "ar": "غمرة"
+  },
+  "girls' college ain shams university": {
+    "en": "Girls' College - Ain Shams University",
+    "ar": "كلية البنات - جامعة عين شمس"
+  },
+  "giza metro station": {
+    "en": "Giza Metro Station",
+    "ar": "محطة الجيزة"
+  },
+  "giza square": {
+    "en": "Giza Square",
+    "ar": "ميدان الجيزة"
+  },
+  "giza square district 6": {
+    "en": "Giza Square-District 6",
+    "ar": "ميدان الجيزة - الحي السادس"
+  },
+  "gladios garden compound": {
+    "en": "Gladios Garden Compound",
+    "ar": "مجمع جلايديوس جاردن"
+  },
+  "golf square 5th settlement": {
+    "en": "Golf Square - 5th Settlement",
+    "ar": "جولف ميدان - التجمع الخامس"
+  },
+  "greek hospital": {
+    "en": "Greek Hospital",
+    "ar": "المستشفى اليوناني"
+  },
+  "green hills club": {
+    "en": "Green Hills Club",
+    "ar": "نادي جرين هيلز"
+  },
+  "habitat obour": {
+    "en": "Habitat - Obour",
+    "ar": "هابيت - عبور"
+  },
+  "hadabet al ahram": {
+    "en": "Hadabet Al Ahram",
+    "ar": "حدائق الأهرام"
+  },
+  "hadayek al ahram gate 3": {
+    "en": "Hadayek Al Ahram Gate 3",
+    "ar": "حدائق الأهرام بوابة 3"
+  },
+  "hadayek al mohandeseen gate sheikh zayed": {
+    "en": "Hadayek Al Mohandeseen Gate - Sheikh Zayed",
+    "ar": "حدائق المهندسين بوابة - الشيخ زايد"
+  },
+  "hadayek al qobba station": {
+    "en": "Hadayek Al Qobba Station",
+    "ar": "محطة حدائق القبة"
+  },
+  "hadayek al qobba youth center": {
+    "en": "Hadayek Al Qobba Youth Center",
+    "ar": "حدائق القبة مركز الشباب"
+  },
+  "hadayek el maadi": {
+    "en": "Hadayek El-Maadi",
+    "ar": "حدائق المعادي"
+  },
+  "hadayek helwan": {
+    "en": "Hadayek Helwan",
+    "ar": "حدائق حلوان"
+  },
+  "hadayeq el zaitoun": {
+    "en": "Hadayeq El-Zaitoun",
+    "ar": "حدائق الزيتون"
+  },
+  "hamada emam industrial zone 2": {
+    "en": "Hamada Emam - Industrial Zone 2",
+    "ar": "حمادة الإمام - المنطقة الصناعية 2"
+  },
+  "hammamat el qobba": {
+    "en": "Hammamat El-Qobba",
+    "ar": "حمامات القبة"
+  },
+  "haram marioteya": {
+    "en": "Haram Marioteya",
+    "ar": "حرم ماريوتيا"
+  },
+  "haram marioteyya basateen": {
+    "en": "Haram Marioteyya-Basateen",
+    "ar": "هرم مريوطية - البساتين"
+  },
+  "haram mashaal": {
+    "en": "Haram Mashaal",
+    "ar": "هرم مشعل"
+  },
+  "haram mashaal al mansoreya road": {
+    "en": "Haram Mashaal - Al Mansoreya Road",
+    "ar": "هرم مشعل - طريق المنصورية"
+  },
+  "hay asher bonook": {
+    "en": "Hay Asher-Bonook",
+    "ar": "حي عاشر-بونوك"
+  },
+  "hay asher fue": {
+    "en": "Hay Asher-FUE",
+    "ar": "حي عاشر-FUE"
+  },
+  "hay asher higher technological institute": {
+    "en": "Hay Asher-Higher Technological Institute",
+    "ar": "الحي العاشر - المعهد التكنولوجي العالي"
+  },
+  "hay asher mahkama": {
+    "en": "Hay Asher-Mahkama",
+    "ar": "الحي العاشر - المحكمة"
+  },
+  "hay asher omaal square": {
+    "en": "Hay Asher-Omaal Square",
+    "ar": "الحي العاشر - ميدان العمال"
+  },
+  "hay asher police academy (east)": {
+    "en": "Hay Asher-Police Academy (East)",
+    "ar": "حي عاشر-أكاديمية الشرطة (الشرق)"
+  },
+  "hay asher rehab gate 6": {
+    "en": "Hay Asher-Rehab Gate 6",
+    "ar": "الحي العاشر - بوابة الرحاب 6"
+  },
+  "hay asher shabab entrance": {
+    "en": "Hay Asher-Shabab Entrance",
+    "ar": "حي عاشر-مدخل شباب"
+  },
+  "hay asher zahraa madinet nasr": {
+    "en": "Hay Asher-Zahraa Madinet Nasr",
+    "ar": "الحي العاشر - زهراء مدينة نصر"
+  },
+  "hazem hassan co. alexandria desert road": {
+    "en": "Hazem Hassan Co. - Alexandria Desert Road",
+    "ar": "شركة حازم حسن - طريق الجيزة الصحراوي"
+  },
+  "health affairs directorate 6th of october": {
+    "en": "Health Affairs Directorate - 6th of October",
+    "ar": "مديرية شؤون الصحة - 6 أكتوبر"
+  },
+  "health insurance hospital nasr city": {
+    "en": "Health Insurance Hospital - Nasr City",
+    "ar": "مستشفى التأمين الصحي - مدينة نصر"
+  },
+  "heliopolis sporting club": {
+    "en": "Heliopolis Sporting Club",
+    "ar": "نادي هليوبوليس الرياضي"
+  },
+  "helmeyet el zaitoun": {
+    "en": "Helmeyet El-Zaitoun",
+    "ar": "حلمية الزيتون"
+  },
+  "helwan": {
+    "en": "Helwan",
+    "ar": "حلوان"
+  },
+  "helwan university": {
+    "en": "Helwan University",
+    "ar": "جامعة حلوان"
+  },
+  "higher institute of marketing commerce & information systems": {
+    "en": "Higher Institute Of Marketing Commerce & Information Systems",
+    "ar": "المعهد العالي للتسويق والتجارة ونظم المعلومات"
+  },
+  "higher technological institute 6th of october": {
+    "en": "Higher Technological Institute - 6th of October",
+    "ar": "المعهد التكنولوجي العالي - السادس من أكتوبر"
+  },
+  "higher technological institute akhnatoun": {
+    "en": "Higher Technological Institute-Akhnatoun",
+    "ar": "المعهد التكنولوجي العالي - أخناتون"
+  },
+  "higher technological institute arabella": {
+    "en": "Higher Technological Institute-Arabella",
+    "ar": "المعهد التكنولوجي العالي - أرابيلا"
+  },
+  "hilton pyramids golf dreamland": {
+    "en": "Hilton Pyramids Golf - Dreamland",
+    "ar": "هيلتون أهرام جولف - دريم لاند"
+  },
+  "hilton ramses abd al moneim riad": {
+    "en": "Hilton Ramses - Abd Al Moneim Riad",
+    "ar": "هيلتون رمسيس - عبد المنعم رياض"
+  },
+  "holding co. for water & wastewater (hcww)": {
+    "en": "Holding Co. For Water & Wastewater (HCWW)",
+    "ar": "الشركة القابضة لمياه الشرب والصرف الصحي"
+  },
+  "housing and development bank al mehwar al markazi": {
+    "en": "Housing And Development Bank - Al Mehwar Al Markazi",
+    "ar": "بنك الإسكان والتنمية - المحور المركزي"
+  },
+  "huckstep": {
+    "en": "Huckstep",
+    "ar": "هوكستيب"
+  },
+  "huckstep bridge start": {
+    "en": "Huckstep Bridge - Start",
+    "ar": "كوبري هوكستيب - ستارت"
+  },
+  "hyper 10th of ramadan station (asher men ramadan)": {
+    "en": "Hyper-10th of Ramadan Station (Asher Men Ramadan)",
+    "ar": "هايبر - محطة العاشر من رمضان"
+  },
+  "hyper al joman": {
+    "en": "Hyper-Al Joman",
+    "ar": "هايبر - الجمان"
+  },
+  "hyper azhari institute": {
+    "en": "Hyper-Azhari Institute",
+    "ar": "هايبر-معهد الأزهرى"
+  },
+  "hyper basateen": {
+    "en": "Hyper-Basateen",
+    "ar": "هايبر - البساتين"
+  },
+  "hyper cic": {
+    "en": "Hyper-CIC",
+    "ar": "هايبر-CIC"
+  },
+  "hyper dandy mall": {
+    "en": "Hyper-Dandy Mall",
+    "ar": "هايبر-داندى مول"
+  },
+  "hyper district 11 (sz)": {
+    "en": "Hyper-District 11 (SZ)",
+    "ar": "هايبر-الحي 11 (SZ)"
+  },
+  "hyper district 16": {
+    "en": "Hyper-District 16",
+    "ar": "هايبر - الحي السادس عشر"
+  },
+  "hyper district 6": {
+    "en": "Hyper-District 6",
+    "ar": "هايبر - الحي السادس"
+  },
+  "hyper giza square": {
+    "en": "Hyper-Giza Square",
+    "ar": "هايبر - ميدان الجيزة"
+  },
+  "hyper haram marioteyya": {
+    "en": "Hyper-Haram Marioteyya",
+    "ar": "هايبر - هرم مريوطية"
+  },
+  "hyper haram mashaal": {
+    "en": "Hyper-Haram Mashaal",
+    "ar": "هايبر - هرم مشعل"
+  },
+  "hyper medan lebnan": {
+    "en": "Hyper-Medan Lebnan",
+    "ar": "هايبر - ميدان لبنان"
+  },
+  "hyper new marg": {
+    "en": "Hyper-New Marg",
+    "ar": "هايبر - المرج الجديدة"
+  },
+  "hyper one 10th of ramadan": {
+    "en": "Hyper One - 10th of Ramadan",
+    "ar": "هايبر وان - 10 رمضان"
+  },
+  "hyper qawmeya arabeya": {
+    "en": "Hyper-Qawmeya Arabeya",
+    "ar": "هايبر - القومية العربية"
+  },
+  "hyper ramses": {
+    "en": "Hyper-Ramses",
+    "ar": "هايبر - رمسيس"
+  },
+  "hyper sheikh zayed": {
+    "en": "Hyper - Sheikh Zayed",
+    "ar": "هايبر - الشيخ زايد"
+  },
+  "hyper sheikh zayed general hospital": {
+    "en": "Hyper-Sheikh Zayed General Hospital",
+    "ar": "هايبر - مستشفى الشيخ زايد العام"
+  },
+  "hyper warraq": {
+    "en": "Hyper-Warraq",
+    "ar": "هايبر - الوراق"
+  },
+  "hyper zayed 2000": {
+    "en": "Hyper-Zayed 2000",
+    "ar": "هايبر - زايد 2000"
+  },
+  "ibrahim al rifaie school 1st settlement": {
+    "en": "Ibrahim Al Rifaie School - 1st Settlement",
+    "ar": "مدرسة إبراهيم الرفاعي - التجمع الأول"
+  },
+  "ibrahim anwar mosque al zaytoun": {
+    "en": "Ibrahim Anwar Mosque - Al Zaytoun",
+    "ar": "مسجد إبراهيم أنور - الزيتون"
+  },
+  "icon for construction and development": {
+    "en": "Icon For Construction And Development",
+    "ar": "أيقونة للإنشاء والتطوير"
+  },
+  "ideal standard nasr road": {
+    "en": "Ideal Standard - Nasr Road",
+    "ar": "إيديال ستاندارد - طريق نصر"
+  },
+  "ikea cfc": {
+    "en": "Ikea - CFC",
+    "ar": "إيكيا - سي إف سي"
+  },
+  "imbaba": {
+    "en": "Imbaba",
+    "ar": "إمبابة"
+  },
+  "imbaba fevers hospital": {
+    "en": "Imbaba Fevers Hospital",
+    "ar": "مستشفى إمبابة ففرز"
+  },
+  "imbaba kan kan": {
+    "en": "Imbaba-Kan Kan",
+    "ar": "إمبابة - كان كان"
+  },
+  "imbaba police station": {
+    "en": "Imbaba Police Station",
+    "ar": "مركز شرطة إمبابة"
+  },
+  "industrial school 6th of october": {
+    "en": "Industrial School - 6th of October",
+    "ar": "مدرسة صناعية - 6 أكتوبر"
+  },
+  "isko": {
+    "en": "Isko",
+    "ar": "إسكو"
+  },
+  "islamic center east sheikh zayed": {
+    "en": "Islamic Center East - Sheikh Zayed",
+    "ar": "مركز إسلامي شرق - الشيخ زايد"
+  },
+  "islamic center west sheikh zayed": {
+    "en": "Islamic Center West - Sheikh Zayed",
+    "ar": "مركز إسلامي غرب - الشيخ زايد"
+  },
+  "ismailiya desert road belbeis desert road": {
+    "en": "Ismailiya Desert Road - Belbeis Desert Road",
+    "ar": "طريق صحراء الإسماعيلية - طريق صحراء البلبيس"
+  },
+  "juhayna square": {
+    "en": "Juhayna Square",
+    "ar": "ميدان جهينة"
+  },
+  "kafr tohormos steps ring road": {
+    "en": "Kafr Tohormos Steps - Ring Road",
+    "ar": "خطى كفر طهرمس - الطريق الدائري"
+  },
+  "kan kan 12th district (hay al thani ashr) 6th of october": {
+    "en": "Kan Kan - 12th District (Hay Al Thani Ashr) - 6th of October",
+    "ar": "كان كان - الحي الثاني عشر (حي الثاني عشر) - 6 أكتوبر"
+  },
+  "kattameya": {
+    "en": "Kattameya",
+    "ar": "القطامية"
+  },
+  "kattameya church": {
+    "en": "Kattameya Church",
+    "ar": "كنيسة القطامية"
+  },
+  "kattameyya imbaba": {
+    "en": "Kattameyya-Imbaba",
+    "ar": "القطامية - إمبابة"
+  },
+  "kawkab al sharq cafe bashayer": {
+    "en": "Kawkab Al Sharq Cafe - Bashayer",
+    "ar": "مقهى كوكب الشرق - بشائر"
+  },
+  "kempinski hotel ring road": {
+    "en": "Kempinski Hotel - Ring Road",
+    "ar": "فندق كيمبينسكي - الطريق الدائري"
+  },
+  "kempinski nile hotel": {
+    "en": "Kempinski Nile Hotel",
+    "ar": "فندق كيمبينسكي النيل"
+  },
+  "kfc al lebeny": {
+    "en": "KFC - Al Lebeny",
+    "ar": "كفك - اللبني"
+  },
+  "kfc al manial": {
+    "en": "KFC - Al Manial",
+    "ar": "كفك - المنيل"
+  },
+  "khadija mosque obour": {
+    "en": "Khadija Mosque - Obour",
+    "ar": "مسجد خديجة - عبور"
+  },
+  "khafraa gate hadayek al ahram": {
+    "en": "Khafraa Gate - Hadayek Al Ahram",
+    "ar": "بوابة خفراء - حديقة الأهرام"
+  },
+  "khalafawy": {
+    "en": "Khalafawy",
+    "ar": "الخلفاوي"
+  },
+  "khedr al touny al tayaran": {
+    "en": "Khedr Al Touny - Al Tayaran",
+    "ar": "خضر التوني - الطيران"
+  },
+  "kheir zaman ahmed al zomor": {
+    "en": "Kheir Zaman - Ahmed Al Zomor",
+    "ar": "خير زمان - أحمد الزمر"
+  },
+  "kheir zaman al mehwar al markazi": {
+    "en": "Kheir Zaman - Al Mehwar Al Markazi",
+    "ar": "خير زمان - المحور المركزي"
+  },
+  "khofo gate hadayek al ahram": {
+    "en": "Khofo Gate - Hadayek Al Ahram",
+    "ar": "بوابة خفو - حديقة الأهرام"
+  },
+  "kia motors joseph tito street": {
+    "en": "Kia Motors - Joseph Tito Street",
+    "ar": "كيا موتورز - شارع يوسف طيتو"
+  },
+  "kids land mostafa al nahas": {
+    "en": "Kids Land - Mostafa Al Nahas",
+    "ar": "كيدز لاند - مصطفى النحاس"
+  },
+  "kit kat district": {
+    "en": "Kit Kat District",
+    "ar": "حي الكيت كات"
+  },
+  "kit kat square": {
+    "en": "Kit Kat Square",
+    "ar": "ميدان الكيت كات"
+  },
+  "kobri el qobba": {
+    "en": "Kobri El-Qobba",
+    "ar": "كوبري القبة"
+  },
+  "koleyet al banat metro station": {
+    "en": "Koleyet Al Banat Metro Station",
+    "ar": "محطة كلية البنات"
+  },
+  "koleyet el banat": {
+    "en": "Koleyet El-Banat",
+    "ar": "كلية البنات"
+  },
+  "kolleyyet el zeraa": {
+    "en": "Kolleyyet El-Zeraa",
+    "ar": "كلية الزراعة"
+  },
+  "korba district": {
+    "en": "Korba District",
+    "ar": "الحي كوربا"
+  },
+  "kozzika": {
+    "en": "Kozzika",
+    "ar": "كوزيكا"
+  },
+  "laylat al qadr": {
+    "en": "Laylat Al Qadr",
+    "ar": "ليلة القدر"
+  },
+  "laylat al qadr district 10": {
+    "en": "Laylat Al Qadr-District 10",
+    "ar": "ليلة القدر - الحي العاشر"
+  },
+  "laylat al qadr district 6": {
+    "en": "Laylat Al Qadr-District 6",
+    "ar": "ليلة القدر - الحي السادس"
+  },
+  "laylat al qadr district 7": {
+    "en": "Laylat Al Qadr-District 7",
+    "ar": "ليلة القدر-الحي 7"
+  },
+  "laylat al qadr dolce": {
+    "en": "Laylat Al Qadr-Dolce",
+    "ar": "ليلة القدر - دولتشي"
+  },
+  "laylat al qadr el hossary": {
+    "en": "Laylat Al Qadr-El Hossary",
+    "ar": "ليلة القدر-الحصري"
+  },
+  "laylat al qadr entrance": {
+    "en": "Laylat Al Qadr Entrance",
+    "ar": "مدخل ليلة القدر"
+  },
+  "laylat al qadr giza square": {
+    "en": "Laylat Al Qadr-Giza Square",
+    "ar": "ليلة القدر - ميدان الجيزة"
+  },
+  "laylat al qadr haram mashaal": {
+    "en": "Laylat Al Qadr-Haram Mashaal",
+    "ar": "ليلة القدر - هرم مشعل"
+  },
+  "laylat al qadr imbaba": {
+    "en": "Laylat Al Qadr-Imbaba",
+    "ar": "ليلة القدر - إمبابة"
+  },
+  "laylat al qadr industrial zone 3": {
+    "en": "Laylat Al Qadr-Industrial Zone 3",
+    "ar": "ليلة القدر - المنطقة الصناعية 3"
+  },
+  "laylat al qadr isko": {
+    "en": "Laylat Al Qadr-Isko",
+    "ar": "ليلة القدر - إسكو"
+  },
+  "laylat al qadr medan lebnan": {
+    "en": "Laylat Al Qadr-Medan Lebnan",
+    "ar": "ليلة القدر - ميدان لبنان"
+  },
+  "laylat al qadr motamayez": {
+    "en": "Laylat Al Qadr-Motamayez",
+    "ar": "ليلة القدر - المتميز"
+  },
+  "laylat al qadr new marg": {
+    "en": "Laylat Al Qadr-New Marg",
+    "ar": "ليلة القدر - المرج الجديدة"
+  },
+  "laylat al qadr ramses": {
+    "en": "Laylat Al Qadr-Ramses",
+    "ar": "ليلة القدر - رمسيس"
+  },
+  "laylat al qadr total 6 october": {
+    "en": "Laylat Al Qadr-Total 6 October",
+    "ar": "ليلة القدر - توتال 6 أكتوبر"
+  },
+  "leather and tanning company autostrad": {
+    "en": "Leather and Tanning Company - Autostrad",
+    "ar": "شركة الجلود والتشحيم - أوتوسترا"
+  },
+  "lebanon square (medan lebnan)": {
+    "en": "Lebanon Square (Medan Lebnan)",
+    "ar": "ميدان لبنان"
+  },
+  "maadi": {
+    "en": "Maadi",
+    "ar": "المعادي"
+  },
+  "maadi corniche exit ring road": {
+    "en": "Maadi Corniche Exit - Ring Road",
+    "ar": "مخرج كورنيش المعادي - الطريق الدائري"
+  },
+  "maadi military hospital": {
+    "en": "Maadi Military Hospital",
+    "ar": "مستشفى المعادي العسكري"
+  },
+  "maahad 5th settlement": {
+    "en": "Maahad - 5th Settlement",
+    "ar": "معهد - التجمع الخامس"
+  },
+  "maahad baneen sheikh zayed": {
+    "en": "Maahad Baneen - Sheikh Zayed",
+    "ar": "معهد بنيين - الشيخ زايد"
+  },
+  "maasara autostrad": {
+    "en": "Maasara - Autostrad",
+    "ar": "معسرة - أوتوسترايد"
+  },
+  "madbah steps ring road": {
+    "en": "Madbah Steps - Ring Road",
+    "ar": "مَدْبَح سِتِس - الطريق الدائري"
+  },
+  "madinat al talaba": {
+    "en": "Madinat Al Talaba",
+    "ar": "مدينة الطلبة"
+  },
+  "madinaty exit cairo fayed desert road": {
+    "en": "Madinaty Exit - Cairo Fayed Desert Road",
+    "ar": "مَخْرَج مَدينَتي - طريق القاهرة فاييد الصحراوي"
+  },
+  "magd al islam hospital": {
+    "en": "Magd Al Islam Hospital",
+    "ar": "مَغْد الإسلام مستشفى"
+  },
+  "magda square": {
+    "en": "Magda Square",
+    "ar": "ميدان ماجدة"
+  },
+  "magra al oyoun salah salem": {
+    "en": "Magra Al Oyoun - Salah Salem",
+    "ar": "مغرا العيون - صلاح سالم"
+  },
+  "mahkama 10th of ramadan station (asher men ramadan)": {
+    "en": "Mahkama-10th of Ramadan Station (Asher Men Ramadan)",
+    "ar": "المحكمة - محطة العاشر من رمضان"
+  },
+  "mahkama al sayeda aisha": {
+    "en": "Mahkama-Al Sayeda Aisha",
+    "ar": "محكمة - السيدة عائشة"
+  },
+  "mahkama alf maskan": {
+    "en": "Mahkama-Alf Maskan",
+    "ar": "المحكمة - ألف مسكن"
+  },
+  "mahmoudeya kattameya": {
+    "en": "Mahmoudeya - Kattameya",
+    "ar": "محمودية - كتمية"
+  },
+  "mahmoudeyya akhnatoun": {
+    "en": "Mahmoudeyya-Akhnatoun",
+    "ar": "المحمودية - أخناتون"
+  },
+  "mahmoudeyya arabella": {
+    "en": "Mahmoudeyya-Arabella",
+    "ar": "المحمودية - أرابيلا"
+  },
+  "mahmoudeyya higher technological institute": {
+    "en": "Mahmoudeyya-Higher Technological Institute",
+    "ar": "المحمودية - المعهد التكنولوجي العالي"
+  },
+  "mahmoudeyya shabab entrance": {
+    "en": "Mahmoudeyya-Shabab Entrance",
+    "ar": "محمودية-مدخل شباب"
+  },
+  "mall of arabia": {
+    "en": "Mall of Arabia",
+    "ar": "مول العرب"
+  },
+  "mall of egypt": {
+    "en": "Mall of Egypt",
+    "ar": "مول مصر"
+  },
+  "mamaleek": {
+    "en": "Mamaleek",
+    "ar": "المماليك"
+  },
+  "mankaraa gate hadayek al ahram": {
+    "en": "Mankaraa Gate - Hadayek Al Ahram",
+    "ar": "بوابة مانكارة - حديقة الأهرام"
+  },
+  "manshiet el sadr": {
+    "en": "Manshiet El-Sadr",
+    "ar": "منشية الصدر"
+  },
+  "manshiyat al bakri steps ring road": {
+    "en": "Manshiyat Al Bakri Steps - Ring Road",
+    "ar": "مَنشِيَّة البَكري سِتِس - الطريق الدائري"
+  },
+  "manshiyat al bakry general hospital": {
+    "en": "Manshiyat Al Bakry General Hospital",
+    "ar": "مَنشِيَّة البَكري مستشفى عام"
+  },
+  "manshiyat al gamal": {
+    "en": "Manshiyat Al Gamal",
+    "ar": "مَنشِيَّة الجمل"
+  },
+  "manshiyat nasser": {
+    "en": "Manshiyat Nasser",
+    "ar": "منشية ناصر"
+  },
+  "mansour chevrolet sales center alexandria desert road": {
+    "en": "Mansour Chevrolet Sales Center - Alexandria Desert Road",
+    "ar": "مَنسور شيفروليه مركز مبيعات - طريق الإسكندرية الصحراوي"
+  },
+  "mar girgis": {
+    "en": "Mar Girgis",
+    "ar": "مار جرجس"
+  },
+  "masaken ain shams": {
+    "en": "Masaken Ain Shams",
+    "ar": "مساكن عين شمس"
+  },
+  "masaken al kendy": {
+    "en": "Masaken Al Kendy",
+    "ar": "مساكن الكندي"
+  },
+  "masaken al zobbat 10th district nasr city": {
+    "en": "Masaken Al Zobbat - 10th District - Nasr City",
+    "ar": "مساكن الزوبّات - الحي العاشر - مدينة نصر"
+  },
+  "masaken othman": {
+    "en": "Masaken Othman",
+    "ar": "مساكن عثمان"
+  },
+  "masaken zainhom": {
+    "en": "Masaken Zainhom",
+    "ar": "مساكن زينهم"
+  },
+  "masaken zobbat almaza": {
+    "en": "Masaken Zobbat Almaza",
+    "ar": "مساكن الزوبّات العَمَزة"
+  },
+  "masarra": {
+    "en": "Masarra",
+    "ar": "مسرة"
+  },
+  "mashaal smart village (al qarya al zakeya)": {
+    "en": "Mashaal Smart Village (Al Qarya Al Zakeya)",
+    "ar": "مشعل القرية الذكية"
+  },
+  "maspero exit 15th of may bridge": {
+    "en": "Maspero Exit - 15th of May Bridge",
+    "ar": "مَخْرَج مسبر - كوبري 15 مايو"
+  },
+  "masraweya": {
+    "en": "Masraweya",
+    "ar": "مصروا"
+  },
+  "massalah gadeeda (matareya)": {
+    "en": "Massalah Gadeeda (Matareya)",
+    "ar": "مسألة جديدة (مطارية)"
+  },
+  "matareya educational hospital": {
+    "en": "Matareya Educational Hospital",
+    "ar": "مستشفى مطارية التعليمية"
+  },
+  "matareya square": {
+    "en": "Matareya Square",
+    "ar": "ميدان مطارية"
+  },
+  "may fair village al shorouq": {
+    "en": "May Fair Village - Al Shorouq",
+    "ar": "قرية مَي فِير - الشروق"
+  },
+  "mazallat": {
+    "en": "Mazallat",
+    "ar": "مزاللات"
+  },
+  "mazar mall": {
+    "en": "Mazar Mall",
+    "ar": "مول مزار"
+  },
+  "mazda plaza alexandria desert road": {
+    "en": "Mazda Plaza - Alexandria Desert Road",
+    "ar": "مَزْدَة بلازا - طريق الصحراء الإسكندرية"
+  },
+  "medan lebnan dandy mall": {
+    "en": "Medan Lebnan-Dandy Mall",
+    "ar": "ميدان لبنان - داندى مول"
+  },
+  "medicare sheikh zayed": {
+    "en": "Medicare - Sheikh Zayed",
+    "ar": "ميديكير - الشيخ زايد"
+  },
+  "mehwar desert rd mashaal qarya zakeya": {
+    "en": "Mehwar Desert Rd-Mashaal Qarya Zakeya",
+    "ar": "طريق مهور الصحراوي - مشعل قرية زكية"
+  },
+  "mehwar desert rd mataar sphinx": {
+    "en": "Mehwar Desert Rd-Mataar Sphinx",
+    "ar": "طريق مهور الصحراوي-مطار أبو الهول"
+  },
+  "mehwar desert rd remaya square": {
+    "en": "Mehwar Desert Rd-Remaya Square",
+    "ar": "المحور الصحراوي - ميدان الرماية"
+  },
+  "mehwar desert rd smart village": {
+    "en": "Mehwar Desert Rd-Smart Village",
+    "ar": "طريق مهور الصحراوي-قرية ذكية"
+  },
+  "metro line 1": {
+    "en": "Metro Line 1",
+    "ar": "الخط الأول للمترو"
+  },
+  "metro line 2": {
+    "en": "Metro Line 2",
+    "ar": "الخط الثاني للمترو"
+  },
+  "metro line 3": {
+    "en": "Metro Line 3",
+    "ar": "الخط الثالث للمترو"
+  },
+  "mezallat": {
+    "en": "Mezallat",
+    "ar": "المظلات"
+  },
+  "military cemetery n/a axis": {
+    "en": "Military Cemetery - N/A Axis",
+    "ar": "قبر عسكري - محور غير متاح"
+  },
+  "mina gate 4 hadayek al ahram": {
+    "en": "Mina Gate 4 - Hadayek Al Ahram",
+    "ar": "بوابة ميناء 4 - حدايك الأهرام"
+  },
+  "minerals & refrigeration center abboud": {
+    "en": "Minerals & Refrigeration Center - Abboud",
+    "ar": "مركز المعادن والتبريد - عبود"
+  },
+  "ministry of higher education": {
+    "en": "Ministry Of Higher Education",
+    "ar": "وزارة التعليم العالي"
+  },
+  "ministry of youth and sports": {
+    "en": "Ministry Of Youth And Sports",
+    "ar": "وزارة الشباب والرياضة"
+  },
+  "misr 2000": {
+    "en": "Misr 2000",
+    "ar": "مصر 2000"
+  },
+  "misr al gadeeda military hospital": {
+    "en": "Misr Al Gadeeda Military Hospital",
+    "ar": "مستشفى مصر الجديدة العسكري"
+  },
+  "misr al qadimah": {
+    "en": "Misr Al Qadimah",
+    "ar": "مصر القديمة"
+  },
+  "misr al wosta electricity company al bahr al aazam": {
+    "en": "Misr Al Wosta Electricity Company - Al Bahr Al Aazam",
+    "ar": "شركة مصر الوسطى للكهرباء - البحر الأظّام"
+  },
+  "misr gas station giza square": {
+    "en": "Misr Gas Station - Giza Square",
+    "ar": "محطة وقود مصر - ميدان الجيزة"
+  },
+  "misr packing 6th of october": {
+    "en": "Misr Packing - 6th of October",
+    "ar": "تغليف مصر - 6 أكتوبر"
+  },
+  "misr sudan 7th district nasr city": {
+    "en": "Misr Sudan - 7th District - Nasr City",
+    "ar": "مصر السودان - الحي السابع - مدينة نصر"
+  },
+  "misr university": {
+    "en": "Misr University",
+    "ar": "جامعة مصر"
+  },
+  "mit nama steps cairo alexandria agriculture road": {
+    "en": "Mit Nama Steps - Cairo Alexandria Agriculture Road",
+    "ar": "مراحل ميت ناما - طريق القاهرة الإسكندرية للزراعة"
+  },
+  "mit okba wadi al nile": {
+    "en": "Mit Okba - Wadi Al Nile",
+    "ar": "ميت أوكبا - وادي النيل"
+  },
+  "miu obour": {
+    "en": "MIU - Obour",
+    "ar": "MIU - عبور"
+  },
+  "moassasa pedestrian bridge": {
+    "en": "Moassasa Pedestrian Bridge",
+    "ar": "جسر المشاة المعسرة"
+  },
+  "mobil hassan al sherif nasr city": {
+    "en": "Mobil Hassan Al Sherif - Nasr City",
+    "ar": "موبيل حسن الأ شريف - نصر سيتي"
+  },
+  "mobil mall of arabia": {
+    "en": "Mobil - Mall of Arabia",
+    "ar": "موبيل - مول أوف أرابيا"
+  },
+  "mobil mostafa kamel axis 1st settlement": {
+    "en": "Mobil Mostafa Kamel Axis - 1st Settlement",
+    "ar": "موبيل محور مصطفى كامل - التجمع الأول"
+  },
+  "mohamed naguib": {
+    "en": "Mohamed Naguib",
+    "ar": "محمد نجيب"
+  },
+  "mohamed naguib metro station": {
+    "en": "Mohamed Naguib Metro Station",
+    "ar": "محطة محمد نجيب"
+  },
+  "moneeb": {
+    "en": "Moneeb",
+    "ar": "المنيب"
+  },
+  "moneeb alf masnaa": {
+    "en": "Moneeb-Alf Masnaa",
+    "ar": "المنيب - ألف مصنع"
+  },
+  "moneeb bonook": {
+    "en": "Moneeb-Bonook",
+    "ar": "منيب-بونوك"
+  },
+  "moneeb district 6": {
+    "en": "Moneeb-District 6",
+    "ar": "المنيب - الحي السادس"
+  },
+  "moneeb fue": {
+    "en": "Moneeb-FUE",
+    "ar": "منيب-فيو"
+  },
+  "moneeb gas": {
+    "en": "Moneeb-Gas",
+    "ar": "المنيب - محطة الوقود"
+  },
+  "moneeb hyper": {
+    "en": "Moneeb-Hyper",
+    "ar": "المنيب - هايبر"
+  },
+  "moneeb konayyesa": {
+    "en": "Moneeb Konayyesa",
+    "ar": "المنيب الكنيسة"
+  },
+  "moneeb mahkama": {
+    "en": "Moneeb-Mahkama",
+    "ar": "المنيب - المحكمة"
+  },
+  "moneeb omaal square": {
+    "en": "Moneeb-Omaal Square",
+    "ar": "المنيب - ميدان العمال"
+  },
+  "mostaqbal entrance masaken othman": {
+    "en": "Mostaqbal Entrance-Masaken Othman",
+    "ar": "مدخل المستقبل - مساكن عثمان"
+  },
+  "mostorad pedestrian bridge": {
+    "en": "Mostorad Pedestrian Bridge",
+    "ar": "مسطرد بريدج"
+  },
+  "mostorod bridge ring road": {
+    "en": "Mostorod Bridge - Ring Road",
+    "ar": "مسطرد جسر - حلقة طريق"
+  },
+  "mostorod station": {
+    "en": "Mostorod Station",
+    "ar": "محطة مسطرد"
+  },
+  "mountain view square": {
+    "en": "Mountain View Square",
+    "ar": "ميدان منظر الجبل"
+  },
+  "msa university": {
+    "en": "MSA University",
+    "ar": "جامعة MSA"
+  },
+  "mubarak educational city entrance": {
+    "en": "Mubarak Educational City Entrance",
+    "ar": "مدخل مدينة مبارك التعليمية"
+  },
+  "n/a axis": {
+    "en": "N/A Axis",
+    "ar": "محور N/A"
+  },
+  "nadi al baraka steps ring road": {
+    "en": "Nadi Al Baraka Steps - Ring Road",
+    "ar": "مراحل نادي الباركة - الطريق الدائري"
+  },
+  "naguib mahfouz square 1st settlement": {
+    "en": "Naguib Mahfouz Square - 1st Settlement",
+    "ar": "ميدان نجيب محفوظ - التجمع الأول"
+  },
+  "nahya steps ring road": {
+    "en": "Nahya Steps - Ring Road",
+    "ar": "مراحل نهية - الطريق الدائري"
+  },
+  "nasr al islam mosque al nozha street": {
+    "en": "Nasr Al Islam Mosque - Al Nozha Street",
+    "ar": "مسجد نصر الإسلام - شارع النزهة"
+  },
+  "nasr city police station 2": {
+    "en": "Nasr City Police Station 2",
+    "ar": "مركز شرطة نصر المدينة 2"
+  },
+  "nasr city sporting club": {
+    "en": "Nasr City Sporting Club",
+    "ar": "نادي نصر المدينة الرياضي"
+  },
+  "nasr city towers": {
+    "en": "Nasr City Towers",
+    "ar": "أبراج مدينة نصر"
+  },
+  "nasser": {
+    "en": "Nasser",
+    "ar": "ناصر"
+  },
+  "nasser institue for research al khalafawy": {
+    "en": "Nasser Institue For Research - Al Khalafawy",
+    "ar": "معهد ناصر للبحوث - الخلافوي"
+  },
+  "national authority for military production": {
+    "en": "National Authority For Military Production",
+    "ar": "السلطة الوطنية للإنتاج العسكري"
+  },
+  "national institute for occupational safety and health (al amn al senaey)": {
+    "en": "National Institute for Occupational Safety and Health (Al Amn Al Senaey)",
+    "ar": "معهد وطني للسلامة المهنية والصحة (الأمن العسكري)"
+  },
+  "national security alexandria desert road": {
+    "en": "National Security - Alexandria Desert Road",
+    "ar": "الأمن الوطني - طريق الصحراء الإسكندرية"
+  },
+  "nefertari international school": {
+    "en": "Nefertari International School",
+    "ar": "مدرسة نفرتاري الدولية"
+  },
+  "new el marg": {
+    "en": "New El-Marg",
+    "ar": "المرج الجديدة"
+  },
+  "new giza gate 1": {
+    "en": "New Giza Gate 1",
+    "ar": "بوابة الجيزة الجديدة 1"
+  },
+  "new marg": {
+    "en": "New Marg",
+    "ar": "المرج الجديدة"
+  },
+  "new marg exit ring road": {
+    "en": "New Marg Exit - Ring Road",
+    "ar": "مخرج مارج الجديد - الطريق الدائري"
+  },
+  "new marg higher technological institute": {
+    "en": "New Marg-Higher Technological Institute",
+    "ar": "المرج الجديدة - المعهد التكنولوجي العالي"
+  },
+  "new marg mahkama": {
+    "en": "New Marg-Mahkama",
+    "ar": "المرج الجديدة - المحكمة"
+  },
+  "new marg rehab gate 13": {
+    "en": "New Marg-Rehab Gate 13",
+    "ar": "المرج الجديدة - بوابة الرحاب 13"
+  },
+  "new marg steps ring road": {
+    "en": "New Marg Steps - Ring Road",
+    "ar": "خطوات مارج الجديدة - الطريق الدائري"
+  },
+  "nile university": {
+    "en": "Nile University",
+    "ar": "جامعة النيل"
+  },
+  "nissan kattameya": {
+    "en": "Nissan - Kattameya",
+    "ar": "نيسان - القطامية"
+  },
+  "north cairo electric station": {
+    "en": "North Cairo Electric Station",
+    "ar": "محطة كهرباء القاهرة الشمالية"
+  },
+  "north cairo electricity co al helmeya": {
+    "en": "North Cairo Electricity Co - Al Helmeya",
+    "ar": "شركة الكهرباء القاهرة الشمالية - الحليمة"
+  },
+  "noubar street": {
+    "en": "Noubar Street",
+    "ar": "شارع نوبار"
+  },
+  "nour al islam mosque shubra al kheima": {
+    "en": "Nour Al Islam Mosque - Shubra Al Kheima",
+    "ar": "مسجد نور الإسلام - شبرا الخيمة"
+  },
+  "nour al islam mosque steps ring road": {
+    "en": "Nour Al Islam Mosque Steps - Ring Road",
+    "ar": "مراحل مسجد نور الإسلام - الطريق الدائري"
+  },
+  "nour city steps ring road": {
+    "en": "Nour City Steps - Ring Road",
+    "ar": "خطوات نور - الطريق الدائري"
+  },
+  "novartis pharma al zaytoun": {
+    "en": "Novartis Pharma - Al Zaytoun",
+    "ar": "نوفارتس فارما - الزيتون"
+  },
+  "obour": {
+    "en": "Obour",
+    "ar": "العبور"
+  },
+  "obour city authority": {
+    "en": "Obour City Authority",
+    "ar": "سلطة عبور المدينة"
+  },
+  "obour market 2 south": {
+    "en": "Obour Market 2 - South",
+    "ar": "سوق عبور 2 - الجنوب"
+  },
+  "obour market east": {
+    "en": "Obour Market - East",
+    "ar": "سوق عبور - الشرق"
+  },
+  "obour market south": {
+    "en": "Obour Market - South",
+    "ar": "سوق عبور - الجنوب"
+  },
+  "obour sporting club": {
+    "en": "Obour Sporting Club",
+    "ar": "نادي عبور الرياضي"
+  },
+  "obour square": {
+    "en": "Obour Square",
+    "ar": "ميدان عبور"
+  },
+  "obour square 3rd settlement": {
+    "en": "Obour Square - 3rd Settlement",
+    "ar": "ميدان عبور - التجمع الثالث"
+  },
+  "obour tunnel": {
+    "en": "Obour Tunnel",
+    "ar": "نفق عبور"
+  },
+  "october bus station": {
+    "en": "October Bus Station",
+    "ar": "محطة حافلة أكتوبر"
+  },
+  "october microbus stop": {
+    "en": "October Microbus Stop",
+    "ar": "محطة حافلة صغيرة أكتوبر"
+  },
+  "om hassan restaurant abbas al akkad": {
+    "en": "Om Hassan Restaurant - Abbas Al Akkad",
+    "ar": "مطعم أم حسن - عباس الأقد"
+  },
+  "omaal square akhnatoun": {
+    "en": "Omaal Square-Akhnatoun",
+    "ar": "ميدان العمال - أخناتون"
+  },
+  "omaal square al sayeda aisha": {
+    "en": "Omaal Square-Al Sayeda Aisha",
+    "ar": "ميدان أومال - السيدة عائشة"
+  },
+  "omm el misryeen": {
+    "en": "Omm El-Misryeen",
+    "ar": "أم المصريين"
+  },
+  "ommal square 5th settlement": {
+    "en": "Ommal Square - 5th Settlement",
+    "ar": "ميدان العمال - التجمع الخامس"
+  },
+  "opera": {
+    "en": "Opera",
+    "ar": "الأوبرا"
+  },
+  "orabi": {
+    "en": "Orabi",
+    "ar": "عرابي"
+  },
+  "oriental weavers al mehwar al markazi": {
+    "en": "Oriental Weavers - Al Mehwar Al Markazi",
+    "ar": "الناشرون الشرقيون - المحور المركزي"
+  },
+  "oriental weavers haram": {
+    "en": "Oriental Weavers - Haram",
+    "ar": "الناشرون الشرقيون - حرم"
+  },
+  "oriental weavers shubra al kheima": {
+    "en": "Oriental Weavers - Shubra Al Kheima",
+    "ar": "الناشرون الشرقيون - شبرا الخيمة"
+  },
+  "othman pedestrian bridge ring road": {
+    "en": "Othman Pedestrian Bridge - Ring Road",
+    "ar": "كوبري عثمان للمشاة - الطريق الدائري"
+  },
+  "othman steps ring road": {
+    "en": "Othman Steps - Ring Road",
+    "ar": "خطوات عثمان - الطريق الدائري"
+  },
+  "panorama october": {
+    "en": "Panorama October",
+    "ar": "بانوراما أكتوبر"
+  },
+  "paradise al shorouq compound": {
+    "en": "Paradise Al Shorouq Compound",
+    "ar": "مستوطنة جنة الشروق"
+  },
+  "pizza hut mostafa al nahas": {
+    "en": "Pizza Hut - Mostafa Al Nahas",
+    "ar": "بيتزا هت - مصطفى النحاس"
+  },
+  "plaza club obour": {
+    "en": "Plaza Club - Obour",
+    "ar": "نادي بلازا - عبور"
+  },
+  "police academy (south) misr 2000": {
+    "en": "Police Academy (South)-Misr 2000",
+    "ar": "أكاديمية الشرطة (جنوب) - مصر 2000"
+  },
+  "police academy east": {
+    "en": "Police Academy - East",
+    "ar": "أكاديمية الشرطة - الشرق"
+  },
+  "police academy north": {
+    "en": "Police Academy - North",
+    "ar": "أكاديمية الشرطة - الشمال"
+  },
+  "police academy south": {
+    "en": "Police Academy - South",
+    "ar": "أكاديمية الشرطة - الجنوب"
+  },
+  "police hospital al shaheed axis": {
+    "en": "Police Hospital - Al Shaheed Axis",
+    "ar": "مستشفى الشرطة - محور الشهيد"
+  },
+  "police station 5th settlement": {
+    "en": "Police Station - 5th Settlement",
+    "ar": "محطة الشرطة - التجمع الخامس"
+  },
+  "port said street al sawah": {
+    "en": "Port Said Street - Al Sawah",
+    "ar": "شارع بورسعيد - السواح"
+  },
+  "porto cairo mall": {
+    "en": "Porto Cairo Mall",
+    "ar": "مول بورتو القاهرة"
+  },
+  "postal office 1st settlement": {
+    "en": "Postal Office - 1st Settlement",
+    "ar": "مكتب البريد - التجمع الأول"
+  },
+  "public taxes mission nasr city": {
+    "en": "Public Taxes Mission - Nasr City",
+    "ar": "مهمة الضرائب العامة - مدينة نصر"
+  },
+  "qalyub": {
+    "en": "Qalyub",
+    "ar": "قليوب"
+  },
+  "qalyub district court": {
+    "en": "Qalyub District Court",
+    "ar": "محكمة القليوبية"
+  },
+  "qalyub exit cairo alexandria agriculture road": {
+    "en": "Qalyub Exit - Cairo Alexandria Agriculture Road",
+    "ar": "مخرج القليوبية - طريق القاهرة الإسكندرية الزراعي"
+  },
+  "qalyub exit ring road": {
+    "en": "Qalyub Exit - Ring Road",
+    "ar": "مخرج القليوبية - الطريق الدائري"
+  },
+  "qalyub steps ring road": {
+    "en": "Qalyub Steps - Ring Road",
+    "ar": "خطوات القليوبية - الطريق الدائري"
+  },
+  "qawmeya arabeya": {
+    "en": "Qawmeya Arabeya",
+    "ar": "القومية العربية"
+  },
+  "qawmeya steps ring road": {
+    "en": "Qawmeya Steps - Ring Road",
+    "ar": "خطوات قومية - الطريق الدائري"
+  },
+  "qnb bank haram street": {
+    "en": "QNB Bank - Haram Street",
+    "ar": "بنك QNB - شارع حرم"
+  },
+  "rabaah al adaweya mosque": {
+    "en": "Rabaah Al Adaweya Mosque",
+    "ar": "مسجد رباح العدوي"
+  },
+  "radobis cinema haram street": {
+    "en": "Radobis Cinema - Haram Street",
+    "ar": "سينما رادوبس - شارع حرم"
+  },
+  "ragab sons 7th district 6th of october": {
+    "en": "Ragab Sons - 7th District - 6th of October",
+    "ar": "أبناء رجب - الحي السابع - 6 أكتوبر"
+  },
+  "ragab sons al lebny": {
+    "en": "Ragab Sons - Al Lebny",
+    "ar": "رجب سونز - اللبني"
+  },
+  "ragab sons al mehwar al markazi": {
+    "en": "Ragab Sons - Al Mehwar Al Markazi",
+    "ar": "رجب سونز - المحور المركزي"
+  },
+  "ragab sons al shabab street obour": {
+    "en": "Ragab Sons - Al Shabab Street - Obour",
+    "ar": "رجب سونز - شارع الشباب - عبور"
+  },
+  "ragab sons mahdy arafa": {
+    "en": "Ragab Sons - Mahdy Arafa",
+    "ar": "رجب سونز - مهدي عرفى"
+  },
+  "rahma mosque ahmed zomor": {
+    "en": "Rahma Mosque - Ahmed Zomor",
+    "ar": "مسجد رحمة - أحمد زمر"
+  },
+  "ramses": {
+    "en": "Ramses",
+    "ar": "رمسيس"
+  },
+  "ramses extension northside": {
+    "en": "Ramses Extension - Northside",
+    "ar": "تمديد رمسيس - الجانب الشمالي"
+  },
+  "ramses extension southside": {
+    "en": "Ramses Extension - Southside",
+    "ar": "تمديد رمسيس - الجانب الجنوبي"
+  },
+  "ramses railway station": {
+    "en": "Ramses Railway Station",
+    "ar": "محطة مصر رمسيس"
+  },
+  "raslan al mehwar al markazi": {
+    "en": "Raslan - Al Mehwar Al Markazi",
+    "ar": "رسلان - المهور المركزي"
+  },
+  "rawda mosque obour": {
+    "en": "Rawda Mosque - Obour",
+    "ar": "مسجد الروضة - عبور"
+  },
+  "rawda mosque obour new marg": {
+    "en": "Rawda Mosque Obour-New Marg",
+    "ar": "رودى-مسجد عبور-نيو مارج"
+  },
+  "real estate registration mission 6th of october": {
+    "en": "Real Estate Registration Mission - 6th of October",
+    "ar": "مهمة تسجيل العقارات - 6 أكتوبر"
+  },
+  "real estate registration mission shubra": {
+    "en": "Real Estate Registration Mission - Shubra",
+    "ar": "مهمة تسجيل العقارات - شبرا"
+  },
+  "red kiosk 6th of october": {
+    "en": "Red Kiosk - 6th of October",
+    "ar": "كشك أحمر - 6 أكتوبر"
+  },
+  "rehab gate 13": {
+    "en": "Rehab Gate 13",
+    "ar": "بوابة الرحاب 13"
+  },
+  "rehab gate 6": {
+    "en": "Rehab Gate 6",
+    "ar": "بوابة الرحاب 6"
+  },
+  "rehab square": {
+    "en": "Rehab Square",
+    "ar": "ميدان الرحاب"
+  },
+  "rehab square masraweyya": {
+    "en": "Rehab Square-Masraweyya",
+    "ar": "ميدان الرحاب - مصراوية"
+  },
+  "remaya exit ring road": {
+    "en": "Remaya Exit - Ring Road",
+    "ar": "مخرج رمية - الطريق الدائري"
+  },
+  "rihana plaza sheikh zayed": {
+    "en": "Rihana Plaza - Sheikh Zayed",
+    "ar": "ميدان رحينا - الشيخ زايد"
+  },
+  "ring road entrance cairo alexandria agriculture road": {
+    "en": "Ring Road Entrance - Cairo Alexandria Agriculture Road",
+    "ar": "مدخل الطريق الدائري - طريق القاهرة الإسكندرية الزراعي"
+  },
+  "ring road steps 1 26th of july mehwar": {
+    "en": "Ring Road Steps 1 - 26th of July Mehwar",
+    "ar": "خطوات الطريق الدائري 1 - 26 يوليو المحور"
+  },
+  "ring road steps 2 26th of july mehwar": {
+    "en": "Ring Road Steps 2 - 26th of July Mehwar",
+    "ar": "خطوات الطريق الدائري 2 - 26 يوليو المحور"
+  },
+  "rod al farag metro station": {
+    "en": "Rod Al Farag Metro Station",
+    "ar": "محطة روض الفرج"
+  },
+  "rod al farag youth center": {
+    "en": "Rod Al Farag Youth Center",
+    "ar": "مركز رُد الفراج للشباب"
+  },
+  "rod el farag": {
+    "en": "Rod El Farag",
+    "ar": "روض الفرج"
+  },
+  "roushdy pharmacy al remaya": {
+    "en": "Roushdy Pharmacy - Al Remaya",
+    "ar": "صيدلية رشدي - الرمية"
+  },
+  "roxy": {
+    "en": "Roxy",
+    "ar": "روكسي"
+  },
+  "royal city gate sheikh zayed": {
+    "en": "Royal City Gate - Sheikh Zayed",
+    "ar": "بوابة المدينة الملكية - الشيخ زايد"
+  },
+  "saad zaghloul": {
+    "en": "Saad Zaghloul",
+    "ar": "سعد زغلول"
+  },
+  "sadat": {
+    "en": "Sadat",
+    "ar": "السادات"
+  },
+  "safeer square heliopolis": {
+    "en": "Safeer Square - Heliopolis",
+    "ar": "ميدان سافر - هليوبوليس"
+  },
+  "saft al laban entrance north ring road": {
+    "en": "Saft Al Laban Entrance North - Ring Road",
+    "ar": "مدخل سفط اللبن الشمالي - الطريق الدائري"
+  },
+  "saft al laban entrance south ring road": {
+    "en": "Saft Al Laban Entrance South - Ring Road",
+    "ar": "مدخل سفط اللبن الجنوبي - الطريق الدائري"
+  },
+  "saft al laban steps ring road": {
+    "en": "Saft Al Laban Steps - Ring Road",
+    "ar": "سُفْت اللبن خطوات - الطريق الدائري"
+  },
+  "safwa clinics obour": {
+    "en": "Safwa Clinics - Obour",
+    "ar": "عيادات صفوة - عبور"
+  },
+  "saint fatima square": {
+    "en": "Saint Fatima Square",
+    "ar": "ميدان سانت فاتيما"
+  },
+  "saint teresa metro station": {
+    "en": "Saint Teresa Metro Station",
+    "ar": "محطة سانت تريزا"
+  },
+  "sakanat el maadi": {
+    "en": "Sakanat El-Maadi",
+    "ar": "ثكنات المعادي"
+  },
+  "sakiat mekki": {
+    "en": "Sakiat Mekki",
+    "ar": "ساقية مكي"
+  },
+  "sakkara steps ring road": {
+    "en": "Sakkara Steps - Ring Road",
+    "ar": "سقارة سلال - الطريق الدائري"
+  },
+  "salah al din citadel salah salem": {
+    "en": "Salah Al Din Citadel - Salah Salem",
+    "ar": "قلعة صلاح الدين - صلاح سالم"
+  },
+  "salah al din square heliopolis": {
+    "en": "Salah Al Din Square - Heliopolis",
+    "ar": "ميدان صلاح الدين - هليوبوليس"
+  },
+  "salam nahda": {
+    "en": "Salam Nahda",
+    "ar": "سلام نهضة"
+  },
+  "salam nahda alf maskan": {
+    "en": "Salam Nahda-Alf Maskan",
+    "ar": "سلام نهضة - ألف مسكن"
+  },
+  "salama afifi street al zawya al hamra": {
+    "en": "Salama Afifi Street - Al Zawya Al Hamra",
+    "ar": "شارع سلامة عفيفي - الزوايا الحمراء"
+  },
+  "salamtak labs dolce": {
+    "en": "Salamtak Labs - Dolce",
+    "ar": "مختبرات سلامتك - دولس"
+  },
+  "samir & ali al thawra street": {
+    "en": "Samir & Ali - Al Thawra Street",
+    "ar": "سمير وعلي - شارع الثورة"
+  },
+  "saqr quraish": {
+    "en": "Saqr Quraish",
+    "ar": "صقر قريش"
+  },
+  "saray al qobba": {
+    "en": "Saray Al Qobba",
+    "ar": "ساراي القبة"
+  },
+  "saray el qobba": {
+    "en": "Saray El-Qobba",
+    "ar": "سراي القبة"
+  },
+  "sekket al waili": {
+    "en": "Sekket Al Waili",
+    "ar": "سقطة الوايل"
+  },
+  "sekket al waili street kobry al qobba": {
+    "en": "Sekket Al Waili Street - Kobry Al Qobba",
+    "ar": "شارع سقطة الوايل - كوبري القبة"
+  },
+  "seoudi supermarket sheikh zayed": {
+    "en": "Seoudi Supermarket - Sheikh Zayed",
+    "ar": "سوبر ماركت سعودي - الشيخ زايد"
+  },
+  "shabab station misr petroleum obour": {
+    "en": "Shabab Station - Misr Petroleum - Obour",
+    "ar": "محطة شباب - مصر للبترول - عبور"
+  },
+  "shabab stop obour new marg": {
+    "en": "Shabab Stop Obour-New Marg",
+    "ar": "شباب-وقف عبور-نيو مارج"
+  },
+  "shabab stop obour salam nahda": {
+    "en": "Shabab Stop Obour-Salam Nahda",
+    "ar": "وقف شباب عبور-سلام النهضة"
+  },
+  "sheikh zayed entrance": {
+    "en": "Sheikh Zayed Entrance",
+    "ar": "مدخل الشيخ زايد"
+  },
+  "sheikh zayed general hospital district 11 (sz)": {
+    "en": "Sheikh Zayed General Hospital-District 11 (SZ)",
+    "ar": "مستشفى الشيخ زايد العام-الحي 11 (SZ)"
+  },
+  "sheikh zayed general hospital northside": {
+    "en": "Sheikh Zayed General Hospital Northside",
+    "ar": "مستشفى الشيخ زايد العام شمال"
+  },
+  "sheikh zayed general hospital southside": {
+    "en": "Sheikh Zayed General Hospital Southside",
+    "ar": "مستشفى الشيخ زايد العام جنوب"
+  },
+  "sheikh zayed islamic center": {
+    "en": "Sheikh Zayed Islamic Center",
+    "ar": "مركز الشيخ زايد الإسلامي"
+  },
+  "sheikh zayed specialized hospital": {
+    "en": "Sheikh Zayed Specialized Hospital",
+    "ar": "مستشفى الشيخ زايد المتخصص"
+  },
+  "shepheard hotel": {
+    "en": "Shepheard Hotel",
+    "ar": "فندق شيفارد"
+  },
+  "sheraton bus station": {
+    "en": "Sheraton Bus Station",
+    "ar": "محطة شيراتون للسيارات"
+  },
+  "shooting club pedestrian tunnel": {
+    "en": "Shooting Club Pedestrian Tunnel",
+    "ar": "نادي الرماية - نفق المشاة"
+  },
+  "shubra al kheima": {
+    "en": "Shubra Al Kheima",
+    "ar": "شبرا الخيمة"
+  },
+  "shubra al kheima city council": {
+    "en": "Shubra Al Kheima City Council",
+    "ar": "مجلس مدينة شبرا الخيمة"
+  },
+  "shubra al kheima east district presidency": {
+    "en": "Shubra Al Kheima East District Presidency",
+    "ar": "رئاسة حي شبرا الخيمة الشرقي"
+  },
+  "shubra al kheima metro station": {
+    "en": "Shubra Al Kheima Metro Station",
+    "ar": "محطة مترو شبرا الخيمة"
+  },
+  "shubra al kheima power plant": {
+    "en": "Shubra Al Kheima Power Plant",
+    "ar": "محطة شبرا الخيمة للطاقة"
+  },
+  "shubra el kheima": {
+    "en": "Shubra El-Kheima",
+    "ar": "شبرا الخيمة"
+  },
+  "silver nile social club maadi corniche": {
+    "en": "Silver Nile Social Club - Maadi Corniche",
+    "ar": "نادي سيلفر نيل الاجتماعي - كورنيش المعادي"
+  },
+  "silver star mall 5th settlement": {
+    "en": "Silver Star Mall - 5th Settlement",
+    "ar": "مول سيلفر ستار - التجمع الخامس"
+  },
+  "sky mart mall 1st settlement": {
+    "en": "Sky Mart Mall - 1st Settlement",
+    "ar": "مول سكاي ماركت - التجمع الأول"
+  },
+  "small industries association al hegaz street 6th of october": {
+    "en": "Small Industries Association - Al Hegaz Street - 6th of October",
+    "ar": "جمعية الصناعات الصغيرة - شارع الحجاز - 6 أكتوبر"
+  },
+  "smart village (al qarya al zakeya)": {
+    "en": "Smart Village (Al Qarya Al Zakeya)",
+    "ar": "القرية الذكية"
+  },
+  "social insurance bureau shubra al kheima": {
+    "en": "Social Insurance Bureau - Shubra Al Kheima",
+    "ar": "مكتب التأمينات الاجتماعية - شبرا الخيمة"
+  },
+  "sodic": {
+    "en": "SODIC",
+    "ar": "سوديك"
+  },
+  "sonesta hotel salah salem": {
+    "en": "Sonesta Hotel - Salah Salem",
+    "ar": "فندق سونستا - صلاح سالم"
+  },
+  "souq al gomla": {
+    "en": "Souq Al Gomla",
+    "ar": "سوق الجملة"
+  },
+  "souq bab al louk": {
+    "en": "Souq Bab Al Louk",
+    "ar": "سوق باب اللوق"
+  },
+  "south teseen street entrance": {
+    "en": "South Teseen Street Entrance",
+    "ar": "مدخل شارع تسين الجنوب"
+  },
+  "sphinx airport": {
+    "en": "Sphinx Airport",
+    "ar": "مطار سفنكس"
+  },
+  "sphinx square": {
+    "en": "Sphinx Square",
+    "ar": "ميدان أبو الهول"
+  },
+  "st. mary and st. mark church 6th of october": {
+    "en": "St. Mary and St. Mark Church - 6th of October",
+    "ar": "كنيسة سانت ماري وسانت مارك - 6 أكتوبر"
+  },
+  "st. teresa": {
+    "en": "St. Teresa",
+    "ar": "سانت تريزا"
+  },
+  "stadium": {
+    "en": "Stadium",
+    "ar": "استاد القاهرة"
+  },
+  "street 10 steps ring road": {
+    "en": "Street 10 Steps - Ring Road",
+    "ar": "الخطوات العشر - الطريق الدائري"
+  },
+  "street 29 al hamd square": {
+    "en": "Street 29 - Al Hamd Square",
+    "ar": "الشارع 29 - ميدان الحمد"
+  },
+  "sudan street": {
+    "en": "Sudan Street",
+    "ar": "شارع السودان"
+  },
+  "suez bridge": {
+    "en": "Suez Bridge",
+    "ar": "كوبري السويس"
+  },
+  "sultan abou al ela mosque maspero": {
+    "en": "Sultan Abou Al Ela Mosque - Maspero",
+    "ar": "مسجد السلطان أبو العلا - مسبرو"
+  },
+  "sun mall": {
+    "en": "Sun Mall",
+    "ar": "مول شمس"
+  },
+  "swan lake compound 5th settlement": {
+    "en": "Swan Lake Compound - 5th Settlement",
+    "ar": "مجمع سوان ليك - التجمع الخامس"
+  },
+  "syndicate of commercial professions abbasseya": {
+    "en": "Syndicate Of Commercial Professions - Abbasseya",
+    "ar": "نقابة المهن التجارية - عباسية"
+  },
+  "t": {
+    "en": "t",
+    "ar": "ت"
+  },
+  "taawon gas station al mataryaa": {
+    "en": "Taawon Gas Station - Al Mataryaa",
+    "ar": "محطة وقود تعاون - المطارية"
+  },
+  "tabarak children's hospital nasr city": {
+    "en": "Tabarak Children's Hospital - Nasr City",
+    "ar": "مستشفى تبريك للأطفال - مدينة نصر"
+  },
+  "tahrir square": {
+    "en": "Tahrir Square",
+    "ar": "ميدان التحرير"
+  },
+  "taki al waili": {
+    "en": "Taki - Al Waili",
+    "ar": "تكي - الوايل"
+  },
+  "tara compound entrance sheikh zayed": {
+    "en": "Tara Compound Entrance - Sheikh Zayed",
+    "ar": "مدخل مجمع طارا - الشيخ زايد"
+  },
+  "telecom egypt central 6th of october": {
+    "en": "Telecom Egypt Central - 6th Of October",
+    "ar": "تليكوم مصر المركز - السادس من أكتوبر"
+  },
+  "telecom egypt central almaza": {
+    "en": "Telecom Egypt Central - Almaza",
+    "ar": "تليكوم مصر المركز - العمازة"
+  },
+  "teraat al gabal street": {
+    "en": "Teraat Al Gabal Street",
+    "ar": "شارع طيرات الجبال"
+  },
+  "the continental school obour": {
+    "en": "The Continental School - Obour",
+    "ar": "المدرسة القارية - عبور"
+  },
+  "the egyptian lawyers association": {
+    "en": "The Egyptian Lawyers Association",
+    "ar": "جمعية المحامين المصريين"
+  },
+  "the good shepherd hospital": {
+    "en": "The Good Shepherd Hospital",
+    "ar": "مستشفى الراعي الصالح"
+  },
+  "the outlet mall 6th of october": {
+    "en": "The Outlet Mall - 6th of October",
+    "ar": "مول الأوتليت - 6 أكتوبر"
+  },
+  "the platform maadi": {
+    "en": "The Platform Maadi",
+    "ar": "المنصة المعادي"
+  },
+  "third settlement ahmed helmy": {
+    "en": "Third Settlement-Ahmed Helmy",
+    "ar": "التجمع الثالث - أحمد حلمي"
+  },
+  "third settlement attaba": {
+    "en": "Third Settlement-Attaba",
+    "ar": "التجمع الثالث - العتبة"
+  },
+  "third settlement new marg": {
+    "en": "Third Settlement-New Marg",
+    "ar": "التجمع الثالث - المرج الجديدة"
+  },
+  "third settlement shubra al kheima": {
+    "en": "Third Settlement-Shubra Al Kheima",
+    "ar": "التجمع الثالث - شبرا الخيمة"
+  },
+  "three pyramids hotel": {
+    "en": "Three Pyramids Hotel",
+    "ar": "فندق ثلاثي الأهرام"
+  },
+  "tiba grand mall": {
+    "en": "Tiba Grand Mall",
+    "ar": "مول تيبا جراند"
+  },
+  "tolip plaza": {
+    "en": "Tolip Plaza",
+    "ar": "مركز توليب"
+  },
+  "tolip plaza 5th settlement": {
+    "en": "Tolip Plaza - 5th Settlement",
+    "ar": "توليب بلازا - التجمع الخامس"
+  },
+  "tolip zahraa nasr city": {
+    "en": "Tolip - Zahraa Nasr City",
+    "ar": "توليب - زهرة نصر سيتي"
+  },
+  "tora el asmant": {
+    "en": "Tora El-Asmant",
+    "ar": "طرة الأسمنت"
+  },
+  "tora el balad": {
+    "en": "Tora El-Balad",
+    "ar": "طرة البلد"
+  },
+  "tora steps autostrad": {
+    "en": "Tora Steps - Autostrad",
+    "ar": "تورا ستبس - أوتوسترايد"
+  },
+  "total gas station 6th of october": {
+    "en": "Total Gas Station - 6th of October",
+    "ar": "توتال محطة وقود - الحي السادس من أكتوبر"
+  },
+  "total gas station bassous ring road": {
+    "en": "Total Gas Station Bassous - Ring Road",
+    "ar": "محطة وقود توتال باسوس - الطريق الدائري"
+  },
+  "total gas station haram marioteya": {
+    "en": "Total Gas Station - Haram Marioteya",
+    "ar": "توتال محطة وقود - حرم ماريوتيا"
+  },
+  "total gas station kattameya entrance": {
+    "en": "Total Gas Station - Kattameya Entrance",
+    "ar": "توتال محطة وقود - مدخل كاتاميا"
+  },
+  "traffic department (moroor) kattameya": {
+    "en": "Traffic Department (Moroor) - Kattameya",
+    "ar": "إدارة المرور (مورور) - قطامية"
+  },
+  "triumph hotel": {
+    "en": "Triumph Hotel",
+    "ar": "فندق تريومف"
+  },
+  "triumph square": {
+    "en": "Triumph Square",
+    "ar": "ميدان تريومف"
+  },
+  "tuktuk stop 15th of may bridge shubra al kheima": {
+    "en": "Tuktuk Stop - 15th of May Bridge - Shubra Al Kheima",
+    "ar": "محطة التكتوك - كوبري 15 مايو - شبرا الخيمة"
+  },
+  "twin plaza": {
+    "en": "Twin Plaza",
+    "ar": "مركز توين"
+  },
+  "union housing al nasr kattameya": {
+    "en": "Union Housing Al Nasr - Kattameya",
+    "ar": "سكن الاتحاد النصر - قطامية"
+  },
+  "universal 6th of october": {
+    "en": "Universal - 6th of October",
+    "ar": "يونيورسال - 6 أكتوبر"
+  },
+  "unknown soldier (al gondi al maghool)": {
+    "en": "Unknown Soldier (Al Gondi Al Maghool)",
+    "ar": "الجندي المجهول (الغندي المجهول)"
+  },
+  "vitrac square 5th settlement": {
+    "en": "Vitrac Square - 5th Settlement",
+    "ar": "ميدان فيتراك - التجمع الخامس"
+  },
+  "vodafone ahmed al zomor": {
+    "en": "Vodafone - Ahmed Al Zomor",
+    "ar": "فودافون - أحمد الزومر"
+  },
+  "vodafone imbaba": {
+    "en": "Vodafone - Imbaba",
+    "ar": "فودافون - إمبابة"
+  },
+  "vodafone square": {
+    "en": "Vodafone Square",
+    "ar": "ميدان فودافون"
+  },
+  "wadi degla sporting club 6th of october": {
+    "en": "Wadi Degla Sporting Club - 6th of October",
+    "ar": "نادي وادي الدجلة الرياضي - 6 أكتوبر"
+  },
+  "wadi degla sporting club heliopolis": {
+    "en": "Wadi Degla Sporting Club - Heliopolis",
+    "ar": "نادي وادي الدجلة الرياضي - هليوبوليس"
+  },
+  "wadi degla sporting club new cairo": {
+    "en": "Wadi Degla Sporting Club - New Cairo",
+    "ar": "نادي وادي الدجلة الرياضي - القاهرة الجديدة"
+  },
+  "wadi hof": {
+    "en": "Wadi Hof",
+    "ar": "وادي حوف"
+  },
+  "waha garage 10th district nasr city": {
+    "en": "Waha Garage - 10th District - Nasr City",
+    "ar": "واحة جراج - الحي العاشر - مدينة نصر"
+  },
+  "waha hotel alexandria desert road": {
+    "en": "Waha Hotel - Alexandria Desert Road",
+    "ar": "واحة فندق - طريق صحراء الإسكندرية"
+  },
+  "wataneya gas station ring road kattameya": {
+    "en": "Wataneya Gas Station - Ring Road - Kattameya",
+    "ar": "محطة وقود وطنية - الطريق الدائري - القطامية"
+  },
+  "water station alexandria desert road": {
+    "en": "Water Station - Alexandria Desert Road",
+    "ar": "محطة ماء - طريق صحراء الإسكندرية"
+  },
+  "waterway compound": {
+    "en": "Waterway Compound",
+    "ar": "مجمع ووتيروي"
+  },
+  "wax museum helwan": {
+    "en": "Wax Museum - Helwan",
+    "ar": "متحف الشمع - حلوان"
+  },
+  "west golf": {
+    "en": "West Golf",
+    "ar": "غولف الغرب"
+  },
+  "windrose academy": {
+    "en": "Windrose Academy",
+    "ar": "أكاديمية ويندروز"
+  },
+  "yellow kiosk 6th of october": {
+    "en": "Yellow Kiosk - 6th of October",
+    "ar": "كشك أصفر - 6 أكتوبر"
+  },
+  "youth club sheikh zayed": {
+    "en": "Youth Club - Sheikh Zayed",
+    "ar": "نادي الشباب - الشيخ زايد"
+  },
+  "youth housing al shorouq": {
+    "en": "Youth Housing - Al Shorouq",
+    "ar": "سكن الشباب - الشروق"
+  },
+  "zahraa exit ring road": {
+    "en": "Zahraa Exit - Ring Road",
+    "ar": "مخرج زهرة - الطريق الدائري"
+  },
+  "zahraa madinet nasr": {
+    "en": "Zahraa Madinet Nasr",
+    "ar": "زهراء مدينة نصر"
+  },
+  "zahraa madinet nasr first settlement hospital": {
+    "en": "Zahraa Madinet Nasr-First Settlement Hospital",
+    "ar": "زهرة مدينة نصر-مستشفى التجمع الأول"
+  },
+  "zahraa madinet nasr haram marioteyya": {
+    "en": "Zahraa Madinet Nasr-Haram Marioteyya",
+    "ar": "زهراء مدينة نصر - هرم مريوطية"
+  },
+  "zahraa madinet nasr misr 2000": {
+    "en": "Zahraa Madinet Nasr-Misr 2000",
+    "ar": "زهرة مدينة نصر-مصر 2000"
+  },
+  "zahraa madinet nasr police academy (south)": {
+    "en": "Zahraa Madinet Nasr-Police Academy (South)",
+    "ar": "زهرة مدينة نصر - أكاديمية الشرطة (جنوب)"
+  },
+  "zahraa madinet nasr rehab gate 13": {
+    "en": "Zahraa Madinet Nasr-Rehab Gate 13",
+    "ar": "زهراء مدينة نصر - بوابة الرحاب 13"
+  },
+  "zahraa metro station": {
+    "en": "Zahraa Metro Station",
+    "ar": "محطة الزهراء"
+  },
+  "zahraa nasr city": {
+    "en": "Zahraa Nasr City",
+    "ar": "زهراء مدينة نصر"
+  },
+  "zain paint store al rawda sheikh zayed": {
+    "en": "Zain Paint Store - Al Rawda - Sheikh Zayed",
+    "ar": "متجر زين للدهانات - الروضة - الشيخ زايد"
+  },
+  "zaker hussein al tayaran": {
+    "en": "Zaker Hussein - Al Tayaran",
+    "ar": "ذاكر حسين - الطيران"
+  },
+  "zamalek sporting club": {
+    "en": "Zamalek Sporting Club",
+    "ar": "نادي الزمالك الرياضي"
+  },
+  "zayed 2000": {
+    "en": "Zayed 2000",
+    "ar": "زايد 2000"
+  },
+  "zayed 2000 al joman": {
+    "en": "Zayed 2000-Al Joman",
+    "ar": "زايد 2000 - الجمان"
+  },
+  "zayed 2000 district 11 entrance": {
+    "en": "Zayed 2000-District 11 Entrance",
+    "ar": "زايد 2000-مدخل الحي 11"
+  },
+  "zayed 2000 gate 3": {
+    "en": "Zayed 2000 Gate 3",
+    "ar": "زايد 2000 بوابة 3"
+  },
+  "zayed 2000 zayed 2000 gate 3": {
+    "en": "Zayed 2000-Zayed 2000 Gate 3",
+    "ar": "زايد 2000 - زايد 2000 بوابة 3"
+  },
+  "zayed boys secondary school": {
+    "en": "Zayed Boys Secondary School",
+    "ar": "المدرسة الثانوية للذكور زايد"
+  },
+  "zewail road wahat road": {
+    "en": "Zewail Road - Wahat Road",
+    "ar": "طريق زويل - طريق واحة"
+  }
+}

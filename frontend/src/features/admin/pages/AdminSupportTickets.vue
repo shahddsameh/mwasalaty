@@ -1,5 +1,7 @@
 <template>
-  <div class="px-4 sm:px-6 lg:px-8 py-6 lg:py-8 space-y-5 max-w-[1440px] mx-auto">
+  <div
+    class="px-4 sm:px-6 lg:px-8 py-6 lg:py-8 space-y-5 max-w-[1440px] mx-auto"
+  >
     <!-- Filters -->
     <div class="flex flex-wrap items-center gap-3">
       <button
@@ -9,7 +11,7 @@
         :class="[
           'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
           statusFilter === filterOption.value
-            ? 'bg-[#FFC400] text-[#111827]'
+            ? 'bg-[#FFC400] text-[#ffffff]'
             : 'bg-[#1E293B] border border-white/10 text-[#94A3B8] hover:bg-[#111827] hover:text-white',
         ]"
       >
@@ -19,7 +21,7 @@
           class="ml-2 px-2 py-0.5 rounded-full text-xs"
           :class="
             statusFilter === filterOption.value
-              ? 'bg-[#111827] text-[#FFC400]'
+              ? 'bg-[#ffffff] text-[#FFC400]'
               : 'bg-[#111827] text-[#9CA3AF]'
           "
         >
@@ -36,7 +38,10 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading && tickets.length === 0" class="flex items-center justify-center py-20">
+    <div
+      v-if="loading && tickets.length === 0"
+      class="flex items-center justify-center py-20"
+    >
       <div class="text-center">
         <div
           class="animate-spin rounded-full h-12 w-12 border-4 border-[#FFC400] border-t-transparent mx-auto mb-4"
@@ -90,7 +95,10 @@
     </div>
 
     <!-- Tickets Table -->
-    <div v-else class="bg-[#1E293B] rounded-2xl overflow-hidden border border-white/10">
+    <div
+      v-else
+      class="bg-[#1E293B] rounded-2xl overflow-hidden border border-white/10"
+    >
       <div class="overflow-x-auto">
         <table class="w-full min-w-[920px] table-fixed">
           <colgroup>
@@ -142,7 +150,9 @@
               class="hover:bg-[#0F172A] transition-colors"
             >
               <td class="px-4 py-3 align-top">
-                <div class="truncate font-medium text-white">{{ ticket.name }}</div>
+                <div class="truncate font-medium text-white">
+                  {{ ticket.name }}
+                </div>
                 <div
                   v-if="ticket.subject"
                   class="truncate text-sm text-[#9CA3AF] mt-0.5"
@@ -151,8 +161,13 @@
                 </div>
               </td>
               <td class="px-4 py-3 align-top">
-                <div class="truncate text-sm text-[#9CA3AF]">{{ ticket.email }}</div>
-                <div v-if="ticket.phone" class="truncate text-sm text-[#9CA3AF]">
+                <div class="truncate text-sm text-[#9CA3AF]">
+                  {{ ticket.email }}
+                </div>
+                <div
+                  v-if="ticket.phone"
+                  class="truncate text-sm text-[#9CA3AF]"
+                >
                   {{ ticket.phone }}
                 </div>
               </td>
@@ -161,7 +176,9 @@
                   {{ ticket.message }}
                 </div>
               </td>
-              <td class="px-4 py-3 align-top text-sm text-[#94A3B8] whitespace-nowrap">
+              <td
+                class="px-4 py-3 align-top text-sm text-[#94A3B8] whitespace-nowrap"
+              >
                 {{ formatDate(ticket.createdAt) }}
               </td>
               <td class="px-4 py-3 align-top">
@@ -186,7 +203,11 @@
           </tbody>
         </table>
       </div>
-      <AdminPagination v-model:page="page" :total-items="filteredTickets.length" :page-size="pageSize" />
+      <AdminPagination
+        v-model:page="page"
+        :total-items="filteredTickets.length"
+        :page-size="pageSize"
+      />
     </div>
 
     <!-- Ticket Detail Modal -->
@@ -290,9 +311,13 @@
                   :key="reply.id"
                   class="bg-[#111827] rounded-lg p-4"
                 >
-                  <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-[#9CA3AF]">
+                  <div
+                    class="flex flex-wrap items-center justify-between gap-2 text-xs text-[#9CA3AF]"
+                  >
                     <span class="truncate">To: {{ reply.to }}</span>
-                    <span class="whitespace-nowrap">{{ formatDateTime(reply.sentAt) }}</span>
+                    <span class="whitespace-nowrap">{{
+                      formatDateTime(reply.sentAt)
+                    }}</span>
                   </div>
                   <div class="mt-2 text-sm font-medium text-white">
                     {{ reply.subject }}
@@ -318,8 +343,8 @@
                   :class="[
                     'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                     selectedTicket.status === status.value
-                      ? 'bg-[#FFC400] text-[#111827]'
-                      : 'bg-[#374151] text-[#9CA3AF] hover:bg-[#4B5563] hover:text-white',
+                      ? 'bg-[#FFC400] text-[#ffffff]'
+                      : 'bg-muted text-[#9CA3AF] hover:bg-[#4B5563] hover:text-white',
                     updating && 'opacity-50 cursor-not-allowed',
                   ]"
                 >
@@ -342,7 +367,7 @@
               <button
                 @click="saveAdminNote"
                 :disabled="updating || !adminNoteInput.trim()"
-                class="mt-2 px-4 py-2 bg-[#FFC400] hover:bg-[#FFD633] text-[#111827] rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="mt-2 px-4 py-2 bg-[#FFC400] hover:bg-[#FFD633] text-[#ffffff] rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Save Note
               </button>
@@ -365,13 +390,17 @@
                 class="w-full px-4 py-3 bg-[#111827] border border-[#374151] rounded-lg text-white placeholder-[#6B7280] focus:outline-none focus:ring-2 focus:ring-[#FFC400] resize-none"
                 placeholder="Write a reply to send by email..."
               ></textarea>
-              <p v-if="replyMessage" class="mt-2 text-sm" :class="replyOk ? 'text-green-300' : 'text-red-300'">
+              <p
+                v-if="replyMessage"
+                class="mt-2 text-sm"
+                :class="replyOk ? 'text-green-300' : 'text-red-300'"
+              >
                 {{ replyMessage }}
               </p>
               <button
                 @click="sendReply"
                 :disabled="updating || !replyInput.trim()"
-                class="mt-2 px-4 py-2 bg-[#FFC400] hover:bg-[#FFD633] text-[#111827] rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="mt-2 px-4 py-2 bg-[#FFC400] hover:bg-[#FFD633] text-[#ffffff] rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Send Reply & Resolve
               </button>
@@ -457,12 +486,25 @@ const filteredTickets = computed(() => {
   if (statusFilter.value === "all") return tickets.value;
   return tickets.value.filter((t) => t.status === statusFilter.value);
 });
-const paginatedTickets = computed(() => filteredTickets.value.slice((page.value - 1) * pageSize, page.value * pageSize));
+const paginatedTickets = computed(() =>
+  filteredTickets.value.slice(
+    (page.value - 1) * pageSize,
+    page.value * pageSize,
+  ),
+);
 
-watch(statusFilter, () => { page.value = 1; });
-watch(() => filteredTickets.value.length, () => {
-  page.value = Math.min(page.value, Math.max(1, Math.ceil(filteredTickets.value.length / pageSize)));
+watch(statusFilter, () => {
+  page.value = 1;
 });
+watch(
+  () => filteredTickets.value.length,
+  () => {
+    page.value = Math.min(
+      page.value,
+      Math.max(1, Math.ceil(filteredTickets.value.length / pageSize)),
+    );
+  },
+);
 
 const replyHistory = computed(() => {
   if (!selectedTicket.value) return [];
@@ -587,13 +629,19 @@ async function saveAdminNote() {
 }
 
 async function sendReply() {
-  if (!selectedTicket.value || !replyInput.value.trim() || updating.value) return;
+  if (!selectedTicket.value || !replyInput.value.trim() || updating.value)
+    return;
 
   updating.value = true;
   replyMessage.value = "";
   try {
-    const updated = await replySupportTicket(selectedTicket.value.id, replyInput.value.trim());
-    const index = tickets.value.findIndex((t) => t.id === selectedTicket.value!.id);
+    const updated = await replySupportTicket(
+      selectedTicket.value.id,
+      replyInput.value.trim(),
+    );
+    const index = tickets.value.findIndex(
+      (t) => t.id === selectedTicket.value!.id,
+    );
     if (index !== -1) tickets.value[index] = updated;
     selectedTicket.value = updated;
     replyInput.value = "";
@@ -608,7 +656,8 @@ async function sendReply() {
       selectedTicket.value = maybeTicket;
     }
     replyOk.value = false;
-    replyMessage.value = err instanceof Error ? err.message : "Failed to send reply";
+    replyMessage.value =
+      err instanceof Error ? err.message : "Failed to send reply";
   } finally {
     updating.value = false;
   }

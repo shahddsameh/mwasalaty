@@ -176,8 +176,12 @@
                   </button>
                 </div>
 
-                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                  <label class="flex min-w-0 flex-1 flex-col gap-1.5 sm:max-w-xs">
+                <div
+                  class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
+                >
+                  <label
+                    class="flex min-w-0 flex-1 flex-col gap-1.5 sm:max-w-xs"
+                  >
                     <span class="text-sm font-semibold text-foreground">
                       {{ t("account.transactionFilters.date") }}
                     </span>
@@ -223,7 +227,9 @@
                 >
                   <div class="min-w-0">
                     <div class="text-foreground">{{ tx.description }}</div>
-                    <div class="text-sm text-muted-foreground">{{ tx.date }}</div>
+                    <div class="text-sm text-muted-foreground">
+                      {{ tx.date }}
+                    </div>
                   </div>
                   <div
                     :class="[
@@ -237,8 +243,14 @@
                   </div>
                 </div>
 
-                <div v-if="hasMoreTransactions" class="border-t border-border pt-4 text-center">
-                  <AppButton variant="outline" @click="visibleTransactionCount += transactionPageSize">
+                <div
+                  v-if="hasMoreTransactions"
+                  class="border-t border-border pt-4 text-center"
+                >
+                  <AppButton
+                    variant="outline"
+                    @click="visibleTransactionCount += transactionPageSize"
+                  >
                     {{ t("account.transactionFilters.showMore") }}
                   </AppButton>
                 </div>
@@ -437,7 +449,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, onMounted, reactive, ref, watch } from "vue";
+import {
+  computed,
+  defineComponent,
+  h,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { ChevronRight, Edit, Settings, User } from "@lucide/vue";
@@ -504,7 +524,10 @@ const transactionPageSize = 8;
 const visibleTransactionCount = ref(transactionPageSize);
 const transactionFilters = [
   { value: "all" as const, labelKey: "account.transactionFilters.all" },
-  { value: "payment" as const, labelKey: "account.transactionFilters.payments" },
+  {
+    value: "payment" as const,
+    labelKey: "account.transactionFilters.payments",
+  },
   { value: "refund" as const, labelKey: "account.transactionFilters.refunds" },
 ];
 

@@ -156,6 +156,7 @@ import AdminStops from "./AdminStops.vue";
 import AdminTickets from "./AdminTickets.vue";
 import AdminUsers from "./AdminUsers.vue";
 import AdminSupportTickets from "./AdminSupportTickets.vue";
+import AdminFeedback from "./AdminFeedback.vue";
 import AdminSettings from "./AdminSettings.vue";
 import { adminLogout, getAdminNotifications, type AdminNotification } from "../services/adminApi";
 import { applyTheme, getSavedTheme, type AppTheme } from "../../../services/theme";
@@ -178,6 +179,7 @@ const validPages = new Set([
   "users",
   "support",
   "support-tickets",
+  "feedback",
   "settings",
 ]);
 
@@ -209,6 +211,10 @@ const PAGE_META: Record<string, { title: string; sub: string }> = {
   "support-tickets": {
     title: "Customer Service Requests",
     sub: "View and manage customer support messages",
+  },
+  feedback: {
+    title: "Feedback",
+    sub: "Review journey route ratings and issues",
   },
   settings: {
     title: "Settings",
@@ -310,6 +316,8 @@ const currentComponent = computed(() => {
     case "support":
     case "support-tickets":
       return AdminSupportTickets;
+    case "feedback":
+      return AdminFeedback;
     case "settings":
       return AdminSettings;
     default:

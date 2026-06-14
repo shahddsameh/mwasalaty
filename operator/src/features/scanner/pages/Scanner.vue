@@ -92,7 +92,7 @@ const statusText = computed(() => {
 
 const flashClass = computed(() => {
   if (flash.value === t("scanner.flashValid")) return "bg-success/90";
-  if (flash.value === t("scanner.flashUsed")) return "bg-warning/90";
+  if (flash.value === t("scanner.flashUsed")) return "bg-warning/90 text-white";
   if (flash.value === t("scanner.flashOffline")) return "bg-surface-dark-muted/90 text-surface-dark-foreground";
   return "bg-destructive/90";
 });

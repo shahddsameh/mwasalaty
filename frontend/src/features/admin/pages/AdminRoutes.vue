@@ -26,7 +26,7 @@
             class="rounded-xl border px-4 py-2 text-sm font-semibold transition-all"
             :class="
               activeTab === tab.value
-                ? 'border-[#FFC400] bg-[#FFC400] text-[#111827]'
+                ? 'border-[#FFC400] bg-[#FFC400] text-[#ffffff]'
                 : 'border-white/10 bg-[#0F172A] text-[#94A3B8] hover:border-[#FFC400] hover:text-[#F8FAFC]'
             "
             @click="activeTab = tab.value"
@@ -151,7 +151,11 @@
             </tbody>
           </table>
         </div>
-        <AdminPagination v-model:page="routePage" :total-items="filteredRoutes.length" :page-size="pageSize" />
+        <AdminPagination
+          v-model:page="routePage"
+          :total-items="filteredRoutes.length"
+          :page-size="pageSize"
+        />
       </div>
 
       <div
@@ -247,7 +251,11 @@
             </tbody>
           </table>
         </div>
-        <AdminPagination v-model:page="searchPage" :total-items="filteredSearches.length" :page-size="pageSize" />
+        <AdminPagination
+          v-model:page="searchPage"
+          :total-items="filteredSearches.length"
+          :page-size="pageSize"
+        />
       </div>
 
       <div
@@ -740,14 +748,18 @@ const Info = defineComponent({
   props: { label: String, value: [String, Number] },
   setup(props) {
     return () =>
-      h("div", { class: "rounded-xl border border-white/10 bg-[#0F172A] p-3" }, [
-        h("div", { class: "text-xs text-[#94A3B8]" }, props.label),
-        h(
-          "div",
-          { class: "mt-1 font-semibold text-[#F8FAFC]" },
-          String(props.value ?? "-"),
-        ),
-      ]);
+      h(
+        "div",
+        { class: "rounded-xl border border-white/10 bg-[#0F172A] p-3" },
+        [
+          h("div", { class: "text-xs text-[#94A3B8]" }, props.label),
+          h(
+            "div",
+            { class: "mt-1 font-semibold text-[#F8FAFC]" },
+            String(props.value ?? "-"),
+          ),
+        ],
+      );
   },
 });
 
@@ -992,8 +1004,18 @@ const filteredSearches = computed(() => {
     ),
   );
 });
-const paginatedRoutes = computed(() => filteredRoutes.value.slice((routePage.value - 1) * pageSize, routePage.value * pageSize));
-const paginatedSearches = computed(() => filteredSearches.value.slice((searchPage.value - 1) * pageSize, searchPage.value * pageSize));
+const paginatedRoutes = computed(() =>
+  filteredRoutes.value.slice(
+    (routePage.value - 1) * pageSize,
+    routePage.value * pageSize,
+  ),
+);
+const paginatedSearches = computed(() =>
+  filteredSearches.value.slice(
+    (searchPage.value - 1) * pageSize,
+    searchPage.value * pageSize,
+  ),
+);
 
 watch([search, selectedMode], () => {
   routePage.value = 1;

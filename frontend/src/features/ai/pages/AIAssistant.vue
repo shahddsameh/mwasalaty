@@ -69,10 +69,11 @@
           <section
             class="bg-gradient-to-br from-primary to-primary-soft text-gradient-foreground rounded-xl p-6 border-2 border-primary"
           >
-            <h3 class="font-display text-xl mb-2">Need a full trip plan?</h3>
+            <h3 class="font-display text-xl mb-2">
+              {{ t("aiAssistant.tripPlanTitle") }}
+            </h3>
             <p class="text-sm mb-4">
-              Use AI Trip Planner for complete day itineraries with attractions,
-              restaurants, and transport.
+              {{ t("aiAssistant.tripPlanCopy") }}
             </p>
             <AppButton
               variant="outline"
@@ -266,7 +267,9 @@ async function search() {
     // Referenced a personal place that hasn't been saved yet.
     if (fromRes?.missing || toRes?.missing) {
       const which = fromRes?.missing ? intent.from : intent.to;
-      message.value = t("aiAssistant.errors.personalPlaceMissing", { place: which });
+      message.value = t("aiAssistant.errors.personalPlaceMissing", {
+        place: which,
+      });
       return;
     }
 

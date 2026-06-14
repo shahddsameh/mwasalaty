@@ -11,7 +11,9 @@
     "tickets": "التذاكر",
     "profile": "الملف الشخصي",
     "settings": "الإعدادات",
-    "login": "تسجيل الدخول"
+    "login": "تسجيل الدخول",
+    "switchToLight": "التبديل إلى الوضع الفاتح",
+    "switchToDark": "التبديل إلى الوضع الداكن"
   },
   "language": {
     "toggle": "English",
@@ -29,6 +31,25 @@
     "removeRecent": "إزالة هذا البحث الأخير"
   },
   "home": {
+    "hero": {
+      "eyebrow": "طريقتك الأذكى للتنقل في القاهرة",
+      "title": "تنقّل في القاهرة بسهولة وثقة",
+      "description": "خطط رحلات واضحة وعملية داخل القاهرة الكبرى باستخدام المترو والحافلات ووسائل النقل المحلية في تجربة واحدة سهلة.",
+      "planRoute": "خطط مسارك",
+      "askAi": "اسأل الذكاء الاصطناعي",
+      "smartRoutes": "خيارات مسارات أذكى",
+      "transitModes": "مترو وحافلات وأكثر",
+      "readyAnytime": "جاهز وقتما تريد",
+      "visualTitle": "رحلتك في القاهرة أصبحت أبسط",
+      "visualSubtitle": "قارن وسائل النقل في مكان واحد",
+      "from": "من",
+      "fromPlace": "ميدان التحرير",
+      "to": "إلى",
+      "toPlace": "مدينة نصر",
+      "metro": "مترو",
+      "bus": "حافلة",
+      "sampleTime": "٣٢ دقيقة"
+    },
     "title": "إلى أين تريد الذهاب؟",
     "subtitle": "خطط رحلتك داخل القاهرة الكبرى مع أكثر من وسيلة نقل",
     "startingPoint": "نقطة البداية",
@@ -654,7 +675,7 @@
       "continueWithGoogle": "المتابعة باستخدام Google",
       "or": "أو",
       "emailAddress": "البريد الإلكتروني",
-      "emailPlaceholder": "your@email.com",
+      "emailPlaceholder": "your{'@'}email.com",
       "password": "كلمة المرور"
     },
     "login": {
@@ -803,6 +824,11 @@
     "goodRoute": "مسار جيد",
     "issuesBad": "مشاكل / سيئ",
     "feedbackThanks": "شكراً لك! ملاحظاتك تساعد في تحسين مسارات النقل في القاهرة.",
+    "issuePlaceholder": "أخبرنا بما حدث...",
+    "submitIssue": "إرسال المشكلة",
+    "submittingFeedback": "جارٍ الإرسال...",
+    "issueRequired": "يرجى توضيح المشكلة قبل الإرسال.",
+    "feedbackSubmitError": "تعذر حفظ ملاحظاتك. يرجى المحاولة مرة أخرى.",
     "returnHome": "العودة للرئيسية",
     "digitalTicketTitle": "تذكرة رقمية"
   },

@@ -11,7 +11,9 @@
     "tickets": "Tickets",
     "profile": "Profile",
     "settings": "Settings",
-    "login": "Login"
+    "login": "Login",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
   },
   "language": {
     "toggle": "العربية",

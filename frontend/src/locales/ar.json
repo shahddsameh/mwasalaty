@@ -11,7 +11,9 @@
     "tickets": "التذاكر",
     "profile": "الملف الشخصي",
     "settings": "الإعدادات",
-    "login": "تسجيل الدخول"
+    "login": "تسجيل الدخول",
+    "switchToLight": "التبديل إلى الوضع الفاتح",
+    "switchToDark": "التبديل إلى الوضع الداكن"
   },
   "language": {
     "toggle": "English",

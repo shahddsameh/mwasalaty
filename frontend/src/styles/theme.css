@@ -298,6 +298,16 @@
     line-height: 1.5;
   }
 
+  .dark input[type="date"] {
+    color-scheme: dark;
+  }
+
+  .dark input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: brightness(0) invert(1);
+    opacity: 1;
+  }
+
   ::selection {
     background: var(--primary);
     color: var(--primary-foreground);

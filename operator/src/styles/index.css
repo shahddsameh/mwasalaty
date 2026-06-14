@@ -1,8 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap");
 @import "tailwindcss";
 
 :root {
   color-scheme: light;
   --font-size: 16px;
+  --font-display: "DM Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
   --background: #f8fafc;
   --foreground: #0f172a;
   --card: #ffffff;
@@ -150,8 +156,17 @@
     @apply bg-background text-foreground;
     min-width: 320px;
     margin: 0;
-    font-family: Inter, Tahoma, "Segoe UI", system-ui, sans-serif;
+    font-family: var(--font-body);
     font-weight: 400;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
   }
 
   button,
@@ -174,6 +189,14 @@
 }
 
 @layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+
   .app-shell {
     min-height: 100dvh;
     padding: max(1rem, env(safe-area-inset-top)) max(0.875rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(0.875rem, env(safe-area-inset-left));
@@ -236,14 +259,6 @@
 
   .soft-alert {
     @apply flex items-start gap-3 rounded-2xl border p-4 text-sm font-medium leading-6;
-  }
-
-  /* Keep the operator UI readable without making routine labels feel heavy. */
-  .font-semibold,
-  .font-bold,
-  .font-extrabold,
-  .font-black {
-    font-weight: 500;
   }
 
   .outcome-card {

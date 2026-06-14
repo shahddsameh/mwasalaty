@@ -52,7 +52,26 @@ const ar = {
     offline: "أنت غير متصل. يمكنك اختيار الماسح؛ سيتم تسجيل المسحات كغير مؤكدة ووضعها في الانتظار.",
     partial: "بعض تفاصيل الماسح غير متاحة.",
     genericRoute: "كل الخطوط",
-    select: "اختيار"
+    select: "اختيار",
+    continue: "متابعة",
+    current: "الحالي",
+    total: "إجمالي الماسحات",
+    busProfiles: "ماسحات الحافلات",
+    subwayProfiles: "ماسحات المترو",
+    searchLabel: "ابحث عن ماسح",
+    searchPlaceholder: "ابحث بالخط أو اسم الماسح أو المعرّف",
+    filterLabel: "تصفية الماسحات حسب الوسيلة",
+    all: "الكل",
+    bus: "حافلة",
+    subway: "مترو",
+    results: "عرض {shown} من أصل {total} ماسحات مطابقة",
+    clearFilters: "مسح عوامل التصفية",
+    noResults: "لا توجد ماسحات مطابقة",
+    noResultsSupport: "جرّب رقم خط أو اسم ماسح أو وسيلة أخرى.",
+    pagination: "صفحات ملفات الماسح",
+    previous: "السابق",
+    next: "التالي",
+    page: "صفحة {current} من {total}"
   },
   dashboard: {
     title: "الوردية الحالية",
@@ -209,6 +228,7 @@ const ar = {
     dark: "داكن",
     appVersion: "إصدار التطبيق",
     installHint: "يمكن تثبيت التطبيق من قائمة المتصفح.",
+    changeScanner: "تغيير الماسح",
     signOut: "تسجيل الخروج",
     signOutWarning: "سيبقى أي عنصر غير متزامن محفوظا على الجهاز."
   }

@@ -15,3 +15,15 @@ test('scanner profiles expose English and concise Arabic labels', () => {
     }
   }
 });
+
+test('scanner profiles include every GTFS route plus generic scanners', () => {
+  const profiles = getAllProfiles();
+  const routeProfiles = profiles.filter(profile => profile.routeShortName);
+
+  assert.equal(profiles.length, 219);
+  assert.equal(routeProfiles.length, 217);
+  assert.equal(routeProfiles.filter(profile => profile.mode === 'BUS').length, 214);
+  assert.equal(routeProfiles.filter(profile => profile.mode === 'SUBWAY').length, 3);
+  assert.equal(new Set(profiles.map(profile => profile.scannerProfileId)).size, profiles.length);
+  assert.equal(new Set(profiles.map(profile => profile.deviceId)).size, profiles.length);
+});

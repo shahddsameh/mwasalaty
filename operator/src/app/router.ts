@@ -15,6 +15,7 @@ import CameraHelp from "@/features/scanner/pages/CameraHelp.vue";
 import ShiftSummary from "@/features/session/pages/ShiftSummary.vue";
 import Account from "@/features/session/pages/Account.vue";
 import { getSelectedProfile } from "@/services/session";
+import { profileRouteRedirect } from "@/app/profileNavigation";
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -38,16 +39,10 @@ export const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  const profile = getSelectedProfile();
-  const globalFallback = to.name === "account" && to.query.fallback === "error";
-
-  if (to.name !== "profile-select" && !profile && !globalFallback) {
-    return { name: "profile-select" };
-  }
-
-  if (to.name === "profile-select" && profile) {
-    return { name: navigator.onLine ? "dashboard" : "scan" };
-  }
-
-  return true;
+  return profileRouteRedirect(
+    to.name,
+    to.query,
+    getSelectedProfile(),
+    navigator.onLine
+  ) ?? true;
 });

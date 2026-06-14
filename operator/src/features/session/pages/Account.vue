@@ -88,7 +88,8 @@
           <AppIcon name="offline" class="h-5 w-5 shrink-0" />{{ $t("account.offline") }}
         </p>
 
-        <section class="section-card border-destructive/20">
+        <section class="section-card grid gap-3 sm:grid-cols-2">
+          <AppButton class="w-full gap-2" size="lg" variant="outline" @click="changeScanner"><AppIcon name="route" class="h-5 w-5" />{{ $t("account.changeScanner") }}</AppButton>
           <AppButton class="w-full gap-2" size="lg" variant="danger" @click="signOut"><AppIcon name="logout" class="h-5 w-5" />{{ $t("account.signOut") }}</AppButton>
         </section>
       </template>
@@ -130,6 +131,10 @@ function signOut() {
   clearSessionView();
   clearSelectedProfile();
   void router.push({ name: "profile-select" });
+}
+
+function changeScanner() {
+  void router.push({ name: "profile-select", query: { change: "1" } });
 }
 
 function selectLocale(nextLocale: Locale) {

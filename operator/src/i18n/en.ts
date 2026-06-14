@@ -52,7 +52,26 @@ const en = {
     offline: "You're offline. You can still select your scanner; scans will be recorded as unverified and queued.",
     partial: "Some scanner details are unavailable.",
     genericRoute: "All routes",
-    select: "Select"
+    select: "Select",
+    continue: "Continue",
+    current: "Current",
+    total: "Total scanners",
+    busProfiles: "Bus scanners",
+    subwayProfiles: "Subway scanners",
+    searchLabel: "Find a scanner",
+    searchPlaceholder: "Search route, scanner name, or ID",
+    filterLabel: "Filter scanners by mode",
+    all: "All",
+    bus: "Bus",
+    subway: "Subway",
+    results: "Showing {shown} of {total} matching scanners",
+    clearFilters: "Clear filters",
+    noResults: "No matching scanners",
+    noResultsSupport: "Try another route number, scanner name, or mode.",
+    pagination: "Scanner profile pages",
+    previous: "Previous",
+    next: "Next",
+    page: "Page {current} of {total}"
   },
   dashboard: {
     title: "Current shift",
@@ -209,6 +228,7 @@ const en = {
     dark: "Dark",
     appVersion: "App version",
     installHint: "Install the app from your browser menu.",
+    changeScanner: "Change scanner",
     signOut: "Sign out",
     signOutWarning: "Any unsynced scans will remain saved on this device."
   }

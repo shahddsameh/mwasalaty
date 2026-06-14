@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { RouterView, useRoute, useRouter } from "vue-router";
 import Header from "../components/layout/Header.vue";
 import PwaUpdatePrompt from "../pwa/PwaUpdatePrompt.vue";
@@ -68,4 +68,11 @@ async function logout() {
 function contactSupport() {
   router.push("/support");
 }
+
+function showBlockedModal() {
+  blocked.value = true;
+}
+
+onMounted(() => window.addEventListener("mwasalaty:user-blocked", showBlockedModal));
+onUnmounted(() => window.removeEventListener("mwasalaty:user-blocked", showBlockedModal));
 </script>

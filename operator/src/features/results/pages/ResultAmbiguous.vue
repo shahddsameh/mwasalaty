@@ -3,7 +3,7 @@
     <section class="mx-auto grid w-full max-w-4xl gap-4">
       <header class="mb-2">
         <p class="text-sm font-bold text-primary">{{ $t("result.ambiguous.headline") }}</p>
-        <h1 class="mt-2 text-2xl font-black text-foreground md:text-3xl">{{ $t("result.ambiguous.support") }}</h1>
+        <h1 class="mt-2 text-2xl font-semibold text-foreground md:text-3xl">{{ $t("result.ambiguous.support") }}</h1>
       </header>
 
       <StateView :state="state" :title="stateTitle" :support="stateSupport">

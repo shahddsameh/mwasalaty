@@ -1,0 +1,49 @@
+name: Deploy to EC2
+
+# Auto-deploy on every push to main. You can also run it by hand from the
+# Actions tab (workflow_dispatch). See deploy/DEPLOYMENT.md, Part 10.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Avoid two deploys clobbering each other if you push twice quickly.
+concurrency:
+  group: deploy-ec2
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script_stop: true        # abort on the first failing command
+          command_timeout: 20m     # builds are slow on a small box
+          script: |
+            set -e
+            cd /var/www/mwasalaty
+
+            # Pull the latest main (reset --hard avoids merge conflicts on the
+            # server; .env files and otp-cairo/ are gitignored, so they survive).
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Backend deps (lightweight, prod only)
+            cd backend && npm ci --omit=dev && cd ..
+
+            # Build the PWA + operator. Cap Node memory so the build coexists
+            # with the running OTP container on the 2 GB box.
+            export NODE_OPTIONS=--max-old-space-size=768
+            pnpm install --frozen-lockfile
+            pnpm -r build
+
+            # Restart the backend and reload Nginx (OTP is left untouched).
+            pm2 restart mwasalaty-api
+            sudo systemctl reload nginx
+
+            echo "Deploy complete."

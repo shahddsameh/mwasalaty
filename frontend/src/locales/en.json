@@ -11,7 +11,9 @@
     "tickets": "Tickets",
     "profile": "Profile",
     "settings": "Settings",
-    "login": "Login"
+    "login": "Login",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
   },
   "language": {
     "toggle": "العربية",
@@ -29,6 +31,25 @@
     "removeRecent": "Remove this recent search"
   },
   "home": {
+    "hero": {
+      "eyebrow": "Your smarter way around Cairo",
+      "title": "Navigate Cairo with confidence",
+      "description": "Plan clear, practical journeys across Greater Cairo with metro, buses, and local transport options in one friendly experience.",
+      "planRoute": "Plan Your Route",
+      "askAi": "Ask AI",
+      "smartRoutes": "Smarter route choices",
+      "transitModes": "Metro, bus and more",
+      "readyAnytime": "Ready when you are",
+      "visualTitle": "Your Cairo journey, simplified",
+      "visualSubtitle": "Compare transport options in one place",
+      "from": "From",
+      "fromPlace": "Tahrir Square",
+      "to": "To",
+      "toPlace": "Nasr City",
+      "metro": "Metro",
+      "bus": "Bus",
+      "sampleTime": "32 min"
+    },
     "title": "Where are you going?",
     "subtitle": "Plan your journey across Greater Cairo with multiple transport options",
     "startingPoint": "Starting point",
@@ -131,6 +152,16 @@
     "transactionHistory": "Transaction History",
     "noTransactions": "No transactions yet. Your ticket purchases and refunds will appear here.",
     "refundLabel": "Refund",
+    "transactionFilters": {
+      "all": "All",
+      "payments": "Payments / Trips",
+      "refunds": "Refunds",
+      "date": "Transaction date",
+      "clearDate": "Clear date",
+      "showMore": "Show more",
+      "resultCount": "Showing {shown} of {total} transactions",
+      "noMatches": "No transactions match these filters."
+    },
     "editProfile": "Edit Profile",
     "saveChanges": "Save changes",
     "saving": "Saving…",
@@ -156,6 +187,90 @@
       "personalInfo": "Personal Info",
       "payments": "Payments",
       "transactions": "Transactions"
+    }
+  },
+  "support": {
+    "badge": "Support · We're online",
+    "title": "Contact Us",
+    "subtitle": "We're here to help. Reach out and our team will get back to you within 24 hours.",
+    "methods": {
+      "email": { "label": "Email us", "value": "support{'@'}mwasalaty.com" },
+      "call": { "label": "Call us", "value": "+20 2 1234 5678" },
+      "visit": { "label": "Visit us", "value": "Smart Village, Giza" },
+      "chat": { "label": "Live chat", "value": "Available 24/7" }
+    },
+    "form": {
+      "title": "Send us a message",
+      "successTitle": "Message sent!",
+      "successBody": "Thanks for reaching out. Our support team will reply within 24 hours.",
+      "sendAnother": "Send another",
+      "topicLabel": "What can we help with?",
+      "name": "Your Name",
+      "namePlaceholder": "Enter your name",
+      "email": "Email",
+      "emailPlaceholder": "your{'@'}email.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "How can we help?",
+      "message": "Message",
+      "messagePlaceholder": "Describe your issue or question...",
+      "send": "Send Message",
+      "sending": "Sending...",
+      "responseTime": "We typically respond within 24 hours"
+    },
+    "topics": {
+      "general": "General",
+      "booking": "Booking",
+      "payment": "Payment",
+      "feedback": "Feedback"
+    },
+    "errors": {
+      "name": "Please enter your name",
+      "email": "Please enter a valid email",
+      "message": "Please enter a message",
+      "failed": "Failed to send message"
+    },
+    "faqTitle": "Frequently Asked Questions",
+    "faqs": {
+      "book": {
+        "q": "How do I book a ticket?",
+        "a": "Search for your route, select your preferred option, and click Book & Pay. You will receive a digital QR ticket valid for 24 hours."
+      },
+      "payment": {
+        "q": "What payment methods are accepted?",
+        "a": "We accept InstaPay, credit/debit cards, Apple Pay, and cash payment on board for select routes."
+      },
+      "offline": {
+        "q": "Can I use the app offline?",
+        "a": "Yes. Download routes for offline use from the Saved & History section."
+      },
+      "aiPlanner": {
+        "q": "What is AI Trip Planner?",
+        "a": "AI Trip Planner creates complete day itineraries based on your budget and interests."
+      }
+    },
+    "office": {
+      "title": "Our office",
+      "addressLine1": "Smart Village, Building B12",
+      "addressLine2": "Giza, Egypt",
+      "directions": "Get directions"
+    },
+    "hours": {
+      "title": "Office hours",
+      "weekdays": "Sunday – Thursday",
+      "weekdaysHours": "9:00 AM – 9:00 PM",
+      "weekend": "Friday – Saturday",
+      "weekendHours": "10:00 AM – 6:00 PM",
+      "open": "Open now",
+      "closed": "Closed"
+    },
+    "social": {
+      "title": "Follow us",
+      "subtitle": "Stay updated on new routes and features."
+    },
+    "urgent": {
+      "title": "Need urgent help?",
+      "subtitle": "Our support team is available 24/7.",
+      "available": "Available 24/7"
     }
   },
   "tickets": {
@@ -340,7 +455,7 @@
     "interactiveMap": "Interactive route map",
     "liveTracking": "with live tracking",
     "saveDestination": "Save Destination",
-    "aiExplanation": "AI Route Explanation",
+    "aiExplanation": "Route Explanation",
     "walking": "Walking",
     "transfers": "Transfers",
     "totalCost": "Total Cost",
@@ -482,7 +597,240 @@
     "version": "Version 1.0.0",
     "rights": "2024 All rights reserved",
     "logoutConfirm": "Are you sure you want to logout?",
-    "loggingOut": "Logging out..."
+    "loggingOut": "Logging out...",
+    "about": "About Us",
+    "aboutDescription": "Our mission, features, and the team behind Mwasalaty"
+  },
+  "about": {
+    "badge": "About Mwasalaty",
+    "title": "Moving Cairo, one smarter trip at a time",
+    "subtitle": "Mwasalaty brings Greater Cairo's buses and metro into a single app — plan a route, pay, and ride with a digital QR ticket, online or off.",
+    "mission": {
+      "title": "Our Mission",
+      "problemHeading": "The problem",
+      "problem": "Getting around Greater Cairo means juggling buses, the metro, and guesswork. Schedules, fares, and connections are scattered, and there's no simple way to plan a full door-to-door trip or pay for it in one place.",
+      "statementHeading": "What we're building",
+      "statement": "We unify Cairo's public transport into one clear journey — combining bus and metro into door-to-door routes you can compare, pay for, and carry as a digital ticket. Our goal is to make public transport the easy, obvious choice for everyone in the city."
+    },
+    "offer": {
+      "title": "What we offer",
+      "items": {
+        "route": {
+          "title": "Multi-modal route planning",
+          "desc": "Door-to-door journeys that combine bus and metro across Greater Cairo, built on real OpenStreetMap and GTFS transit data."
+        },
+        "filters": {
+          "title": "Routes that fit you",
+          "desc": "Compare every trip by fastest, cheapest, or most comfortable, and pick the option that matches how you want to travel."
+        },
+        "ai": {
+          "title": "Ask in your own words",
+          "desc": "Tell our AI assistant where you're going in plain Arabic or English, and it finds the route — no forms, just a sentence."
+        },
+        "ticket": {
+          "title": "Digital QR ticketing",
+          "desc": "Buy once and get a QR ticket valid for 24 hours, with per-leg scanning and refunds for journeys you don't take."
+        },
+        "offline": {
+          "title": "Works offline",
+          "desc": "An installable PWA that caches your routes and tickets, so your trip keeps working even when the signal drops."
+        },
+        "operator": {
+          "title": "Built for operators too",
+          "desc": "A dedicated scanner app lets bus and metro operators validate tickets in real time — fully bilingual in Arabic and English."
+        }
+      }
+    },
+    "how": {
+      "title": "How it works",
+      "steps": {
+        "plan": {
+          "title": "Plan",
+          "desc": "Search your start and destination, or just ask the AI, and compare bus and metro routes side by side."
+        },
+        "pay": {
+          "title": "Pay",
+          "desc": "Check out securely and get a digital QR ticket valid for 24 hours from your trip."
+        },
+        "ride": {
+          "title": "Ride & scan",
+          "desc": "Follow live step-by-step navigation and show your QR to the operator's scanner on each leg."
+        }
+      }
+    },
+    "team": {
+      "title": "The team",
+      "subtitle": "Mwasalaty was built as a graduation project at ITI (Information Technology Institute) by a team passionate about transport and technology.",
+      "role": "Team Member"
+    },
+    "cta": {
+      "title": "Ready to move smarter?",
+      "subtitle": "Plan your next trip across Cairo, or reach out if you have a question.",
+      "plan": "Plan a trip",
+      "contact": "Contact us"
+    }
+  },
+  "auth": {
+    "common": {
+      "continueWithGoogle": "Continue with Google",
+      "or": "or",
+      "emailAddress": "Email Address",
+      "emailPlaceholder": "your{'@'}email.com",
+      "password": "Password"
+    },
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your Mwasalaty account",
+      "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "signIn": "Sign In",
+      "signingIn": "Signing In...",
+      "continueAsGuest": "Continue as Guest",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create Account"
+    },
+    "signup": {
+      "title": "Create Account",
+      "subtitle": "Join Mwasalaty and start your journey",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "phoneNumber": "Phone Number",
+      "phonePlaceholder": "+20 XXX XXX XXXX",
+      "passwordPlaceholder": "Create a password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "agreePrefix": "I agree to the",
+      "termsOfService": "Terms of Service",
+      "and": "and",
+      "privacyPolicy": "Privacy Policy",
+      "createAccount": "Create Account",
+      "creatingAccount": "Creating Account...",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign In"
+    },
+    "errors": {
+      "emailRequired": "Email is required.",
+      "passwordRequired": "Password is required.",
+      "fullNameRequired": "Full name is required.",
+      "passwordMismatch": "Passwords do not match.",
+      "agreeRequired": "You need to agree to the Terms of Service and Privacy Policy.",
+      "signInFailed": "Could not sign in right now.",
+      "signUpFailed": "Could not create your account right now."
+    },
+    "success": {
+      "accountCreated": "Account created. Check your email to confirm your account, then sign in."
+    }
+  },
+  "booking": {
+    "title": "Booking & Payment",
+    "subtitle": "Complete your booking to get your digital ticket",
+    "routeSummary": "Route Summary",
+    "from": "From",
+    "to": "To",
+    "trip": "Trip",
+    "legsCount": "{count} leg(s)",
+    "legs": "Legs",
+    "metroJourney": "Metro journey",
+    "transferAt": "transfer at {station}",
+    "paymentMethod": "Payment Method",
+    "paymobTitle": "PayMob Secure Checkout",
+    "paymobDesc": "You'll be redirected to PayMob to complete your payment securely.",
+    "testBadge": "Test / Sandbox payment — MVP",
+    "offlineWarning": "You are offline. Reconnect before buying a ticket.",
+    "fareBreakdown": "Fare Breakdown",
+    "metroLabel": "Metro",
+    "total": "Total",
+    "includesAll": "Includes all transport fees",
+    "validFor24h": "Valid for 24 hours",
+    "digitalQrTicket": "Digital QR ticket",
+    "preparingCheckout": "Preparing secure checkout…",
+    "paySecurely": "Pay securely - {total} {currency}",
+    "loginRequiredTitle": "Login Required",
+    "loginRequiredCopy": "You must log in or create an account before completing this booking and payment. We saved your selected trip and will bring you back here after authentication.",
+    "login": "Login",
+    "signUp": "Sign Up",
+    "errors": {
+      "offline": "You are offline. Reconnect before buying a ticket.",
+      "routeUnavailable": "This route is no longer available. Please plan the trip again.",
+      "checkoutFailed": "Could not start checkout. Please try again."
+    }
+  },
+  "ticketView": {
+    "loading": "Loading your ticket…",
+    "notFoundTitle": "Ticket not found",
+    "notFoundDefault": "This ticket could not be found. It may have expired.",
+    "viewAllTickets": "View all tickets",
+    "allTickets": "All Tickets",
+    "paymentCompleted": "Payment completed. Your trip ticket is ready.",
+    "digitalTransportTicket": "Digital Transport Ticket",
+    "statusValid": "Valid",
+    "statusUsed": "Used",
+    "statusRefunded": "Refunded",
+    "statusPartialRefund": "Partial refund",
+    "showQr": "Show this QR to the operator scanner.",
+    "ticketId": "Ticket ID",
+    "passenger": "Passenger",
+    "guest": "Guest",
+    "totalFare": "Total Fare",
+    "payment": "Payment",
+    "paymentTest": "PayMob (test)",
+    "validUntil": "Valid Until",
+    "validFallback": "24h from booking",
+    "scheduledDeparture": "Scheduled Departure",
+    "tripLegs": "Trip legs",
+    "tripLegsDesc": "Each leg will be marked as used after scanning.",
+    "startNavigation": "Start Navigation",
+    "howToUse": "How to Use",
+    "step1": "1. Show the QR code to the operator scanner.",
+    "step2": "2. Each leg is marked as used after it is scanned.",
+    "step3FromDeparture": "3. The ticket is valid for 24 hours from your scheduled departure.",
+    "step3FromBooking": "3. The ticket is valid for 24 hours from booking.",
+    "step4": "4. Works offline — keep this screen handy during your trip.",
+    "quickActions": "Quick Actions",
+    "contactSupport": "Contact Support"
+  },
+  "liveNav": {
+    "liveNavigation": "Live Navigation",
+    "online": "Online",
+    "offlineDemo": "Offline demo",
+    "exit": "Exit",
+    "noGeometry": "Map route shape is not available for this step yet.",
+    "step": "Step",
+    "of": "of",
+    "next": "Next",
+    "prev": "Prev",
+    "nextStep": "Next Step",
+    "arrive": "Arrive",
+    "recenter": "Recenter",
+    "recenterMap": "Recenter Map",
+    "allSteps": "All Steps",
+    "currentStep": "Current Step",
+    "remainingTime": "Remaining Time",
+    "distanceLeft": "Distance Left",
+    "viewTicket": "View Digital Ticket",
+    "noStepsAvailable": "No navigation steps available.",
+    "modeWalk": "Walk",
+    "modeMetro": "Metro",
+    "modeBus": "Bus",
+    "allStepsTitle": "All Navigation Steps",
+    "endTitle": "End Navigation",
+    "endConfirm": "Are you sure you want to end navigation? Your progress will be saved.",
+    "endNavigation": "End Navigation",
+    "continue": "Continue",
+    "arrivedTitle": "You've Arrived!",
+    "welcomeTo": "Welcome to {destination}!",
+    "howWasJourney": "How was your journey?",
+    "goodRoute": "Good Route",
+    "issuesBad": "Issues / Bad",
+    "feedbackThanks": "Thank you! Your feedback helps improve Cairo's transit routes.",
+    "issuePlaceholder": "Tell us what went wrong...",
+    "submitIssue": "Submit issue",
+    "submittingFeedback": "Submitting...",
+    "issueRequired": "Please tell us what went wrong before submitting.",
+    "feedbackSubmitError": "Could not save your feedback. Please try again.",
+    "returnHome": "Return Home",
+    "digitalTicketTitle": "Digital Ticket"
   },
   "example": {
     "ticketStatusTitle": "Ticket status",

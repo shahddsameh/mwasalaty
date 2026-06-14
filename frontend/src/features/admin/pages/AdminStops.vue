@@ -89,7 +89,7 @@
             </thead>
             <tbody class="divide-y divide-white/10">
               <tr
-                v-for="stop in filteredStops"
+                v-for="stop in paginatedStops"
                 :key="stopKey(stop)"
                 class="hover:bg-[#0F172A] transition-colors"
               >
@@ -122,6 +122,7 @@
             </tbody>
           </table>
         </div>
+        <AdminPagination v-model:page="page" :total-items="filteredStops.length" :page-size="pageSize" />
       </div>
 
       <div
@@ -330,9 +331,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, onMounted, ref } from "vue";
+import { computed, defineComponent, h, onMounted, ref, watch } from "vue";
 import { MapPin, RefreshCw, Search } from "@lucide/vue";
 import { Card, StatCard } from "../components/AdminShared.vue";
+import AdminPagination from "../components/AdminPagination.vue";
 import {
   getTransitStopDetails,
   listTransitStops,
@@ -349,6 +351,8 @@ const loading = ref(true);
 const detailsLoading = ref(false);
 const detailsError = ref("");
 const error = ref("");
+const page = ref(1);
+const pageSize = 10;
 
 const Info = defineComponent({
   props: { label: String, value: [String, Number] },
@@ -397,6 +401,12 @@ const filteredStops = computed(() => {
         .includes(q),
     ),
   );
+});
+const paginatedStops = computed(() => filteredStops.value.slice((page.value - 1) * pageSize, page.value * pageSize));
+
+watch(search, () => { page.value = 1; });
+watch(() => filteredStops.value.length, () => {
+  page.value = Math.min(page.value, Math.max(1, Math.ceil(filteredStops.value.length / pageSize)));
 });
 
 function stopKey(stop: TransitStop) {

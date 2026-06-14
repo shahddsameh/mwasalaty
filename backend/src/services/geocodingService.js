@@ -114,7 +114,13 @@ let lastNominatimRequestAt = 0;
  */
 export function searchPlaces(query, limit = 8) {
   const normalized = normalizePlaceName(query);
-  const toResult = ({ label, lat, lng, source }) => ({ label, lat, lng, source });
+  const toResult = ({ label, arLabel, lat, lng, source }) => ({
+    label,
+    arLabel: arLabel ?? null,
+    lat,
+    lng,
+    source,
+  });
 
   if (!normalized) return SEARCHABLE_PLACES.slice(0, limit).map(toResult);
 

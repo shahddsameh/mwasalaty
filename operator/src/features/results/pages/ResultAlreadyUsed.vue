@@ -7,7 +7,7 @@
     :primary-action="{ label: $t('common.nextScan') }"
     @primary="goNext"
   >
-    <p class="mt-6 rounded-lg border border-warning bg-warning-soft px-4 py-3 text-lg font-black text-warning">
+    <p class="mt-6 rounded-lg border border-warning bg-warning-soft px-4 py-3 text-lg font-semibold text-warning">
       {{ $t("result.alreadyUsed.guidance") }}
     </p>
   </ResultScreen>

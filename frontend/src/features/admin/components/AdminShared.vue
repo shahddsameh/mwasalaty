@@ -20,11 +20,18 @@ export const StatCard = defineComponent({
       h(
         "div",
         {
-          class: `${props.className || "bg-[#1E293B] rounded-2xl p-4 border border-white/10 min-h-[104px] flex flex-col justify-between shadow-sm"}`,
+          class: `${props.className || "bg-card rounded-2xl p-4 border border-border min-h-[104px] flex flex-col justify-between shadow-sm"}`,
         },
         [
           h("div", { class: "flex items-center justify-between gap-3" }, [
-            h("p", { class: "text-sm font-medium leading-tight text-[#94A3B8]" }, props.label),
+            h(
+              "p",
+              {
+                class:
+                  "text-sm font-medium leading-tight text-muted-foreground",
+              },
+              props.label,
+            ),
             h("span", {
               class: "h-2.5 w-2.5 rounded-full flex-shrink-0",
               style: { background: props.color },
@@ -39,7 +46,7 @@ export const StatCard = defineComponent({
             props.value,
           ),
           props.sub &&
-            h("p", { class: "text-xs text-[#94A3B8] mt-2" }, props.sub),
+            h("p", { class: "text-xs text-muted-foreground mt-2" }, props.sub),
         ],
       );
   },
@@ -56,7 +63,7 @@ export const Card = defineComponent({
       h(
         "div",
         {
-          class: `bg-[#1E293B] rounded-2xl border border-white/10 overflow-hidden shadow-sm ${props.className || ""}`,
+          class: `bg-card rounded-2xl border border-border overflow-hidden shadow-sm ${props.className || ""}`,
         },
         slots.default?.(),
       );
@@ -78,7 +85,9 @@ export const StatusBadge = defineComponent({
           class:
             "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold",
           style: {
-            background: isActive ? "rgba(16,185,129,0.12)" : "rgba(239,68,68,0.12)",
+            background: isActive
+              ? "rgba(16,185,129,0.12)"
+              : "rgba(239,68,68,0.12)",
             color: isActive ? "#10B981" : "#EF4444",
           },
         },
@@ -105,11 +114,12 @@ export const Field = defineComponent({
       h("div", { class: "flex flex-col gap-2" }, [
         h(
           "label",
-          { class: "text-sm font-semibold text-[#F8FAFC]" },
+          { class: "text-sm font-semibold text-foreground" },
           props.label,
         ),
         slots.default?.(),
-        props.hint && h("p", { class: "text-xs text-[#94A3B8]" }, props.hint),
+        props.hint &&
+          h("p", { class: "text-xs text-muted-foreground" }, props.hint),
       ]);
   },
 });

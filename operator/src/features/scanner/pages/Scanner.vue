@@ -2,48 +2,53 @@
   <main class="app-shell bottom-nav-offset">
     <AppNav />
     <section class="mx-auto flex w-full max-w-5xl flex-col gap-4">
-      <header class="flex items-center justify-between gap-3">
-        <div>
-          <p class="text-sm font-bold text-primary">{{ $t("scanner.title") }}</p>
-          <h1 class="text-2xl font-black text-foreground">{{ displayProfile(profile) }}</h1>
-        </div>
-        <RouterLink to="/dashboard" class="tap-target rounded-lg border border-border bg-card px-3 py-2 text-sm font-bold text-foreground transition hover:bg-secondary focus-ring">
-          {{ $t("common.dashboard") }}
-        </RouterLink>
-      </header>
+      <OperatorHeader
+        :eyebrow="$t('scanner.title')"
+        :title="displayProfile(profile)"
+        :subtitle="$t('scanner.empty')"
+        :status="status === 'live' ? $t('common.scan') : statusText"
+        icon="scan"
+      />
 
-      <section class="relative min-h-[62dvh] overflow-hidden rounded-xl border border-border bg-black shadow-sm">
-        <video ref="videoRef" class="h-full min-h-[62dvh] w-full object-cover" muted playsinline />
+      <section class="relative min-h-[52dvh] overflow-hidden rounded-2xl border border-border bg-surface-dark shadow-sm md:min-h-[60dvh]">
+        <video ref="videoRef" class="h-full min-h-[52dvh] w-full object-cover md:min-h-[60dvh]" muted playsinline />
 
         <div v-if="status === 'live'" class="pointer-events-none absolute inset-0 scanner-grid">
-          <div class="absolute inset-[12%] rounded-lg border-4 border-white shadow-[0_0_0_999px_rgba(0,0,0,0.24)]">
-            <span class="absolute -top-12 start-0 rounded-lg bg-card px-3 py-2 text-sm font-bold text-card-foreground shadow-sm">
+          <div class="absolute inset-[10%] rounded-2xl border-2 border-primary shadow-[0_0_0_999px_rgba(2,6,23,0.48)] sm:inset-[14%]">
+            <span class="absolute -top-14 start-0 rounded-xl bg-surface-dark/90 px-3 py-2 text-sm font-medium text-surface-dark-foreground shadow-sm backdrop-blur">
               {{ $t("scanner.empty") }}
             </span>
+            <span class="absolute -left-1 -top-1 h-8 w-8 rounded-tl-3xl border-l-4 border-t-4 border-primary" />
+            <span class="absolute -right-1 -top-1 h-8 w-8 rounded-tr-3xl border-r-4 border-t-4 border-primary" />
+            <span class="absolute -bottom-1 -left-1 h-8 w-8 rounded-bl-3xl border-b-4 border-l-4 border-primary" />
+            <span class="absolute -bottom-1 -right-1 h-8 w-8 rounded-br-3xl border-b-4 border-r-4 border-primary" />
           </div>
         </div>
 
-        <div v-if="status !== 'live'" class="absolute inset-0 grid place-items-center bg-card p-6 text-center text-card-foreground">
-          <div class="max-w-sm">
-            <div class="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-lg bg-muted text-3xl" aria-hidden="true">
-              {{ status === "starting" ? "..." : "!" }}
+        <div v-if="status !== 'live'" class="absolute inset-0 grid place-items-center bg-surface-dark p-6 text-center text-surface-dark-foreground">
+          <div class="max-w-md">
+            <div class="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl border border-surface-dark-border bg-surface-dark-foreground/10 text-primary shadow-sm" aria-hidden="true">
+              <div v-if="status === 'starting'" class="h-9 w-9 animate-spin rounded-full border-4 border-surface-dark-foreground/20 border-t-primary" />
+              <AppIcon v-else name="camera" class="h-9 w-9" />
             </div>
-            <h2 class="text-2xl font-black">{{ statusText }}</h2>
-            <p v-if="status === 'denied'" class="mt-3 text-muted-foreground">{{ $t("scanner.denied") }}</p>
+            <p class="mb-2 text-xs font-medium uppercase tracking-[0.12em] text-primary">{{ $t("common.appName") }}</p>
+            <h2 class="text-2xl font-semibold sm:text-3xl">{{ statusText }}</h2>
+            <p v-if="status !== 'starting'" class="mx-auto mt-3 max-w-sm text-sm leading-6 text-surface-dark-foreground/70">{{ status === 'denied' ? $t("scanner.denied") : $t("scanner.empty") }}</p>
             <div v-if="status !== 'starting'" class="mt-5 flex flex-wrap justify-center gap-3">
-              <AppButton variant="secondary" @click="start">{{ $t("scanner.tryAgain") }}</AppButton>
-              <RouterLink to="/camera-help" class="tap-target inline-flex items-center justify-center rounded-lg border border-border bg-card px-4 py-2.5 font-bold text-foreground transition hover:bg-secondary focus-ring">
+              <AppButton @click="start"><AppIcon name="camera" class="me-2 h-5 w-5" />{{ $t("scanner.tryAgain") }}</AppButton>
+              <RouterLink to="/camera-help" class="tap-target inline-flex items-center justify-center rounded-xl border border-surface-dark-border bg-surface-dark-foreground/10 px-4 py-2.5 font-medium text-surface-dark-foreground transition hover:bg-surface-dark-foreground/15 focus-ring">
                 {{ $t("scanner.help") }}
               </RouterLink>
+              <RouterLink to="/dashboard" class="tap-target inline-flex items-center justify-center rounded-xl px-4 py-2.5 font-medium text-surface-dark-foreground/70 transition hover:text-surface-dark-foreground focus-ring">{{ $t("common.dashboard") }}</RouterLink>
             </div>
           </div>
         </div>
 
-        <div v-if="processing" class="absolute inset-x-5 bottom-5 rounded-lg bg-card px-4 py-3 text-center text-lg font-black text-card-foreground shadow-lg">
+        <div v-if="processing" class="absolute inset-x-5 bottom-5 rounded-2xl border border-surface-dark-border bg-surface-dark/90 px-4 py-4 text-center text-lg font-semibold text-surface-dark-foreground shadow-sm backdrop-blur">
           {{ $t("scanner.processing") }}
         </div>
 
-        <div v-if="flash" :class="flashClass" class="absolute inset-0 grid place-items-center text-4xl font-black">
+        <div v-if="flash" :class="flashClass" class="absolute inset-0 grid place-items-center text-4xl font-semibold">
           {{ flash }}
         </div>
       </section>
@@ -57,6 +62,8 @@ import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import AppButton from "@/components/ui/AppButton.vue";
 import AppNav from "@/components/shared/AppNav.vue";
+import OperatorHeader from "@/components/shared/OperatorHeader.vue";
+import AppIcon from "@/components/ui/AppIcon.vue";
 import { useCamera } from "@/features/scanner/composables/useCamera";
 import { decodeFromVideo } from "@/features/scanner/services/scanFrame";
 import { handleDecodedText } from "@/features/scanner/services/scanOrchestrator";
@@ -85,8 +92,8 @@ const statusText = computed(() => {
 
 const flashClass = computed(() => {
   if (flash.value === t("scanner.flashValid")) return "bg-success/90";
-  if (flash.value === t("scanner.flashUsed")) return "bg-warning/90";
-  if (flash.value === t("scanner.flashOffline")) return "bg-slate-700/90";
+  if (flash.value === t("scanner.flashUsed")) return "bg-warning/90 text-white";
+  if (flash.value === t("scanner.flashOffline")) return "bg-surface-dark-muted/90 text-surface-dark-foreground";
   return "bg-destructive/90";
 });
 

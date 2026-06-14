@@ -22,6 +22,10 @@ import {
   replyToSupportTicket,
 } from "../services/supportTicketService.js";
 import {
+  createJourneyFeedback,
+  listJourneyFeedback,
+} from "../services/journeyFeedbackService.js";
+import {
   getTransitRouteDetails,
   getTransitStopDetails,
   listRouteSearches,
@@ -213,6 +217,33 @@ export async function adminTransitStopDetailsHandler(req, res) {
 export async function adminRouteSearchesHandler(req, res) {
   try {
     res.json({ searches: await listRouteSearches() });
+  } catch (err) {
+    sendError(res, err);
+  }
+}
+
+export async function createJourneyFeedbackHandler(req, res) {
+  try {
+    const feedback = await createJourneyFeedback(req.body || {});
+    res.status(201).json({ feedback });
+  } catch (err) {
+    if (err.code === "VALIDATION_ERROR") {
+      res.status(400).json({ error: makeError("VALIDATION_ERROR", err.message).error });
+    } else {
+      console.error("[createJourneyFeedback] Error:", err);
+      res.status(500).json({
+        error: makeError(
+          ErrorCodes.INTERNAL_SERVER_ERROR,
+          "Failed to save journey feedback",
+        ).error,
+      });
+    }
+  }
+}
+
+export async function adminJourneyFeedbackHandler(req, res) {
+  try {
+    res.json({ feedback: await listJourneyFeedback() });
   } catch (err) {
     sendError(res, err);
   }

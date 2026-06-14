@@ -1,22 +1,33 @@
 <template>
   <main
-    class="grid min-h-screen place-items-center bg-[#111827] px-4 text-white"
+    class="admin-theme relative grid min-h-screen place-items-center bg-background px-4 text-foreground"
   >
+    <button
+      type="button"
+      class="absolute end-4 top-4 rounded-xl border border-border bg-card p-2.5 text-muted-foreground shadow-sm transition-colors hover:bg-surface-hover hover:text-foreground"
+      :aria-label="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+      :title="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+      @click="toggleTheme"
+    >
+      <Sun v-if="theme === 'dark'" class="h-5 w-5" />
+      <Moon v-else class="h-5 w-5" />
+    </button>
+
     <section
-      class="w-full max-w-md rounded-2xl border border-[#FFC400]/50 bg-[#1F2937] p-6"
+      class="w-full max-w-md rounded-2xl border border-primary/50 bg-card p-6 shadow-xl"
     >
       <p class="mb-2 text-xs font-bold uppercase tracking-wide text-[#FFC400]">
         Restricted Access
       </p>
       <h1 class="mb-3 text-3xl font-bold">Admin Portal</h1>
-      <p class="mb-6 text-[#9CA3AF]">Sign in with the backend ADMIN_SECRET.</p>
+      <p class="mb-6 text-muted-foreground">Sign in with the backend ADMIN_SECRET.</p>
       <form class="space-y-4" @submit.prevent="submit">
         <label class="block">
-          <span class="mb-1 block text-sm">Admin secret</span>
+          <span class="mb-1 block text-sm">Admin Password</span>
           <input
             v-model="secret"
             type="password"
-            class="w-full rounded-xl border border-[#374151] bg-[#111827] px-3 py-2"
+            class="w-full rounded-xl border border-border bg-input-background px-3 py-2 text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
           />
         </label>
         <p v-if="error" class="text-sm text-red-300">{{ error }}</p>
@@ -34,12 +45,21 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { Moon, Sun } from "@lucide/vue";
 import { adminLogin } from "../services/adminApi";
+import { applyTheme, getSavedTheme, type AppTheme } from "../../../services/theme";
+import "../styles/admin-theme.css";
 
 const router = useRouter();
+const theme = ref<AppTheme>(getSavedTheme());
 const secret = ref("");
 const loading = ref(false);
 const error = ref("");
+
+function toggleTheme() {
+  theme.value = theme.value === "dark" ? "light" : "dark";
+  applyTheme(theme.value);
+}
 
 async function submit() {
   loading.value = true;

@@ -1,17 +1,19 @@
 <template>
   <main class="app-shell bottom-nav-offset">
     <AppNav />
-    <section class="mx-auto grid w-full max-w-5xl gap-4">
-      <header class="field-panel p-5">
-        <p class="text-sm font-bold text-muted-foreground">{{ $t("syncQueue.title") }}</p>
-        <h1 class="mt-2 text-3xl font-black">{{ scans.length }}</h1>
-        <p v-if="!isOnline" class="mt-3 rounded-lg bg-muted p-3 text-sm font-semibold text-muted-foreground">
-          {{ $t("syncQueue.offline") }}
-        </p>
-      </header>
+    <section class="mx-auto grid w-full max-w-5xl gap-5">
+      <OperatorHeader
+        :eyebrow="$t('syncQueue.title')"
+        :title="String(scans.length)"
+        :subtitle="stateTitle"
+        :status="isOnline ? $t('common.synced') : $t('common.pending')"
+        icon="sync"
+      />
 
-      <p v-if="discrepancies.length" class="rounded-lg border border-warning bg-warning-soft p-4 font-bold text-warning">
-        {{ $t("syncQueue.discrepancies", { count: discrepancies.length }) }}
+      <p v-if="!isOnline" class="soft-alert border-border bg-muted text-muted-foreground"><AppIcon name="offline" class="h-5 w-5 shrink-0" />{{ $t("syncQueue.offline") }}</p>
+
+      <p v-if="discrepancies.length" class="soft-alert border-warning bg-warning-soft text-warning">
+        <AppIcon name="warning" class="h-5 w-5 shrink-0" />{{ $t("syncQueue.discrepancies", { count: discrepancies.length }) }}
       </p>
 
       <StateView :state="state" :title="stateTitle" :support="stateSupport">
@@ -21,27 +23,27 @@
           </AppButton>
         </template>
 
-        <div class="grid gap-3">
+        <div class="grid gap-3 sm:grid-cols-2">
           <article
             v-for="scan in sortedScans"
             :key="scan.id"
-            class="field-panel p-4"
+            class="field-panel p-5"
           >
             <div class="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p class="text-xs font-bold uppercase text-muted-foreground">{{ formatDateTime(scan.scannedAt) }}</p>
-                <h2 class="mt-1 break-all text-lg font-black">{{ scan.payload.ticketId }}</h2>
+                <p class="text-xs font-medium uppercase text-muted-foreground">{{ formatDateTime(scan.scannedAt) }}</p>
+                <h2 class="mt-1 break-all text-lg font-semibold">{{ scan.payload.ticketId }}</h2>
                 <p class="mt-1 text-sm text-muted-foreground">{{ scan.scannerProfileId }}</p>
               </div>
-              <span :class="statusTone(scan)" class="rounded-full px-3 py-1 text-sm font-bold">
+              <span :class="statusTone(scan)" class="rounded-full border px-3 py-1 text-sm font-medium">
                 {{ statusLabel(scan) }}
               </span>
             </div>
           </article>
         </div>
 
-        <AppButton class="mt-4 w-full" size="lg" :disabled="syncing || !isOnline" @click="retrySync">
-          {{ $t("syncQueue.retry") }}
+        <AppButton class="mt-4 w-full gap-2" size="lg" :disabled="syncing || !isOnline" @click="retrySync">
+          <AppIcon name="sync" class="h-5 w-5" />{{ $t("syncQueue.retry") }}
         </AppButton>
       </StateView>
     </section>
@@ -54,6 +56,8 @@ import { useI18n } from "vue-i18n";
 import AppNav from "@/components/shared/AppNav.vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import StateView from "@/components/shared/StateView.vue";
+import OperatorHeader from "@/components/shared/OperatorHeader.vue";
+import AppIcon from "@/components/ui/AppIcon.vue";
 import { useOnline } from "@/composables/useOnline";
 import { list, type QueuedScan } from "@/services/queue";
 import { syncQueue } from "@/services/sync";
@@ -106,11 +110,11 @@ function statusLabel(scan: QueuedScan) {
 }
 
 function statusTone(scan: QueuedScan) {
-  if (scan.discrepancy && scan.reconciledOutcome === "invalid") return "bg-danger-soft text-destructive";
-  if (scan.discrepancy) return "bg-warning-soft text-warning";
-  if (scan.syncState === "synced") return "bg-success-soft text-success";
-  if (scan.syncState === "failed") return "bg-danger-soft text-destructive";
-  return "bg-muted text-muted-foreground";
+  if (scan.discrepancy && scan.reconciledOutcome === "invalid") return "border-destructive/20 bg-danger-soft text-destructive";
+  if (scan.discrepancy) return "border-warning/20 bg-warning-soft text-warning";
+  if (scan.syncState === "synced") return "border-success/20 bg-success-soft text-success";
+  if (scan.syncState === "failed") return "border-destructive/20 bg-danger-soft text-destructive";
+  return "border-border bg-muted text-muted-foreground";
 }
 
 onMounted(() => {

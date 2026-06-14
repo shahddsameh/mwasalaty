@@ -326,7 +326,7 @@
     <!-- Mobile: Bottom sheet for all steps -->
     <Modal
       :open="showStepsSheet"
-      title="All Navigation Steps"
+      :title="t('liveNav.allStepsTitle')"
       @close="showStepsSheet = false"
     >
       <div class="space-y-2 max-h-[60vh] overflow-y-auto">
@@ -358,32 +358,22 @@
     <!-- End navigation modal -->
     <Modal
       :open="endModalOpen"
-      title="End Navigation"
+      :title="t('liveNav.endTitle')"
       @close="endModalOpen = false"
     >
       <div class="space-y-4">
         <p class="text-muted-foreground">
-          Are you sure you want to end navigation? Your progress will be saved.
+          {{ t("liveNav.endConfirm") }}
         </p>
         <div class="flex gap-3">
-          <AppButton
-            variant="danger"
-            class="flex-1"
-            @click="
-              router.push({
-                path: '/route-details',
-                query: { start, destination, filter },
-                state: { route, steps, start, destination, filter },
-              })
-            "
-          >
-            End Navigation
+          <AppButton variant="danger" class="flex-1" @click="endNavigation">
+            {{ t("liveNav.endNavigation") }}
           </AppButton>
           <AppButton
             variant="outline"
             class="flex-1"
             @click="endModalOpen = false"
-            >Continue</AppButton
+            >{{ t("liveNav.continue") }}</AppButton
           >
         </div>
       </div>
@@ -392,7 +382,7 @@
     <!-- Arrived modal -->
     <Modal
       :open="feedbackModalOpen"
-      title="You've Arrived!"
+      :title="t('liveNav.arrivedTitle')"
       @close="feedbackModalOpen = false"
     >
       <div class="space-y-4 text-center">
@@ -402,34 +392,58 @@
           <ThumbsUp class="w-8 h-8 text-success-foreground" />
         </div>
         <h3 class="font-display text-2xl text-foreground">
-          Welcome to {{ destination }}!
+          {{ t("liveNav.welcomeTo", { destination }) }}
         </h3>
-        <p class="text-muted-foreground">How was your journey?</p>
+        <p class="text-muted-foreground">{{ t("liveNav.howWasJourney") }}</p>
         <div class="grid grid-cols-2 gap-3">
           <button
             type="button"
             class="p-4 border-2 rounded-lg transition-all flex flex-col items-center justify-center gap-2 cursor-pointer"
-            :class="feedbackRating === 'good' ? 'border-success bg-success/15 text-success' : 'border-border hover:border-success text-foreground'"
-            @click="feedbackRating = 'good'"
+            :class="selectedFeedback === 'good' ? 'border-success bg-success/15 text-success' : 'border-border hover:border-success text-foreground'"
+            :disabled="isSubmittingFeedback || feedbackSubmitted"
+            @click="submitGoodFeedback"
           >
             <Smile class="w-6 h-6" />
-            <span class="font-medium text-sm">Good Route</span>
+            <span class="font-medium text-sm">{{ t("liveNav.goodRoute") }}</span>
           </button>
           <button
             type="button"
             class="p-4 border-2 rounded-lg transition-all flex flex-col items-center justify-center gap-2 cursor-pointer"
-            :class="feedbackRating === 'bad' ? 'border-destructive bg-destructive/15 text-destructive' : 'border-border hover:border-destructive text-foreground'"
-            @click="feedbackRating = 'bad'"
+            :class="selectedFeedback === 'bad' ? 'border-destructive bg-destructive/15 text-destructive' : 'border-border hover:border-destructive text-foreground'"
+            :disabled="isSubmittingFeedback || feedbackSubmitted"
+            @click="selectBadFeedback"
           >
             <Frown class="w-6 h-6" />
-            <span class="font-medium text-sm">Issues / Bad</span>
+            <span class="font-medium text-sm">{{ t("liveNav.issuesBad") }}</span>
           </button>
         </div>
-        <p v-if="feedbackRating" class="text-sm text-success animate-fade-in font-display font-medium">
-          Thank you! Your feedback helps improve Cairo's transit routes.
+        <div v-if="selectedFeedback === 'bad' && !feedbackSubmitted" class="space-y-2 text-left animate-fade-in">
+          <textarea
+            v-model="issueMessage"
+            rows="4"
+            class="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+            :placeholder="t('liveNav.issuePlaceholder')"
+            :disabled="isSubmittingFeedback"
+          />
+          <p v-if="feedbackError" class="text-sm text-destructive">
+            {{ feedbackError }}
+          </p>
+          <AppButton
+            class="w-full"
+            :disabled="isSubmittingFeedback"
+            @click="submitBadFeedback"
+          >
+            {{ isSubmittingFeedback ? t("liveNav.submittingFeedback") : t("liveNav.submitIssue") }}
+          </AppButton>
+        </div>
+        <p v-else-if="feedbackError" class="text-sm text-destructive">
+          {{ feedbackError }}
+        </p>
+        <p v-if="feedbackSubmitted" class="text-sm text-success animate-fade-in font-display font-medium">
+          {{ t("liveNav.feedbackThanks") }}
         </p>
         <AppButton class="w-full" @click="router.push('/')"
-          >Return Home</AppButton
+          >{{ t("liveNav.returnHome") }}</AppButton
         >
       </div>
     </Modal>
@@ -437,7 +451,7 @@
     <!-- Ticket modal -->
     <Modal
       :open="ticketModalOpen"
-      title="Digital Ticket"
+      :title="t('liveNav.digitalTicketTitle')"
       @close="ticketModalOpen = false"
     >
       <TicketPreview
@@ -452,6 +466,7 @@
 <script setup lang="ts">
 import { computed, defineComponent, h, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import {
   ArrowLeft,
   ArrowRight,
@@ -472,7 +487,7 @@ import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
 import TicketPreview from "@/features/tickets/components/TicketPreview.vue";
 import type { ApiRouteOption, RouteDetailStep, Ticket as TicketData } from "@/services/api";
-import { getTicket, subscribeToTicket } from "@/services/api";
+import { getTicket, submitJourneyFeedback, subscribeToTicket } from "@/services/api";
 import { readCurrentTicket, storeCurrentTicket } from "@/services/currentTicket";
 import {
   getSavedRouteSearch,
@@ -485,6 +500,7 @@ import { useLiveLocation } from "@/composables/useLiveLocation";
 
 // ── Route state (exactly as original) ────────────────────────────────────────
 const router = useRouter();
+const { t } = useI18n();
 const state = history.state ?? {};
 const savedSearch = getSavedRouteSearch();
 const selectedRoute = getSelectedRoute();
@@ -507,7 +523,7 @@ const route = (state.route ??
 
 const fallbackStep: RouteDetailStep = {
   type: "walking",
-  instruction: "No navigation steps available.",
+  instruction: t("liveNav.noStepsAvailable"),
   duration: "N/A",
   color: "var(--transport-walking)",
   softColor: "var(--transport-walking-soft)",
@@ -522,6 +538,8 @@ const destination =
   state.destination ?? savedSearch.destination ?? "Unknown destination";
 const filter = normalizeFilter(state.filter ?? savedSearch.filter);
 const progressKey = `mwasalaty:live-nav-step:${route.id || start}:${destination}`;
+// Resume an interrupted trip within this window; ignore (start fresh) past it.
+const LIVE_NAV_PROGRESS_TTL_MS = 3 * 60 * 60 * 1000;
 
 saveRouteSearch({ start, destination, filter });
 
@@ -529,34 +547,37 @@ saveRouteSearch({ start, destination, filter });
 const isOnline = ref(true);
 const currentStepIndex = ref(readSavedStepIndex());
 const endModalOpen = ref(false);
-// TODO: Wire feedback modal to backend submission when an API is ready.
 const feedbackModalOpen = ref(false);
 const ticketModalOpen = ref(false);
 const currentTicket = ref<TicketData | null>(matchingNavigationTicket(readCurrentTicket()));
 const showStepsSheet = ref(false);
-const feedbackRating = ref<"good" | "bad" | null>(null);
+const selectedFeedback = ref<"good" | "bad" | null>(null);
+const issueMessage = ref("");
+const isSubmittingFeedback = ref(false);
+const feedbackSubmitted = ref(false);
+const feedbackError = ref<string | null>(null);
 const lastAutoAdvanceAt = ref(0);
 let stopTicketUpdates: (() => void) | undefined;
-const labels = {
-  liveNavigation: "Live Navigation",
-  online: "Online",
-  offlineDemo: "Offline demo (TODO: not real offline)",
-  exit: "Exit",
-  noGeometry: "Map route shape is not available for this step yet.",
-  step: "Step",
-  of: "of",
-  next: "Next",
-  prev: "Prev",
-  nextStep: "Next Step",
-  arrive: "Arrive",
-  recenter: "Recenter",
-  recenterMap: "Recenter Map",
-  allSteps: "All Steps",
-  currentStep: "Current Step",
-  remainingTime: "Remaining Time",
-  distanceLeft: "Distance Left",
-  viewTicket: "View Digital Ticket",
-};
+const labels = computed(() => ({
+  liveNavigation: t("liveNav.liveNavigation"),
+  online: t("liveNav.online"),
+  offlineDemo: t("liveNav.offlineDemo"),
+  exit: t("liveNav.exit"),
+  noGeometry: t("liveNav.noGeometry"),
+  step: t("liveNav.step"),
+  of: t("liveNav.of"),
+  next: t("liveNav.next"),
+  prev: t("liveNav.prev"),
+  nextStep: t("liveNav.nextStep"),
+  arrive: t("liveNav.arrive"),
+  recenter: t("liveNav.recenter"),
+  recenterMap: t("liveNav.recenterMap"),
+  allSteps: t("liveNav.allSteps"),
+  currentStep: t("liveNav.currentStep"),
+  remainingTime: t("liveNav.remainingTime"),
+  distanceLeft: t("liveNav.distanceLeft"),
+  viewTicket: t("liveNav.viewTicket"),
+}));
 
 const currentStep = computed(
   () => steps[currentStepIndex.value] ?? fallbackStep,
@@ -610,7 +631,14 @@ onMounted(async () => {
 // Re-focus map whenever the active step changes
 watch(currentStepIndex, (idx) => {
   fitStep(idx);
-  localStorage.setItem(progressKey, String(idx));
+  try {
+    localStorage.setItem(
+      progressKey,
+      JSON.stringify({ stepIndex: idx, savedAt: Date.now() }),
+    );
+  } catch {
+    // Ignore storage failures.
+  }
 });
 
 watch(location, (nextLocation) => {
@@ -635,16 +663,56 @@ function prev() {
 
 function next() {
   if (currentStepIndex.value < steps.length - 1) currentStepIndex.value += 1;
-  else feedbackModalOpen.value = true;
+  else {
+    // Trip complete — don't resume this route on the next visit.
+    clearNavigationProgress();
+    resetFeedbackState();
+    feedbackModalOpen.value = true;
+  }
+}
+
+function endNavigation() {
+  clearNavigationProgress();
+  router.push({
+    path: "/route-details",
+    query: { start, destination, filter },
+    state: { route, steps, start, destination, filter },
+  });
 }
 
 function recenterMap() {
   recenter(currentStepIndex.value);
 }
 
+// The backend itineraryId is positional (`itin_001`, …) and reused across
+// searches, so it can't tell journeys apart. Match on journey content instead:
+// the ordered, normalized sequence of ticketable (non-WALK) legs. The ticket's
+// legs are built from the route's legs at checkout, so the same trip lines up.
+function legSignature(
+  legs?: Array<{
+    mode?: string;
+    route?: { shortName?: string; longName?: string } | null;
+    from?: { name?: string };
+    to?: { name?: string };
+  }>,
+): string {
+  return (legs ?? [])
+    .filter((l) => (l.mode ?? "").toUpperCase() !== "WALK")
+    .map((l) =>
+      [
+        (l.mode ?? "").toUpperCase(),
+        (l.route?.shortName ?? l.route?.longName ?? "").trim().toLowerCase(),
+        (l.from?.name ?? "").trim().toLowerCase(),
+        (l.to?.name ?? "").trim().toLowerCase(),
+      ].join("|"),
+    )
+    .join(" >> ");
+}
+
 function matchingNavigationTicket(ticket: TicketData | null): TicketData | null {
-  if (!ticket?.sourceItineraryId || !route.itineraryId) return null;
-  return ticket.sourceItineraryId === route.itineraryId ? ticket : null;
+  if (!ticket) return null;
+  const routeSig = legSignature(route.legs);
+  return routeSig && routeSig === legSignature(ticket.legs) ? ticket : null;
 }
 
 async function openTicketModal() {
@@ -667,8 +735,71 @@ async function openTicketModal() {
   }
 }
 
+function resetFeedbackState() {
+  selectedFeedback.value = null;
+  issueMessage.value = "";
+  isSubmittingFeedback.value = false;
+  feedbackSubmitted.value = false;
+  feedbackError.value = null;
+}
+
+function selectBadFeedback() {
+  selectedFeedback.value = "bad";
+  feedbackError.value = null;
+}
+
+function feedbackPayload(rating: "good" | "bad", message: string | null) {
+  return {
+    userId: currentTicket.value?.passenger?.userId ?? null,
+    routeId: route.id || null,
+    tripId: route.itineraryId || route.id || null,
+    ticketId: currentTicket.value?.ticketId ?? null,
+    origin: start,
+    destination,
+    rating,
+    issueMessage: message,
+    routeSummary: route.summary || null,
+    transportModes: Array.from(
+      new Set((route.legs ?? []).map((leg) => String(leg.mode || "")).filter(Boolean)),
+    ),
+  };
+}
+
+async function submitFeedback(rating: "good" | "bad", message: string | null) {
+  if (isSubmittingFeedback.value || feedbackSubmitted.value) return;
+  selectedFeedback.value = rating;
+  feedbackError.value = null;
+  isSubmittingFeedback.value = true;
+  try {
+    await submitJourneyFeedback(feedbackPayload(rating, message));
+    feedbackSubmitted.value = true;
+  } catch (err) {
+    feedbackError.value =
+      err instanceof Error ? err.message : t("liveNav.feedbackSubmitError");
+  } finally {
+    isSubmittingFeedback.value = false;
+  }
+}
+
+function submitGoodFeedback() {
+  void submitFeedback("good", null);
+}
+
+function submitBadFeedback() {
+  const message = issueMessage.value.trim();
+  if (!message) {
+    feedbackError.value = t("liveNav.issueRequired");
+    return;
+  }
+  void submitFeedback("bad", message);
+}
+
 function modeLabel(type: string) {
-  return type === "walking" ? "Walk" : type === "metro" ? "Metro" : "Bus";
+  return type === "walking"
+    ? t("liveNav.modeWalk")
+    : type === "metro"
+      ? t("liveNav.modeMetro")
+      : t("liveNav.modeBus");
 }
 
 type NavPoint = { lat: number; lng: number } | [number, number];
@@ -740,9 +871,42 @@ function maybeAutoAdvance(userLocation: { lat: number; lng: number; accuracy: nu
 }
 
 function readSavedStepIndex() {
-  const saved = Number.parseInt(localStorage.getItem(progressKey) ?? "0", 10);
-  if (!Number.isFinite(saved)) return 0;
-  return Math.min(Math.max(saved, 0), Math.max(steps.length - 1, 0));
+  let raw: string | null = null;
+  try {
+    raw = localStorage.getItem(progressKey);
+  } catch {
+    return 0;
+  }
+  if (!raw) return 0;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return 0;
+  }
+
+  // Only accept the timestamped shape; ignore legacy bare-number values.
+  if (!parsed || typeof parsed !== "object") return 0;
+  const { stepIndex, savedAt } = parsed as {
+    stepIndex?: unknown;
+    savedAt?: unknown;
+  };
+  if (typeof stepIndex !== "number" || typeof savedAt !== "number") return 0;
+
+  // Resume only an interrupted trip within the window; otherwise start fresh.
+  if (Date.now() - savedAt > LIVE_NAV_PROGRESS_TTL_MS) return 0;
+
+  if (!Number.isFinite(stepIndex)) return 0;
+  return Math.min(Math.max(stepIndex, 0), Math.max(steps.length - 1, 0));
+}
+
+function clearNavigationProgress() {
+  try {
+    localStorage.removeItem(progressKey);
+  } catch {
+    // Ignore storage failures.
+  }
 }
 
 // ── Inline sub-components (unchanged from original) ───────────────────────────

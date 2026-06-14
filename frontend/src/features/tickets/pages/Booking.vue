@@ -2,17 +2,20 @@
   <main class="min-h-screen pb-20 bg-background">
     <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-12">
       <h1 class="font-display text-2xl sm:text-3xl text-foreground mb-3">
-        Booking & Payment
+        {{ t("booking.title") }}
       </h1>
       <p class="text-muted-foreground mb-8">
-        Complete your booking to get your digital ticket
+        {{ t("booking.subtitle") }}
       </p>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         <section class="lg:col-span-2 space-y-6">
-          <Card title="Route Summary">
-            <InfoRow label="From" :value="fromLabel" />
-            <InfoRow label="To" :value="toLabel" />
-            <InfoRow label="Trip" :value="`${ticketableLegs.length} leg(s)`" />
+          <Card :title="t('booking.routeSummary')">
+            <InfoRow :label="t('booking.from')" :value="fromLabel" />
+            <InfoRow :label="t('booking.to')" :value="toLabel" />
+            <InfoRow
+              :label="t('booking.trip')"
+              :value="t('booking.legsCount', { count: ticketableLegs.length })"
+            />
             <div class="flex flex-wrap gap-2 mt-3">
               <span
                 v-for="(leg, i) in ticketableLegs"
@@ -24,7 +27,7 @@
             </div>
           </Card>
 
-          <Card title="Legs">
+          <Card :title="t('booking.legs')">
             <div class="space-y-3">
               <template v-for="group in legGroups">
                 <!-- Bus / non-metro leg: one row, its own fare. -->
@@ -54,7 +57,7 @@
                 >
                   <div class="flex items-center justify-between gap-3">
                     <div class="font-display text-foreground">
-                      Metro journey
+                      {{ t("booking.metroJourney") }}
                     </div>
                     <div class="font-display text-foreground whitespace-nowrap">
                       {{ group.amount }} {{ currency }}
@@ -72,7 +75,8 @@
                         v-if="i < group.legs.length - 1"
                         class="text-xs text-muted-foreground pl-3"
                       >
-                        &#8627; transfer at {{ leg.to?.name }}
+                        &#8627;
+                        {{ t("booking.transferAt", { station: leg.to?.name }) }}
                       </div>
                     </div>
                   </div>
@@ -81,23 +85,22 @@
             </div>
           </Card>
 
-          <Card title="Payment Method">
+          <Card :title="t('booking.paymentMethod')">
             <div
               class="p-4 border-2 border-primary bg-secondary rounded-lg flex items-start gap-3"
             >
               <CreditCard class="w-6 h-6 text-primary flex-shrink-0 mt-0.5" />
               <div>
                 <div class="font-display text-foreground">
-                  PayMob Secure Checkout
+                  {{ t("booking.paymobTitle") }}
                 </div>
                 <p class="text-sm text-muted-foreground mt-1">
-                  You'll be redirected to PayMob to complete your payment
-                  securely.
+                  {{ t("booking.paymobDesc") }}
                 </p>
                 <span
                   class="inline-block mt-2 px-2.5 py-1 rounded-full bg-secondary text-xs text-foreground"
                 >
-                  Test / Sandbox payment — MVP
+                  {{ t("booking.testBadge") }}
                 </span>
               </div>
             </div>
@@ -108,7 +111,7 @@
             class="flex items-start gap-3 p-4 rounded-lg border-2 border-warning bg-warning-soft text-sm text-foreground"
           >
             <CloudOff class="w-5 h-5 flex-shrink-0 text-warning mt-0.5" />
-            <span>You are offline. Reconnect before buying a ticket.</span>
+            <span>{{ t("booking.offlineWarning") }}</span>
           </div>
 
           <p
@@ -128,14 +131,14 @@
             <ShieldCheck v-else class="w-5 h-5" />
             {{
               processing
-                ? "Preparing secure checkout…"
-                : `Pay securely - ${total} ${currency}`
+                ? t("booking.preparingCheckout")
+                : t("booking.paySecurely", { total, currency })
             }}
           </AppButton>
         </section>
 
         <aside class="space-y-6">
-          <Card title="Fare Breakdown" sticky>
+          <Card :title="t('booking.fareBreakdown')" sticky>
             <InfoRow
               v-for="line in fareLines"
               :key="line.key"
@@ -146,7 +149,7 @@
             <div
               class="pt-4 border-t-2 border-border mt-4 flex items-center justify-between"
             >
-              <span class="font-display text-lg">Total</span>
+              <span class="font-display text-lg">{{ t("booking.total") }}</span>
               <span class="font-display text-3xl text-primary"
                 >{{ total }} {{ currency }}</span
               >
@@ -154,8 +157,8 @@
             <div
               class="mt-4 p-3 bg-secondary rounded-lg text-sm text-muted-foreground"
             >
-              Includes all transport fees<br />Valid for 24 hours<br />Digital
-              QR ticket
+              {{ t("booking.includesAll") }}<br />{{ t("booking.validFor24h")
+              }}<br />{{ t("booking.digitalQrTicket") }}
             </div>
           </Card>
         </aside>
@@ -164,24 +167,22 @@
 
     <Modal
       :open="loginModalOpen"
-      title="Login Required"
+      :title="t('booking.loginRequiredTitle')"
       @close="loginModalOpen = false"
     >
       <div class="space-y-4">
         <p class="p-4 bg-secondary rounded-lg text-sm text-foreground">
-          You must log in or create an account before completing this booking
-          and payment. We saved your selected trip and will bring you back here
-          after authentication.
+          {{ t("booking.loginRequiredCopy") }}
         </p>
         <div class="flex gap-3">
-          <AppButton class="flex-1" @click="redirectToAuth('/login')"
-            >Login</AppButton
-          >
+          <AppButton class="flex-1" @click="redirectToAuth('/login')">{{
+            t("booking.login")
+          }}</AppButton>
           <AppButton
             variant="outline"
             class="flex-1"
             @click="redirectToAuth('/signup')"
-            >Sign Up</AppButton
+            >{{ t("booking.signUp") }}</AppButton
           >
         </div>
       </div>
@@ -192,6 +193,7 @@
 <script setup lang="ts">
 import { computed, defineComponent, h, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { CloudOff, CreditCard, Loader2, ShieldCheck } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
@@ -209,6 +211,7 @@ import { useNetworkStatus } from "@/core/offline/networkStatus";
 
 const router = useRouter();
 const currentRoute = useRoute();
+const { t } = useI18n();
 const { user, isAuthenticated, ensureAuthInitialized } = useAuthState();
 const { isOnline } = useNetworkStatus();
 
@@ -420,7 +423,9 @@ const fareLines = computed(() =>
   legGroups.value.map((g) => ({
     key: g.key,
     label:
-      g.kind === "metro" ? `Metro ${g.lineNames.join(" → ")}` : g.fareLabel,
+      g.kind === "metro"
+        ? `${t("booking.metroLabel")} ${g.lineNames.join(" → ")}`
+        : g.fareLabel,
     amount: g.amount,
   })),
 );
@@ -475,7 +480,7 @@ async function startCheckout() {
   errorMessage.value = "";
   // A ticket may never be purchased from a cached/offline route preview.
   if (!isOnline.value) {
-    errorMessage.value = "You are offline. Reconnect before buying a ticket.";
+    errorMessage.value = t("booking.errors.offline");
     return;
   }
   processing.value = true;
@@ -501,9 +506,7 @@ async function startCheckout() {
           : { mode: "now" },
       );
       if (!fresh.length) {
-        throw new Error(
-          "This route is no longer available. Please plan the trip again.",
-        );
+        throw new Error(t("booking.errors.routeUnavailable"));
       }
       effectiveRoute = pickByFilter(fresh);
     }
@@ -563,9 +566,7 @@ async function startCheckout() {
     window.location.href = res.checkoutUrl;
   } catch (err) {
     errorMessage.value =
-      err instanceof Error
-        ? err.message
-        : "Could not start checkout. Please try again.";
+      err instanceof Error ? err.message : t("booking.errors.checkoutFailed");
     processing.value = false;
   }
 }

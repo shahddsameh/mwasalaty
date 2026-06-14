@@ -45,6 +45,16 @@
           >
             {{ t("language.toggle") }}
           </button>
+          <button
+            type="button"
+            class="rounded-lg p-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
+            :aria-label="theme === 'dark' ? t('nav.switchToLight') : t('nav.switchToDark')"
+            :title="theme === 'dark' ? t('nav.switchToLight') : t('nav.switchToDark')"
+            @click="toggleTheme"
+          >
+            <Sun v-if="theme === 'dark'" class="h-5 w-5" />
+            <Moon v-else class="h-5 w-5" />
+          </button>
           <RouterLink
             :to="isAuthenticated ? '/profile' : '/auth'"
             :class="
@@ -99,7 +109,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { RouterLink, useRoute } from "vue-router";
 import {
@@ -108,32 +118,44 @@ import {
   Globe2,
   LogIn,
   MapPin,
+  Moon,
   Settings,
+  Sun,
   Ticket,
   User,
 } from "@lucide/vue";
 import { setI18nLanguage } from "@/i18n";
 import { useAuthState } from "@/services/authState";
 import { changeLanguage, type AppLanguage } from "@/services/language";
+import { applyTheme, getSavedTheme, type AppTheme } from "@/services/theme";
 
 const route = useRoute();
 const { locale, t } = useI18n();
 const { isAuthenticated } = useAuthState();
+const theme = ref<AppTheme>(getSavedTheme());
 const currentPath = computed(() => route.path);
 const active = (path: string) => currentPath.value === path;
 
-const desktopLinks = [
-  { to: "/", labelKey: "nav.routePlanner" },
+const desktopLinks = computed(() => [
+  { to: "/", labelKey: "nav.routePlanner", icon: MapPin },
   // { to: "/ai-trip-planner", labelKey: "nav.aiTripPlanner", icon: Brain },
-  { to: "/saved", labelKey: "nav.saved", icon: BookmarkCheck },
-  { to: "/all-tickets", labelKey: "nav.allTickets", icon: Ticket },
-];
+  ...(isAuthenticated.value
+    ? [
+        { to: "/saved", labelKey: "nav.saved", icon: BookmarkCheck },
+        { to: "/all-tickets", labelKey: "nav.allTickets", icon: Ticket },
+      ]
+    : []),
+]);
 
 const mobileLinks = computed(() => [
   { to: "/", labelKey: "nav.routePlanner", icon: MapPin },
   // { to: "/ai-trip-planner", labelKey: "nav.aiTrip", icon: Brain },
-  { to: "/saved", labelKey: "nav.saved", icon: BookmarkCheck },
-  { to: "/all-tickets", labelKey: "nav.tickets", icon: Ticket },
+  ...(isAuthenticated.value
+    ? [
+        { to: "/saved", labelKey: "nav.saved", icon: BookmarkCheck },
+        { to: "/all-tickets", labelKey: "nav.tickets", icon: Ticket },
+      ]
+    : []),
   isAuthenticated.value
     ? { to: "/profile", labelKey: "nav.profile", icon: User }
     : { to: "/auth", labelKey: "nav.login", icon: LogIn },
@@ -144,6 +166,18 @@ async function toggleLanguage() {
   setI18nLanguage(nextLanguage);
   await changeLanguage(nextLanguage);
 }
+
+function toggleTheme() {
+  theme.value = theme.value === "dark" ? "light" : "dark";
+  applyTheme(theme.value);
+}
+
+watch(
+  () => route.fullPath,
+  () => {
+    theme.value = getSavedTheme();
+  },
+);
 
 function desktopClass(path: string) {
   return [

@@ -21,16 +21,15 @@
           <span
             class="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-medium text-foreground border border-primary/30 mb-4"
           >
-            <Headphones class="w-3.5 h-3.5" /> Support · We're online
+            <Headphones class="w-3.5 h-3.5" /> {{ t("support.badge") }}
           </span>
           <h1
             class="font-display text-3xl md:text-5xl font-bold text-foreground mb-3"
           >
-            Contact Us
+            {{ t("support.title") }}
           </h1>
           <p class="text-muted-foreground max-w-xl text-sm md:text-base">
-            We're here to help. Reach out and our team will get back to you
-            within 24 hours.
+            {{ t("support.subtitle") }}
           </p>
         </div>
       </header>
@@ -65,7 +64,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Left: message form + FAQ -->
         <section class="lg:col-span-2 space-y-8">
-          <Card title="Send us a message">
+          <Card :title="t('support.form.title')">
             <!-- Success state -->
             <div
               v-if="submitted"
@@ -77,23 +76,22 @@
                 <CheckCircle2 class="w-8 h-8 text-success" />
               </span>
               <h3 class="font-display text-2xl text-foreground mb-1">
-                Message sent!
+                {{ t("support.form.successTitle") }}
               </h3>
               <p class="text-sm text-muted-foreground max-w-sm mb-6">
-                Thanks for reaching out. Our support team will reply within 24
-                hours.
+                {{ t("support.form.successBody") }}
               </p>
               <AppButton variant="outline" @click="resetForm">
-                Send another
+                {{ t("support.form.sendAnother") }}
               </AppButton>
             </div>
 
             <form v-else class="space-y-5" @submit.prevent="submit">
               <!-- Topic chips -->
               <div>
-                <span class="block text-sm text-foreground mb-2"
-                  >What can we help with?</span
-                >
+                <span class="block text-sm text-foreground mb-2">{{
+                  t("support.form.topicLabel")
+                }}</span>
                 <div class="flex flex-wrap gap-2">
                   <button
                     v-for="option in topics"
@@ -102,7 +100,7 @@
                     :class="topicClass(option)"
                     @click="topic = option"
                   >
-                    {{ option }}
+                    {{ t(`support.topics.${option}`) }}
                   </button>
                 </div>
               </div>
@@ -110,33 +108,35 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <AppInput
                   v-model="form.name"
-                  label="Your Name"
-                  placeholder="Enter your name"
+                  :label="t('support.form.name')"
+                  :placeholder="t('support.form.namePlaceholder')"
                   :error="errors.name"
                 />
                 <AppInput
                   v-model="form.email"
-                  label="Email"
+                  :label="t('support.form.email')"
                   type="email"
-                  placeholder="your@email.com"
+                  :placeholder="t('support.form.emailPlaceholder')"
                   :error="errors.email"
                 />
               </div>
 
               <AppInput
                 v-model="form.subject"
-                label="Subject"
-                placeholder="How can we help?"
+                :label="t('support.form.subject')"
+                :placeholder="t('support.form.subjectPlaceholder')"
               />
 
               <label class="block">
-                <span class="block text-sm text-foreground mb-2">Message</span>
+                <span class="block text-sm text-foreground mb-2">{{
+                  t("support.form.message")
+                }}</span>
                 <textarea
                   v-model="form.message"
                   rows="6"
                   class="w-full px-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent resize-none transition-all"
                   :class="errors.message ? 'border-destructive' : ''"
-                  placeholder="Describe your issue or question..."
+                  :placeholder="t('support.form.messagePlaceholder')"
                 />
                 <span v-if="errors.message" class="text-sm text-destructive">{{
                   errors.message
@@ -153,15 +153,15 @@
                 :disabled="sending"
               >
                 <Send class="w-5 h-5" />
-                {{ sending ? "Sending..." : "Send Message" }}
+                {{ sending ? t("support.form.sending") : t("support.form.send") }}
               </AppButton>
               <p class="text-sm text-muted-foreground text-center">
-                We typically respond within 24 hours
+                {{ t("support.form.responseTime") }}
               </p>
             </form>
           </Card>
 
-          <Card title="Frequently Asked Questions">
+          <Card :title="t('support.faqTitle')">
             <div class="space-y-3">
               <div
                 v-for="(faq, index) in faqs"
@@ -201,7 +201,7 @@
 
         <!-- Right: office, hours, social, urgent -->
         <aside class="space-y-8">
-          <Card title="Our office">
+          <Card :title="t('support.office.title')">
             <div
               class="relative h-36 -mx-6 -mt-2 mb-4 overflow-hidden border-y border-border"
               style="
@@ -233,7 +233,8 @@
               </span>
             </div>
             <p class="text-sm text-foreground leading-relaxed mb-4">
-              Smart Village, Building B12<br />Giza, Egypt
+              {{ t("support.office.addressLine1")
+              }}<br />{{ t("support.office.addressLine2") }}
             </p>
             <a
               href="https://maps.google.com/?q=Smart+Village+Giza"
@@ -241,23 +242,28 @@
               rel="noopener"
               class="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary-hover transition-colors"
             >
-              Get directions <ArrowRight class="w-4 h-4 rtl:rotate-180" />
+              {{ t("support.office.directions") }}
+              <ArrowRight class="w-4 h-4 rtl:rotate-180" />
             </a>
           </Card>
 
-          <Card title="Office hours">
+          <Card :title="t('support.hours.title')">
             <div class="space-y-3">
               <div class="flex items-center justify-between">
-                <span class="text-sm text-foreground">Sunday – Thursday</span>
-                <span class="text-sm text-muted-foreground" dir="ltr"
-                  >9:00 AM – 9:00 PM</span
-                >
+                <span class="text-sm text-foreground">{{
+                  t("support.hours.weekdays")
+                }}</span>
+                <span class="text-sm text-muted-foreground" dir="ltr">{{
+                  t("support.hours.weekdaysHours")
+                }}</span>
               </div>
               <div class="flex items-center justify-between">
-                <span class="text-sm text-foreground">Friday – Saturday</span>
-                <span class="text-sm text-muted-foreground" dir="ltr"
-                  >10:00 AM – 6:00 PM</span
-                >
+                <span class="text-sm text-foreground">{{
+                  t("support.hours.weekend")
+                }}</span>
+                <span class="text-sm text-muted-foreground" dir="ltr">{{
+                  t("support.hours.weekendHours")
+                }}</span>
               </div>
               <div class="pt-2 border-t border-border">
                 <span
@@ -272,15 +278,15 @@
                     class="h-1.5 w-1.5 rounded-full"
                     :class="isOpen ? 'bg-success' : 'bg-muted-foreground'"
                   />
-                  {{ isOpen ? "Open now" : "Closed" }}
+                  {{ isOpen ? t("support.hours.open") : t("support.hours.closed") }}
                 </span>
               </div>
             </div>
           </Card>
 
-          <Card title="Follow us">
+          <Card :title="t('support.social.title')">
             <p class="text-sm text-muted-foreground mb-4">
-              Stay updated on new routes and features.
+              {{ t("support.social.subtitle") }}
             </p>
             <div class="flex gap-3">
               <a
@@ -308,8 +314,10 @@
             class="rounded-xl text-gradient-foreground p-6 border-2 border-primary bg-gradient-to-br from-primary-soft via-warning-soft to-primary"
           >
             <MessageCircle class="w-8 h-8 mb-3" />
-            <h3 class="font-display text-xl mb-2">Need urgent help?</h3>
-            <p class="text-sm mb-4">Our support team is available 24/7.</p>
+            <h3 class="font-display text-xl mb-2">
+              {{ t("support.urgent.title") }}
+            </h3>
+            <p class="text-sm mb-4">{{ t("support.urgent.subtitle") }}</p>
             <div class="space-y-2 text-sm">
               <a
                 href="mailto:support@mwasalaty.com"
@@ -326,7 +334,7 @@
                 <Phone class="w-4 h-4 shrink-0" /> +20 2 1234 5678
               </a>
               <div class="flex items-center gap-2">
-                <Clock class="w-4 h-4 shrink-0" /> Available 24/7
+                <Clock class="w-4 h-4 shrink-0" /> {{ t("support.urgent.available") }}
               </div>
             </div>
           </section>
@@ -338,6 +346,7 @@
 
 <script setup lang="ts">
 import { computed, defineComponent, h, onMounted, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import {
   ArrowRight,
   CheckCircle2,
@@ -354,13 +363,14 @@ import AppButton from "@/components/ui/AppButton.vue";
 import AppInput from "@/components/ui/AppInput.vue";
 import { getCurrentSession, getCurrentUser } from "@/services/supabaseAuth";
 
+const { t } = useI18n();
 const activeQuestion = ref<number | null>(null);
 const sending = ref(false);
 const errorMessage = ref("");
 const submitted = ref(false);
-const topic = ref("General");
+const topic = ref("general");
 
-const topics = ["General", "Booking", "Payment", "Feedback"];
+const topics = ["general", "booking", "payment", "feedback"];
 
 const form = reactive({ name: "", email: "", subject: "", message: "" });
 const errors = reactive({ name: "", email: "", message: "" });
@@ -371,40 +381,40 @@ const isOpen = computed(() => {
   return hour >= 9 && hour < 21;
 });
 
-const methods = [
+const methods = computed(() => [
   {
-    label: "Email us",
-    value: "support@mwasalaty.com",
+    label: t("support.methods.email.label"),
+    value: t("support.methods.email.value"),
     href: "mailto:support@mwasalaty.com",
     icon: Mail,
     color: "var(--transport-walking)",
     soft: "var(--transport-walking-soft)",
   },
   {
-    label: "Call us",
-    value: "+20 2 1234 5678",
+    label: t("support.methods.call.label"),
+    value: t("support.methods.call.value"),
     href: "tel:+20212345678",
     icon: Phone,
     color: "var(--success)",
     soft: "var(--success-soft)",
   },
   {
-    label: "Visit us",
-    value: "Smart Village, Giza",
+    label: t("support.methods.visit.label"),
+    value: t("support.methods.visit.value"),
     href: "https://maps.google.com/?q=Smart+Village+Giza",
     icon: MapPin,
     color: "var(--transport-microbus)",
     soft: "var(--transport-microbus-soft)",
   },
   {
-    label: "Live chat",
-    value: "Available 24/7",
+    label: t("support.methods.chat.label"),
+    value: t("support.methods.chat.value"),
     href: "#",
     icon: MessageCircle,
     color: "var(--primary-hover)",
     soft: "var(--primary-soft)",
   },
-];
+]);
 
 const socials = [
   {
@@ -429,28 +439,24 @@ const socials = [
   },
 ];
 
-const faqs = [
+const faqs = computed(() => [
   {
-    question: "How do I book a ticket?",
-    answer:
-      "Search for your route, select your preferred option, and click Book & Pay. You will receive a digital QR ticket valid for 24 hours.",
+    question: t("support.faqs.book.q"),
+    answer: t("support.faqs.book.a"),
   },
   {
-    question: "What payment methods are accepted?",
-    answer:
-      "We accept InstaPay, credit/debit cards, Apple Pay, and cash payment on board for select routes.",
+    question: t("support.faqs.payment.q"),
+    answer: t("support.faqs.payment.a"),
   },
   {
-    question: "Can I use the app offline?",
-    answer:
-      "Yes. Download routes for offline use from the Saved & History section.",
+    question: t("support.faqs.offline.q"),
+    answer: t("support.faqs.offline.a"),
   },
   {
-    question: "What is AI Trip Planner?",
-    answer:
-      "AI Trip Planner creates complete day itineraries based on your budget and interests.",
+    question: t("support.faqs.aiPlanner.q"),
+    answer: t("support.faqs.aiPlanner.a"),
   },
-];
+]);
 
 function topicClass(option: string) {
   return [
@@ -489,11 +495,11 @@ onMounted(async () => {
 
 async function submit() {
   errorMessage.value = "";
-  errors.name = form.name.trim() ? "" : "Please enter your name";
+  errors.name = form.name.trim() ? "" : t("support.errors.name");
   errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
     ? ""
-    : "Please enter a valid email";
-  errors.message = form.message.trim() ? "" : "Please enter a message";
+    : t("support.errors.email");
+  errors.message = form.message.trim() ? "" : t("support.errors.message");
 
   if (errors.name || errors.email || errors.message) return;
 
@@ -512,17 +518,17 @@ async function submit() {
         userId: currentUserId.value || undefined,
         name: form.name.trim(),
         email: form.email.trim(),
-        subject: form.subject.trim() || topic.value,
+        subject: form.subject.trim() || t(`support.topics.${topic.value}`),
         message: form.message.trim(),
       }),
     });
     const data = await response.json().catch(() => null);
     if (!response.ok)
-      throw new Error(data?.error?.message || "Failed to send message");
+      throw new Error(data?.error?.message || t("support.errors.failed"));
     submitted.value = true;
   } catch (err) {
     errorMessage.value =
-      err instanceof Error ? err.message : "Failed to send message";
+      err instanceof Error ? err.message : t("support.errors.failed");
   } finally {
     sending.value = false;
   }
@@ -530,7 +536,7 @@ async function submit() {
 
 function resetForm() {
   submitted.value = false;
-  topic.value = "General";
+  topic.value = "general";
   form.name = "";
   form.email = "";
   form.subject = "";

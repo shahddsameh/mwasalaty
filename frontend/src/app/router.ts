@@ -20,6 +20,7 @@ import ResetPassword from "../features/auth/pages/ResetPassword.vue";
 import Profile from "../features/account/pages/Profile.vue";
 import Settings from "../features/account/pages/Settings.vue";
 import Support from "../features/account/pages/Support.vue";
+import About from "../features/info/pages/About.vue";
 import AllTickets from "../features/tickets/pages/AllTickets.vue";
 import OperatorScan from "../features/operator/pages/OperatorScan.vue";
 import AdminDashboard from "../features/admin/pages/AdminDashboard.vue";
@@ -93,6 +94,7 @@ const router = createRouter({
       component: Settings,
     },
     { path: "/support", name: "support", component: Support },
+    { path: "/about", name: "about", component: About },
     { path: "/admin/login", name: "admin-login", component: AdminLogin },
     { path: "/admin", name: "admin", component: AdminDashboard, meta: { requiresAdmin: true } },
     { path: "/admin/:section", name: "admin-section", component: AdminDashboard, meta: { requiresAdmin: true } },
@@ -125,8 +127,8 @@ router.beforeEach(async (to) => {
   if (isAuthenticated.value && !to.path.startsWith("/admin") && !allowsBlockedUser) {
     const status = await getUserStatus();
     if (status.blocked === true) {
-      alert("Your account has been blocked due to suspicious activity or policy violations. You can contact support if you believe this is a mistake.");
-      return { path: "/support" };
+      window.dispatchEvent(new CustomEvent("mwasalaty:user-blocked"));
+      return false;
     }
   }
 

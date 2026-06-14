@@ -26,7 +26,7 @@
             class="rounded-xl border px-4 py-2 text-sm font-semibold transition-all"
             :class="
               activeTab === tab.value
-                ? 'border-[#FFC400] bg-[#FFC400] text-[#111827]'
+                ? 'border-[#FFC400] bg-[#FFC400] text-[#ffffff]'
                 : 'border-white/10 bg-[#0F172A] text-[#94A3B8] hover:border-[#FFC400] hover:text-[#F8FAFC]'
             "
             @click="activeTab = tab.value"
@@ -121,7 +121,7 @@
             </thead>
             <tbody class="divide-y divide-white/10">
               <tr
-                v-for="route in filteredRoutes"
+                v-for="route in paginatedRoutes"
                 :key="routeKey(route)"
                 class="hover:bg-[#0F172A] transition-colors"
               >
@@ -151,6 +151,11 @@
             </tbody>
           </table>
         </div>
+        <AdminPagination
+          v-model:page="routePage"
+          :total-items="filteredRoutes.length"
+          :page-size="pageSize"
+        />
       </div>
 
       <div
@@ -210,7 +215,7 @@
             </thead>
             <tbody class="divide-y divide-white/10">
               <tr
-                v-for="item in filteredSearches"
+                v-for="item in paginatedSearches"
                 :key="searchKey(item)"
                 class="hover:bg-[#0F172A] transition-colors"
               >
@@ -246,6 +251,11 @@
             </tbody>
           </table>
         </div>
+        <AdminPagination
+          v-model:page="searchPage"
+          :total-items="filteredSearches.length"
+          :page-size="pageSize"
+        />
       </div>
 
       <div
@@ -635,9 +645,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, onMounted, ref } from "vue";
+import { computed, defineComponent, h, onMounted, ref, watch } from "vue";
 import { RefreshCw, Route as RouteIcon, Search } from "@lucide/vue";
 import { Card, StatCard } from "../components/AdminShared.vue";
+import AdminPagination from "../components/AdminPagination.vue";
 import {
   getTransitRouteDetails,
   listRouteSearches,
@@ -691,6 +702,9 @@ const loading = ref(true);
 const detailsLoading = ref(false);
 const detailsError = ref("");
 const error = ref("");
+const routePage = ref(1);
+const searchPage = ref(1);
+const pageSize = 10;
 
 const routeTabs = [
   { value: "transit", label: "Transit Routes" },
@@ -734,14 +748,18 @@ const Info = defineComponent({
   props: { label: String, value: [String, Number] },
   setup(props) {
     return () =>
-      h("div", { class: "rounded-xl border border-white/10 bg-[#0F172A] p-3" }, [
-        h("div", { class: "text-xs text-[#94A3B8]" }, props.label),
-        h(
-          "div",
-          { class: "mt-1 font-semibold text-[#F8FAFC]" },
-          String(props.value ?? "-"),
-        ),
-      ]);
+      h(
+        "div",
+        { class: "rounded-xl border border-white/10 bg-[#0F172A] p-3" },
+        [
+          h("div", { class: "text-xs text-[#94A3B8]" }, props.label),
+          h(
+            "div",
+            { class: "mt-1 font-semibold text-[#F8FAFC]" },
+            String(props.value ?? "-"),
+          ),
+        ],
+      );
   },
 });
 
@@ -985,6 +1003,27 @@ const filteredSearches = computed(() => {
         .includes(q),
     ),
   );
+});
+const paginatedRoutes = computed(() =>
+  filteredRoutes.value.slice(
+    (routePage.value - 1) * pageSize,
+    routePage.value * pageSize,
+  ),
+);
+const paginatedSearches = computed(() =>
+  filteredSearches.value.slice(
+    (searchPage.value - 1) * pageSize,
+    searchPage.value * pageSize,
+  ),
+);
+
+watch([search, selectedMode], () => {
+  routePage.value = 1;
+  searchPage.value = 1;
+});
+watch(activeTab, () => {
+  routePage.value = 1;
+  searchPage.value = 1;
 });
 
 async function loadData() {

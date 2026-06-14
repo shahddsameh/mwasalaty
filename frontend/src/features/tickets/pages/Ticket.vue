@@ -7,7 +7,7 @@
         class="bg-card rounded-2xl border-2 border-border p-12 text-center max-w-md mx-auto"
       >
         <Loader2 class="w-8 h-8 text-primary animate-spin mx-auto mb-4" />
-        <p class="text-muted-foreground">Loading your ticket…</p>
+        <p class="text-muted-foreground">{{ t("ticketView.loading") }}</p>
       </div>
 
       <!-- Not found -->
@@ -16,10 +16,12 @@
         class="bg-card rounded-2xl border-2 border-border p-12 text-center max-w-md mx-auto"
       >
         <AlertTriangle class="w-8 h-8 text-destructive mx-auto mb-4" />
-        <h1 class="font-display text-xl text-foreground mb-2">Ticket not found</h1>
+        <h1 class="font-display text-xl text-foreground mb-2">
+          {{ t("ticketView.notFoundTitle") }}
+        </h1>
         <p class="text-muted-foreground mb-6">{{ errorMessage }}</p>
         <AppButton class="w-full" @click="router.replace('/all-tickets')">
-          View all tickets
+          {{ t("ticketView.viewAllTickets") }}
         </AppButton>
       </div>
 
@@ -30,11 +32,11 @@
             class="flex items-center gap-2 text-foreground hover:text-primary mb-6"
             @click="router.push('/all-tickets')"
           >
-            <ArrowLeft class="w-5 h-5" /> All Tickets
+            <ArrowLeft class="w-5 h-5" /> {{ t("ticketView.allTickets") }}
           </button>
 
           <p class="text-success font-display mb-4">
-            Payment completed. Your trip ticket is ready.
+            {{ t("ticketView.paymentCompleted") }}
           </p>
 
           <div class="bg-card rounded-2xl overflow-hidden border-2 border-border">
@@ -45,7 +47,9 @@
                 <h1 class="font-display text-2xl md:text-3xl text-foreground">
                   Mwasalaty
                 </h1>
-                <p class="text-foreground">Digital Transport Ticket</p>
+                <p class="text-foreground">
+                  {{ t("ticketView.digitalTransportTicket") }}
+                </p>
               </div>
               <span
                 class="px-4 py-2 rounded-full flex items-center gap-2"
@@ -69,27 +73,29 @@
                 <QrCode v-else class="w-48 h-48 md:w-64 md:h-64 text-foreground" />
               </button>
               <p class="text-sm text-foreground text-center">
-                Show this QR to the operator scanner.
+                {{ t("ticketView.showQr") }}
               </p>
               <div
                 class="font-mono text-base md:text-xl text-foreground text-center break-all mt-3"
               >
                 {{ ticket.ticketId }}
               </div>
-              <p class="text-sm text-muted-foreground mt-1">Ticket ID</p>
+              <p class="text-sm text-muted-foreground mt-1">
+                {{ t("ticketView.ticketId") }}
+              </p>
             </div>
 
             <div
               class="px-4 md:px-8 py-6 bg-surface-dark text-surface-dark-foreground"
             >
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <Field label="Passenger" :value="ticket.passenger?.name || 'Guest'" />
-                <Field label="Total Fare" :value="`${ticket.payment.amount} ${ticket.payment.currency}`" gold />
-                <Field label="Payment" :value="paymentLabel" />
-                <Field label="Valid Until" :value="validUntil" />
+                <Field :label="t('ticketView.passenger')" :value="ticket.passenger?.name || t('ticketView.guest')" />
+                <Field :label="t('ticketView.totalFare')" :value="`${ticket.payment.amount} ${ticket.payment.currency}`" gold />
+                <Field :label="t('ticketView.payment')" :value="paymentLabel" />
+                <Field :label="t('ticketView.validUntil')" :value="validUntil" />
                 <Field
                   v-if="departsAt"
-                  label="Scheduled Departure"
+                  :label="t('ticketView.scheduledDeparture')"
                   :value="departsAt"
                 />
               </div>
@@ -98,9 +104,11 @@
             <div
               class="px-4 md:px-8 py-6 bg-surface-dark text-surface-dark-foreground border-t border-surface-dark-border"
             >
-              <h3 class="font-display text-lg mb-1">Trip legs</h3>
+              <h3 class="font-display text-lg mb-1">
+                {{ t("ticketView.tripLegs") }}
+              </h3>
               <p class="text-sm text-surface-dark-foreground/70 mb-4">
-                Each leg will be marked as used after scanning.
+                {{ t("ticketView.tripLegsDesc") }}
               </p>
               <div class="space-y-3">
                 <div
@@ -119,7 +127,7 @@
                     :class="legStatusClass(leg.status)"
                   >
                     <component :is="legStatusIcon(leg.status)" class="w-3.5 h-3.5" />
-                    {{ leg.status }}
+                    {{ t(`tickets.legStatus.${leg.status}`) }}
                   </span>
                 </div>
               </div>
@@ -132,44 +140,47 @@
                 class="flex items-center justify-center gap-2"
                 @click="router.push('/live-navigation')"
               >
-                <Navigation class="w-5 h-5" /> Start Navigation
+                <Navigation class="w-5 h-5" /> {{ t("ticketView.startNavigation") }}
               </AppButton>
               <AppButton
                 variant="ghost"
                 class="text-surface-dark-foreground border-surface-dark-border hover:bg-surface-dark-muted flex items-center justify-center gap-2"
                 @click="router.push('/all-tickets')"
               >
-                View All Tickets
+                {{ t("ticketView.viewAllTickets") }}
               </AppButton>
             </div>
           </div>
         </section>
 
         <aside class="space-y-6">
-          <InfoCard title="How to Use">
+          <InfoCard :title="t('ticketView.howToUse')">
             <ol class="space-y-3 text-sm text-muted-foreground">
-              <li>1. Show the QR code to the operator scanner.</li>
-              <li>2. Each leg is marked as used after it is scanned.</li>
+              <li>{{ t("ticketView.step1") }}</li>
+              <li>{{ t("ticketView.step2") }}</li>
               <li>
-                3. The ticket is valid for 24 hours from
-                {{ departsAt ? "your scheduled departure" : "booking" }}.
+                {{
+                  departsAt
+                    ? t("ticketView.step3FromDeparture")
+                    : t("ticketView.step3FromBooking")
+                }}
               </li>
-              <li>4. Works offline — keep this screen handy during your trip.</li>
+              <li>{{ t("ticketView.step4") }}</li>
             </ol>
           </InfoCard>
-          <InfoCard title="Quick Actions">
+          <InfoCard :title="t('ticketView.quickActions')">
             <div class="space-y-2">
               <AppButton
                 variant="outline"
                 class="w-full justify-start"
                 @click="router.push('/all-tickets')"
-                >View All Tickets</AppButton
+                >{{ t("ticketView.viewAllTickets") }}</AppButton
               >
               <AppButton
                 variant="outline"
                 class="w-full justify-start"
                 @click="router.push('/support')"
-                >Contact Support</AppButton
+                >{{ t("ticketView.contactSupport") }}</AppButton
               >
             </div>
           </InfoCard>
@@ -197,6 +208,7 @@
 <script setup lang="ts">
 import { computed, defineComponent, h, onMounted, onUnmounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import QRCode from "qrcode";
 import {
   AlertTriangle,
@@ -218,10 +230,11 @@ import { db } from "@/db/appDb";
 
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n();
 
 const ticket = ref<Ticket | null>(null);
 const loading = ref(true);
-const errorMessage = ref("This ticket could not be found. It may have expired.");
+const errorMessage = ref(t("ticketView.notFoundDefault"));
 const qrDataUrl = ref("");
 const qrModalOpen = ref(false);
 let stopTicketUpdates: (() => void) | undefined;
@@ -262,7 +275,7 @@ onMounted(async () => {
           ticket.value = stored;
         } else {
           errorMessage.value =
-            err instanceof Error ? err.message : "This ticket could not be found.";
+            err instanceof Error ? err.message : t("ticketView.notFoundDefault");
         }
       }
     }
@@ -299,13 +312,13 @@ onUnmounted(() => stopTicketUpdates?.());
 const statusLabel = computed(() => {
   switch (ticket.value?.status) {
     case "used":
-      return "Used";
+      return t("ticketView.statusUsed");
     case "refunded":
-      return "Refunded";
+      return t("ticketView.statusRefunded");
     case "partially_refunded":
-      return "Partial refund";
+      return t("ticketView.statusPartialRefund");
     default:
-      return "Valid";
+      return t("ticketView.statusValid");
   }
 });
 
@@ -336,14 +349,17 @@ const statusIcon = computed(() => {
 const paymentLabel = computed(() => {
   const p = ticket.value?.payment;
   if (!p) return "";
-  const method = p.method === "PAYMOB_TEST" ? "PayMob (test)" : p.method;
+  const method =
+    p.method === "PAYMOB_TEST" ? t("ticketView.paymentTest") : p.method;
   return `${method} - ${p.status}`;
 });
 
 const validUntil = computed(() => {
-  if (!ticket.value?.expiresAt) return "24h from booking";
+  if (!ticket.value?.expiresAt) return t("ticketView.validFallback");
   const d = new Date(ticket.value.expiresAt);
-  return Number.isNaN(d.getTime()) ? "24h from booking" : d.toLocaleString();
+  return Number.isNaN(d.getTime())
+    ? t("ticketView.validFallback")
+    : d.toLocaleString();
 });
 
 const departsAt = computed(() => {

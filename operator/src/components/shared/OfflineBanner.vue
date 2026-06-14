@@ -1,12 +1,12 @@
 <template>
   <div
     v-if="!isOnline"
-    class="sticky top-0 z-40 mb-4 rounded-lg border border-surface-dark-border bg-surface-dark-muted px-4 py-3 text-white shadow-lg"
+    class="sticky top-0 z-[60] border-b border-surface-dark-border bg-surface-dark px-4 py-2.5 text-surface-dark-foreground shadow-lg"
     aria-live="polite"
   >
     <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3">
-      <p class="text-sm font-semibold">{{ $t("offline.banner") }}</p>
-      <span class="rounded-full bg-white/15 px-3 py-1 text-sm font-bold">
+      <p class="flex items-center gap-2 text-sm font-semibold"><AppIcon name="offline" class="h-4 w-4 text-primary" />{{ $t("offline.banner") }}</p>
+      <span class="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-contrast">
         {{ queuedLabel }}
       </span>
     </div>
@@ -18,6 +18,7 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useOnline } from "@/composables/useOnline";
 import { count } from "@/services/queue";
+import AppIcon from "@/components/ui/AppIcon.vue";
 
 const { t } = useI18n();
 const { isOnline } = useOnline();

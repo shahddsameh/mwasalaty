@@ -1,31 +1,31 @@
 <template>
   <main class="app-shell bottom-nav-offset">
     <AppNav />
-    <section class="mx-auto grid w-full max-w-5xl gap-4">
-      <header class="field-panel p-5">
-        <p class="text-sm font-bold text-muted-foreground">{{ $t("shift.title") }}</p>
-        <h1 class="mt-2 text-3xl font-black">{{ displayProfile(profile) }}</h1>
-        <p class="mt-2 text-muted-foreground">
-          {{ $t("shift.duration") }}: {{ formatDuration(session?.startedAt, session?.endedAt) }}
-        </p>
-      </header>
+    <section class="mx-auto grid w-full max-w-5xl gap-5">
+      <OperatorHeader
+        :eyebrow="$t('shift.title')"
+        :title="displayProfile(profile)"
+        :subtitle="$t('shift.success')"
+        :status="$t('shift.duration')"
+        :meta="formatDuration(session?.startedAt, session?.endedAt)"
+        icon="summary"
+      />
 
-      <p v-if="queuedCount > 0" class="rounded-lg border border-warning bg-warning-soft p-4 font-bold text-warning">
-        {{ $t("shift.unsyncedWarning", { count: queuedCount }) }}
+      <p v-if="queuedCount > 0" class="soft-alert border-warning bg-warning-soft text-warning">
+        <AppIcon name="warning" class="h-5 w-5 shrink-0" />{{ $t("shift.unsyncedWarning", { count: queuedCount }) }}
       </p>
 
-      <p v-if="!session" class="field-panel p-4 text-center text-muted-foreground">{{ $t("shift.empty") }}</p>
+      <p v-if="!session" class="soft-alert border-border bg-card text-muted-foreground"><AppIcon name="history" class="h-5 w-5 shrink-0" />{{ $t("shift.empty") }}</p>
 
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <article v-for="outcome in outcomes" :key="outcome" class="field-panel p-4">
-          <p class="text-sm font-bold text-muted-foreground">{{ $t(`dashboard.counts.${outcome}`) }}</p>
-          <strong class="mt-2 block text-3xl">{{ session?.tally[outcome] ?? 0 }}</strong>
-        </article>
+      <div class="grid grid-cols-2 gap-3 lg:grid-cols-3">
+        <OutcomeCard v-for="outcome in outcomes" :key="outcome" :outcome="outcome" :label="$t(`dashboard.counts.${outcome}`)" :value="session?.tally[outcome] ?? 0" />
       </div>
 
-      <AppButton size="xl" variant="danger" @click="finishShift">
-        {{ $t("shift.end") }}
-      </AppButton>
+      <section class="section-card border-destructive/20">
+        <h2 class="section-heading">{{ $t("shift.end") }}</h2>
+        <p class="mt-2 text-sm leading-6 text-muted-foreground">{{ $t("shift.offline") }}</p>
+        <AppButton class="mt-5 w-full gap-2" size="lg" variant="danger" @click="finishShift"><AppIcon name="logout" class="h-5 w-5" />{{ $t("shift.end") }}</AppButton>
+      </section>
     </section>
   </main>
 </template>
@@ -35,6 +35,9 @@ import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import AppNav from "@/components/shared/AppNav.vue";
 import AppButton from "@/components/ui/AppButton.vue";
+import AppIcon from "@/components/ui/AppIcon.vue";
+import OperatorHeader from "@/components/shared/OperatorHeader.vue";
+import OutcomeCard from "@/components/shared/OutcomeCard.vue";
 import { OUTCOMES } from "@/services/outcome";
 import { count } from "@/services/queue";
 import { clearSelectedProfile, clearSessionView, endShift, getSelectedProfile, getSession } from "@/services/session";

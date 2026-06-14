@@ -105,7 +105,7 @@
   --primary: #ffb302;
   --primary-hover: #f5740b;
   --primary-soft: #fef3c7;
-  --primary-foreground: #e2e8f0;
+  --primary-foreground: #ffffff;
   --secondary: #01193d;
   --secondary-foreground: #e2e8f0;
   --muted: #011737;
@@ -147,7 +147,7 @@
   --chart-5: #cbd5e1;
   --sidebar: #020620;
   --sidebar-foreground: #e2e8f0;
-  --sidebar-primary: #fbbf24;
+  --sidebar-primary: #ffb302;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #030a35;
   --sidebar-accent-foreground: #e2e8f0;
@@ -296,6 +296,16 @@
     font-size: var(--text-base);
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
+  }
+
+  .dark input[type="date"] {
+    color-scheme: dark;
+  }
+
+  .dark input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: brightness(0) invert(1);
+    opacity: 1;
   }
 
   ::selection {

@@ -48,17 +48,42 @@
           {{ loading ? "Loading..." : "Refresh" }}
         </button>
       </div>
-      <div class="grid gap-3 border-b border-white/10 p-4 md:grid-cols-2 lg:grid-cols-4">
-        <input v-model="search" type="search" placeholder="Search ticket, user, or route..." class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-[#F8FAFC] placeholder:text-[#64748B] focus:border-[#FFC400] focus:outline-none" />
-        <select v-model="statusFilter" class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-[#F8FAFC] focus:border-[#FFC400] focus:outline-none">
+      <div
+        class="grid gap-3 border-b border-white/10 p-4 md:grid-cols-2 lg:grid-cols-4"
+      >
+        <input
+          v-model="search"
+          type="search"
+          placeholder="Search ticket, user, or route..."
+          class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-[#F8FAFC] placeholder:text-[#64748B] focus:border-[#FFC400] focus:outline-none"
+        />
+        <select
+          v-model="statusFilter"
+          class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-[#F8FAFC] focus:border-[#FFC400] focus:outline-none"
+        >
           <option value="all">All statuses</option>
-          <option v-for="status in statusOptions" :key="status" :value="status">{{ status }}</option>
+          <option v-for="status in statusOptions" :key="status" :value="status">
+            {{ status }}
+          </option>
         </select>
-        <select v-model="paymentMethodFilter" class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-[#F8FAFC] focus:border-[#FFC400] focus:outline-none">
+        <select
+          v-model="paymentMethodFilter"
+          class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-[#F8FAFC] focus:border-[#FFC400] focus:outline-none"
+        >
           <option value="all">All payment methods</option>
-          <option v-for="method in paymentMethodOptions" :key="method" :value="method">{{ method }}</option>
+          <option
+            v-for="method in paymentMethodOptions"
+            :key="method"
+            :value="method"
+          >
+            {{ method }}
+          </option>
         </select>
-        <input v-model="dateFilter" type="date" class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-[#F8FAFC] focus:border-[#FFC400] focus:outline-none" />
+        <input
+          v-model="dateFilter"
+          type="date"
+          class="rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-[#F8FAFC] focus:border-[#FFC400] focus:outline-none"
+        />
       </div>
       <div v-if="loading" class="py-16 text-center text-sm text-[#94A3B8]">
         Loading tickets...
@@ -146,11 +171,18 @@
                 <td class="px-4 py-3 text-[#94A3B8] truncate max-w-[420px]">
                   {{ routeText(ticket) }}
                 </td>
-                <td class="px-4 py-3 text-[#94A3B8] whitespace-nowrap">
-                  {{ ticket.status || "-" }}
+                <td class="px-4 py-3 text-[#94A3B8]">
+                  <div class="w-full truncate" :title="ticket.status || '-'">
+                    {{ ticket.status || "-" }}
+                  </div>
                 </td>
-                <td class="px-4 py-3 text-[#94A3B8] whitespace-nowrap">
-                  {{ ticket.paymentStatus || "-" }}
+                <td class="px-4 py-3 text-[#94A3B8]">
+                  <div
+                    class="w-full truncate"
+                    :title="ticket.paymentStatus || '-'"
+                  >
+                    {{ ticket.paymentStatus || "-" }}
+                  </div>
                 </td>
                 <td class="px-4 py-3 text-[#94A3B8]">
                   <div class="flex flex-col">
@@ -187,7 +219,11 @@
             </tbody>
           </table>
         </div>
-        <AdminPagination v-model:page="page" :total-items="filteredTickets.length" :page-size="pageSize" />
+        <AdminPagination
+          v-model:page="page"
+          :total-items="filteredTickets.length"
+          :page-size="pageSize"
+        />
       </div>
     </Card>
 
@@ -242,19 +278,47 @@ const filteredTickets = computed(() => {
   const query = search.value.trim().toLowerCase();
   return tickets.value.filter((ticket) => {
     const status = transactionStatus(ticket);
-    const searchable = [ticket.ticketId, ticket.userName, ticket.userId, ticket.route, ticket.from, ticket.to, ticket.status, ticket.paymentStatus, paymentMethod(ticket)].join(" ").toLowerCase();
-    return (!query || searchable.includes(query)) &&
+    const searchable = [
+      ticket.ticketId,
+      ticket.userName,
+      ticket.userId,
+      ticket.route,
+      ticket.from,
+      ticket.to,
+      ticket.status,
+      ticket.paymentStatus,
+      paymentMethod(ticket),
+    ]
+      .join(" ")
+      .toLowerCase();
+    return (
+      (!query || searchable.includes(query)) &&
       (statusFilter.value === "all" || status === statusFilter.value) &&
-      (paymentMethodFilter.value === "all" || paymentMethod(ticket) === paymentMethodFilter.value) &&
-      (!dateFilter.value || createdDate(ticket) === dateFilter.value);
+      (paymentMethodFilter.value === "all" ||
+        paymentMethod(ticket) === paymentMethodFilter.value) &&
+      (!dateFilter.value || createdDate(ticket) === dateFilter.value)
+    );
   });
 });
-const paginatedTickets = computed(() => filteredTickets.value.slice((page.value - 1) * pageSize, page.value * pageSize));
+const paginatedTickets = computed(() =>
+  filteredTickets.value.slice(
+    (page.value - 1) * pageSize,
+    page.value * pageSize,
+  ),
+);
 
-watch([search, statusFilter, paymentMethodFilter, dateFilter], () => { page.value = 1; });
-watch(() => filteredTickets.value.length, () => {
-  page.value = Math.min(page.value, Math.max(1, Math.ceil(filteredTickets.value.length / pageSize)));
+watch([search, statusFilter, paymentMethodFilter, dateFilter], () => {
+  page.value = 1;
 });
+watch(
+  () => filteredTickets.value.length,
+  () => {
+    page.value = Math.min(
+      page.value,
+      Math.max(1, Math.ceil(filteredTickets.value.length / pageSize)),
+    );
+  },
+);
 
 function formatDateParts(value?: string) {
   if (!value) return ["-", ""];

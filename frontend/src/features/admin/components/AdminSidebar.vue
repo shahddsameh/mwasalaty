@@ -6,7 +6,7 @@
     <div class="px-6 py-6 border-b border-sidebar-border">
       <div class="flex items-center gap-3">
         <div
-          class="w-10 h-10 rounded-xl bg-[#FFC400] flex items-center justify-center text-[#111827] text-xl font-bold"
+          class="w-10 h-10 rounded-xl bg-[#FFC400] flex items-center justify-center text-[#ffffff] text-xl font-bold"
         >
           M
         </div>
@@ -32,7 +32,7 @@
           :class="[
             'w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all',
             active === item.page
-              ? 'bg-sidebar-primary text-[#111827] shadow-sm'
+              ? 'bg-sidebar-primary text-[#ffffff] shadow-sm'
               : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
           ]"
         >
@@ -45,7 +45,9 @@
     <!-- Footer -->
     <div class="px-6 py-4 border-t border-sidebar-border">
       <p class="text-xs text-sidebar-foreground/60">Mwaslaty Admin v1.0.0</p>
-      <p class="text-xs text-sidebar-foreground/45 mt-0.5">Cairo Transport System</p>
+      <p class="text-xs text-sidebar-foreground/45 mt-0.5">
+        Cairo Transport System
+      </p>
     </div>
   </aside>
 </template>

@@ -13,7 +13,9 @@
           aria-hidden="true"
         />
 
-        <div class="relative grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:p-12">
+        <div
+          class="relative grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:p-12"
+        >
           <div class="max-w-2xl text-start">
             <div
               class="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary-soft px-3 py-1.5 text-sm font-semibold text-primary-hover"
@@ -23,18 +25,20 @@
             </div>
 
             <h1
-              class="font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl lg:text-5xl"
+              class="font-display text-xl font-semibold leading-tight text-foreground sm:text-2xl lg:text-3xl"
             >
               {{ t("home.hero.title") }}
             </h1>
-            <p class="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
+            <p
+              class="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg"
+            >
               {{ t("home.hero.description") }}
             </p>
 
             <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
               <a
                 href="#route-planner"
-                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 font-semibold text-[#111827] shadow-sm transition-colors hover:bg-primary-hover hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 <MapPinned class="h-5 w-5" />
                 {{ t("home.hero.planRoute") }}
@@ -42,7 +46,7 @@
               </a>
               <RouterLink
                 to="/ai-assistant"
-                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 py-3 font-semibold text-foreground transition-colors hover:border-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-primary bg-gradient-to-br from-primary-soft via-warning-soft to-primary px-5 py-3 font-semibold text-primary-hover transition-colors hover:border-primary-hover hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 <Sparkles class="h-5 w-5 text-primary-hover" />
                 {{ t("home.hero.askAi") }}
@@ -66,7 +70,9 @@
           </div>
 
           <div class="mx-auto w-full max-w-lg lg:mx-0 lg:ms-auto">
-            <div class="rounded-2xl border border-border bg-background/80 p-4 shadow-sm backdrop-blur sm:p-5">
+            <div
+              class="rounded-2xl border border-border bg-background/80 p-4 shadow-sm backdrop-blur sm:p-5"
+            >
               <div class="mb-5 flex items-center justify-between gap-3">
                 <div>
                   <p class="text-sm font-semibold text-foreground">
@@ -76,7 +82,9 @@
                     {{ t("home.hero.visualSubtitle") }}
                   </p>
                 </div>
-                <span class="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary-hover">
+                <span
+                  class="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary-hover"
+                >
                   <MapPinned class="h-5 w-5" />
                 </span>
               </div>
@@ -84,28 +92,44 @@
               <div class="rounded-xl border border-border bg-card p-4">
                 <div class="grid grid-cols-[auto_1fr] gap-x-3">
                   <div class="flex flex-col items-center">
-                    <span class="mt-1 h-3 w-3 rounded-full border-[3px] border-primary bg-card" />
+                    <span
+                      class="mt-1 h-3 w-3 rounded-full border-[3px] border-primary bg-card"
+                    />
                     <span class="my-1 min-h-10 w-px flex-1 bg-border" />
                     <span class="h-3 w-3 rounded-full bg-accent" />
                   </div>
                   <div class="space-y-5">
                     <div>
-                      <p class="text-xs text-muted-foreground">{{ t("home.hero.from") }}</p>
-                      <p class="mt-0.5 font-medium text-foreground">{{ t("home.hero.fromPlace") }}</p>
+                      <p class="text-xs text-muted-foreground">
+                        {{ t("home.hero.from") }}
+                      </p>
+                      <p class="mt-0.5 font-medium text-foreground">
+                        {{ t("home.hero.fromPlace") }}
+                      </p>
                     </div>
                     <div>
-                      <p class="text-xs text-muted-foreground">{{ t("home.hero.to") }}</p>
-                      <p class="mt-0.5 font-medium text-foreground">{{ t("home.hero.toPlace") }}</p>
+                      <p class="text-xs text-muted-foreground">
+                        {{ t("home.hero.to") }}
+                      </p>
+                      <p class="mt-0.5 font-medium text-foreground">
+                        {{ t("home.hero.toPlace") }}
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                <div class="mt-5 flex flex-wrap items-center gap-2 border-t border-border pt-4">
-                  <span class="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-xs font-medium text-primary-hover">
+                <div
+                  class="mt-5 flex flex-wrap items-center gap-2 border-t border-border pt-4"
+                >
+                  <span
+                    class="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-xs font-medium text-primary-hover"
+                  >
                     <Train class="h-3.5 w-3.5" />
                     {{ t("home.hero.metro") }}
                   </span>
-                  <span class="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-foreground">
+                  <span
+                    class="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-foreground"
+                  >
                     <Bus class="h-3.5 w-3.5 text-transport-bus" />
                     {{ t("home.hero.bus") }}
                   </span>
@@ -128,7 +152,10 @@
         </p>
       </section>
 
-      <div id="route-planner" class="grid scroll-mt-24 grid-cols-1 gap-6 lg:grid-cols-3">
+      <div
+        id="route-planner"
+        class="grid scroll-mt-24 grid-cols-1 gap-6 lg:grid-cols-3"
+      >
         <div class="lg:col-span-2 space-y-6">
           <TripSearch />
         </div>
@@ -261,7 +288,9 @@
                 <div class="text-xs text-foreground font-medium leading-tight">
                   {{ t(dest.nameKey) }}
                 </div>
-                <div class="text-xs text-muted-foreground">{{ t(dest.areaKey) }}</div>
+                <div class="text-xs text-muted-foreground">
+                  {{ t(dest.areaKey) }}
+                </div>
               </button>
             </div>
           </Panel>
@@ -453,7 +482,8 @@ function savedPlaceLabel(place: SavedPlace) {
   if (normalized === "home") return t("home.placeTypes.home");
   if (normalized === "work") return t("home.placeTypes.work");
   if (normalized === "school") return t("home.placeTypes.school");
-  if (normalized === "gym" || place.type === "other") return t("home.placeTypes.gym");
+  if (normalized === "gym" || place.type === "other")
+    return t("home.placeTypes.gym");
   return place.name;
 }
 

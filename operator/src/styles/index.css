@@ -11,7 +11,7 @@
   --primary-hover: #ff8800;
   --primary-soft: #fef3c7;
   --primary-foreground: #ffffff;
-  --primary-contrast: #111827;
+  --primary-contrast: #ffffff;
   --secondary: #fef7e3;
   --secondary-foreground: #0f172a;
   --muted: #f1f5f9;
@@ -231,11 +231,19 @@
   }
 
   .section-heading {
-    @apply text-lg font-semibold text-foreground sm:text-xl;
+    @apply text-lg font-medium text-foreground sm:text-xl;
   }
 
   .soft-alert {
-    @apply flex items-start gap-3 rounded-2xl border p-4 text-sm font-semibold leading-6;
+    @apply flex items-start gap-3 rounded-2xl border p-4 text-sm font-medium leading-6;
+  }
+
+  /* Keep the operator UI readable without making routine labels feel heavy. */
+  .font-semibold,
+  .font-bold,
+  .font-extrabold,
+  .font-black {
+    font-weight: 500;
   }
 
   .outcome-card {

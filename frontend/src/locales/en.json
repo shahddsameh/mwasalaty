@@ -29,6 +29,25 @@
     "removeRecent": "Remove this recent search"
   },
   "home": {
+    "hero": {
+      "eyebrow": "Your smarter way around Cairo",
+      "title": "Navigate Cairo with confidence",
+      "description": "Plan clear, practical journeys across Greater Cairo with metro, buses, and local transport options in one friendly experience.",
+      "planRoute": "Plan Your Route",
+      "askAi": "Ask AI",
+      "smartRoutes": "Smarter route choices",
+      "transitModes": "Metro, bus and more",
+      "readyAnytime": "Ready when you are",
+      "visualTitle": "Your Cairo journey, simplified",
+      "visualSubtitle": "Compare transport options in one place",
+      "from": "From",
+      "fromPlace": "Tahrir Square",
+      "to": "To",
+      "toPlace": "Nasr City",
+      "metro": "Metro",
+      "bus": "Bus",
+      "sampleTime": "32 min"
+    },
     "title": "Where are you going?",
     "subtitle": "Plan your journey across Greater Cairo with multiple transport options",
     "startingPoint": "Starting point",

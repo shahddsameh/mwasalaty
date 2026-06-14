@@ -1,6 +1,124 @@
 <template>
   <main class="min-h-screen pb-20 bg-background">
     <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">
+      <section
+        class="relative mb-10 overflow-hidden rounded-2xl border border-border bg-card shadow-sm md:mb-12"
+      >
+        <div
+          class="pointer-events-none absolute -end-20 -top-24 h-64 w-64 rounded-full bg-primary/15 blur-3xl"
+          aria-hidden="true"
+        />
+        <div
+          class="pointer-events-none absolute -bottom-28 start-1/3 h-56 w-56 rounded-full bg-accent/10 blur-3xl"
+          aria-hidden="true"
+        />
+
+        <div class="relative grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:p-12">
+          <div class="max-w-2xl text-start">
+            <div
+              class="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary-soft px-3 py-1.5 text-sm font-semibold text-primary-hover"
+            >
+              <Route class="h-4 w-4" />
+              {{ t("home.hero.eyebrow") }}
+            </div>
+
+            <h1
+              class="font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl lg:text-5xl"
+            >
+              {{ t("home.hero.title") }}
+            </h1>
+            <p class="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
+              {{ t("home.hero.description") }}
+            </p>
+
+            <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <a
+                href="#route-planner"
+                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 font-semibold text-[#111827] shadow-sm transition-colors hover:bg-primary-hover hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
+                <MapPinned class="h-5 w-5" />
+                {{ t("home.hero.planRoute") }}
+                <ArrowRight class="h-4 w-4 rtl:rotate-180" />
+              </a>
+              <RouterLink
+                to="/ai-assistant"
+                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 py-3 font-semibold text-foreground transition-colors hover:border-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
+                <Sparkles class="h-5 w-5 text-primary-hover" />
+                {{ t("home.hero.askAi") }}
+              </RouterLink>
+            </div>
+
+            <div class="mt-8 grid grid-cols-1 gap-3 text-sm sm:grid-cols-3">
+              <div class="flex items-center gap-2 text-muted-foreground">
+                <Route class="h-4 w-4 shrink-0 text-primary-hover" />
+                <span>{{ t("home.hero.smartRoutes") }}</span>
+              </div>
+              <div class="flex items-center gap-2 text-muted-foreground">
+                <Train class="h-4 w-4 shrink-0 text-success" />
+                <span>{{ t("home.hero.transitModes") }}</span>
+              </div>
+              <div class="flex items-center gap-2 text-muted-foreground">
+                <Clock3 class="h-4 w-4 shrink-0 text-accent" />
+                <span>{{ t("home.hero.readyAnytime") }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mx-auto w-full max-w-lg lg:mx-0 lg:ms-auto">
+            <div class="rounded-2xl border border-border bg-background/80 p-4 shadow-sm backdrop-blur sm:p-5">
+              <div class="mb-5 flex items-center justify-between gap-3">
+                <div>
+                  <p class="text-sm font-semibold text-foreground">
+                    {{ t("home.hero.visualTitle") }}
+                  </p>
+                  <p class="mt-1 text-xs text-muted-foreground">
+                    {{ t("home.hero.visualSubtitle") }}
+                  </p>
+                </div>
+                <span class="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary-hover">
+                  <MapPinned class="h-5 w-5" />
+                </span>
+              </div>
+
+              <div class="rounded-xl border border-border bg-card p-4">
+                <div class="grid grid-cols-[auto_1fr] gap-x-3">
+                  <div class="flex flex-col items-center">
+                    <span class="mt-1 h-3 w-3 rounded-full border-[3px] border-primary bg-card" />
+                    <span class="my-1 min-h-10 w-px flex-1 bg-border" />
+                    <span class="h-3 w-3 rounded-full bg-accent" />
+                  </div>
+                  <div class="space-y-5">
+                    <div>
+                      <p class="text-xs text-muted-foreground">{{ t("home.hero.from") }}</p>
+                      <p class="mt-0.5 font-medium text-foreground">{{ t("home.hero.fromPlace") }}</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-muted-foreground">{{ t("home.hero.to") }}</p>
+                      <p class="mt-0.5 font-medium text-foreground">{{ t("home.hero.toPlace") }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-5 flex flex-wrap items-center gap-2 border-t border-border pt-4">
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-xs font-medium text-primary-hover">
+                    <Train class="h-3.5 w-3.5" />
+                    {{ t("home.hero.metro") }}
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-foreground">
+                    <Bus class="h-3.5 w-3.5 text-transport-bus" />
+                    {{ t("home.hero.bus") }}
+                  </span>
+                  <span class="ms-auto text-sm font-semibold text-foreground">
+                    {{ t("home.hero.sampleTime") }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="mb-8">
         <h1 class="font-display text-2xl md:text-3xl text-foreground mb-2">
           {{ t("home.title") }}
@@ -10,7 +128,7 @@
         </p>
       </section>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div id="route-planner" class="grid scroll-mt-24 grid-cols-1 gap-6 lg:grid-cols-3">
         <div class="lg:col-span-2 space-y-6">
           <TripSearch />
         </div>
@@ -158,19 +276,25 @@ import { computed, defineComponent, h, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import {
   Briefcase,
+  ArrowRight,
+  Bus,
   Building2,
+  Clock3,
   Dumbbell,
   CastleIcon,
   Home as HomeIcon,
   Landmark,
   MapPin,
+  MapPinned,
   Plane,
   Plus,
   ShoppingBag,
   Star,
+  Sparkles,
   Train,
   Trash2,
   Triangle,
+  Route,
 } from "@lucide/vue";
 import TripSearch from "@/features/trip-planner/components/TripSearch.vue";
 import PlaceAutocomplete from "@/features/home/components/PlaceAutocomplete.vue";

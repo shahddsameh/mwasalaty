@@ -21,8 +21,10 @@ import {
   adminUsersHandler,
   adminGetSupportTicketsHandler,
   adminGetSupportTicketHandler,
+  adminJourneyFeedbackHandler,
   adminUpdateSupportTicketHandler,
   adminReplySupportTicketHandler,
+  createJourneyFeedbackHandler,
   createSupportTicketHandler,
   meStatusHandler,
 } from "../controllers/adminController.js";
@@ -34,6 +36,7 @@ router.post("/admin/login", adminLoginHandler);
 
 // Public endpoint for users to submit support tickets
 router.post("/support/tickets", createSupportTicketHandler);
+router.post("/feedback/journey", createJourneyFeedbackHandler);
 router.get("/me/status", meStatusHandler);
 
 router.use("/admin", requireAdmin);
@@ -44,6 +47,7 @@ router.post("/admin/users/:id/block", adminBlockUserHandler);
 router.post("/admin/users/:id/unblock", adminUnblockUserHandler);
 router.get("/admin/dashboard/stats", adminDashboardStatsHandler);
 router.get("/admin/notifications", adminNotificationsHandler);
+router.get("/admin/feedback/journey", adminJourneyFeedbackHandler);
 router.get("/admin/tickets", adminTicketsHandler);
 router.get("/admin/tickets/:id", adminTicketHandler);
 router.patch("/admin/tickets/:id/status", adminTicketStatusHandler);

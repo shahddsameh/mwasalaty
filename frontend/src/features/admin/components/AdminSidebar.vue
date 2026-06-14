@@ -61,6 +61,7 @@ import {
   Users,
   Settings,
   MessageCircle,
+  MessageSquareText,
 } from "@lucide/vue";
 
 defineProps<{
@@ -78,6 +79,7 @@ const navItems = [
   { page: "tickets", label: "Tickets", icon: Ticket },
   { page: "users", label: "Users", icon: Users },
   { page: "support", label: "Support", icon: MessageCircle },
+  { page: "feedback", label: "Feedback", icon: MessageSquareText },
   { page: "settings", label: "Settings", icon: Settings },
 ];
 </script>

@@ -399,8 +399,9 @@
           <button
             type="button"
             class="p-4 border-2 rounded-lg transition-all flex flex-col items-center justify-center gap-2 cursor-pointer"
-            :class="feedbackRating === 'good' ? 'border-success bg-success/15 text-success' : 'border-border hover:border-success text-foreground'"
-            @click="feedbackRating = 'good'"
+            :class="selectedFeedback === 'good' ? 'border-success bg-success/15 text-success' : 'border-border hover:border-success text-foreground'"
+            :disabled="isSubmittingFeedback || feedbackSubmitted"
+            @click="submitGoodFeedback"
           >
             <Smile class="w-6 h-6" />
             <span class="font-medium text-sm">{{ t("liveNav.goodRoute") }}</span>
@@ -408,14 +409,37 @@
           <button
             type="button"
             class="p-4 border-2 rounded-lg transition-all flex flex-col items-center justify-center gap-2 cursor-pointer"
-            :class="feedbackRating === 'bad' ? 'border-destructive bg-destructive/15 text-destructive' : 'border-border hover:border-destructive text-foreground'"
-            @click="feedbackRating = 'bad'"
+            :class="selectedFeedback === 'bad' ? 'border-destructive bg-destructive/15 text-destructive' : 'border-border hover:border-destructive text-foreground'"
+            :disabled="isSubmittingFeedback || feedbackSubmitted"
+            @click="selectBadFeedback"
           >
             <Frown class="w-6 h-6" />
             <span class="font-medium text-sm">{{ t("liveNav.issuesBad") }}</span>
           </button>
         </div>
-        <p v-if="feedbackRating" class="text-sm text-success animate-fade-in font-display font-medium">
+        <div v-if="selectedFeedback === 'bad' && !feedbackSubmitted" class="space-y-2 text-left animate-fade-in">
+          <textarea
+            v-model="issueMessage"
+            rows="4"
+            class="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+            :placeholder="t('liveNav.issuePlaceholder')"
+            :disabled="isSubmittingFeedback"
+          />
+          <p v-if="feedbackError" class="text-sm text-destructive">
+            {{ feedbackError }}
+          </p>
+          <AppButton
+            class="w-full"
+            :disabled="isSubmittingFeedback"
+            @click="submitBadFeedback"
+          >
+            {{ isSubmittingFeedback ? t("liveNav.submittingFeedback") : t("liveNav.submitIssue") }}
+          </AppButton>
+        </div>
+        <p v-else-if="feedbackError" class="text-sm text-destructive">
+          {{ feedbackError }}
+        </p>
+        <p v-if="feedbackSubmitted" class="text-sm text-success animate-fade-in font-display font-medium">
           {{ t("liveNav.feedbackThanks") }}
         </p>
         <AppButton class="w-full" @click="router.push('/')"
@@ -463,7 +487,7 @@ import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
 import TicketPreview from "@/features/tickets/components/TicketPreview.vue";
 import type { ApiRouteOption, RouteDetailStep, Ticket as TicketData } from "@/services/api";
-import { getTicket, subscribeToTicket } from "@/services/api";
+import { getTicket, submitJourneyFeedback, subscribeToTicket } from "@/services/api";
 import { readCurrentTicket, storeCurrentTicket } from "@/services/currentTicket";
 import {
   getSavedRouteSearch,
@@ -523,12 +547,15 @@ saveRouteSearch({ start, destination, filter });
 const isOnline = ref(true);
 const currentStepIndex = ref(readSavedStepIndex());
 const endModalOpen = ref(false);
-// TODO: Wire feedback modal to backend submission when an API is ready.
 const feedbackModalOpen = ref(false);
 const ticketModalOpen = ref(false);
 const currentTicket = ref<TicketData | null>(matchingNavigationTicket(readCurrentTicket()));
 const showStepsSheet = ref(false);
-const feedbackRating = ref<"good" | "bad" | null>(null);
+const selectedFeedback = ref<"good" | "bad" | null>(null);
+const issueMessage = ref("");
+const isSubmittingFeedback = ref(false);
+const feedbackSubmitted = ref(false);
+const feedbackError = ref<string | null>(null);
 const lastAutoAdvanceAt = ref(0);
 let stopTicketUpdates: (() => void) | undefined;
 const labels = computed(() => ({
@@ -639,6 +666,7 @@ function next() {
   else {
     // Trip complete — don't resume this route on the next visit.
     clearNavigationProgress();
+    resetFeedbackState();
     feedbackModalOpen.value = true;
   }
 }
@@ -705,6 +733,65 @@ async function openTicketModal() {
   } catch {
     // Keep the matching cached ticket available when offline or the refresh fails.
   }
+}
+
+function resetFeedbackState() {
+  selectedFeedback.value = null;
+  issueMessage.value = "";
+  isSubmittingFeedback.value = false;
+  feedbackSubmitted.value = false;
+  feedbackError.value = null;
+}
+
+function selectBadFeedback() {
+  selectedFeedback.value = "bad";
+  feedbackError.value = null;
+}
+
+function feedbackPayload(rating: "good" | "bad", message: string | null) {
+  return {
+    userId: currentTicket.value?.passenger?.userId ?? null,
+    routeId: route.id || null,
+    tripId: route.itineraryId || route.id || null,
+    ticketId: currentTicket.value?.ticketId ?? null,
+    origin: start,
+    destination,
+    rating,
+    issueMessage: message,
+    routeSummary: route.summary || null,
+    transportModes: Array.from(
+      new Set((route.legs ?? []).map((leg) => String(leg.mode || "")).filter(Boolean)),
+    ),
+  };
+}
+
+async function submitFeedback(rating: "good" | "bad", message: string | null) {
+  if (isSubmittingFeedback.value || feedbackSubmitted.value) return;
+  selectedFeedback.value = rating;
+  feedbackError.value = null;
+  isSubmittingFeedback.value = true;
+  try {
+    await submitJourneyFeedback(feedbackPayload(rating, message));
+    feedbackSubmitted.value = true;
+  } catch (err) {
+    feedbackError.value =
+      err instanceof Error ? err.message : t("liveNav.feedbackSubmitError");
+  } finally {
+    isSubmittingFeedback.value = false;
+  }
+}
+
+function submitGoodFeedback() {
+  void submitFeedback("good", null);
+}
+
+function submitBadFeedback() {
+  const message = issueMessage.value.trim();
+  if (!message) {
+    feedbackError.value = t("liveNav.issueRequired");
+    return;
+  }
+  void submitFeedback("bad", message);
 }
 
 function modeLabel(type: string) {

@@ -145,6 +145,24 @@ export type AdminNotificationsResponse = {
   notifications: AdminNotification[];
 };
 
+export type JourneyFeedback = {
+  id: string;
+  userId?: string | null;
+  user?: string | null;
+  routeId?: string | null;
+  tripId?: string | null;
+  ticketId?: string | null;
+  origin?: string | null;
+  destination?: string | null;
+  rating: "good" | "bad";
+  issueMessage?: string | null;
+  routeSummary?: string | null;
+  transportModes?: string[];
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  raw?: unknown;
+};
+
 function token() {
   return localStorage.getItem(TOKEN_KEY) ?? "";
 }
@@ -347,4 +365,9 @@ export async function listRouteSearches() {
 
 export async function getDashboardStats() {
   return (await adminFetch("/api/admin/dashboard/stats")) as DashboardStats;
+}
+
+export async function listJourneyFeedback() {
+  const data = await adminFetch("/api/admin/feedback/journey");
+  return (data.feedback ?? []) as JourneyFeedback[];
 }

@@ -675,7 +675,7 @@
       "continueWithGoogle": "المتابعة باستخدام Google",
       "or": "أو",
       "emailAddress": "البريد الإلكتروني",
-      "emailPlaceholder": "your@email.com",
+      "emailPlaceholder": "your{'@'}email.com",
       "password": "كلمة المرور"
     },
     "login": {
@@ -824,6 +824,11 @@
     "goodRoute": "مسار جيد",
     "issuesBad": "مشاكل / سيئ",
     "feedbackThanks": "شكراً لك! ملاحظاتك تساعد في تحسين مسارات النقل في القاهرة.",
+    "issuePlaceholder": "أخبرنا بما حدث...",
+    "submitIssue": "إرسال المشكلة",
+    "submittingFeedback": "جارٍ الإرسال...",
+    "issueRequired": "يرجى توضيح المشكلة قبل الإرسال.",
+    "feedbackSubmitError": "تعذر حفظ ملاحظاتك. يرجى المحاولة مرة أخرى.",
     "returnHome": "العودة للرئيسية",
     "digitalTicketTitle": "تذكرة رقمية"
   },

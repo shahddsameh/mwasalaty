@@ -516,3 +516,35 @@ export async function refundTicket(ticketId: string, legIds?: string[]): Promise
   if (!res.ok) throw new Error(await readApiError(res));
   return (await res.json()) as RefundResult;
 }
+
+export type JourneyFeedbackRating = 'good' | 'bad';
+
+export type JourneyFeedbackPayload = {
+  userId?: string | null;
+  routeId?: string | null;
+  tripId?: string | null;
+  ticketId?: string | null;
+  origin?: string | null;
+  destination?: string | null;
+  rating: JourneyFeedbackRating;
+  issueMessage?: string | null;
+  routeSummary?: string | null;
+  transportModes?: string[];
+};
+
+export async function submitJourneyFeedback(
+  payload: JourneyFeedbackPayload,
+): Promise<{ feedback: unknown }> {
+  const session = await getCurrentSession().catch(() => null);
+  const body: JourneyFeedbackPayload = {
+    ...payload,
+    userId: payload.userId ?? session?.user?.id ?? null,
+  };
+  const res = await fetch('/api/feedback/journey', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...(await authHeader()) },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return (await res.json()) as { feedback: unknown };
+}

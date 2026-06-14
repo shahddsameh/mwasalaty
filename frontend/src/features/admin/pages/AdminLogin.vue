@@ -23,7 +23,7 @@
       <p class="mb-6 text-muted-foreground">Sign in with the backend ADMIN_SECRET.</p>
       <form class="space-y-4" @submit.prevent="submit">
         <label class="block">
-          <span class="mb-1 block text-sm">Admin secret</span>
+          <span class="mb-1 block text-sm">Admin Password</span>
           <input
             v-model="secret"
             type="password"

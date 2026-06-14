@@ -675,7 +675,7 @@
       "continueWithGoogle": "Continue with Google",
       "or": "or",
       "emailAddress": "Email Address",
-      "emailPlaceholder": "your@email.com",
+      "emailPlaceholder": "your{'@'}email.com",
       "password": "Password"
     },
     "login": {
@@ -824,6 +824,11 @@
     "goodRoute": "Good Route",
     "issuesBad": "Issues / Bad",
     "feedbackThanks": "Thank you! Your feedback helps improve Cairo's transit routes.",
+    "issuePlaceholder": "Tell us what went wrong...",
+    "submitIssue": "Submit issue",
+    "submittingFeedback": "Submitting...",
+    "issueRequired": "Please tell us what went wrong before submitting.",
+    "feedbackSubmitError": "Could not save your feedback. Please try again.",
     "returnHome": "Return Home",
     "digitalTicketTitle": "Digital Ticket"
   },

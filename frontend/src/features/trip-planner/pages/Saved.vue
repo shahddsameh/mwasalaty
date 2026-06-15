@@ -283,6 +283,7 @@ import Modal from "@/components/ui/Modal.vue";
 import PageTitle from "@/components/shared/PageTitle.vue";
 import PlaceAutocomplete from "@/features/home/components/PlaceAutocomplete.vue";
 import { placeSuggestions } from "@/features/home/services/placeSuggestions";
+import { resolvePlaceCoords } from "@/services/api";
 import {
   describeSavedPlace,
   makeSavedPlaceId,
@@ -699,11 +700,17 @@ async function addNewPlace() {
     return;
   }
 
+  // Resolve coordinates now so the saved place carries an exact point. Without
+  // this the AI planner would later geocode the display name ("Home") instead of
+  // the address, diverging from a manual address search.
+  const coords = await resolvePlaceCoords(address);
+
   await saveFavoritePlace({
     id: makeSavedPlaceId(name, address),
     name,
     address,
     type: newPlaceType.value,
+    ...(coords ? { lat: coords.lat, lng: coords.lng } : {}),
     createdAt: Date.now(),
   });
   newPlaceName.value = "";

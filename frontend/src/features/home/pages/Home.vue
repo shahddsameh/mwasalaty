@@ -328,6 +328,7 @@ import {
 import TripSearch from "@/features/trip-planner/components/TripSearch.vue";
 import PlaceAutocomplete from "@/features/home/components/PlaceAutocomplete.vue";
 import { placeSuggestions } from "@/features/home/services/placeSuggestions";
+import { resolvePlaceCoords } from "@/services/api";
 import { useTripSearchStore } from "@/stores/tripSearch";
 import {
   describeSavedPlace,
@@ -510,11 +511,17 @@ async function addSavedPlace() {
     return;
   }
 
+  // Resolve coordinates now so the saved place carries an exact point. Without
+  // this the AI planner would later geocode the display name ("Home") instead of
+  // the address, diverging from a manual address search.
+  const coords = await resolvePlaceCoords(address);
+
   await saveFavoritePlace({
     id: makeSavedPlaceId(name, address),
     name,
     address,
     type: newPlaceType.value,
+    ...(coords ? { lat: coords.lat, lng: coords.lng } : {}),
     createdAt: Date.now(),
   });
   closeSavePlace();

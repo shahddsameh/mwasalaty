@@ -154,7 +154,13 @@ function resolvePersonal(label: string | null): ResolvedPlace | null {
     typeof fav.lat === "number" && typeof fav.lng === "number"
       ? { lat: fav.lat, lng: fav.lng }
       : undefined;
-  return { label: fav.name, coords };
+  // With stored coords we keep the friendly name ("Home") for display and let the
+  // coords drive planning. Without them (older favorites saved before we captured
+  // coordinates), fall back to the geocodable address ("Makram Ebeid") — the name
+  // alone isn't resolvable and would send the planner a different destination than
+  // a manual address search.
+  const resolvedLabel = coords ? fav.name : fav.address?.trim() || fav.name;
+  return { label: resolvedLabel, coords };
 }
 
 // One-shot device location (triggers the browser's permission prompt).

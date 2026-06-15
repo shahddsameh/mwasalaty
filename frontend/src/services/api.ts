@@ -169,6 +169,32 @@ export async function searchPlaces(
   return data.places ?? [];
 }
 
+/**
+ * Resolve a place label/address to in-coverage coordinates via the autocomplete
+ * catalog. Prefers an exact label match, else the top-ranked result. Returns
+ * undefined when nothing matches (the caller can let the planner geocode the
+ * label later). Used at save time so favorites store coordinates and the AI
+ * planner uses the exact saved point instead of re-geocoding the display name.
+ */
+export async function resolvePlaceCoords(
+  query: string,
+): Promise<PlaceCoords | undefined> {
+  const trimmed = query.trim();
+  if (!trimmed) return undefined;
+  try {
+    const results = await searchPlaces(trimmed);
+    const norm = trimmed.toLowerCase();
+    const match =
+      results.find((place) => place.label.trim().toLowerCase() === norm) ??
+      results[0];
+    return match && typeof match.lat === 'number' && typeof match.lng === 'number'
+      ? { lat: match.lat, lng: match.lng }
+      : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export type TripWhen = {
   mode: 'now' | 'depart' | 'arrive';
   date?: string;

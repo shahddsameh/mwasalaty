@@ -3,13 +3,14 @@
     class="px-4 sm:px-6 lg:px-8 py-6 lg:py-8 space-y-5 max-w-[1440px] mx-auto"
   >
     <!-- Filters -->
-    <div class="flex flex-wrap items-center gap-3">
+    <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
       <button
         v-for="filterOption in filterOptions"
         :key="filterOption.value"
         @click="statusFilter = filterOption.value"
         :class="[
           'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+          'w-full sm:w-auto',
           statusFilter === filterOption.value
             ? 'bg-[#FFC400] text-[#ffffff]'
             : 'bg-[#1E293B] border border-white/10 text-[#94A3B8] hover:bg-[#111827] hover:text-white',
@@ -31,7 +32,7 @@
       <button
         @click="loadTickets"
         :disabled="loading || updating"
-        class="ml-auto px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-[#1E293B] border border-white/10 text-[#94A3B8] hover:bg-[#111827] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+        class="w-full px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-[#1E293B] border border-white/10 text-[#94A3B8] hover:bg-[#111827] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed sm:ml-auto sm:w-auto"
       >
         {{ loading && tickets.length ? "Refreshing..." : "Refresh" }}
       </button>
@@ -214,18 +215,18 @@
     <Teleport to="body">
       <div
         v-if="selectedTicket"
-        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4"
         @click.self="closeTicket"
       >
         <div
-          class="bg-[#1E293B] rounded-2xl border border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+          class="bg-[#1E293B] rounded-2xl border border-white/10 max-w-2xl w-full max-h-[calc(100dvh-1.5rem)] sm:max-h-[90vh] overflow-y-auto"
         >
           <!-- Modal Header -->
           <div
-            class="sticky top-0 bg-[#111827] px-6 py-4 border-b border-white/10 flex items-center justify-between"
+            class="sticky top-0 bg-[#111827] px-4 py-4 sm:px-6 border-b border-white/10 flex items-start justify-between gap-3"
           >
-            <div>
-              <h2 class="text-xl font-bold text-white">Support Ticket</h2>
+            <div class="min-w-0">
+              <h2 class="text-lg sm:text-xl font-bold text-white">Support Ticket</h2>
               <p class="text-sm text-[#9CA3AF]">ID: {{ selectedTicket.id }}</p>
             </div>
             <button
@@ -237,7 +238,7 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="p-6 space-y-6">
+          <div class="p-4 sm:p-6 space-y-6">
             <!-- Customer Info -->
             <div>
               <h3 class="text-sm font-medium text-[#9CA3AF] mb-3">

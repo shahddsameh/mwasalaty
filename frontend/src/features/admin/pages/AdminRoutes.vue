@@ -2,7 +2,7 @@
   <div
     class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5"
   >
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
       <StatCard label="Transit Routes" :value="routes.length" color="#38BDF8" />
       <StatCard
         label="Route Searches"
@@ -52,7 +52,7 @@
             </button>
           </div>
 
-          <div class="relative flex-1 min-w-[220px]">
+          <div class="relative min-w-0 flex-1 basis-full sm:basis-[220px]">
             <Search
               class="w-4 h-4 text-[#94A3B8] absolute left-3 top-1/2 -translate-y-1/2"
             />
@@ -277,11 +277,11 @@
     <Teleport to="body">
       <div
         v-if="selectedRoute"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-3 sm:p-4 backdrop-blur-sm"
         @click.self="selectedRoute = null"
       >
         <Card
-          className="w-full max-w-5xl max-h-[88vh] overflow-y-auto shadow-2xl"
+          className="w-full max-w-5xl max-h-[calc(100dvh-1.5rem)] sm:max-h-[88vh] overflow-y-auto shadow-2xl"
         >
           <DetailsHeader
             title="Transit Route Details"
@@ -443,11 +443,11 @@
     <Teleport to="body">
       <div
         v-if="selectedSearch"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-3 sm:p-4 backdrop-blur-sm"
         @click.self="selectedSearch = null"
       >
         <Card
-          className="w-full max-w-6xl max-h-[88vh] overflow-y-auto shadow-2xl"
+          className="w-full max-w-6xl max-h-[calc(100dvh-1.5rem)] sm:max-h-[88vh] overflow-y-auto shadow-2xl"
         >
           <DetailsHeader
             title="Route Search Details"
@@ -726,10 +726,10 @@ const DetailsHeader = defineComponent({
         "div",
         {
           class:
-            "p-4 md:p-5 border-b border-white/10 flex items-center justify-between gap-4",
+            "p-4 md:p-5 border-b border-white/10 flex items-start justify-between gap-4",
         },
         [
-          h("h3", { class: "text-lg font-bold text-[#F8FAFC]" }, props.title),
+          h("h3", { class: "min-w-0 text-lg font-bold text-[#F8FAFC]" }, props.title),
           h(
             "button",
             {

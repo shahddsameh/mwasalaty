@@ -2,7 +2,7 @@
   <div
     class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5"
   >
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
       <StatCard label="Total Stops" :value="stops.length" color="#38BDF8" />
       <StatCard label="With Location" :value="locatedStops" color="#00B86B" />
       <StatCard
@@ -18,8 +18,8 @@
     </Card>
 
     <Card>
-      <div class="p-4 md:p-5 border-b border-white/10 flex items-center gap-3">
-        <div class="relative flex-1">
+      <div class="p-4 md:p-5 border-b border-white/10 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div class="relative w-full sm:flex-1">
           <Search
             class="w-4 h-4 text-[#94A3B8] absolute left-3 top-1/2 -translate-y-1/2"
           />
@@ -140,11 +140,11 @@
     <Teleport to="body">
       <div
         v-if="selectedStop"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-3 sm:p-4 backdrop-blur-sm"
         @click.self="selectedStop = null"
       >
         <Card
-          className="w-full max-w-5xl max-h-[88vh] overflow-y-auto shadow-2xl"
+          className="w-full max-w-5xl max-h-[calc(100dvh-1.5rem)] sm:max-h-[88vh] overflow-y-auto shadow-2xl"
         >
           <div
             class="p-4 md:p-5 flex items-start justify-between gap-4 border-b border-white/10"

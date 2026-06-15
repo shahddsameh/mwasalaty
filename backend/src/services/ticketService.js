@@ -43,14 +43,25 @@ function getSubwayTier(stationCount) {
   return METRO_TIERS.find(t => count >= t.min && count <= t.max) ?? METRO_TIERS[0];
 }
 
+function isLegUsed(leg) {
+  return Boolean(leg.used || leg.usedAt || leg.validatedAt || leg.status === 'used');
+}
+
+function isLegRefunded(leg) {
+  return Boolean(leg.refunded || leg.refundedAt || leg.status === 'refunded');
+}
+
+function ticketHasUsedHistory(ticket) {
+  return Boolean(ticket.usedAt || ticket.legs?.some(isLegUsed));
+}
+
 function resolveTicketStatus(ticket) {
   const legs = ticket.legs;
   if (legs.length === 0) return 'active';
-  const allUsed     = legs.every(l => l.status === 'used');
-  const allRefunded = legs.every(l => l.status === 'refunded');
-  const hasRefunded = legs.some(l => l.status === 'refunded');
-  if (allUsed)     return 'used';
+  const allRefunded = ticket.status === 'refunded' || legs.every(isLegRefunded);
+  const hasRefunded = legs.some(isLegRefunded);
   if (allRefunded) return 'refunded';
+  if (ticketHasUsedHistory(ticket)) return 'used';
   if (hasRefunded) return 'partially_refunded';
   return 'active';
 }
@@ -101,15 +112,9 @@ export function createTicket(body) {
 
   const ticketId = `ticket_${shortUUID()}`;
   const now = new Date();
-  // For trips scheduled in the future, the 24 h validity starts from the
-  // departure time instead of purchase time, so the ticket is still valid when
-  // the passenger actually travels. Past/now departures fall back to "now".
   const parsedDeparture = departureAt ? new Date(departureAt) : null;
-  const expiryBase =
-    parsedDeparture && !Number.isNaN(parsedDeparture.getTime()) && parsedDeparture.getTime() > now.getTime()
-      ? parsedDeparture
-      : now;
-  const expiresAt = new Date(expiryBase.getTime() + 24 * 60 * 60 * 1000);
+  const activatedAt = now;
+  const expiresAt = new Date(activatedAt.getTime() + 24 * 60 * 60 * 1000);
 
   const legs = transitLegs.map((leg, i) => {
     const ticketLegId = `ticket_leg_${String(i + 1).padStart(3, '0')}`;
@@ -151,8 +156,9 @@ export function createTicket(body) {
     ticketId,
     status: 'active',
     createdAt: now.toISOString(),
+    activatedAt: activatedAt.toISOString(),
     expiresAt: expiresAt.toISOString(),
-    ...(expiryBase !== now && { departureAt: parsedDeparture.toISOString() }),
+    ...(parsedDeparture && !Number.isNaN(parsedDeparture.getTime()) && { departureAt: parsedDeparture.toISOString() }),
     sourcePlanId: planId,
     sourceItineraryId: itineraryId,
     passenger: {
@@ -252,6 +258,7 @@ export function validateLeg(ticketId, ticketLegId, { operatorId, deviceId, valid
   const resolvedAt = validatedAt || new Date().toISOString();
   const profile = getProfileByOperatorDevice(operatorId, deviceId);
   leg.status = 'used';
+  leg.usedAt = resolvedAt;
   leg.validatedAt = resolvedAt;
   leg.validatedBy = {
     ...(profile && {
@@ -403,6 +410,7 @@ export function scanValidate(qrPayload, scannerProfileId, { stationsTraversed } 
   const resolvedAt = new Date().toISOString();
 
   leg.status = 'used';
+  leg.usedAt = resolvedAt;
   leg.validatedAt = resolvedAt;
   leg.validatedBy = {
     scannerProfileId: profile.scannerProfileId,
@@ -435,14 +443,42 @@ export async function refundTicket(ticketId, legIds, refundMeta = {}) {
   }
 
   const now = new Date();
-  const expiresAt = new Date(ticket.expiresAt);
-  const graceExpiry = new Date(expiresAt.getTime() + 24 * 60 * 60 * 1000);
+  const expiresAt = ticket.expiresAt ? new Date(ticket.expiresAt) : null;
+  const isNotExpired = !expiresAt || Number.isNaN(expiresAt.getTime()) || expiresAt > now;
+  const isPaid = ticket.payment?.status === 'paid' || ticket.paymentStatus === 'paid';
 
-  if (now > expiresAt && now > graceExpiry) {
+  if (ticket.status !== 'active') {
+    throw {
+      code: ErrorCodes.NO_REFUNDABLE_LEGS,
+      message: 'Ticket is not active',
+      details: { ticketId, status: ticket.status },
+    };
+  }
+
+  if (!isPaid) {
+    throw {
+      code: ErrorCodes.NO_REFUNDABLE_LEGS,
+      message: 'Ticket payment is not paid',
+      details: { ticketId, paymentStatus: ticket.payment?.status || ticket.paymentStatus || null },
+    };
+  }
+
+  if (!isNotExpired) {
     throw {
       code: ErrorCodes.REFUND_WINDOW_EXPIRED,
-      message: 'Refund window has closed — ticket expired more than 24 hours ago',
-      details: { ticketId, expiresAt: ticket.expiresAt, graceExpiry: graceExpiry.toISOString() },
+      message: 'Refund window has closed because the ticket has expired',
+      details: { ticketId, expiresAt: ticket.expiresAt },
+    };
+  }
+
+  if (ticketHasUsedHistory(ticket)) {
+    throw {
+      code: ErrorCodes.LEG_ALREADY_USED,
+      message: 'Used tickets cannot be refunded',
+      details: {
+        ticketId,
+        usedLegIds: ticket.legs.filter(isLegUsed).map(l => l.ticketLegId),
+      },
     };
   }
 
@@ -456,7 +492,7 @@ export async function refundTicket(ticketId, legIds, refundMeta = {}) {
       return leg;
     });
 
-    const refundedLegIds = candidateLegs.filter(l => l.status === 'refunded').map(l => l.ticketLegId);
+    const refundedLegIds = candidateLegs.filter(isLegRefunded).map(l => l.ticketLegId);
     if (refundedLegIds.length > 0) {
       throw {
         code: ErrorCodes.LEG_ALREADY_REFUNDED,
@@ -465,7 +501,7 @@ export async function refundTicket(ticketId, legIds, refundMeta = {}) {
       };
     }
 
-    const usedLegIds = candidateLegs.filter(l => l.status === 'used').map(l => l.ticketLegId);
+    const usedLegIds = candidateLegs.filter(isLegUsed).map(l => l.ticketLegId);
     if (usedLegIds.length > 0) {
       throw {
         code: ErrorCodes.LEG_ALREADY_USED,
@@ -476,7 +512,7 @@ export async function refundTicket(ticketId, legIds, refundMeta = {}) {
 
     refundableLegs = candidateLegs;
   } else {
-    const usedLegIds = ticket.legs.filter(l => l.status === 'used').map(l => l.ticketLegId);
+    const usedLegIds = ticket.legs.filter(isLegUsed).map(l => l.ticketLegId);
     if (usedLegIds.length > 0) {
       throw {
         code: ErrorCodes.LEG_ALREADY_USED,
@@ -485,7 +521,7 @@ export async function refundTicket(ticketId, legIds, refundMeta = {}) {
       };
     }
 
-    const refundedLegIds = ticket.legs.filter(l => l.status === 'refunded').map(l => l.ticketLegId);
+    const refundedLegIds = ticket.legs.filter(isLegRefunded).map(l => l.ticketLegId);
     if (refundedLegIds.length > 0) {
       throw {
         code: ErrorCodes.LEG_ALREADY_REFUNDED,
@@ -494,7 +530,9 @@ export async function refundTicket(ticketId, legIds, refundMeta = {}) {
       };
     }
 
-    refundableLegs = ticket.legs.filter(l => l.status === 'unused');
+    refundableLegs = ticket.legs.filter(l => {
+      return !isLegUsed(l) && !isLegRefunded(l);
+    });
     if (refundableLegs.length === 0) {
       throw {
         code: ErrorCodes.NO_REFUNDABLE_LEGS,

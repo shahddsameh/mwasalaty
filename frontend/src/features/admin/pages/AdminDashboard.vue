@@ -7,10 +7,20 @@
       <header
         class="flex-shrink-0 border-b border-border bg-card text-card-foreground"
       >
-        <div class="flex items-center justify-between px-4 md:px-6 py-3 gap-4">
-          <div class="min-w-0">
+        <div class="flex items-center justify-between px-3 sm:px-4 md:px-6 py-3 gap-2 sm:gap-4">
+          <button
+            type="button"
+            class="lg:hidden rounded-lg border border-border bg-muted p-2 text-muted-foreground transition-colors hover:bg-surface-hover hover:text-foreground"
+            aria-label="Open admin menu"
+            title="Open admin menu"
+            @click="mobileSidebarOpen = true"
+          >
+            <Menu class="h-5 w-5" />
+          </button>
+
+          <div class="min-w-0 flex-1">
             <h1
-              class="text-base md:text-lg font-bold text-white truncate"
+              class="text-base md:text-lg font-bold text-white truncate sm:whitespace-normal"
               style="font-family: &quot;DM Sans&quot;, sans-serif"
             >
               {{ meta.title }}
@@ -20,7 +30,7 @@
             </p>
           </div>
 
-          <div class="flex items-center gap-2 flex-shrink-0">
+          <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
             <button
               type="button"
               class="rounded-lg border border-border bg-muted p-2 text-muted-foreground transition-colors hover:bg-surface-hover hover:text-foreground"
@@ -138,17 +148,41 @@
       </header>
 
       <!-- Page content -->
-      <main class="flex-1 overflow-auto bg-background pb-20 lg:pb-0">
+      <main class="flex-1 min-w-0 overflow-x-hidden overflow-y-auto bg-background pb-20 lg:pb-0">
         <component :is="currentComponent" @nav="goToPage" />
       </main>
     </div>
+
+    <Teleport to="body">
+      <div
+        v-if="mobileSidebarOpen"
+        class="fixed inset-0 z-50 lg:hidden"
+        role="dialog"
+        aria-modal="true"
+      >
+        <button
+          type="button"
+          class="absolute inset-0 h-full w-full bg-black/55"
+          aria-label="Close admin menu"
+          @click="mobileSidebarOpen = false"
+        />
+        <div class="relative h-full">
+          <AdminSidebar
+            :active="activePage"
+            mobile
+            @nav="goToPage"
+            @close="mobileSidebarOpen = false"
+          />
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Bell, LogOut, ChevronDown, Moon, Sun } from "@lucide/vue";
+import { Bell, LogOut, ChevronDown, Moon, Sun, Menu } from "@lucide/vue";
 import AdminSidebar from "../components/AdminSidebar.vue";
 import AdminDashboardHome from "./AdminDashboardHome.vue";
 import AdminRoutes from "./AdminRoutes.vue";
@@ -165,6 +199,7 @@ import "../styles/admin-theme.css";
 const route = useRoute();
 const router = useRouter();
 const activePage = ref("dashboard");
+const mobileSidebarOpen = ref(false);
 const theme = ref<AppTheme>(getSavedTheme());
 const notificationMenuRef = ref<HTMLElement | null>(null);
 const notificationsOpen = ref(false);
@@ -179,6 +214,7 @@ const validPages = new Set([
   "users",
   "support",
   "support-tickets",
+  "stations",
   "feedback",
   "settings",
 ]);
@@ -195,6 +231,10 @@ const PAGE_META: Record<string, { title: string; sub: string }> = {
   stops: {
     title: "Stops Management",
     sub: "Create, edit, and manage transport stops",
+  },
+  stations: {
+    title: "Stations Management",
+    sub: "Create, edit, and manage transport stops and stations",
   },
   tickets: {
     title: "Tickets Management",
@@ -249,6 +289,7 @@ onBeforeUnmount(() => {
 function goToPage(page: string) {
   const nextPage = validPages.has(page) ? page : "dashboard";
   activePage.value = nextPage;
+  mobileSidebarOpen.value = false;
   router.push(nextPage === "dashboard" ? "/admin" : `/admin/${nextPage}`);
 }
 
@@ -308,6 +349,7 @@ const currentComponent = computed(() => {
     case "routes":
       return AdminRoutes;
     case "stops":
+    case "stations":
       return AdminStops;
     case "tickets":
       return AdminTickets;

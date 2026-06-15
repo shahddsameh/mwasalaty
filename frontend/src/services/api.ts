@@ -337,6 +337,10 @@ export type TicketLeg = {
   fareAmount: number;
   currency?: string;
   status: TicketLegStatus;
+  used?: boolean;
+  usedAt?: string;
+  validatedAt?: string;
+  refunded?: boolean;
   refundedAt?: string;
 };
 
@@ -344,7 +348,11 @@ export type Ticket = {
   ticketId: string;
   status: 'active' | 'used' | 'refunded' | 'partially_refunded';
   createdAt?: string;
+  activatedAt?: string;
+  activated_at?: string;
   expiresAt?: string;
+  expires_at?: string;
+  usedAt?: string;
   departureAt?: string;
   sourcePlanId?: string;
   sourceItineraryId?: string;
@@ -360,6 +368,7 @@ export type Ticket = {
     refundedAmount?: number;
     refundedAt?: string;
   };
+  paymentStatus?: string;
   qrPayload: TicketQrPayload;
   legs: TicketLeg[];
 };
@@ -451,6 +460,7 @@ export async function confirmCheckoutRedirect(
 export async function getTicket(ticketId: string): Promise<Ticket> {
   const res = await fetch(`/api/tickets/${encodeURIComponent(ticketId)}`, {
     headers: await authHeader(),
+    cache: 'no-store',
   });
   if (!res.ok) throw new Error(await readApiError(res));
   return (await res.json()) as Ticket;
@@ -487,7 +497,10 @@ export function subscribeToTicket(
 
 export async function getTickets(): Promise<Ticket[]> {
   // The backend derives the user from the auth token; no userId query needed.
-  const res = await fetch('/api/tickets', { headers: await authHeader() });
+  const res = await fetch('/api/tickets', {
+    headers: await authHeader(),
+    cache: 'no-store',
+  });
   if (!res.ok) throw new Error(await readApiError(res));
   const data = (await res.json()) as { tickets?: Ticket[] };
   return data.tickets ?? [];

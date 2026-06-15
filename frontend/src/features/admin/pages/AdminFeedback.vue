@@ -4,7 +4,7 @@
       <div class="p-4 text-sm font-medium text-red-200">{{ error }}</div>
     </Card>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
       <StatCard label="Total feedback" :value="feedback.length" color="#38BDF8" />
       <StatCard label="Good feedback" :value="goodCount" color="#10B981" />
       <StatCard label="Bad / issue feedback" :value="badCount" color="#E63946" />
@@ -12,7 +12,7 @@
     </div>
 
     <Card>
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 p-4 md:p-5">
+      <div class="flex flex-col gap-3 border-b border-white/10 p-4 md:p-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 class="text-lg font-bold text-[#F8FAFC]" style="font-family: &quot;DM Sans&quot;, sans-serif">
             Feedback
@@ -20,7 +20,7 @@
           <p class="text-sm text-[#94A3B8]">Journey ratings and rider-reported route issues</p>
         </div>
         <button
-          class="rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-[#F8FAFC] hover:border-[#FFC400] hover:text-[#FFC400] disabled:opacity-60"
+          class="w-full rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-[#F8FAFC] hover:border-[#FFC400] hover:text-[#FFC400] disabled:opacity-60 sm:w-auto"
           :disabled="loading"
           @click="loadFeedback"
         >
@@ -28,7 +28,7 @@
         </button>
       </div>
 
-      <div class="grid gap-3 border-b border-white/10 p-4 md:grid-cols-3">
+      <div class="grid gap-3 border-b border-white/10 p-4 sm:grid-cols-3">
         <input
           v-model="search"
           type="search"
@@ -125,13 +125,13 @@
     <Teleport to="body">
       <div
         v-if="selectedFeedback"
-        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4"
         @click.self="selectedFeedback = null"
       >
-        <div class="bg-[#1E293B] rounded-2xl border border-white/10 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-          <div class="sticky top-0 bg-[#111827] px-6 py-4 border-b border-white/10 flex items-center justify-between">
-            <div>
-              <h2 class="text-xl font-bold text-white">Feedback Details</h2>
+        <div class="bg-[#1E293B] rounded-2xl border border-white/10 max-w-3xl w-full max-h-[calc(100dvh-1.5rem)] sm:max-h-[90vh] overflow-y-auto">
+          <div class="sticky top-0 bg-[#111827] px-4 py-4 sm:px-6 border-b border-white/10 flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <h2 class="text-lg sm:text-xl font-bold text-white">Feedback Details</h2>
               <p class="text-sm text-[#9CA3AF]">ID: {{ selectedFeedback.id }}</p>
             </div>
             <button class="p-2 hover:bg-[#374151] rounded-lg transition-colors" @click="selectedFeedback = null">
@@ -139,7 +139,7 @@
             </button>
           </div>
 
-          <div class="p-6 space-y-5">
+          <div class="p-4 sm:p-6 space-y-5">
             <div class="flex flex-wrap items-center gap-3">
               <span :class="ratingBadgeClass(selectedFeedback.rating)">
                 {{ ratingLabel(selectedFeedback.rating) }}

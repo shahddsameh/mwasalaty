@@ -10,7 +10,7 @@
 
     <Card>
       <div
-        class="flex items-center justify-between gap-3 border-b border-white/10 p-4 md:p-5"
+        class="flex flex-col gap-3 border-b border-white/10 p-4 md:p-5 sm:flex-row sm:items-center sm:justify-between"
       >
         <div>
           <h2
@@ -22,7 +22,7 @@
           <p class="text-sm text-[#94A3B8]">Supabase Auth users</p>
         </div>
         <button
-          class="rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-[#F8FAFC] hover:border-[#FFC400] hover:text-[#FFC400]"
+          class="w-full rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-[#F8FAFC] hover:border-[#FFC400] hover:text-[#FFC400] sm:w-auto"
           type="button"
           :disabled="loading"
           @click="loadUsers"

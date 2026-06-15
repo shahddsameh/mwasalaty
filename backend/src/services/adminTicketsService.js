@@ -27,6 +27,8 @@ function uuidOrNull(value) {
 
 function mapDbTicket(row) {
   const raw = row.raw || {};
+  const activatedAt = row.activated_at || raw.activatedAt || raw.createdAt || row.created_at;
+  const expiresAt = row.expires_at || row.valid_until || raw.expiresAt;
   return {
     id: row.id,
     ticketId: raw.ticketId || row.id,
@@ -39,7 +41,9 @@ function mapDbTicket(row) {
     paymentStatus: row.payment_status || raw.payment?.status,
     refundStatus: row.refund_status || raw.refundStatus || raw.payment?.refundStatus || null,
     created_at: row.created_at || raw.createdAt,
-    valid_until: row.valid_until || raw.expiresAt,
+    activated_at: activatedAt,
+    expires_at: expiresAt,
+    valid_until: expiresAt,
     raw,
   };
 }
@@ -48,15 +52,33 @@ function cleanNullish(value) {
   return value === undefined ? null : value;
 }
 
+function isMissingActivationColumnError(error) {
+  const message = `${error?.message || ''} ${error?.details || ''}`;
+  return (
+    error?.code === 'PGRST204' &&
+    (message.includes('activated_at') || message.includes('expires_at'))
+  ) || /column .*tickets\.(activated_at|expires_at).*does not exist/i.test(message);
+}
+
+function withoutActivationColumns(payload) {
+  const next = { ...payload };
+  delete next.activated_at;
+  delete next.expires_at;
+  return next;
+}
+
 function rawTicketFromRow(row) {
   const raw = row.raw && typeof row.raw === 'object' ? structuredClone(row.raw) : {};
   const ticketId = raw.ticketId || row.id;
+  const activatedAt = row.activated_at || raw.activatedAt || raw.createdAt || row.created_at;
+  const expiresAt = row.expires_at || row.valid_until || raw.expiresAt;
 
   return {
     ...raw,
     ticketId,
     status: row.status || raw.status || 'active',
-    expiresAt: row.valid_until || raw.expiresAt,
+    activatedAt,
+    expiresAt,
     createdAt: row.created_at || raw.createdAt,
     passenger: {
       ...(raw.passenger || {}),
@@ -71,10 +93,11 @@ function rawTicketFromRow(row) {
   };
 }
 
-function reactivatedRawTicket(row, validUntil) {
+function reactivatedRawTicket(row, activatedAt, expiresAt) {
   const raw = rawTicketFromRow(row);
   raw.status = 'active';
-  raw.expiresAt = validUntil;
+  raw.activatedAt = activatedAt;
+  raw.expiresAt = expiresAt;
   raw.refundStatus = null;
 
   if (raw.payment && typeof raw.payment === 'object') {
@@ -88,6 +111,8 @@ function reactivatedRawTicket(row, validUntil) {
 function ticketToRow(ticket) {
   const first = firstLeg(ticket);
   const last = lastLeg(ticket);
+  const activatedAt = ticket.activatedAt || ticket.createdAt || new Date().toISOString();
+  const expiresAt = ticket.expiresAt || null;
   return {
     user_id: uuidOrNull(ticket.passenger?.userId),
     user_email: ticket.passenger?.email || null,
@@ -98,7 +123,9 @@ function ticketToRow(ticket) {
     status: ticket.status || null,
     payment_status: ticket.payment?.status || null,
     refund_status: ticket.refundStatus || ticket.payment?.refundStatus || null,
-    valid_until: ticket.expiresAt || null,
+    activated_at: activatedAt,
+    expires_at: expiresAt,
+    valid_until: expiresAt,
     raw: ticket,
     created_at: ticket.createdAt || new Date().toISOString(),
     updated_at: new Date().toISOString(),
@@ -116,9 +143,15 @@ export async function syncTicketToSupabase(ticket) {
       .maybeSingle();
     if (lookupError) throw lookupError;
 
-    const result = existing?.id
+    let result = existing?.id
       ? await supabase.from('tickets').update(row).eq('id', existing.id)
       : await supabase.from('tickets').insert(row);
+    if (result.error && isMissingActivationColumnError(result.error)) {
+      const fallbackRow = withoutActivationColumns(row);
+      result = existing?.id
+        ? await supabase.from('tickets').update(fallbackRow).eq('id', existing.id)
+        : await supabase.from('tickets').insert(fallbackRow);
+    }
     if (result.error) throw result.error;
   } catch (err) {
     console.warn(`[adminTickets] Supabase ticket sync skipped: ${err?.error?.message || err.message}`);
@@ -161,50 +194,78 @@ export async function listTicketPayloadsFromSupabase(userId) {
 
 export async function getAdminTicketFromSupabase(id) {
   const supabase = getSupabaseAdminClient();
-  const { data, error } = await supabase
+  const query = supabase
     .from('tickets')
     .select('*')
-    .eq('id', id)
     .maybeSingle();
+  const { data, error } = uuidOrNull(id)
+    ? await query.or(`id.eq.${id},raw->>ticketId.eq.${id}`)
+    : await query.eq('raw->>ticketId', id);
   if (error) throw error;
   return data ? mapDbTicket(data) : null;
 }
 
 export async function reactivateAdminTicketInSupabase(id) {
   const supabase = getSupabaseAdminClient();
-  const { data: existing, error: lookupError } = await supabase
+  const lookup = supabase
     .from('tickets')
     .select('*')
-    .eq('id', id)
     .maybeSingle();
+  const { data: existing, error: lookupError } = uuidOrNull(id)
+    ? await lookup.or(`id.eq.${id},raw->>ticketId.eq.${id}`)
+    : await lookup.eq('raw->>ticketId', id);
   if (lookupError) throw lookupError;
   if (!existing) return null;
 
-  const validUntil = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
-  const raw = reactivatedRawTicket(existing, validUntil);
+  const now = new Date();
+  const activatedAt = now.toISOString();
+  const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString();
+  const raw = reactivatedRawTicket(existing, activatedAt, expiresAt);
   const payload = {
     status: 'active',
     payment_status: 'paid',
     refund_status: null,
-    valid_until: validUntil,
+    activated_at: activatedAt,
+    expires_at: expiresAt,
+    valid_until: expiresAt,
     raw,
-    updated_at: new Date().toISOString(),
+    updated_at: activatedAt,
   };
 
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from('tickets')
     .update(payload)
-    .eq('id', id)
+    .eq('id', existing.id)
     .select('*')
     .maybeSingle();
+  if (error && isMissingActivationColumnError(error)) {
+    const fallbackPayload = withoutActivationColumns(payload);
+    const fallback = await supabase
+      .from('tickets')
+      .update(fallbackPayload)
+      .eq('id', existing.id)
+      .select('*')
+      .maybeSingle();
+    data = fallback.data;
+    error = fallback.error;
+  }
   if (error) {
     console.error('[adminTickets] Failed to reactivate ticket in Supabase', {
       id,
-      validUntil,
+      expiresAt,
       message: error.message,
     });
     throw error;
   }
+  console.log('[adminTickets] reactivated ticket response', {
+    id: data?.id,
+    ticketId: data?.raw?.ticketId,
+    status: data?.status,
+    activated_at: data?.activated_at,
+    expires_at: data?.expires_at,
+    valid_until: data?.valid_until,
+  });
+  console.log('[adminTickets] expiresAt', data?.expires_at || data?.valid_until || data?.raw?.expiresAt);
   return data ? mapDbTicket(data) : null;
 }
 

@@ -6,7 +6,7 @@
       <div class="p-4 text-sm font-medium text-[#B91C1C]">{{ error }}</div>
     </Card>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
       <StatCard label="Total Tickets" :value="tickets.length" color="#38BDF8" />
       <StatCard
         label="Active"
@@ -29,7 +29,7 @@
 
     <Card>
       <div
-        class="flex items-center justify-between gap-3 border-b border-white/10 p-4 md:p-5"
+        class="flex flex-col gap-3 border-b border-white/10 p-4 md:p-5 sm:flex-row sm:items-center sm:justify-between"
       >
         <div>
           <h2
@@ -41,7 +41,7 @@
           <p class="text-sm text-[#94A3B8]">User bookings and payment status</p>
         </div>
         <button
-          class="rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-[#F8FAFC] hover:border-[#FFC400] hover:text-[#FFC400]"
+          class="w-full rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-[#F8FAFC] hover:border-[#FFC400] hover:text-[#FFC400] sm:w-auto"
           :disabled="loading"
           @click="loadTickets"
         >
@@ -49,7 +49,7 @@
         </button>
       </div>
       <div
-        class="grid gap-3 border-b border-white/10 p-4 md:grid-cols-2 lg:grid-cols-4"
+        class="grid gap-3 border-b border-white/10 p-4 sm:grid-cols-2 lg:grid-cols-4"
       >
         <input
           v-model="search"
@@ -351,7 +351,9 @@ async function runAction(
   busyId.value = id;
   error.value = "";
   try {
-    await action(id);
+    const ticket = await action(id);
+    console.log("reactivated ticket response", ticket);
+    console.log("expiresAt", ticket.expires_at || ticket.valid_until);
     await loadTickets();
   } catch (err) {
     error.value = err instanceof Error ? err.message : "Ticket update failed";

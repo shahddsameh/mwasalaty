@@ -10,7 +10,7 @@
         <div class="flex items-center justify-between px-3 sm:px-4 md:px-6 py-3 gap-2 sm:gap-4">
           <button
             type="button"
-            class="lg:hidden rounded-lg border border-border bg-muted p-2 text-muted-foreground transition-colors hover:bg-surface-hover hover:text-foreground"
+            class="hidden md:block lg:hidden rounded-lg border border-border bg-muted p-2 text-muted-foreground transition-colors hover:bg-surface-hover hover:text-foreground"
             aria-label="Open admin menu"
             title="Open admin menu"
             @click="mobileSidebarOpen = true"
@@ -23,7 +23,7 @@
               class="text-base md:text-lg font-bold text-white truncate sm:whitespace-normal"
               style="font-family: &quot;DM Sans&quot;, sans-serif"
             >
-              {{ meta.title }}
+              {{ pageTitle }}
             </h1>
             <p class="text-xs text-[#9CA3AF] hidden sm:block truncate">
               {{ meta.sub }}
@@ -148,7 +148,7 @@
       </header>
 
       <!-- Page content -->
-      <main class="flex-1 min-w-0 overflow-x-hidden overflow-y-auto bg-background pb-20 lg:pb-0">
+      <main class="flex-1 min-w-0 overflow-x-hidden overflow-y-auto bg-background pb-24 lg:pb-0">
         <component :is="currentComponent" @nav="goToPage" />
       </main>
     </div>
@@ -167,6 +167,82 @@
         <span class="text-[10px] sm:text-xs truncate max-w-full px-1">{{ item.label }}</span>
       </button>
     </nav>
+
+    <!-- Mobile Bottom Sheet Menu (screens < 768px) -->
+    <Teleport to="body">
+      <div
+        v-if="mobileMenuOpen"
+        class="fixed inset-0 z-50 md:hidden flex flex-col justify-end"
+        role="dialog"
+        aria-modal="true"
+      >
+        <!-- Backdrop -->
+        <button
+          type="button"
+          class="absolute inset-0 h-full w-full bg-black/60 transition-opacity backdrop-blur-xs"
+          aria-label="Close menu"
+          @click="mobileMenuOpen = false"
+        />
+        
+        <!-- Sheet Content -->
+        <div class="relative w-full bg-[#1E293B] rounded-t-3xl border-t border-white/10 p-5 pb-8 flex flex-col max-h-[85vh] overflow-y-auto z-10 shadow-2xl">
+          <!-- Pull handle -->
+          <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mb-4 flex-shrink-0" />
+          
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <p class="text-sm font-bold text-white uppercase tracking-wider">Mwaslaty Admin</p>
+              <p class="text-xs text-[#9CA3AF]">Additional links and configuration</p>
+            </div>
+            <button
+              type="button"
+              class="p-1.5 rounded-lg bg-[#0F172A] border border-white/10 text-white"
+              @click="mobileMenuOpen = false"
+            >
+              <X class="w-5 h-5" />
+            </button>
+          </div>
+
+          <!-- Extra navigation links -->
+          <div class="grid grid-cols-2 gap-3 mb-6">
+            <button
+              v-for="item in extraNavItems"
+              :key="item.page"
+              type="button"
+              class="flex flex-col items-center justify-center p-4 rounded-2xl bg-[#0F172A] border border-white/10 text-center gap-2 hover:border-[#FFC400] hover:bg-[#111827] transition-all"
+              @click="goToPage(item.page); mobileMenuOpen = false;"
+            >
+              <component :is="item.icon" class="w-6 h-6 text-[#FFC400]" />
+              <span class="text-xs font-semibold text-white">{{ item.label }}</span>
+            </button>
+          </div>
+
+          <!-- Bottom controls -->
+          <div class="border-t border-white/10 pt-4 flex flex-col gap-3">
+            <div class="flex items-center justify-between p-3 rounded-xl bg-[#0F172A] border border-white/10">
+              <span class="text-xs font-semibold text-[#9CA3AF]">App Theme</span>
+              <button
+                type="button"
+                class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1E293B] border border-white/10 text-white text-xs font-medium"
+                @click="toggleTheme"
+              >
+                <component :is="theme === 'dark' ? Sun : Moon" class="w-4 h-4 text-[#FFC400]" />
+                {{ theme === 'dark' ? 'Light Mode' : 'Dark Mode' }}
+              </button>
+            </div>
+
+            <button
+              type="button"
+              class="w-full flex items-center justify-center gap-2 p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 text-red-400 text-sm font-bold transition-colors"
+              @click="logout(); mobileMenuOpen = false;"
+            >
+              <LogOut class="w-4 h-4" />
+              <span>Exit Admin Panel</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <Teleport to="body">
       <div
@@ -197,7 +273,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Bell, LogOut, ChevronDown, Moon, Sun, Menu, LayoutDashboard, Route as RouteIcon, MapPin, Ticket } from "@lucide/vue";
+import { Bell, LogOut, ChevronDown, Moon, Sun, Menu, LayoutDashboard, Route as RouteIcon, MapPin, Ticket, X, Users, MessageCircle, MessageSquareText, Settings } from "@lucide/vue";
 import AdminSidebar from "../components/AdminSidebar.vue";
 import AdminDashboardHome from "./AdminDashboardHome.vue";
 import AdminRoutes from "./AdminRoutes.vue";
@@ -215,6 +291,7 @@ const route = useRoute();
 const router = useRouter();
 const activePage = ref("dashboard");
 const mobileSidebarOpen = ref(false);
+const mobileMenuOpen = ref(false);
 const theme = ref<AppTheme>(getSavedTheme());
 const notificationMenuRef = ref<HTMLElement | null>(null);
 const notificationsOpen = ref(false);
@@ -234,13 +311,36 @@ const validPages = new Set([
   "settings",
 ]);
 
+const isMobile = ref(false);
+const updateWidth = () => {
+  isMobile.value = window.innerWidth < 768;
+};
+
 const mobileNavItems = computed(() => [
   { page: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { page: "routes", label: "Routes", icon: RouteIcon },
   { page: "stops", label: "Stops", icon: MapPin },
   { page: "tickets", label: "Tickets", icon: Ticket },
-  { page: "menu", label: "Menu", icon: Menu, action: () => { mobileSidebarOpen.value = true; } }
+  { 
+    page: "menu", 
+    label: "Menu", 
+    icon: Menu, 
+    action: () => {
+      if (window.innerWidth < 768) {
+        mobileMenuOpen.value = true;
+      } else {
+        mobileSidebarOpen.value = true;
+      }
+    } 
+  }
 ]);
+
+const extraNavItems = [
+  { page: "users", label: "Users", icon: Users },
+  { page: "support", label: "Support", icon: MessageCircle },
+  { page: "feedback", label: "Feedback", icon: MessageSquareText },
+  { page: "settings", label: "Settings", icon: Settings },
+];
 
 function isActive(page: string) {
   if (page === "menu") return false;
@@ -293,6 +393,25 @@ const PAGE_META: Record<string, { title: string; sub: string }> = {
 
 const meta = computed(() => PAGE_META[activePage.value] ?? PAGE_META.dashboard);
 
+const pageTitle = computed(() => {
+  if (isMobile.value) {
+    const MOBILE_TITLES: Record<string, string> = {
+      dashboard: "Dashboard",
+      routes: "Routes",
+      stops: "Stops",
+      stations: "Stations",
+      tickets: "Tickets",
+      users: "Users",
+      support: "Service Requests",
+      "support-tickets": "Service Requests",
+      feedback: "Feedback",
+      settings: "Settings",
+    };
+    return MOBILE_TITLES[activePage.value] ?? meta.value.title;
+  }
+  return meta.value.title;
+});
+
 watch(
   () => route.params.section,
   (section) => {
@@ -307,12 +426,15 @@ onMounted(() => {
   loadNotifications();
   document.addEventListener("click", closeNotificationsOnOutsideClick);
   window.addEventListener("admin-notifications-refresh", loadNotifications);
+  window.addEventListener("resize", updateWidth);
+  updateWidth();
 });
 
 onBeforeUnmount(() => {
   document.documentElement.classList.remove("admin-theme-active");
   document.removeEventListener("click", closeNotificationsOnOutsideClick);
   window.removeEventListener("admin-notifications-refresh", loadNotifications);
+  window.removeEventListener("resize", updateWidth);
 });
 
 function goToPage(page: string) {

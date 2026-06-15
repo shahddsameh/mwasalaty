@@ -1,10 +1,10 @@
 <template>
-  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5">
+  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 lg:py-8 flex flex-col gap-3.5 md:gap-5 pb-24 lg:pb-8">
     <Card v-if="error" className="border-red-500/30 bg-red-500/10">
       <div class="p-4 text-sm font-medium text-red-200">{{ error }}</div>
     </Card>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
       <StatCard label="Total feedback" :value="feedback.length" color="#38BDF8" />
       <StatCard label="Good feedback" :value="goodCount" color="#10B981" />
       <StatCard label="Bad / issue feedback" :value="badCount" color="#E63946" />

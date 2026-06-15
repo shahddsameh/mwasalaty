@@ -1,6 +1,6 @@
 <template>
   <div
-    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5 pb-20 lg:pb-8"
+    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 lg:py-8 flex flex-col gap-3.5 md:gap-5 pb-24 lg:pb-8"
   >
     <div>
       <h2 class="text-[28px] font-bold leading-tight text-[#F8FAFC]">Dashboard</h2>
@@ -13,7 +13,7 @@
       <div class="p-4 text-sm font-medium text-[#B91C1C]">{{ error }}</div>
     </Card>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-2.5 sm:gap-4">
       <StatCard
         className="bg-[#1E293B] rounded-2xl p-4 border border-white/10 min-h-[104px] flex flex-col justify-between"
         label="Total Tickets"

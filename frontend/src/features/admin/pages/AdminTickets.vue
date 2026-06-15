@@ -1,12 +1,12 @@
 <template>
   <div
-    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5"
+    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 lg:py-8 flex flex-col gap-3.5 md:gap-5"
   >
     <Card v-if="error" className="border-[#FCA5A5] bg-[#FEF2F2]">
       <div class="p-4 text-sm font-medium text-[#B91C1C]">{{ error }}</div>
     </Card>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
       <StatCard label="Total Tickets" :value="tickets.length" color="#38BDF8" />
       <StatCard
         label="Active"
@@ -222,53 +222,53 @@
         </div>
 
         <!-- Mobile Card Layout -->
-        <div class="md:hidden divide-y divide-white/10">
+        <div class="md:hidden p-3 space-y-3.5">
           <div
             v-for="ticket in paginatedTickets"
             :key="ticket.id"
-            class="p-4 flex flex-col gap-3 hover:bg-[#0F172A] transition-colors text-sm"
+            class="bg-[#0F172A] border border-white/5 rounded-2xl p-4 flex flex-col gap-3 shadow-sm hover:border-[#FFC400]/30 transition-all text-sm"
           >
             <div class="flex items-start justify-between gap-2">
               <div class="min-w-0">
-                <span class="text-xs font-semibold text-[#9CA3AF]">TICKET ID</span>
+                <span class="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider">TICKET ID</span>
                 <p class="font-semibold text-white break-all mt-0.5">{{ ticket.ticketId }}</p>
               </div>
               <div class="flex-shrink-0 text-right">
-                <span class="text-xs font-semibold text-[#9CA3AF]">STATUS</span>
+                <span class="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider">STATUS</span>
                 <div class="mt-0.5">
-                  <span class="inline-block rounded-full bg-white/5 px-2 py-0.5 text-xs font-medium text-white">{{ ticket.status || "-" }}</span>
+                  <span class="inline-block rounded-full bg-white/5 px-2.5 py-0.5 text-xs font-medium text-white">{{ ticket.status || "-" }}</span>
                 </div>
               </div>
             </div>
 
             <div class="grid grid-cols-2 gap-2 text-xs">
               <div>
-                <span class="font-semibold text-[#9CA3AF]">USER</span>
-                <p class="text-[#94A3B8] truncate mt-0.5">{{ ticket.userName || ticket.userId || "-" }}</p>
+                <span class="font-bold text-[#9CA3AF]">USER</span>
+                <p class="text-white truncate mt-0.5">{{ ticket.userName || ticket.userId || "-" }}</p>
               </div>
               <div>
-                <span class="font-semibold text-[#9CA3AF]">PAYMENT</span>
-                <p class="text-[#94A3B8] truncate mt-0.5">{{ ticket.paymentStatus || "-" }}</p>
+                <span class="font-bold text-[#9CA3AF]">PAYMENT</span>
+                <p class="text-white truncate mt-0.5">{{ ticket.paymentStatus || "-" }}</p>
               </div>
             </div>
 
             <div class="text-xs">
-              <span class="font-semibold text-[#9CA3AF]">ROUTE</span>
-              <p class="text-[#94A3B8] break-words mt-0.5 whitespace-normal">{{ routeText(ticket) }}</p>
+              <span class="font-bold text-[#9CA3AF]">ROUTE</span>
+              <p class="text-[#CBD5E1] break-words mt-0.5 whitespace-normal leading-relaxed">{{ routeText(ticket) }}</p>
             </div>
 
             <div class="grid grid-cols-2 gap-2 text-xs">
               <div>
-                <span class="font-semibold text-[#9CA3AF]">CREATED</span>
+                <span class="font-bold text-[#9CA3AF]">CREATED</span>
                 <p class="text-[#94A3B8] mt-0.5 flex flex-col">
-                  <span class="whitespace-normal">{{ formatDateParts(ticket.created_at)[0] }}</span>
+                  <span class="text-white">{{ formatDateParts(ticket.created_at)[0] }}</span>
                   <span class="text-[10px] text-[#64748B]">{{ formatDateParts(ticket.created_at)[1] }}</span>
                 </p>
               </div>
               <div>
-                <span class="font-semibold text-[#9CA3AF]">VALID UNTIL</span>
+                <span class="font-bold text-[#9CA3AF]">VALID UNTIL</span>
                 <p class="text-[#94A3B8] mt-0.5 flex flex-col">
-                  <span class="whitespace-normal">{{ formatDateParts(ticket.valid_until)[0] }}</span>
+                  <span class="text-white">{{ formatDateParts(ticket.valid_until)[0] }}</span>
                   <span class="text-[10px] text-[#64748B]">{{ formatDateParts(ticket.valid_until)[1] }}</span>
                 </p>
               </div>
@@ -276,11 +276,11 @@
 
             <div class="flex justify-end pt-2 border-t border-white/5">
               <button
-                class="w-full sm:w-auto rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 font-semibold text-[#10B981] transition-all hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+                class="w-full rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-bold text-[#10B981] transition-all hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60"
                 :disabled="busyId === ticket.id"
                 @click="activate(ticket.id)"
               >
-                {{ busyId === ticket.id ? "Updating..." : "Active" }}
+                {{ busyId === ticket.id ? "Updating..." : "Activate Ticket" }}
               </button>
             </div>
           </div>

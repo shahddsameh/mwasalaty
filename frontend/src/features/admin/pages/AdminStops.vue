@@ -1,8 +1,8 @@
 <template>
   <div
-    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5"
+    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 lg:py-8 flex flex-col gap-3.5 md:gap-5 pb-24 lg:pb-8"
   >
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
       <StatCard label="Total Stops" :value="stops.length" color="#38BDF8" />
       <StatCard label="With Location" :value="locatedStops" color="#00B86B" />
       <StatCard

@@ -20,3 +20,4 @@ operator/tsconfig.tsbuildinfo
 specs/
 .specify/
 .agents/
+*.pem

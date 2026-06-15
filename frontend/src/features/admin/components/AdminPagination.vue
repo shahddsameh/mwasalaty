@@ -60,7 +60,7 @@ const visiblePages = computed(() => {
 });
 
 const buttonClass =
-  "min-h-9 rounded-lg border border-white/10 bg-[#0F172A] px-3 text-xs font-semibold text-[#CBD5E1] transition hover:border-[#FFC400] hover:text-[#FFC400] disabled:cursor-not-allowed disabled:opacity-40";
+  "min-h-[44px] sm:min-h-9 rounded-lg border border-white/10 bg-[#0F172A] px-3 text-xs font-semibold text-[#CBD5E1] transition hover:border-[#FFC400] hover:text-[#FFC400] disabled:cursor-not-allowed disabled:opacity-40";
 const activeClass =
-  "min-h-9 rounded-lg border border-[#FFC400] bg-[#FFC400] px-3 text-xs font-bold text-[#ffffff]";
+  "min-h-[44px] sm:min-h-9 rounded-lg border border-[#FFC400] bg-[#FFC400] px-3 text-xs font-bold text-[#ffffff]";
 </script>

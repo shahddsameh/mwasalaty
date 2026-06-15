@@ -59,7 +59,7 @@
 
               <div
                 v-if="notificationsOpen"
-                class="absolute right-0 top-11 z-50 w-[min(360px,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-white/10 bg-[#1E293B] shadow-2xl"
+                class="fixed md:absolute left-4 right-4 md:left-auto md:right-0 top-16 md:top-11 z-50 w-auto md:w-[360px] overflow-hidden rounded-2xl border border-white/10 bg-[#1E293B] shadow-2xl"
               >
                 <div class="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
                   <div>
@@ -80,7 +80,7 @@
                 <div v-else-if="!notifications.length" class="px-4 py-8 text-center text-sm text-[#94A3B8]">
                   No new notifications
                 </div>
-                <div v-else class="max-h-[420px] overflow-y-auto">
+                <div v-else class="max-h-[min(420px,calc(100vh-8rem))] overflow-y-auto">
                   <div
                     v-for="item in notifications"
                     :key="item.id"
@@ -102,7 +102,7 @@
                         {{ item.status }}
                       </span>
                     </div>
-                    <p class="mt-2 line-clamp-2 text-xs text-[#CBD5E1]">
+                    <p class="mt-2 line-clamp-2 text-xs text-[#CBD5E1] whitespace-normal break-words">
                       {{ item.message || "No message preview" }}
                     </p>
                     <div class="mt-3 flex items-center justify-between gap-3">
@@ -153,6 +153,21 @@
       </main>
     </div>
 
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 h-16 bg-[#1E293B] border-t border-white/10 flex items-center justify-around px-2 pb-safe shadow-lg">
+      <button
+        v-for="item in mobileNavItems"
+        :key="item.page"
+        type="button"
+        class="flex flex-col items-center justify-center flex-1 h-full py-1 text-xs transition-colors"
+        :class="isActive(item.page) ? 'text-[#FFC400]' : 'text-[#9CA3AF] hover:text-white'"
+        @click="item.action ? item.action() : goToPage(item.page)"
+      >
+        <component :is="item.icon" class="w-5 h-5 mb-0.5" />
+        <span class="text-[10px] sm:text-xs truncate max-w-full px-1">{{ item.label }}</span>
+      </button>
+    </nav>
+
     <Teleport to="body">
       <div
         v-if="mobileSidebarOpen"
@@ -182,7 +197,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Bell, LogOut, ChevronDown, Moon, Sun, Menu } from "@lucide/vue";
+import { Bell, LogOut, ChevronDown, Moon, Sun, Menu, LayoutDashboard, Route as RouteIcon, MapPin, Ticket } from "@lucide/vue";
 import AdminSidebar from "../components/AdminSidebar.vue";
 import AdminDashboardHome from "./AdminDashboardHome.vue";
 import AdminRoutes from "./AdminRoutes.vue";
@@ -218,6 +233,20 @@ const validPages = new Set([
   "feedback",
   "settings",
 ]);
+
+const mobileNavItems = computed(() => [
+  { page: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { page: "routes", label: "Routes", icon: RouteIcon },
+  { page: "stops", label: "Stops", icon: MapPin },
+  { page: "tickets", label: "Tickets", icon: Ticket },
+  { page: "menu", label: "Menu", icon: Menu, action: () => { mobileSidebarOpen.value = true; } }
+]);
+
+function isActive(page: string) {
+  if (page === "menu") return false;
+  if (activePage.value === "stations" && page === "stops") return true;
+  return activePage.value === page;
+}
 
 const PAGE_META: Record<string, { title: string; sub: string }> = {
   dashboard: {

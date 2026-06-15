@@ -100,7 +100,8 @@
       v-else
       class="bg-[#1E293B] rounded-2xl overflow-hidden border border-white/10"
     >
-      <div class="overflow-x-auto">
+      <!-- Desktop Table Layout -->
+      <div class="hidden md:block overflow-x-auto">
         <table class="w-full min-w-[920px] table-fixed">
           <colgroup>
             <col class="w-[22%]" />
@@ -204,6 +205,63 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Mobile Card Layout -->
+      <div class="md:hidden divide-y divide-white/10">
+        <div
+          v-for="ticket in paginatedTickets"
+          :key="ticket.id"
+          class="p-4 flex flex-col gap-3 hover:bg-[#0F172A] transition-colors text-sm"
+        >
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <span class="text-xs font-semibold text-[#9CA3AF]">CUSTOMER</span>
+              <p class="font-semibold text-white text-sm mt-0.5 truncate">{{ ticket.name }}</p>
+              <p v-if="ticket.subject" class="text-xs text-[#9CA3AF] truncate mt-0.5">{{ ticket.subject }}</p>
+            </div>
+            <div class="flex-shrink-0 text-right">
+              <span class="text-xs font-semibold text-[#9CA3AF]">STATUS</span>
+              <div class="mt-0.5">
+                <span
+                  :class="[
+                    'inline-flex whitespace-nowrap px-2.5 py-0.5 rounded-full text-xs font-medium',
+                    statusColors[ticket.status],
+                  ]"
+                >
+                  {{ statusLabels[ticket.status] }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div>
+              <span class="font-semibold text-[#9CA3AF]">CONTACT</span>
+              <p class="text-[#94A3B8] truncate mt-0.5">{{ ticket.email }}</p>
+              <p v-if="ticket.phone" class="text-[#94A3B8] truncate mt-0.5">{{ ticket.phone }}</p>
+            </div>
+            <div>
+              <span class="font-semibold text-[#9CA3AF]">DATE</span>
+              <p class="text-[#94A3B8] mt-0.5">{{ formatDate(ticket.createdAt) }}</p>
+            </div>
+          </div>
+
+          <div class="text-xs">
+            <span class="font-semibold text-[#9CA3AF]">MESSAGE</span>
+            <p class="text-[#94A3B8] mt-0.5 break-words whitespace-normal line-clamp-3">{{ ticket.message }}</p>
+          </div>
+
+          <div class="flex justify-end pt-2 border-t border-white/5">
+            <button
+              @click="openTicket(ticket)"
+              class="w-full sm:w-auto rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#111827]"
+            >
+              View
+            </button>
+          </div>
+        </div>
+      </div>
+
       <AdminPagination
         v-model:page="page"
         :total-items="filteredTickets.length"

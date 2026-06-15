@@ -87,7 +87,8 @@
         v-else-if="activeTab === 'transit' && filteredRoutes.length > 0"
         class="bg-[#1E293B] rounded-xl overflow-hidden border border-white/10"
       >
-        <div class="overflow-x-auto">
+        <!-- Desktop Table Layout -->
+        <div class="hidden md:block overflow-x-auto">
           <table class="w-full min-w-[920px] table-fixed text-left text-sm">
             <colgroup>
               <col class="w-[16%]" />
@@ -151,6 +152,42 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Mobile Card Layout -->
+        <div class="md:hidden divide-y divide-white/10">
+          <div
+            v-for="route in paginatedRoutes"
+            :key="routeKey(route)"
+            class="p-4 flex flex-col gap-3 hover:bg-[#0F172A] transition-colors text-sm"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <span class="text-xs font-semibold text-[#9CA3AF]">SHORT NAME</span>
+                <p class="font-bold text-white text-sm mt-0.5">{{ route.short_name || "-" }}</p>
+              </div>
+              <div class="flex-shrink-0 text-right">
+                <span class="text-xs font-semibold text-[#9CA3AF]">MODE</span>
+                <div class="mt-0.5">
+                  <span class="inline-block rounded-full bg-white/5 px-2.5 py-0.5 text-xs font-semibold text-white">{{ normalizeMode(route) }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-xs">
+              <span class="font-semibold text-[#9CA3AF]">LONG NAME</span>
+              <p class="text-[#94A3B8] break-words mt-0.5 whitespace-normal">{{ route.long_name || "-" }}</p>
+            </div>
+            <div class="flex justify-end pt-2 border-t border-white/5">
+              <button
+                class="w-full sm:w-auto rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#111827]"
+                :disabled="detailsLoading && selectedRoute?.id === route.id"
+                @click="openRouteDetails(route)"
+              >
+                {{ detailsLoading && selectedRoute?.id === route.id ? "Loading..." : "View Details" }}
+              </button>
+            </div>
+          </div>
+        </div>
+
         <AdminPagination
           v-model:page="routePage"
           :total-items="filteredRoutes.length"
@@ -162,7 +199,8 @@
         v-else-if="activeTab === 'searches' && filteredSearches.length > 0"
         class="bg-[#1E293B] rounded-xl overflow-hidden border border-white/10"
       >
-        <div class="overflow-x-auto">
+        <!-- Desktop Table Layout -->
+        <div class="hidden md:block overflow-x-auto">
           <table class="w-full min-w-[960px] text-left text-sm">
             <thead class="sticky top-0 bg-[#111827] border-b border-white/10">
               <tr>
@@ -251,6 +289,62 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Mobile Card Layout -->
+        <div class="md:hidden divide-y divide-white/10">
+          <div
+            v-for="item in paginatedSearches"
+            :key="searchKey(item)"
+            class="p-4 flex flex-col gap-3 hover:bg-[#0F172A] transition-colors text-sm"
+          >
+            <div class="flex flex-col gap-1.5 text-xs">
+              <div>
+                <span class="font-semibold text-[#9CA3AF] uppercase text-[10px]">From</span>
+                <p class="font-semibold text-white text-sm">{{ item.from_label || "-" }}</p>
+              </div>
+              <div>
+                <span class="font-semibold text-[#9CA3AF] uppercase text-[10px]">To</span>
+                <p class="font-semibold text-white text-sm">{{ item.to_label || "-" }}</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">DATE / TIME</span>
+                <p class="text-[#94A3B8] mt-0.5">{{ item.date || "-" }} at {{ item.time || "-" }}</p>
+              </div>
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">OPTIMIZED FOR</span>
+                <p class="text-[#94A3B8] mt-0.5">{{ item.optimized_for || "-" }}</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-xs">
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">TOTAL ROUTES</span>
+                <p class="text-[#94A3B8] mt-0.5">{{ item.total_routes ?? "-" }}</p>
+              </div>
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">SEARCH COUNT</span>
+                <p class="text-[#94A3B8] mt-0.5">{{ item.search_count ?? 1 }}</p>
+              </div>
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">LATEST</span>
+                <p class="text-[#94A3B8] mt-0.5 truncate">{{ formatDate(item.latest_created_at || item.created_at) }}</p>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-2 border-t border-white/5">
+              <button
+                class="w-full sm:w-auto rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#111827]"
+                @click="selectedSearch = item"
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+        </div>
+
         <AdminPagination
           v-model:page="searchPage"
           :total-items="filteredSearches.length"
@@ -366,73 +460,104 @@
                 No related stops found for this route.
               </div>
               <div v-else class="max-h-[360px] overflow-auto">
-                <table
-                  class="w-full min-w-[760px] table-fixed text-left text-sm"
-                >
-                  <colgroup>
-                    <col class="w-[10%]" />
-                    <col class="w-[34%]" />
-                    <col class="w-[20%]" />
-                    <col class="w-[18%]" />
-                    <col class="w-[18%]" />
-                  </colgroup>
-                  <thead
-                    class="sticky top-0 bg-[#111827] border-b border-[#374151]"
+                <!-- Desktop Table Layout -->
+                <div class="hidden md:block">
+                  <table
+                    class="w-full min-w-[760px] table-fixed text-left text-sm"
                   >
-                    <tr>
-                      <th
-                        class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-                      >
-                        Order
-                      </th>
-                      <th
-                        class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-                      >
-                        Stop Name
-                      </th>
-                      <th
-                        class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-                      >
-                        Stop Code / ID
-                      </th>
-                      <th
-                        class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-                      >
-                        Direction
-                      </th>
-                      <th
-                        class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-                      >
-                        Trips
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-[#374151]">
-                    <tr
-                      v-for="stop in relatedStops"
-                      :key="stop.id"
-                      class="hover:bg-[#111827] transition-colors"
+                    <colgroup>
+                      <col class="w-[10%]" />
+                      <col class="w-[34%]" />
+                      <col class="w-[20%]" />
+                      <col class="w-[18%]" />
+                      <col class="w-[18%]" />
+                    </colgroup>
+                    <thead
+                      class="sticky top-0 bg-[#111827] border-b border-[#374151]"
                     >
-                      <td
-                        class="px-4 py-4 font-medium text-white whitespace-nowrap"
+                      <tr>
+                        <th
+                          class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                        >
+                          Order
+                        </th>
+                        <th
+                          class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                        >
+                          Stop Name
+                        </th>
+                        <th
+                          class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                        >
+                          Stop Code / ID
+                        </th>
+                        <th
+                          class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                        >
+                          Direction
+                        </th>
+                        <th
+                          class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                        >
+                          Trips
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-[#374151]">
+                      <tr
+                        v-for="stop in relatedStops"
+                        :key="stop.id"
+                        class="hover:bg-[#111827] transition-colors"
                       >
-                        {{ stop.stopOrder ?? "-" }}
-                      </td>
-                      <td class="px-4 py-4 text-[#9CA3AF] truncate">
-                        {{ stop.name || "-" }}
-                      </td>
-                      <td class="px-4 py-4 text-[#9CA3AF] truncate">
-                        {{ stop.code || stop.id || "-" }}
-                      </td>
-                      <td class="px-4 py-4 text-[#9CA3AF] truncate">
-                        {{ formatList(stop.directionIds) }}
-                      </td>
-                      <td class="px-4 py-4 text-[#9CA3AF] whitespace-nowrap">
-                        {{ stop.tripCount ?? stop.patternCodes?.length ?? "-" }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                        <td
+                          class="px-4 py-4 font-medium text-white whitespace-nowrap"
+                        >
+                          {{ stop.stopOrder ?? "-" }}
+                        </td>
+                        <td class="px-4 py-4 text-[#9CA3AF] truncate">
+                          {{ stop.name || "-" }}
+                        </td>
+                        <td class="px-4 py-4 text-[#9CA3AF] truncate">
+                          {{ stop.code || stop.id || "-" }}
+                        </td>
+                        <td class="px-4 py-4 text-[#9CA3AF] truncate">
+                          {{ formatList(stop.directionIds) }}
+                        </td>
+                        <td class="px-4 py-4 text-[#9CA3AF] whitespace-nowrap">
+                          {{ stop.tripCount ?? stop.patternCodes?.length ?? "-" }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Mobile Card Layout -->
+                <div class="md:hidden divide-y divide-[#374151]">
+                  <div
+                    v-for="stop in relatedStops"
+                    :key="stop.id"
+                    class="p-4 flex flex-col gap-2 hover:bg-[#111827] transition-colors text-sm"
+                  >
+                    <div class="flex items-center justify-between text-xs">
+                      <span class="font-semibold text-[#FFC400]">ORDER: {{ stop.stopOrder ?? "-" }}</span>
+                      <span class="text-[#9CA3AF]">Trips: {{ stop.tripCount ?? stop.patternCodes?.length ?? "-" }}</span>
+                    </div>
+                    <div>
+                      <span class="text-xs font-semibold text-[#9CA3AF]">Stop Name</span>
+                      <p class="font-semibold text-white break-words mt-0.5 whitespace-normal">{{ stop.name || "-" }}</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <span class="font-semibold text-[#9CA3AF]">Stop Code / ID</span>
+                        <p class="text-[#9CA3AF] truncate mt-0.5">{{ stop.code || stop.id || "-" }}</p>
+                      </div>
+                      <div>
+                        <span class="font-semibold text-[#9CA3AF]">Direction</span>
+                        <p class="text-[#9CA3AF] truncate mt-0.5 whitespace-normal break-words">{{ formatList(stop.directionIds) }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -11,7 +11,7 @@
         </p>
       </div>
       <span class="rounded-full bg-success-soft px-3 py-1 text-sm text-success">
-        {{ ticket.status }}
+        {{ computedStatus }}
       </span>
     </div>
 
@@ -47,14 +47,49 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTickets } from "@/composables/useTickets";
+import type { Ticket, TicketLeg } from "@/services/api";
 
 const props = defineProps<{ ticketId: string }>();
 const { tickets } = useTickets(props.ticketId);
 
 const ticket = computed(() => tickets.value[0]);
+const computedStatus = computed(() => {
+  if (!ticket.value) return undefined;
+  if (
+    ticket.value.status === "refunded" ||
+    (ticket.value.legs.length > 0 && ticket.value.legs.every(isLegRefunded))
+  ) {
+    return "refunded";
+  }
+  if (ticketHasUsedHistory(ticket.value)) return "used";
+  if (isExpired(ticket.value)) return "expired";
+  return ticket.value.status;
+});
 const validUntil = computed(() =>
   ticket.value?.expiresAt
     ? new Date(ticket.value.expiresAt).toLocaleString()
     : "24h from booking",
 );
+
+function isExpired(value: Ticket) {
+  if (!value.expiresAt) return false;
+  const expiresAt = new Date(value.expiresAt);
+  return !Number.isNaN(expiresAt.getTime()) && expiresAt < new Date();
+}
+
+function isLegUsed(leg: TicketLeg) {
+  return Boolean(
+    leg.used || leg.usedAt || leg.validatedAt || leg.status === "used",
+  );
+}
+
+function isLegRefunded(leg: TicketLeg) {
+  return Boolean(
+    leg.refunded || leg.refundedAt || leg.status === "refunded",
+  );
+}
+
+function ticketHasUsedHistory(value: Ticket) {
+  return Boolean(value.usedAt || value.legs.some(isLegUsed));
+}
 </script>

@@ -1,6 +1,10 @@
 <template>
   <aside
-    class="hidden lg:flex flex-col w-64 xl:w-72 bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex-shrink-0"
+    :class="[
+      mobile
+        ? 'flex h-full w-72 max-w-[85vw] flex-col bg-sidebar text-sidebar-foreground shadow-2xl'
+        : 'hidden lg:flex flex-col w-64 xl:w-72 bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex-shrink-0',
+    ]"
   >
     <!-- Logo -->
     <div class="px-6 py-6 border-b border-sidebar-border">
@@ -28,10 +32,10 @@
         <button
           v-for="item in navItems"
           :key="item.page"
-          @click="$emit('nav', item.page)"
+          @click="handleNav(item.page)"
           :class="[
             'w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all',
-            active === item.page
+            isActive(item.page)
               ? 'bg-sidebar-primary text-[#ffffff] shadow-sm'
               : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
           ]"
@@ -64,13 +68,25 @@ import {
   MessageSquareText,
 } from "@lucide/vue";
 
-defineProps<{
+const props = defineProps<{
   active: string;
+  mobile?: boolean;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   nav: [page: string];
+  close: [];
 }>();
+
+function handleNav(page: string) {
+  emit("nav", page);
+  if (props.mobile) emit("close");
+}
+
+function isActive(page: string) {
+  if (props.active === "stations") return page === "stops";
+  return props.active === page;
+}
 
 const navItems = [
   { page: "dashboard", label: "Dashboard", icon: LayoutDashboard },

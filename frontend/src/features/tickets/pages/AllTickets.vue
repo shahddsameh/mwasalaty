@@ -174,7 +174,7 @@
             type="button"
             class="flex w-full items-center gap-3 rounded-lg border p-3 text-left"
             :class="legSelectionClass(leg)"
-            :disabled="refundMode === 'total' || leg.status !== 'unused'"
+            :disabled="refundMode === 'total' || !isRefundableLeg(leg)"
             @click="toggleLeg(leg)"
           >
             <span
@@ -298,10 +298,10 @@ const notice = ref<{
 } | null>(null);
 
 const activeTickets = computed(() =>
-  tickets.value.filter((ticket) => canRefund(ticket)),
+  tickets.value.filter((ticket) => computedTicketStatus(ticket) === "active"),
 );
 const historyTickets = computed(() =>
-  tickets.value.filter((ticket) => !canRefund(ticket)),
+  tickets.value.filter((ticket) => computedTicketStatus(ticket) !== "active"),
 );
 const refundAmount = computed(() => {
   if (!refundTicketTarget.value) return 0;
@@ -315,19 +315,13 @@ async function loadTickets() {
   errorMessage.value = "";
   offlineNotice.value = false;
 
-  // Render saved tickets from IndexedDB first so the list works offline and
-  // never depends on GET /api/tickets while offline (req 9).
-  let offlineTickets: Ticket[] = [];
-  try {
-    offlineTickets = await db.tickets.orderBy("savedAt").reverse().toArray();
-  } catch {
-    // IndexedDB unavailable; continue with network only.
-  }
-  if (offlineTickets.length) tickets.value = offlineTickets;
-
   try {
     await ensureAuthInitialized();
     const fresh = await getTickets();
+    fresh.forEach((ticket) => {
+      console.log("reactivated ticket response", ticket);
+      console.log("expiresAt", ticket.expiresAt || ticket.expires_at);
+    });
     tickets.value = fresh;
     // Keep the offline store in sync for the next offline visit.
     try {
@@ -340,7 +334,14 @@ async function loadTickets() {
   } catch (error) {
     // Offline (or the request failed): show saved tickets with a note instead
     // of an error, as long as we have something cached.
-    if (tickets.value.length) {
+    let offlineTickets: Ticket[] = [];
+    try {
+      offlineTickets = await db.tickets.orderBy("savedAt").reverse().toArray();
+    } catch {
+      // IndexedDB unavailable; show the network error below.
+    }
+    if (offlineTickets.length) {
+      tickets.value = offlineTickets;
       offlineNotice.value = true;
     } else {
       errorMessage.value =
@@ -356,12 +357,10 @@ function openRefundModal(ticket: Ticket) {
   refundError.value = "";
   if (canFullyRefund(ticket)) {
     refundMode.value = "total";
-    selectedLegIds.value = ticket.legs.map((leg) => leg.ticketLegId);
+    selectedLegIds.value = refundableLegs(ticket).map((leg) => leg.ticketLegId);
   } else {
     refundMode.value = "partial";
-    selectedLegIds.value = ticket.legs
-      .filter((leg) => leg.status === "unused")
-      .map((leg) => leg.ticketLegId);
+    selectedLegIds.value = refundableLegs(ticket).map((leg) => leg.ticketLegId);
   }
 }
 
@@ -376,13 +375,13 @@ function selectTotalRefund() {
   if (!refundTicketTarget.value || !canFullyRefund(refundTicketTarget.value))
     return;
   refundMode.value = "total";
-  selectedLegIds.value = refundTicketTarget.value.legs.map(
+  selectedLegIds.value = refundableLegs(refundTicketTarget.value).map(
     (leg) => leg.ticketLegId,
   );
 }
 
 function toggleLeg(leg: TicketLeg) {
-  if (refundMode.value !== "partial" || leg.status !== "unused") return;
+  if (refundMode.value !== "partial" || !isRefundableLeg(leg)) return;
   selectedLegIds.value = selectedLegIds.value.includes(leg.ticketLegId)
     ? selectedLegIds.value.filter((id) => id !== leg.ticketLegId)
     : [...selectedLegIds.value, leg.ticketLegId];
@@ -424,14 +423,31 @@ async function confirmRefund() {
 }
 
 function refundableLegs(ticket: Ticket) {
-  return ticket.legs.filter((leg) => leg.status === "unused");
+  const isTicketActive = ticket.status === "active";
+  const isPaid = (ticket.paymentStatus ?? ticket.payment?.status) === "paid";
+  const isNotExpired = !isExpired(ticket);
+
+  if (ticketHasUsedHistory(ticket)) {
+    console.log("refundableLegs", []);
+    return [];
+  }
+
+  const legs = ticket.legs.filter((leg) => {
+    return (
+      isTicketActive &&
+      isPaid &&
+      isNotExpired &&
+      !isLegUsed(leg) &&
+      !isLegRefunded(leg)
+    );
+  });
+  console.log("refundableLegs", legs);
+  return legs;
 }
 
 function canFullyRefund(ticket: Ticket) {
-  return (
-    ticket.legs.length > 0 &&
-    ticket.legs.every((leg) => leg.status === "unused")
-  );
+  const refundable = refundableLegs(ticket);
+  return ticket.legs.length > 0 && refundable.length === ticket.legs.length;
 }
 
 function canRefund(ticket: Ticket) {
@@ -466,8 +482,35 @@ function dateLabel(value?: string) {
     : date.toLocaleString();
 }
 
+function isExpired(ticket: Ticket) {
+  const value = ticket.expiresAt || ticket.expires_at;
+  if (!value) return false;
+  const expiresAt = new Date(value);
+  return !Number.isNaN(expiresAt.getTime()) && expiresAt < new Date();
+}
+
+function computedTicketStatus(ticket: Ticket): Ticket["status"] | "expired" {
+  let computedStatus: Ticket["status"] | "expired";
+  if (
+    ticket.status === "refunded" ||
+    (ticket.legs.length > 0 && ticket.legs.every(isLegRefunded))
+  ) {
+    computedStatus = "refunded";
+  } else if (ticketHasUsedHistory(ticket)) {
+    computedStatus = "used";
+  } else if (isExpired(ticket)) {
+    computedStatus = "expired";
+  } else {
+    computedStatus = ticket.status;
+  }
+  console.log("computedStatus", computedStatus);
+  return computedStatus;
+}
+
 function statusLabel(ticket: Ticket) {
-  switch (ticket.status) {
+  switch (computedTicketStatus(ticket)) {
+    case "expired":
+      return t("ticket.status.expired");
     case "used":
       return t("ticket.status.used");
     case "refunded":
@@ -480,7 +523,9 @@ function statusLabel(ticket: Ticket) {
 }
 
 function statusClass(ticket: Ticket) {
-  switch (ticket.status) {
+  switch (computedTicketStatus(ticket)) {
+    case "expired":
+      return "bg-secondary text-muted-foreground";
     case "used":
       return "bg-secondary text-muted-foreground";
     case "refunded":
@@ -493,11 +538,31 @@ function statusClass(ticket: Ticket) {
 }
 
 function legSelectionClass(leg: TicketLeg) {
-  if (leg.status !== "unused")
+  if (!isRefundableLeg(leg))
     return "cursor-not-allowed border-border bg-muted opacity-70";
   if (selectedLegIds.value.includes(leg.ticketLegId))
     return "border-primary bg-secondary";
   return "border-border bg-card hover:border-primary";
+}
+
+function isRefundableLeg(leg: TicketLeg) {
+  return !isLegUsed(leg) && !isLegRefunded(leg);
+}
+
+function isLegUsed(leg: TicketLeg) {
+  return Boolean(
+    leg.used || leg.usedAt || leg.validatedAt || leg.status === "used",
+  );
+}
+
+function isLegRefunded(leg: TicketLeg) {
+  return Boolean(
+    leg.refunded || leg.refundedAt || leg.status === "refunded",
+  );
+}
+
+function ticketHasUsedHistory(ticket: Ticket) {
+  return Boolean(ticket.usedAt || ticket.legs.some(isLegUsed));
 }
 
 function legStatusTextClass(status: TicketLegStatus) {
@@ -625,7 +690,7 @@ const TicketSection = defineComponent({
                           h(
                             "div",
                             { class: "font-display text-sm text-foreground" },
-                            dateLabel(ticket.expiresAt),
+                            dateLabel(ticket.expiresAt || ticket.expires_at),
                           ),
                         ]),
                       ]),

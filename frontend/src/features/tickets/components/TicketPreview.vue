@@ -90,7 +90,7 @@
 import { computed, defineComponent, h, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import QRCode from "qrcode";
-import { Check, QrCode, RotateCcw } from "@lucide/vue";
+import { Check, QrCode, RotateCcw, XCircle } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import type { Ticket, TicketLeg, TicketLegStatus } from "@/services/api";
 
@@ -118,7 +118,9 @@ watch(
 );
 
 const statusLabel = computed(() => {
-  switch (props.ticket.status) {
+  switch (computedTicketStatus.value) {
+    case "expired":
+      return "Expired";
     case "used":
       return "Used";
     case "refunded":
@@ -131,7 +133,9 @@ const statusLabel = computed(() => {
 });
 
 const statusBadgeClass = computed(() => {
-  switch (props.ticket.status) {
+  switch (computedTicketStatus.value) {
+    case "expired":
+      return "bg-secondary text-muted-foreground";
     case "used":
       return "bg-secondary text-muted-foreground";
     case "refunded":
@@ -142,12 +146,25 @@ const statusBadgeClass = computed(() => {
   }
 });
 
-const statusIcon = computed(() =>
-  props.ticket.status === "refunded" ||
-  props.ticket.status === "partially_refunded"
+const statusIcon = computed(() => {
+  if (computedTicketStatus.value === "expired") return XCircle;
+  return computedTicketStatus.value === "refunded" ||
+    computedTicketStatus.value === "partially_refunded"
     ? RotateCcw
-    : Check,
-);
+    : Check;
+});
+
+const computedTicketStatus = computed((): Ticket["status"] | "expired" => {
+  if (
+    props.ticket.status === "refunded" ||
+    (props.ticket.legs.length > 0 && props.ticket.legs.every(isLegRefunded))
+  ) {
+    return "refunded";
+  }
+  if (ticketHasUsedHistory(props.ticket)) return "used";
+  if (isExpired(props.ticket)) return "expired";
+  return props.ticket.status;
+});
 
 const paymentLabel = computed(() => {
   const method =
@@ -180,6 +197,28 @@ function legStatusClass(status: TicketLegStatus) {
     default:
       return "bg-muted text-muted-foreground";
   }
+}
+
+function isExpired(ticket: Ticket) {
+  if (!ticket.expiresAt) return false;
+  const expiresAt = new Date(ticket.expiresAt);
+  return !Number.isNaN(expiresAt.getTime()) && expiresAt < new Date();
+}
+
+function isLegUsed(leg: TicketLeg) {
+  return Boolean(
+    leg.used || leg.usedAt || leg.validatedAt || leg.status === "used",
+  );
+}
+
+function isLegRefunded(leg: TicketLeg) {
+  return Boolean(
+    leg.refunded || leg.refundedAt || leg.status === "refunded",
+  );
+}
+
+function ticketHasUsedHistory(ticket: Ticket) {
+  return Boolean(ticket.usedAt || ticket.legs.some(isLegUsed));
 }
 
 const PreviewField = defineComponent({

@@ -310,7 +310,9 @@ onMounted(async () => {
 onUnmounted(() => stopTicketUpdates?.());
 
 const statusLabel = computed(() => {
-  switch (ticket.value?.status) {
+  switch (computedTicketStatus.value) {
+    case "expired":
+      return t("ticket.status.expired");
     case "used":
       return t("ticketView.statusUsed");
     case "refunded":
@@ -323,7 +325,9 @@ const statusLabel = computed(() => {
 });
 
 const statusBadgeClass = computed(() => {
-  switch (ticket.value?.status) {
+  switch (computedTicketStatus.value) {
+    case "expired":
+      return "bg-secondary text-muted-foreground";
     case "used":
       return "bg-secondary text-muted-foreground";
     case "refunded":
@@ -335,15 +339,30 @@ const statusBadgeClass = computed(() => {
 });
 
 const statusIcon = computed(() => {
-  switch (ticket.value?.status) {
+  switch (computedTicketStatus.value) {
     case "used":
       return Check;
+    case "expired":
+      return XCircle;
     case "refunded":
     case "partially_refunded":
       return RotateCcw;
     default:
       return Check;
   }
+});
+
+const computedTicketStatus = computed((): Ticket["status"] | "expired" | undefined => {
+  if (!ticket.value) return undefined;
+  if (
+    ticket.value.status === "refunded" ||
+    (ticket.value.legs.length > 0 && ticket.value.legs.every(isLegRefunded))
+  ) {
+    return "refunded";
+  }
+  if (ticketHasUsedHistory(ticket.value)) return "used";
+  if (isExpired(ticket.value)) return "expired";
+  return ticket.value.status;
 });
 
 const paymentLabel = computed(() => {
@@ -394,6 +413,28 @@ function legStatusIcon(status: TicketLegStatus) {
     default:
       return Clock;
   }
+}
+
+function isExpired(value: Ticket) {
+  if (!value.expiresAt) return false;
+  const expiresAt = new Date(value.expiresAt);
+  return !Number.isNaN(expiresAt.getTime()) && expiresAt < new Date();
+}
+
+function isLegUsed(leg: TicketLeg) {
+  return Boolean(
+    leg.used || leg.usedAt || leg.validatedAt || leg.status === "used",
+  );
+}
+
+function isLegRefunded(leg: TicketLeg) {
+  return Boolean(
+    leg.refunded || leg.refundedAt || leg.status === "refunded",
+  );
+}
+
+function ticketHasUsedHistory(value: Ticket) {
+  return Boolean(value.usedAt || value.legs.some(isLegUsed));
 }
 
 const Field = defineComponent({

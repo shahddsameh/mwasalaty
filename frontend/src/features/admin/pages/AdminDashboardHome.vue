@@ -1,6 +1,6 @@
 <template>
   <div
-    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5 pb-20 lg:pb-8"
+    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 lg:py-8 flex flex-col gap-3.5 md:gap-5 pb-24 lg:pb-8"
   >
     <div>
       <h2 class="text-[28px] font-bold leading-tight text-[#F8FAFC]">Dashboard</h2>
@@ -13,7 +13,7 @@
       <div class="p-4 text-sm font-medium text-[#B91C1C]">{{ error }}</div>
     </Card>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-2.5 sm:gap-4">
       <StatCard
         className="bg-[#1E293B] rounded-2xl p-4 border border-white/10 min-h-[104px] flex flex-col justify-between"
         label="Total Tickets"
@@ -139,53 +139,86 @@
       >
         No data yet
       </div>
-      <div v-else class="overflow-x-auto">
-        <table class="w-full min-w-[720px] text-left text-sm table-fixed">
-          <thead class="sticky top-0 bg-[#111827] border-b border-white/10">
-            <tr>
-              <th
-                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+      <div v-else>
+        <!-- Desktop Table Layout -->
+        <div class="hidden md:block overflow-x-auto">
+          <table class="w-full min-w-[720px] text-left text-sm table-fixed">
+            <thead class="sticky top-0 bg-[#111827] border-b border-white/10">
+              <tr>
+                <th
+                  class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                >
+                  From
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                >
+                  To
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                >
+                  Created
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                >
+                  Total Routes
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/10">
+              <tr
+                v-for="item in stats.recentRouteSearches"
+                :key="`${item.from_label}-${item.to_label}-${item.created_at}`"
+                class="hover:bg-[#0F172A] transition-colors"
               >
-                From
-              </th>
-              <th
-                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-              >
-                To
-              </th>
-              <th
-                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-              >
-                Created
-              </th>
-              <th
-                class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-              >
-                Total Routes
-              </th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-white/10">
-            <tr
-              v-for="item in stats.recentRouteSearches"
-              :key="`${item.from_label}-${item.to_label}-${item.created_at}`"
-              class="hover:bg-[#0F172A] transition-colors"
-            >
-              <td class="px-4 py-3 font-semibold text-white">
-                {{ item.from_label || "-" }}
-              </td>
-              <td class="px-4 py-3 text-[#9CA3AF]">
-                {{ item.to_label || "-" }}
-              </td>
-              <td class="px-4 py-3 text-[#9CA3AF]">
-                {{ formatDate(item.created_at) }}
-              </td>
-              <td class="px-4 py-3 text-[#9CA3AF]">
-                {{ item.total_routes ?? "-" }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <td class="px-4 py-3 font-semibold text-white">
+                  {{ item.from_label || "-" }}
+                </td>
+                <td class="px-4 py-3 text-[#9CA3AF]">
+                  {{ item.to_label || "-" }}
+                </td>
+                <td class="px-4 py-3 text-[#9CA3AF]">
+                  {{ formatDate(item.created_at) }}
+                </td>
+                <td class="px-4 py-3 text-[#9CA3AF]">
+                  {{ item.total_routes ?? "-" }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Card Layout -->
+        <div class="md:hidden divide-y divide-white/10">
+          <div
+            v-for="item in stats.recentRouteSearches"
+            :key="`${item.from_label}-${item.to_label}-${item.created_at}`"
+            class="p-4 flex flex-col gap-2 hover:bg-[#0F172A] transition-colors"
+          >
+            <div class="flex flex-col gap-1 text-xs">
+              <div>
+                <span class="font-semibold text-[#9CA3AF] uppercase text-[10px]">From</span>
+                <p class="font-semibold text-white text-sm">{{ item.from_label || "-" }}</p>
+              </div>
+              <div>
+                <span class="font-semibold text-[#9CA3AF] uppercase text-[10px]">To</span>
+                <p class="font-semibold text-white text-sm">{{ item.to_label || "-" }}</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">CREATED</span>
+                <p class="text-[#9CA3AF] mt-0.5">{{ formatDate(item.created_at) }}</p>
+              </div>
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">TOTAL ROUTES</span>
+                <p class="text-[#9CA3AF] mt-0.5">{{ item.total_routes ?? "-" }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </Card>
   </div>

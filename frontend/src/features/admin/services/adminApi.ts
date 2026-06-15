@@ -125,6 +125,8 @@ export type AdminTicket = Record<string, unknown> & {
   paymentStatus?: string;
   refundStatus?: string | null;
   created_at?: string;
+  activated_at?: string;
+  expires_at?: string;
   valid_until?: string;
   raw?: unknown;
 };

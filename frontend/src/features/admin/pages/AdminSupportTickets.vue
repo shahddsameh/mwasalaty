@@ -3,37 +3,41 @@
     class="px-4 sm:px-6 lg:px-8 py-6 lg:py-8 space-y-5 max-w-[1440px] mx-auto"
   >
     <!-- Filters -->
-    <div class="flex flex-wrap items-center gap-3">
-      <button
-        v-for="filterOption in filterOptions"
-        :key="filterOption.value"
-        @click="statusFilter = filterOption.value"
-        :class="[
-          'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-          statusFilter === filterOption.value
-            ? 'bg-[#FFC400] text-[#ffffff]'
-            : 'bg-[#1E293B] border border-white/10 text-[#94A3B8] hover:bg-[#111827] hover:text-white',
-        ]"
-      >
-        {{ filterOption.label }}
-        <span
-          v-if="filterOption.count"
-          class="ml-2 px-2 py-0.5 rounded-full text-xs"
-          :class="
+    <div class="flex items-center justify-between gap-3 border-b border-white/5 pb-2 md:border-b-0 md:pb-0">
+      <div class="flex-1 flex overflow-x-auto scrollbar-none gap-2 pb-1 md:pb-0 md:flex-wrap">
+        <button
+          v-for="filterOption in filterOptions"
+          :key="filterOption.value"
+          @click="statusFilter = filterOption.value"
+          :class="[
+            'px-3.5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 flex items-center gap-1.5',
             statusFilter === filterOption.value
-              ? 'bg-[#ffffff] text-[#FFC400]'
-              : 'bg-[#111827] text-[#9CA3AF]'
-          "
+              ? 'bg-[#FFC400] text-[#111827]'
+              : 'bg-[#1E293B] border border-white/10 text-[#94A3B8] hover:bg-[#111827] hover:text-white',
+          ]"
         >
-          {{ filterOption.count }}
-        </span>
-      </button>
+          {{ filterOption.label }}
+          <span
+            v-if="filterOption.count"
+            class="px-1.5 py-0.5 rounded-full text-[10px]"
+            :class="
+              statusFilter === filterOption.value
+                ? 'bg-[#111827]/15 text-[#111827] font-bold'
+                : 'bg-[#111827] text-[#9CA3AF]'
+            "
+          >
+            {{ filterOption.count }}
+          </span>
+        </button>
+      </div>
       <button
         @click="loadTickets"
         :disabled="loading || updating"
-        class="ml-auto px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-[#1E293B] border border-white/10 text-[#94A3B8] hover:bg-[#111827] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+        class="p-2 rounded-full bg-[#1E293B] border border-white/10 text-[#94A3B8] hover:bg-[#111827] hover:text-white disabled:opacity-50 flex-shrink-0 flex items-center justify-center h-9 w-9 md:w-auto md:h-auto md:px-4 md:py-2 md:rounded-lg md:text-sm md:font-medium"
+        title="Refresh support tickets"
       >
-        {{ loading && tickets.length ? "Refreshing..." : "Refresh" }}
+        <RefreshCw class="w-4 h-4" :class="{ 'animate-spin': loading && tickets.length }" />
+        <span class="hidden md:inline md:ml-2">{{ loading && tickets.length ? "Refreshing..." : "Refresh" }}</span>
       </button>
     </div>
 
@@ -99,7 +103,8 @@
       v-else
       class="bg-[#1E293B] rounded-2xl overflow-hidden border border-white/10"
     >
-      <div class="overflow-x-auto">
+      <!-- Desktop Table Layout -->
+      <div class="hidden md:block overflow-x-auto">
         <table class="w-full min-w-[920px] table-fixed">
           <colgroup>
             <col class="w-[22%]" />
@@ -203,6 +208,61 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Mobile Support Inbox Layout -->
+      <div class="md:hidden space-y-4">
+        <div
+          v-for="ticket in paginatedTickets"
+          :key="ticket.id"
+          class="bg-[#1E293B] border border-white/10 rounded-2xl p-4 flex flex-col gap-3 shadow-md"
+        >
+          <!-- Customer name and status badge at the top -->
+          <div class="flex items-center justify-between gap-3">
+            <h4 class="font-bold text-white text-base truncate">{{ ticket.name }}</h4>
+            <span
+              :class="[
+                'inline-flex whitespace-nowrap px-2.5 py-1 rounded-full text-xs font-semibold',
+                statusColors[ticket.status],
+              ]"
+            >
+              {{ statusLabels[ticket.status] }}
+            </span>
+          </div>
+
+          <!-- Category/Subject under customer name -->
+          <div v-if="ticket.subject" class="-mt-1">
+            <span class="text-xs font-bold text-[#FFC400] uppercase tracking-wider">{{ ticket.subject }}</span>
+          </div>
+
+          <!-- Message preview -->
+          <p class="text-xs text-[#CBD5E1] break-words whitespace-normal line-clamp-2 leading-relaxed bg-[#0F172A] p-2.5 rounded-xl border border-white/5">
+            {{ ticket.message }}
+          </p>
+
+          <!-- Contact and date in a clean layout -->
+          <div class="grid grid-cols-2 gap-3 pt-1 text-xs">
+            <div class="space-y-1">
+              <span class="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider block">CONTACT</span>
+              <p class="text-white truncate" :title="ticket.email">{{ ticket.email }}</p>
+              <p v-if="ticket.phone" class="text-[#9CA3AF] truncate">{{ ticket.phone }}</p>
+            </div>
+            <div class="space-y-1 text-right">
+              <span class="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider block">RECEIVED</span>
+              <p class="text-white">{{ formatDate(ticket.createdAt) }}</p>
+            </div>
+          </div>
+
+          <!-- Full-width View button at the bottom -->
+          <button
+            @click="openTicket(ticket)"
+            type="button"
+            class="w-full mt-2 py-2.5 rounded-xl bg-[#0F172A] border border-white/10 text-center text-xs font-bold text-[#FFC400] hover:bg-[#111827] hover:border-[#FFC400] transition-all"
+          >
+            View Details & Reply
+          </button>
+        </div>
+      </div>
+
       <AdminPagination
         v-model:page="page"
         :total-items="filteredTickets.length"
@@ -214,18 +274,18 @@
     <Teleport to="body">
       <div
         v-if="selectedTicket"
-        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4"
         @click.self="closeTicket"
       >
         <div
-          class="bg-[#1E293B] rounded-2xl border border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+          class="bg-[#1E293B] rounded-2xl border border-white/10 max-w-2xl w-full max-h-[calc(100dvh-1.5rem)] sm:max-h-[90vh] overflow-y-auto"
         >
           <!-- Modal Header -->
           <div
-            class="sticky top-0 bg-[#111827] px-6 py-4 border-b border-white/10 flex items-center justify-between"
+            class="sticky top-0 bg-[#111827] px-4 py-4 sm:px-6 border-b border-white/10 flex items-start justify-between gap-3"
           >
-            <div>
-              <h2 class="text-xl font-bold text-white">Support Ticket</h2>
+            <div class="min-w-0">
+              <h2 class="text-lg sm:text-xl font-bold text-white">Support Ticket</h2>
               <p class="text-sm text-[#9CA3AF]">ID: {{ selectedTicket.id }}</p>
             </div>
             <button
@@ -237,7 +297,7 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="p-6 space-y-6">
+          <div class="p-4 sm:p-6 space-y-6">
             <!-- Customer Info -->
             <div>
               <h3 class="text-sm font-medium text-[#9CA3AF] mb-3">
@@ -415,7 +475,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from "vue";
 import AdminPagination from "../components/AdminPagination.vue";
-import { MessageSquare, X, User, Mail, Phone, Calendar } from "@lucide/vue";
+import { MessageSquare, X, User, Mail, Phone, Calendar, RefreshCw } from "@lucide/vue";
 import {
   getSupportTickets,
   replySupportTicket,

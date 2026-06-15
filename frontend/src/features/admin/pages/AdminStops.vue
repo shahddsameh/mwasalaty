@@ -1,8 +1,8 @@
 <template>
   <div
-    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5"
+    class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 lg:py-8 flex flex-col gap-3.5 md:gap-5 pb-24 lg:pb-8"
   >
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
       <StatCard label="Total Stops" :value="stops.length" color="#38BDF8" />
       <StatCard label="With Location" :value="locatedStops" color="#00B86B" />
       <StatCard
@@ -18,8 +18,8 @@
     </Card>
 
     <Card>
-      <div class="p-4 md:p-5 border-b border-white/10 flex items-center gap-3">
-        <div class="relative flex-1">
+      <div class="p-4 md:p-5 border-b border-white/10 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div class="relative w-full sm:flex-1">
           <Search
             class="w-4 h-4 text-[#94A3B8] absolute left-3 top-1/2 -translate-y-1/2"
           />
@@ -49,7 +49,8 @@
         v-else-if="filteredStops.length > 0"
         class="bg-[#1E293B] rounded-xl overflow-hidden border border-white/10"
       >
-        <div class="overflow-x-auto">
+        <!-- Desktop Table Layout -->
+        <div class="hidden md:block overflow-x-auto">
           <table class="w-full min-w-[920px] table-fixed text-left text-sm">
             <colgroup>
               <col class="w-[34%]" />
@@ -122,6 +123,48 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Mobile Card Layout -->
+        <div class="md:hidden divide-y divide-white/10">
+          <div
+            v-for="stop in paginatedStops"
+            :key="stopKey(stop)"
+            class="p-4 flex flex-col gap-3 hover:bg-[#0F172A] transition-colors text-sm"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <span class="text-xs font-semibold text-[#9CA3AF]">STOP NAME</span>
+                <p class="font-bold text-white text-sm mt-0.5 whitespace-normal break-words">{{ stop.name || "Unnamed stop" }}</p>
+              </div>
+              <div class="flex-shrink-0 text-right">
+                <span class="text-xs font-semibold text-[#9CA3AF]">ID</span>
+                <p class="text-xs text-[#94A3B8] mt-0.5 truncate max-w-[120px]">{{ stop.id || "-" }}</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">LATITUDE</span>
+                <p class="text-[#94A3B8] mt-0.5">{{ formatCoord(stop.lat) }}</p>
+              </div>
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">LONGITUDE</span>
+                <p class="text-[#94A3B8] mt-0.5">{{ formatCoord(stop.lng ?? stop.lon) }}</p>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-2 border-t border-white/5">
+              <button
+                class="w-full sm:w-auto inline-flex h-9 items-center justify-center whitespace-nowrap rounded-xl border border-white/10 bg-[#0F172A] px-4 text-sm font-semibold leading-none text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#111827]"
+                :disabled="detailsLoading && selectedStop?.id === stop.id"
+                @click="openStopDetails(stop)"
+              >
+                {{ detailsLoading && selectedStop?.id === stop.id ? "Loading..." : "View Details" }}
+              </button>
+            </div>
+          </div>
+        </div>
+
         <AdminPagination v-model:page="page" :total-items="filteredStops.length" :page-size="pageSize" />
       </div>
 
@@ -140,11 +183,11 @@
     <Teleport to="body">
       <div
         v-if="selectedStop"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-3 sm:p-4 backdrop-blur-sm"
         @click.self="selectedStop = null"
       >
         <Card
-          className="w-full max-w-5xl max-h-[88vh] overflow-y-auto shadow-2xl"
+          className="w-full max-w-5xl max-h-[calc(100dvh-1.5rem)] sm:max-h-[88vh] overflow-y-auto shadow-2xl"
         >
           <div
             class="p-4 md:p-5 flex items-start justify-between gap-4 border-b border-white/10"
@@ -256,71 +299,102 @@
                 No related routes found for this stop.
               </div>
               <div v-else class="max-h-[360px] overflow-auto">
-                <table
-                  class="w-full min-w-[760px] table-fixed text-left text-sm"
-                >
-                  <colgroup>
-                    <col class="w-[18%]" />
-                    <col class="w-[36%]" />
-                    <col class="w-[16%]" />
-                    <col class="w-[20%]" />
-                    <col class="w-[10%]" />
-                  </colgroup>
-                  <thead
-                    class="sticky top-0 bg-[#111827] border-b border-[#374151]"
+                <!-- Desktop Table Layout -->
+                <div class="hidden md:block">
+                  <table
+                    class="w-full min-w-[760px] table-fixed text-left text-sm"
                   >
-                    <tr>
-                      <th
-                        class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-                      >
-                        Short Name
-                      </th>
-                      <th
-                        class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-                      >
-                        Long Name
-                      </th>
-                      <th
-                        class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-                      >
-                        Mode
-                      </th>
-                      <th
-                        class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-                      >
-                        Route ID
-                      </th>
-                      <th
-                        class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
-                      >
-                        Trips
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-[#374151]">
-                    <tr
-                      v-for="route in relatedRoutes"
-                      :key="route.id"
-                      class="hover:bg-[#111827] transition-colors"
+                    <colgroup>
+                      <col class="w-[18%]" />
+                      <col class="w-[36%]" />
+                      <col class="w-[16%]" />
+                      <col class="w-[20%]" />
+                      <col class="w-[10%]" />
+                    </colgroup>
+                    <thead
+                      class="sticky top-0 bg-[#111827] border-b border-[#374151]"
                     >
-                      <td class="px-4 py-4 font-medium text-white truncate">
-                        {{ route.short_name || "-" }}
-                      </td>
-                      <td class="px-4 py-4 text-[#9CA3AF] truncate">
-                        {{ route.long_name || "-" }}
-                      </td>
-                      <td class="px-4 py-4 text-[#9CA3AF] whitespace-nowrap">
-                        {{ route.mode || "-" }}
-                      </td>
-                      <td class="px-4 py-4 text-[#9CA3AF] truncate">
-                        {{ route.id || "-" }}
-                      </td>
-                      <td class="px-4 py-4 text-[#9CA3AF] whitespace-nowrap">
-                        {{ route.tripCount ?? "-" }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                      <tr>
+                        <th
+                          class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                        >
+                          Short Name
+                        </th>
+                        <th
+                          class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                        >
+                          Long Name
+                        </th>
+                        <th
+                          class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                        >
+                          Mode
+                        </th>
+                        <th
+                          class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                        >
+                          Route ID
+                        </th>
+                        <th
+                          class="px-4 py-3 text-left text-xs font-medium text-[#9CA3AF] uppercase tracking-wide"
+                        >
+                          Trips
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-[#374151]">
+                      <tr
+                        v-for="route in relatedRoutes"
+                        :key="route.id"
+                        class="hover:bg-[#111827] transition-colors"
+                      >
+                        <td class="px-4 py-4 font-medium text-white truncate">
+                          {{ route.short_name || "-" }}
+                        </td>
+                        <td class="px-4 py-4 text-[#9CA3AF] truncate">
+                          {{ route.long_name || "-" }}
+                        </td>
+                        <td class="px-4 py-4 text-[#9CA3AF] whitespace-nowrap">
+                          {{ route.mode || "-" }}
+                        </td>
+                        <td class="px-4 py-4 text-[#9CA3AF] truncate">
+                          {{ route.id || "-" }}
+                        </td>
+                        <td class="px-4 py-4 text-[#9CA3AF] whitespace-nowrap">
+                          {{ route.tripCount ?? "-" }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Mobile Card Layout -->
+                <div class="md:hidden divide-y divide-[#374151]">
+                  <div
+                    v-for="route in relatedRoutes"
+                    :key="route.id"
+                    class="p-4 flex flex-col gap-2 hover:bg-[#111827] transition-colors text-sm"
+                  >
+                    <div class="flex items-center justify-between text-xs">
+                      <span class="font-semibold text-[#FFC400]">SHORT NAME: {{ route.short_name || "-" }}</span>
+                      <span class="text-[#9CA3AF]">Trips: {{ route.tripCount ?? "-" }}</span>
+                    </div>
+                    <div>
+                      <span class="text-xs font-semibold text-[#9CA3AF]">Long Name</span>
+                      <p class="font-semibold text-white break-words mt-0.5 whitespace-normal">{{ route.long_name || "-" }}</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <span class="font-semibold text-[#9CA3AF]">Mode</span>
+                        <p class="text-[#9CA3AF] truncate mt-0.5">{{ route.mode || "-" }}</p>
+                      </div>
+                      <div>
+                        <span class="font-semibold text-[#9CA3AF]">Route ID</span>
+                        <p class="text-[#9CA3AF] truncate mt-0.5">{{ route.id || "-" }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

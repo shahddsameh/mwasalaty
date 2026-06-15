@@ -1,10 +1,10 @@
 <template>
-  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-5">
+  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 lg:py-8 flex flex-col gap-3.5 md:gap-5 pb-24 lg:pb-8">
     <Card v-if="error" className="border-red-500/30 bg-red-500/10">
       <div class="p-4 text-sm font-medium text-red-200">{{ error }}</div>
     </Card>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
       <StatCard label="Total feedback" :value="feedback.length" color="#38BDF8" />
       <StatCard label="Good feedback" :value="goodCount" color="#10B981" />
       <StatCard label="Bad / issue feedback" :value="badCount" color="#E63946" />
@@ -12,7 +12,7 @@
     </div>
 
     <Card>
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 p-4 md:p-5">
+      <div class="flex flex-col gap-3 border-b border-white/10 p-4 md:p-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 class="text-lg font-bold text-[#F8FAFC]" style="font-family: &quot;DM Sans&quot;, sans-serif">
             Feedback
@@ -20,7 +20,7 @@
           <p class="text-sm text-[#94A3B8]">Journey ratings and rider-reported route issues</p>
         </div>
         <button
-          class="rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-[#F8FAFC] hover:border-[#FFC400] hover:text-[#FFC400] disabled:opacity-60"
+          class="w-full rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-[#F8FAFC] hover:border-[#FFC400] hover:text-[#FFC400] disabled:opacity-60 sm:w-auto"
           :disabled="loading"
           @click="loadFeedback"
         >
@@ -28,7 +28,7 @@
         </button>
       </div>
 
-      <div class="grid gap-3 border-b border-white/10 p-4 md:grid-cols-3">
+      <div class="grid gap-3 border-b border-white/10 p-4 sm:grid-cols-3">
         <input
           v-model="search"
           type="search"
@@ -52,7 +52,8 @@
         No journey feedback found.
       </div>
       <div v-else class="bg-[#1E293B] rounded-xl overflow-hidden border border-white/10">
-        <div class="overflow-x-auto">
+        <!-- Desktop Table Layout -->
+        <div class="hidden md:block overflow-x-auto">
           <table class="w-full min-w-[1180px] table-fixed text-left text-sm">
             <colgroup>
               <col class="w-[130px]" />
@@ -106,18 +107,82 @@
                 </td>
                 <td class="px-4 py-3 text-right">
                   <div class="flex justify-end">
-                  <button
-                    class="min-w-[118px] whitespace-nowrap rounded-xl border border-white/10 bg-[#0F172A] px-3 py-1.5 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#111827]"
-                    @click="selectedFeedback = item"
-                  >
-                    View details
-                  </button>
+                    <button
+                      class="min-w-[118px] whitespace-nowrap rounded-xl border border-white/10 bg-[#0F172A] px-3 py-1.5 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#111827]"
+                      @click="selectedFeedback = item"
+                    >
+                      View details
+                    </button>
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+
+        <!-- Mobile Card Layout -->
+        <div class="md:hidden divide-y divide-white/10">
+          <div
+            v-for="item in paginatedFeedback"
+            :key="item.id"
+            class="p-4 flex flex-col gap-3 hover:bg-[#0F172A] transition-colors text-sm"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0 flex-1">
+                <span class="text-xs font-semibold text-[#9CA3AF]">USER</span>
+                <p class="font-semibold text-white text-sm mt-0.5 truncate">{{ userLabel(item) }}</p>
+              </div>
+              <div class="flex-shrink-0 text-right">
+                <span class="text-xs font-semibold text-[#9CA3AF]">RATING</span>
+                <div class="mt-0.5">
+                  <span :class="ratingBadgeClass(item.rating)">
+                    {{ ratingLabel(item.rating) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">ORIGIN</span>
+                <p class="text-[#94A3B8] truncate mt-0.5">{{ item.origin || "-" }}</p>
+              </div>
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">DESTINATION</span>
+                <p class="text-[#94A3B8] truncate mt-0.5">{{ item.destination || "-" }}</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">DATE</span>
+                <p class="text-[#94A3B8] mt-0.5 flex flex-col">
+                  <span>{{ formatDateParts(item.createdAt)[0] }}</span>
+                  <span class="text-[10px] text-[#64748B]">{{ formatDateParts(item.createdAt)[1] }}</span>
+                </p>
+              </div>
+              <div>
+                <span class="font-semibold text-[#9CA3AF]">TICKET ID</span>
+                <p class="text-[#94A3B8] truncate mt-0.5">{{ item.ticketId || "-" }}</p>
+              </div>
+            </div>
+
+            <div class="text-xs">
+              <span class="font-semibold text-[#9CA3AF]">ISSUE PREVIEW</span>
+              <p class="text-[#94A3B8] break-words mt-0.5 whitespace-normal">{{ issuePreview(item) }}</p>
+            </div>
+
+            <div class="flex justify-end pt-2 border-t border-white/5">
+              <button
+                class="w-full sm:w-auto rounded-xl border border-white/10 bg-[#0F172A] px-3 py-2 text-sm font-semibold text-[#FFC400] transition-all hover:border-[#FFC400] hover:bg-[#111827]"
+                @click="selectedFeedback = item"
+              >
+                View details
+              </button>
+            </div>
+          </div>
+        </div>
+
         <AdminPagination v-model:page="page" :total-items="filteredFeedback.length" :page-size="pageSize" />
       </div>
     </Card>
@@ -125,13 +190,13 @@
     <Teleport to="body">
       <div
         v-if="selectedFeedback"
-        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4"
         @click.self="selectedFeedback = null"
       >
-        <div class="bg-[#1E293B] rounded-2xl border border-white/10 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-          <div class="sticky top-0 bg-[#111827] px-6 py-4 border-b border-white/10 flex items-center justify-between">
-            <div>
-              <h2 class="text-xl font-bold text-white">Feedback Details</h2>
+        <div class="bg-[#1E293B] rounded-2xl border border-white/10 max-w-3xl w-full max-h-[calc(100dvh-1.5rem)] sm:max-h-[90vh] overflow-y-auto">
+          <div class="sticky top-0 bg-[#111827] px-4 py-4 sm:px-6 border-b border-white/10 flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <h2 class="text-lg sm:text-xl font-bold text-white">Feedback Details</h2>
               <p class="text-sm text-[#9CA3AF]">ID: {{ selectedFeedback.id }}</p>
             </div>
             <button class="p-2 hover:bg-[#374151] rounded-lg transition-colors" @click="selectedFeedback = null">
@@ -139,7 +204,7 @@
             </button>
           </div>
 
-          <div class="p-6 space-y-5">
+          <div class="p-4 sm:p-6 space-y-5">
             <div class="flex flex-wrap items-center gap-3">
               <span :class="ratingBadgeClass(selectedFeedback.rating)">
                 {{ ratingLabel(selectedFeedback.rating) }}

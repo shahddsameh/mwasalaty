@@ -44,6 +44,18 @@ function handleServiceError(res, err) {
   return res.status(500).json(makeError(ErrorCodes.INTERNAL_SERVER_ERROR, 'An unexpected error occurred'));
 }
 
+function isLegUsed(leg) {
+  return Boolean(leg.used || leg.usedAt || leg.validatedAt || leg.status === 'used');
+}
+
+function isLegRefunded(leg) {
+  return Boolean(leg.refunded || leg.refundedAt || leg.status === 'refunded');
+}
+
+function ticketHasUsedHistory(ticket) {
+  return Boolean(ticket.usedAt || ticket.legs?.some(isLegUsed));
+}
+
 export async function createTicketHandler(req, res) {
   try {
     if (req.body?.passenger?.userId !== req.auth?.user?.id) {
@@ -132,16 +144,60 @@ export async function scanValidateHandler(req, res) {
 }
 
 function resolveRefundableLegs(ticket, legIds) {
+  const now = new Date();
+  const expiresAt = ticket.expiresAt ? new Date(ticket.expiresAt) : null;
+  const isNotExpired = !expiresAt || Number.isNaN(expiresAt.getTime()) || expiresAt > now;
+  const isPaid = ticket.payment?.status === 'paid' || ticket.paymentStatus === 'paid';
+
+  if (ticket.status !== 'active') {
+    throw {
+      code: ErrorCodes.NO_REFUNDABLE_LEGS,
+      message: 'Ticket is not active',
+      details: { ticketId: ticket.ticketId, status: ticket.status },
+    };
+  }
+
+  if (!isPaid) {
+    throw {
+      code: ErrorCodes.NO_REFUNDABLE_LEGS,
+      message: 'Ticket payment is not paid',
+      details: { ticketId: ticket.ticketId, paymentStatus: ticket.payment?.status || ticket.paymentStatus || null },
+    };
+  }
+
+  if (!isNotExpired) {
+    throw {
+      code: ErrorCodes.REFUND_WINDOW_EXPIRED,
+      message: 'Refund window has closed because the ticket has expired',
+      details: { ticketId: ticket.ticketId, expiresAt: ticket.expiresAt },
+    };
+  }
+
+  if (ticketHasUsedHistory(ticket)) {
+    throw {
+      code: ErrorCodes.LEG_ALREADY_USED,
+      message: 'Used tickets cannot be refunded',
+      details: {
+        ticketId: ticket.ticketId,
+        usedLegIds: ticket.legs.filter(isLegUsed).map(l => l.ticketLegId),
+      },
+    };
+  }
+
   if (Array.isArray(legIds) && legIds.length > 0) {
     return legIds.map(id => {
       const leg = ticket.legs.find(l => l.ticketLegId === id);
       if (!leg) throw { code: ErrorCodes.LEG_NOT_FOUND, message: `Leg '${id}' not found`, details: { ticketId: ticket.ticketId, ticketLegId: id } };
-      if (leg.status === 'refunded') throw { code: ErrorCodes.LEG_ALREADY_REFUNDED, message: 'Leg already refunded', details: { ticketLegId: id } };
-      if (leg.status === 'used') throw { code: ErrorCodes.LEG_ALREADY_USED, message: 'Used legs cannot be refunded', details: { ticketLegId: id } };
+      if (isLegRefunded(leg)) {
+        throw { code: ErrorCodes.LEG_ALREADY_REFUNDED, message: 'Leg already refunded', details: { ticketLegId: id } };
+      }
+      if (isLegUsed(leg)) {
+        throw { code: ErrorCodes.LEG_ALREADY_USED, message: 'Used legs cannot be refunded', details: { ticketLegId: id } };
+      }
       return leg;
     });
   }
-  const used = ticket.legs.filter(l => l.status === 'used');
+  const used = ticket.legs.filter(isLegUsed);
   if (used.length > 0) {
     throw {
       code: ErrorCodes.LEG_ALREADY_USED,
@@ -149,7 +205,7 @@ function resolveRefundableLegs(ticket, legIds) {
       details: { ticketId: ticket.ticketId, usedLegIds: used.map(l => l.ticketLegId) },
     };
   }
-  const refunded = ticket.legs.filter(l => l.status === 'refunded');
+  const refunded = ticket.legs.filter(isLegRefunded);
   if (refunded.length > 0) {
     throw {
       code: ErrorCodes.LEG_ALREADY_REFUNDED,
@@ -157,7 +213,9 @@ function resolveRefundableLegs(ticket, legIds) {
       details: { ticketId: ticket.ticketId, refundedLegIds: refunded.map(l => l.ticketLegId) },
     };
   }
-  const unused = ticket.legs.filter(l => l.status === 'unused');
+  const unused = ticket.legs.filter(l => {
+    return !isLegUsed(l) && !isLegRefunded(l);
+  });
   if (unused.length === 0) throw { code: ErrorCodes.NO_REFUNDABLE_LEGS, message: 'No unused legs to refund', details: { ticketId: ticket.ticketId } };
   return unused;
 }

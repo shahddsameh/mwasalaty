@@ -423,26 +423,21 @@ async function confirmRefund() {
 }
 
 function refundableLegs(ticket: Ticket) {
-  const isTicketActive = ticket.status === "active";
-  const isPaid = (ticket.paymentStatus ?? ticket.payment?.status) === "paid";
+  const paymentStatus = ticket.paymentStatus ?? ticket.payment?.status;
+  // A partial refund flips the payment status to "partially_refunded"; the ticket
+  // was still paid, so its remaining unused legs stay refundable.
+  const isPaid =
+    paymentStatus === "paid" || paymentStatus === "partially_refunded";
   const isNotExpired = !isExpired(ticket);
+  const isFullyRefunded = ticket.status === "refunded";
 
-  if (ticketHasUsedHistory(ticket)) {
-    console.log("refundableLegs", []);
-    return [];
-  }
+  // An unused, unrefunded leg stays refundable even after a sibling leg is used or
+  // refunded, as long as the ticket is paid, not expired, and not fully refunded.
+  if (!isPaid || !isNotExpired || isFullyRefunded) return [];
 
-  const legs = ticket.legs.filter((leg) => {
-    return (
-      isTicketActive &&
-      isPaid &&
-      isNotExpired &&
-      !isLegUsed(leg) &&
-      !isLegRefunded(leg)
-    );
-  });
-  console.log("refundableLegs", legs);
-  return legs;
+  return ticket.legs.filter(
+    (leg) => !isLegUsed(leg) && !isLegRefunded(leg),
+  );
 }
 
 function canFullyRefund(ticket: Ticket) {
@@ -490,21 +485,24 @@ function isExpired(ticket: Ticket) {
 }
 
 function computedTicketStatus(ticket: Ticket): Ticket["status"] | "expired" {
-  let computedStatus: Ticket["status"] | "expired";
-  if (
+  const legs = ticket.legs;
+  const allRefunded =
     ticket.status === "refunded" ||
-    (ticket.legs.length > 0 && ticket.legs.every(isLegRefunded))
-  ) {
-    computedStatus = "refunded";
-  } else if (ticketHasUsedHistory(ticket)) {
-    computedStatus = "used";
-  } else if (isExpired(ticket)) {
-    computedStatus = "expired";
-  } else {
-    computedStatus = ticket.status;
-  }
-  console.log("computedStatus", computedStatus);
-  return computedStatus;
+    (legs.length > 0 && legs.every(isLegRefunded));
+  if (allRefunded) return "refunded";
+  if (isExpired(ticket)) return "expired";
+
+  // Any leg that is neither used nor refunded can still be ridden, so the ticket
+  // is active even if a sibling leg was already used or refunded.
+  const hasRideableLeg = legs.some(
+    (leg) => !isLegUsed(leg) && !isLegRefunded(leg),
+  );
+  if (hasRideableLeg) return "active";
+
+  // No rideable legs remain (all used, or a used+refunded mix) but it isn't fully
+  // refunded or expired.
+  if (ticketHasUsedHistory(ticket)) return "used";
+  return ticket.status;
 }
 
 function statusLabel(ticket: Ticket) {

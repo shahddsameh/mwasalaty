@@ -55,6 +55,10 @@ function ticketHasUsedHistory(ticket) {
   return Boolean(ticket.usedAt || ticket.legs?.some(isLegUsed));
 }
 
+// Payment states that mean the rider actually paid, so a refund is still possible.
+// 'partially_refunded' is included because a prior partial refund leaves paid legs.
+const PAID_PAYMENT_STATES = new Set(['paid', 'partially_refunded']);
+
 function resolveTicketStatus(ticket) {
   const legs = ticket.legs;
   if (legs.length === 0) return 'active';
@@ -445,12 +449,17 @@ export async function refundTicket(ticketId, legIds, refundMeta = {}) {
   const now = new Date();
   const expiresAt = ticket.expiresAt ? new Date(ticket.expiresAt) : null;
   const isNotExpired = !expiresAt || Number.isNaN(expiresAt.getTime()) || expiresAt > now;
-  const isPaid = ticket.payment?.status === 'paid' || ticket.paymentStatus === 'paid';
+  // A partial refund flips the payment status to 'partially_refunded'; the ticket
+  // was still paid, so its remaining unused legs stay refundable.
+  const isPaid = PAID_PAYMENT_STATES.has(ticket.payment?.status) || PAID_PAYMENT_STATES.has(ticket.paymentStatus);
 
-  if (ticket.status !== 'active') {
+  // A fully refunded ticket has nothing left to refund. A 'used' or
+  // 'partially_refunded' ticket may still have unused legs worth refunding, so it
+  // proceeds to the per-leg checks below.
+  if (ticket.status === 'refunded') {
     throw {
       code: ErrorCodes.NO_REFUNDABLE_LEGS,
-      message: 'Ticket is not active',
+      message: 'Ticket has been fully refunded',
       details: { ticketId, status: ticket.status },
     };
   }
@@ -471,17 +480,9 @@ export async function refundTicket(ticketId, legIds, refundMeta = {}) {
     };
   }
 
-  if (ticketHasUsedHistory(ticket)) {
-    throw {
-      code: ErrorCodes.LEG_ALREADY_USED,
-      message: 'Used tickets cannot be refunded',
-      details: {
-        ticketId,
-        usedLegIds: ticket.legs.filter(isLegUsed).map(l => l.ticketLegId),
-      },
-    };
-  }
-
+  // No blanket block on used history: an unused leg stays refundable even after a
+  // sibling leg is used. The per-leg legIds branch rejects refunding a *used* leg,
+  // and the total-refund branch rejects a total refund once any leg is used.
   let refundableLegs;
   if (Array.isArray(legIds) && legIds.length > 0) {
     const candidateLegs = legIds.map(id => {

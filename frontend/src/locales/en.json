@@ -445,7 +445,9 @@
     },
     "preview": {
       "title": "You are offline. Showing a previously saved route. Availability may have changed.",
-      "subtitle": "Reconnect before starting the trip or buying a ticket."
+      "subtitle": "Reconnect before starting the trip or buying a ticket.",
+      "staleTitle": "Couldn't refresh live results. Showing a previously saved route.",
+      "staleSubtitle": "Availability may have changed since it was saved. Try again to get the latest."
     }
   },
   "routeDetails": {

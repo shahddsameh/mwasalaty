@@ -59,8 +59,12 @@
         <div class="flex items-start gap-3">
           <CloudOff class="mt-0.5 h-5 w-5 flex-shrink-0 text-warning" />
           <div class="text-sm text-foreground">
-            <p class="font-display">{{ t("routeResults.preview.title") }}</p>
-            <p class="mt-1 text-muted-foreground">{{ t("routeResults.preview.subtitle") }}</p>
+            <p class="font-display">
+              {{ isOnline ? t("routeResults.preview.staleTitle") : t("routeResults.preview.title") }}
+            </p>
+            <p class="mt-1 text-muted-foreground">
+              {{ isOnline ? t("routeResults.preview.staleSubtitle") : t("routeResults.preview.subtitle") }}
+            </p>
           </div>
         </div>
       </div>
@@ -150,6 +154,7 @@ import RouteCard from "@/components/route/RouteCard.vue";
 import RoutePreviewMap from "../components/RoutePreviewMap.vue";
 import { type ApiRouteOption } from "@/services/api";
 import { useRoutePlanning } from "@/composables/useRoutePlanning";
+import { useNetworkStatus } from "@/core/offline/networkStatus";
 import { localizePlaceName } from "@/services/placeLocalization";
 import {
   computeDepartureAt,
@@ -165,6 +170,7 @@ type TimeMode = "now" | "depart" | "arrive";
 const router = useRouter();
 const currentRoute = useRoute();
 const { t } = useI18n();
+const { isOnline } = useNetworkStatus();
 
 const state = history.state ?? {};
 const queryString = (value: unknown) =>

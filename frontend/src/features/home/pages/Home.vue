@@ -4,17 +4,137 @@
       <section
         class="relative mb-10 overflow-hidden rounded-2xl border border-border bg-card shadow-sm md:mb-12"
       >
+        <!-- Animated Background Blobs -->
         <div
-          class="pointer-events-none absolute -end-20 -top-24 h-64 w-64 rounded-full bg-primary/15 blur-3xl"
+          class="pointer-events-none absolute -end-20 -top-24 h-64 w-64 rounded-full bg-primary/15 blur-3xl animate-float-slow-1"
           aria-hidden="true"
         />
         <div
-          class="pointer-events-none absolute -bottom-28 start-1/3 h-56 w-56 rounded-full bg-accent/10 blur-3xl"
+          class="pointer-events-none absolute -bottom-28 start-1/3 h-56 w-56 rounded-full bg-accent/10 blur-3xl animate-float-slow-2"
           aria-hidden="true"
         />
 
+        <!-- Animated SVG Transit Network Background -->
         <div
-          class="relative grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:p-12"
+          class="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-35 dark:opacity-20"
+          aria-hidden="true"
+        >
+          <svg width="100%" height="100%" class="absolute inset-0 select-none">
+            <defs>
+              <!-- Grid pattern -->
+              <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                <circle cx="20" cy="20" r="1" fill="currentColor" class="text-border/30" />
+              </pattern>
+              
+              <!-- Glow Filters -->
+              <filter id="glow-metro" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="3.5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <filter id="glow-bus" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="3.5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <filter id="glow-accent" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="3.5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            
+            <!-- Grid background layer -->
+            <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+            
+            <!-- Styled Transit Routes -->
+            <!-- Metro Line (Red) -->
+            <path
+              d="M -50,320 Q 180,240 380,280 T 780,180 T 1150,220"
+              fill="none"
+              stroke="var(--color-transport-metro)"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-dasharray="12 18"
+              class="opacity-60 path-metro"
+            />
+            <!-- Bus Route (Orange) -->
+            <path
+              d="M -50,120 C 220,70 380,330 680,180 T 1150,120"
+              fill="none"
+              stroke="var(--color-transport-bus)"
+              stroke-width="2"
+              stroke-linecap="round"
+              class="opacity-50 path-bus"
+            />
+            <!-- Accent/Tram/Walk (Teal) -->
+            <path
+              d="M 120,450 Q 280,120 520,180 T 980,380"
+              fill="none"
+              stroke="var(--color-accent)"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-dasharray="6 6"
+              class="opacity-70 path-accent"
+            />
+
+            <!-- Animated glowing dots (vehicles) traversing the paths -->
+            <!-- Metro Vehicle -->
+            <circle r="5.5" fill="var(--color-transport-metro)" filter="url(#glow-metro)" class="vehicle-dot">
+              <animateMotion
+                path="M -50,320 Q 180,240 380,280 T 780,180 T 1150,220"
+                dur="24s"
+                repeatCount="indefinite"
+              />
+            </circle>
+            
+            <!-- Bus Vehicle -->
+            <circle r="4.5" fill="var(--color-transport-bus)" filter="url(#glow-bus)" class="vehicle-dot">
+              <animateMotion
+                path="M -50,120 C 220,70 380,330 680,180 T 1150,120"
+                dur="30s"
+                repeatCount="indefinite"
+              />
+            </circle>
+
+            <!-- Accent Vehicle -->
+            <circle r="4" fill="var(--color-accent)" filter="url(#glow-accent)" class="vehicle-dot">
+              <animateMotion
+                path="M 120,450 Q 280,120 520,180 T 980,380"
+                dur="20s"
+                repeatCount="indefinite"
+              />
+            </circle>
+
+            <!-- Station Stops / Hubs (Intersections or prominent coordinates) -->
+            <!-- Hub 1 (Main Cairo Connection) -->
+            <g class="station-hub" transform="translate(380, 280)">
+              <circle r="8" fill="var(--card)" stroke="var(--color-transport-metro)" stroke-width="2.5" />
+              <circle r="15" fill="none" stroke="var(--color-transport-metro)" stroke-width="1.5" class="animate-ping-slow" />
+            </g>
+            
+            <!-- Hub 2 (Bus / Accent Hub) -->
+            <g class="station-hub" transform="translate(680, 180)">
+              <circle r="6.5" fill="var(--card)" stroke="var(--color-transport-bus)" stroke-width="2" />
+              <circle r="12" fill="none" stroke="var(--color-transport-bus)" stroke-width="1.2" class="animate-ping-slow" style="animation-delay: 1s;" />
+            </g>
+
+            <!-- Hub 3 (Secondary Accent Hub) -->
+            <g class="station-hub" transform="translate(520, 180)">
+              <circle r="6" fill="var(--card)" stroke="var(--color-accent)" stroke-width="2" />
+              <circle r="12" fill="none" stroke="var(--color-accent)" stroke-width="1.2" class="animate-ping-slow" style="animation-delay: 2s;" />
+            </g>
+          </svg>
+        </div>
+
+        <div
+          class="relative z-10 grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:p-12"
         >
           <div class="max-w-2xl text-start">
             <div
@@ -181,6 +301,7 @@
                 @click="openSavePlace('start')"
               >
                 <Plus class="w-4 h-4" />
+              
               </button>
             </div>
             <div
@@ -527,3 +648,64 @@ async function addSavedPlace() {
   closeSavePlace();
 }
 </script>
+
+<style scoped>
+/* Scoped styles for animated hero section background */
+.animate-float-slow-1 {
+  animation: float-blob-1 25s ease-in-out infinite;
+}
+
+.animate-float-slow-2 {
+  animation: float-blob-2 30s ease-in-out infinite;
+}
+
+.animate-ping-slow {
+  animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+  transform-origin: center;
+}
+
+@keyframes float-blob-1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(35px, -25px) scale(1.08);
+  }
+  66% {
+    transform: translate(-15px, 25px) scale(0.96);
+  }
+}
+
+@keyframes float-blob-2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-35px, 15px) scale(1.06);
+  }
+}
+
+@keyframes ping-slow {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  75%, 100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* Fallback / Accessibility for prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-slow-1,
+  .animate-float-slow-2,
+  .animate-ping-slow {
+    animation: none !important;
+  }
+
+  .vehicle-dot {
+    display: none !important;
+  }
+}
+</style>

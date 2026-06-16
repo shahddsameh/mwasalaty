@@ -7,22 +7,29 @@
     ]"
   >
     <!-- Logo -->
+    <!-- Logo -->
     <div class="px-6 py-6 border-b border-sidebar-border">
-      <div class="flex items-center gap-3">
-        <div
-          class="w-10 h-10 rounded-xl bg-[#FFC400] flex items-center justify-center text-[#ffffff] text-xl font-bold"
+      <div
+        dir="ltr"
+        class="grid grid-cols-[auto_1fr] grid-rows-[auto_auto] items-start"
+      >
+        <img
+          :src="mwasalatyLogo"
+          alt="Mwasalaty logo"
+          class="row-span-2 h-10 w-auto object-contain flex-shrink-0 -mt-1"
+        />
+
+        <p
+          class="-ms-1 mt-0.5 font-display text-2xl font-bold leading-none tracking-tight text-sidebar-foreground"
         >
-          M
-        </div>
-        <div>
-          <p
-            class="text-lg font-bold text-sidebar-foreground"
-            style="font-family: &quot;DM Sans&quot;, sans-serif"
-          >
-            Mwaslaty
-          </p>
-          <p class="text-xs text-sidebar-foreground/60">Admin Panel</p>
-        </div>
+          wasalaty
+        </p>
+
+        <p
+          class="-ms-9 mt-2.5 text-sm font-medium leading-none text-sidebar-foreground/60"
+        >
+          Admin Panel
+        </p>
       </div>
     </div>
 
@@ -57,6 +64,8 @@
 </template>
 
 <script setup lang="ts">
+import mwasalatyLogo from "@/assets/mwasalaty-lightlogo1.png";
+
 import {
   LayoutDashboard,
   Route as RouteIcon,
@@ -80,11 +89,17 @@ const emit = defineEmits<{
 
 function handleNav(page: string) {
   emit("nav", page);
-  if (props.mobile) emit("close");
+
+  if (props.mobile) {
+    emit("close");
+  }
 }
 
 function isActive(page: string) {
-  if (props.active === "stations") return page === "stops";
+  if (props.active === "stations") {
+    return page === "stops";
+  }
+
   return props.active === page;
 }
 

@@ -6,15 +6,19 @@
       <div class="flex items-center justify-between">
         <RouterLink
           to="/"
-          class="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity"
+          dir="ltr"
+          class="flex items-center gap-1 md:gap-2 hover:opacity-80 transition-opacity"
         >
-          <div
-            class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-primary flex items-center justify-center"
+          <img
+            :src="mwasalatyLogo"
+            alt="Mwasalaty logo"
+            class="h-10 md:h-12 w-auto object-contain"
+          />
+
+          <span
+            class="font-display text-xl md:text-2xl font-bold leading-none -ms-2 md:-ms-3"
           >
-            <MapPin class="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
-          </div>
-          <span class="font-display text-xl md:text-xl font-bold">
-            {{ t("app.name") }}
+            wasalaty
           </span>
         </RouterLink>
 
@@ -34,10 +38,16 @@
             :to="item.to"
             :class="desktopClass(item.to)"
           >
-            <component v-if="item.icon" :is="item.icon" class="w-4 h-4 me-1.5" />
+            <component
+              v-if="item.icon"
+              :is="item.icon"
+              class="w-4 h-4 me-1.5"
+            />
             {{ t(item.labelKey) }}
           </RouterLink>
+
           <div class="w-px h-6 bg-sidebar-border mx-1" />
+
           <button
             type="button"
             class="px-3 py-2 rounded-lg transition-colors text-sm hover:bg-sidebar-accent"
@@ -45,16 +55,22 @@
           >
             {{ t("language.toggle") }}
           </button>
+
           <button
             type="button"
             class="rounded-lg p-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
-            :aria-label="theme === 'dark' ? t('nav.switchToLight') : t('nav.switchToDark')"
-            :title="theme === 'dark' ? t('nav.switchToLight') : t('nav.switchToDark')"
+            :aria-label="
+              theme === 'dark' ? t('nav.switchToLight') : t('nav.switchToDark')
+            "
+            :title="
+              theme === 'dark' ? t('nav.switchToLight') : t('nav.switchToDark')
+            "
             @click="toggleTheme"
           >
             <Sun v-if="theme === 'dark'" class="h-5 w-5" />
             <Moon v-else class="h-5 w-5" />
           </button>
+
           <RouterLink
             :to="isAuthenticated ? '/profile' : '/auth'"
             :class="
@@ -70,6 +86,7 @@
             <LogIn v-else class="w-4 h-4" />
             <span v-if="!isAuthenticated">{{ t("nav.login") }}</span>
           </RouterLink>
+
           <RouterLink
             to="/settings"
             :class="iconClass('/settings')"
@@ -82,7 +99,7 @@
 
       <nav
         class="lg:hidden fixed bottom-0 z-50 bg-sidebar border-t border-sidebar-border px-2 py-2"
-        style="inset-inline-start: 0; inset-inline-end: 0;"
+        style="inset-inline-start: 0; inset-inline-end: 0"
       >
         <div class="flex items-center justify-around">
           <RouterLink
@@ -94,14 +111,6 @@
             <component :is="item.icon" class="w-5 h-5" />
             <span>{{ t(item.labelKey) }}</span>
           </RouterLink>
-          <!-- <button
-            type="button"
-            class="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-xs text-sidebar-foreground hover:text-primary"
-            @click="toggleLanguage"
-          >
-            <Globe2 class="w-5 h-5" />
-            <span>{{ t("language.current") }}</span>
-          </button> -->
         </div>
       </nav>
     </div>
@@ -114,8 +123,6 @@ import { useI18n } from "vue-i18n";
 import { RouterLink, useRoute } from "vue-router";
 import {
   BookmarkCheck,
-  Brain,
-  Globe2,
   LogIn,
   MapPin,
   Moon,
@@ -124,6 +131,9 @@ import {
   Ticket,
   User,
 } from "@lucide/vue";
+
+import mwasalatyLogo from "@/assets/mwasalaty-lightlogo1.png";
+
 import { setI18nLanguage } from "@/i18n";
 import { useAuthState } from "@/services/authState";
 import { changeLanguage, type AppLanguage } from "@/services/language";
@@ -132,13 +142,14 @@ import { applyTheme, getSavedTheme, type AppTheme } from "@/services/theme";
 const route = useRoute();
 const { locale, t } = useI18n();
 const { isAuthenticated } = useAuthState();
+
 const theme = ref<AppTheme>(getSavedTheme());
+
 const currentPath = computed(() => route.path);
 const active = (path: string) => currentPath.value === path;
 
 const desktopLinks = computed(() => [
   { to: "/", labelKey: "nav.routePlanner", icon: MapPin },
-  // { to: "/ai-trip-planner", labelKey: "nav.aiTripPlanner", icon: Brain },
   ...(isAuthenticated.value
     ? [
         { to: "/saved", labelKey: "nav.saved", icon: BookmarkCheck },
@@ -149,7 +160,6 @@ const desktopLinks = computed(() => [
 
 const mobileLinks = computed(() => [
   { to: "/", labelKey: "nav.routePlanner", icon: MapPin },
-  // { to: "/ai-trip-planner", labelKey: "nav.aiTrip", icon: Brain },
   ...(isAuthenticated.value
     ? [
         { to: "/saved", labelKey: "nav.saved", icon: BookmarkCheck },
@@ -163,6 +173,7 @@ const mobileLinks = computed(() => [
 
 async function toggleLanguage() {
   const nextLanguage: AppLanguage = locale.value === "ar" ? "en" : "ar";
+
   setI18nLanguage(nextLanguage);
   await changeLanguage(nextLanguage);
 }

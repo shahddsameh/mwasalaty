@@ -23,9 +23,8 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "prompt",
-      includeAssets: ["icons/mwasalaty-darklogo2.png"],
+      includeAssets: ["icons/mwasalaty-app-icon.png"],
       manifest: {
-        id: "/mwasalaty-pwa-v2",
         name: "Mwasalaty",
         short_name: "Mwasalaty",
         description:
@@ -38,34 +37,33 @@ export default defineConfig({
         start_url: "/",
         icons: [
           {
-            src: "/icons/mwasalaty-darklogo2.png",
-            sizes: "192x192",
+            src: "/icons/mwasalaty-app-icon.png",
+            sizes: "934x934",
             type: "image/png",
             purpose: "any",
           },
           {
-            src: "/icons/mwasalaty-darklogo2.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "any",
-          },
-          {
-            src: "/icons/mwasalaty-darklogo2.png",
-            sizes: "512x512",
+            src: "/icons/mwasalaty-app-icon.png",
+            sizes: "934x934",
             type: "image/png",
             purpose: "maskable",
           },
         ],
       },
       workbox: {
+        // App shell precache: JS, CSS, HTML, icons, SVG, webp, woff2, etc.
         globPatterns: ["**/*.{js,css,html,svg,png,webp,ico,json,woff2}"],
 
+        // Vue Router offline support: serve the SPA shell for navigations so
+        // the app and its IndexedDB-backed offline features boot offline.
         navigateFallback: "/index.html",
 
+        // Never serve the SPA shell for API calls.
         navigateFallbackDenylist: [/^\/api\//],
 
         runtimeCaching: [
           {
+            // Place autocomplete: fast cached results, refreshed in background.
             urlPattern: /\/api\/places\/search/,
             handler: "StaleWhileRevalidate",
             options: {
@@ -80,6 +78,7 @@ export default defineConfig({
             },
           },
           {
+            // Map tiles. CacheFirst so the map renders offline once tiles are seen.
             urlPattern: /^https:\/\/[a-z0-9.]*google\.com\/vt\//,
             handler: "CacheFirst",
             options: {
@@ -93,6 +92,9 @@ export default defineConfig({
               },
             },
           },
+
+          // NOTE: /api/plan is intentionally NOT cached here.
+          // It is a POST request and should not be treated as a confirmed/bookable route.
         ],
       },
       devOptions: {

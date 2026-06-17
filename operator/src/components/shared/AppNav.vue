@@ -1,64 +1,132 @@
 <template>
-  <nav
-    class="operator-nav bottom-nav-safe fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card/95 px-1 shadow-sm backdrop-blur-xl md:static md:mx-auto md:mb-5 md:w-full md:max-w-5xl md:rounded-2xl md:border md:p-2"
-    aria-label="Operator navigation"
+  <header
+    class="w-full bg-sidebar text-sidebar-foreground border border-sidebar-border rounded-xl p-3 mb-5 flex items-center justify-between md:static md:mx-auto md:max-w-5xl md:rounded-lg md:p-3"
   >
-    <ul class="mx-auto flex w-full max-w-5xl items-stretch md:items-center md:gap-1">
-      <li v-for="item in items" :key="item.to" class="flex-1">
-        <RouterLink
-          :to="item.to"
-          class="operator-nav-link group tap-target relative flex h-full flex-col items-center justify-center gap-1 px-0.5 py-2 text-muted-foreground transition-colors hover:bg-surface-hover hover:text-foreground md:flex-row md:gap-2 md:rounded-xl md:px-3 md:py-2.5"
-          active-class="operator-nav-active"
+    <div class="flex w-full items-center justify-between">
+      <!-- Logo and App Name -->
+      <RouterLink
+        to="/dashboard"
+        dir="ltr"
+        class="flex items-center gap-1 md:gap-2 hover:opacity-80 transition-opacity"
+      >
+        <img
+          :src="mwasalatyLogo"
+          alt="Mwasalaty logo"
+          class="h-8 md:h-10 w-auto object-contain"
+        />
+        <span
+          class="font-display text-xl md:text-2xl font-bold leading-none -ms-1.5 md:-ms-2"
         >
-          <AppIcon :name="item.icon" class="h-5 w-5" />
-          <span class="max-w-full truncate text-[0.62rem] font-medium leading-none sm:text-[0.7rem] md:text-sm">{{ item.label }}</span>
+          wasalaty
+        </span>
+      </RouterLink>
+
+      <!-- Mobile Account Link (hidden on desktop) -->
+      <RouterLink
+        to="/account"
+        class="block md:hidden"
+        :class="iconClass('/account')"
+        :title="t('common.account')"
+      >
+        <AppIcon name="account" class="w-5 h-5 flex-shrink-0" />
+      </RouterLink>
+
+      <!-- Desktop Nav Links (hidden on mobile) -->
+      <nav class="hidden md:flex items-center gap-2">
+        <RouterLink
+          v-for="item in desktopItems"
+          :key="item.to"
+          :to="item.to"
+          :class="desktopClass(item.to)"
+        >
+          <AppIcon :name="item.icon" class="w-4 h-4 me-1.5 flex-shrink-0" />
+          {{ item.label }}
         </RouterLink>
-      </li>
-    </ul>
-  </nav>
+      </nav>
+    </div>
+
+    <!-- Mobile Fixed Bottom Nav (hidden on desktop) -->
+    <nav
+      class="md:hidden fixed bottom-0 z-[9999] bg-sidebar border-t border-sidebar-border px-2 py-2"
+      style="inset-inline-start: 0; inset-inline-end: 0"
+    >
+      <div class="flex items-center justify-around">
+        <RouterLink
+          v-for="item in mobileItems"
+          :key="item.to"
+          :to="item.to"
+          :class="mobileClass(item.to)"
+        >
+          <AppIcon :name="item.icon" class="w-5 h-5 flex-shrink-0" />
+          <span
+            class="max-w-full truncate text-[0.65rem] font-medium leading-tight sm:text-[0.75rem]"
+            >{{ item.label }}</span
+          >
+        </RouterLink>
+      </div>
+    </nav>
+  </header>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { RouterLink, useRoute } from "vue-router";
 import AppIcon from "@/components/ui/AppIcon.vue";
 import type { AppIconName } from "@/components/ui/AppIcon.vue";
+import mwasalatyLogo from "@/assets/mwasalaty-lightlogo1.png";
 
+const route = useRoute();
 const { t } = useI18n();
 
-const items = computed<Array<{ to: string; label: string; icon: AppIconName }>>(() => [
-  { to: "/dashboard", label: t("common.dashboard"), icon: "dashboard" },
-  { to: "/scan", label: t("common.scan"), icon: "scan" },
-  { to: "/history", label: t("common.history"), icon: "history" },
-  { to: "/sync", label: t("common.sync"), icon: "sync" },
-  { to: "/shift-summary", label: t("common.summary"), icon: "summary" },
-  { to: "/account", label: t("common.account"), icon: "account" }
-]);
+const currentPath = computed(() => route.path);
+const active = (path: string) => currentPath.value === path;
+
+const desktopItems = computed<Array<{ to: string; label: string; icon: AppIconName }>>(
+  () => [
+    { to: "/dashboard", label: t("common.dashboard"), icon: "dashboard" },
+    { to: "/scan", label: t("common.scan"), icon: "scan" },
+    { to: "/history", label: t("common.history"), icon: "history" },
+    { to: "/sync", label: t("common.sync"), icon: "sync" },
+    { to: "/shift-summary", label: t("common.summary"), icon: "summary" },
+    { to: "/account", label: t("common.account"), icon: "account" },
+  ],
+);
+
+const mobileItems = computed<Array<{ to: string; label: string; icon: AppIconName }>>(
+  () => [
+    { to: "/dashboard", label: t("common.dashboard"), icon: "dashboard" },
+    { to: "/scan", label: t("common.scan"), icon: "scan" },
+    { to: "/history", label: t("common.history"), icon: "history" },
+    { to: "/sync", label: t("common.sync"), icon: "sync" },
+    { to: "/shift-summary", label: t("common.summary"), icon: "summary" },
+  ],
+);
+
+function desktopClass(path: string) {
+  return [
+    "px-3 py-2 rounded-lg transition-colors text-sm flex items-center",
+    active(path)
+      ? "bg-primary text-primary-foreground font-medium"
+      : "hover:bg-sidebar-accent text-sidebar-foreground",
+  ];
+}
+
+function iconClass(path: string) {
+  return [
+    "p-2 rounded-lg transition-colors",
+    active(path)
+      ? "bg-primary text-primary-foreground"
+      : "hover:bg-sidebar-accent text-sidebar-foreground",
+  ];
+}
+
+function mobileClass(path: string) {
+  return [
+    "flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors text-xs",
+    active(path)
+      ? "text-primary font-medium"
+      : "text-sidebar-foreground hover:text-primary",
+  ];
+}
 </script>
-
-<style scoped>
-.operator-nav-active {
-  color: var(--foreground);
-  background: color-mix(in srgb, var(--primary) 14%, transparent);
-}
-
-.operator-nav-active::before {
-  content: "";
-  position: absolute;
-  inset-inline: 18%;
-  top: 0;
-  height: 3px;
-  border-radius: 999px;
-  background: var(--primary);
-}
-
-@media (min-width: 768px) {
-  .operator-nav-active::before {
-    inset-block: 25%;
-    inset-inline-start: 0;
-    inset-inline-end: auto;
-    width: 3px;
-    height: auto;
-  }
-}
-</style>

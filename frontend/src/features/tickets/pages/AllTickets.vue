@@ -19,16 +19,16 @@
 
       <div
         v-if="notice"
-        class="mb-6 flex items-start justify-between gap-4 rounded-xl border p-4"
+        class="mb-6 flex items-start justify-between gap-3 sm:gap-4 rounded-xl border p-3.5 sm:p-4"
         :class="
           notice.type === 'success'
             ? 'border-success bg-success-soft text-success'
             : 'border-destructive bg-destructive/10 text-destructive'
         "
       >
-        <div>
-          <div class="font-display">{{ notice.title }}</div>
-          <p class="mt-1 text-sm">{{ notice.message }}</p>
+        <div class="min-w-0">
+          <div class="font-display text-sm sm:text-base truncate" :title="notice.title">{{ notice.title }}</div>
+          <p class="mt-1 text-xs sm:text-sm">{{ notice.message }}</p>
         </div>
         <button
           type="button"
@@ -41,21 +41,21 @@
 
       <section
         v-if="loading"
-        class="rounded-2xl border-2 border-border bg-card p-12 text-center"
+        class="rounded-2xl border-2 border-border bg-card p-6 sm:p-12 text-center"
       >
         <Loader2 class="mx-auto mb-4 h-8 w-8 animate-spin text-primary" />
-        <p class="text-muted-foreground">{{ t("tickets.loading") }}</p>
+        <p class="text-sm sm:text-base text-muted-foreground">{{ t("tickets.loading") }}</p>
       </section>
 
       <section
         v-else-if="errorMessage"
-        class="rounded-2xl border-2 border-border bg-card p-12 text-center"
+        class="rounded-2xl border-2 border-border bg-card p-6 sm:p-12 text-center"
       >
         <AlertTriangle class="mx-auto mb-4 h-8 w-8 text-destructive" />
-        <h2 class="font-display text-xl text-foreground">
+        <h2 class="font-display text-lg sm:text-xl text-foreground">
           {{ t("tickets.loadErrorTitle") }}
         </h2>
-        <p class="mx-auto mb-6 mt-2 max-w-lg text-muted-foreground">
+        <p class="mx-auto mb-6 mt-2 max-w-lg text-xs sm:text-sm text-muted-foreground">
           {{ errorMessage }}
         </p>
         <AppButton @click="loadTickets">{{ t("tickets.tryAgain") }}</AppButton>
@@ -63,13 +63,13 @@
 
       <section
         v-else-if="tickets.length === 0"
-        class="rounded-2xl border-2 border-dashed border-border bg-card p-12 text-center"
+        class="rounded-2xl border-2 border-dashed border-border bg-card p-6 sm:p-12 text-center"
       >
         <TicketIcon class="mx-auto mb-4 h-10 w-10 text-muted-foreground" />
-        <h2 class="font-display text-xl text-foreground">
+        <h2 class="font-display text-lg sm:text-xl text-foreground">
           {{ t("tickets.emptyTitle") }}
         </h2>
-        <p class="mb-6 mt-2 text-muted-foreground">
+        <p class="mb-6 mt-2 text-xs sm:text-sm text-muted-foreground">
           {{ t("tickets.emptyCopy") }}
         </p>
         <AppButton @click="router.push('/plan')">{{
@@ -99,19 +99,19 @@
       size="lg"
       @close="closeRefundModal"
     >
-      <div v-if="refundTicketTarget" class="space-y-5">
-        <div class="rounded-lg bg-secondary p-4">
-          <div class="font-mono text-sm text-muted-foreground">
+      <div v-if="refundTicketTarget" class="space-y-4 sm:space-y-5">
+        <div class="rounded-lg bg-secondary p-3 sm:p-4">
+          <div class="font-mono text-xs sm:text-sm text-muted-foreground truncate" :title="refundTicketTarget.ticketId">
             {{ refundTicketTarget.ticketId }}
           </div>
-          <div class="mt-1 font-display text-lg text-foreground">
+          <div class="mt-1 font-display text-base sm:text-lg text-foreground truncate" :title="ticketRoute(refundTicketTarget)">
             {{ ticketRoute(refundTicketTarget) }}
           </div>
         </div>
 
         <div
           v-if="refundError"
-          class="rounded-lg border border-destructive bg-destructive/10 p-3 text-sm text-destructive"
+          class="rounded-lg border border-destructive bg-destructive/10 p-3 text-xs sm:text-sm text-destructive"
         >
           {{ refundError }}
         </div>
@@ -119,7 +119,7 @@
         <div class="grid gap-3 sm:grid-cols-2">
           <button
             type="button"
-            class="rounded-xl border-2 p-4 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+            class="rounded-xl border-2 p-3 sm:p-4 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-50"
             :class="
               refundMode === 'total'
                 ? 'border-primary bg-secondary'
@@ -129,22 +129,22 @@
             @click="selectTotalRefund"
           >
             <div class="flex items-center justify-between gap-3">
-              <span class="font-display text-foreground">{{
+              <span class="font-display text-sm sm:text-base text-foreground">{{
                 t("tickets.refund.total")
               }}</span>
               <CheckCircle2
                 v-if="refundMode === 'total'"
-                class="h-5 w-5 text-primary"
+                class="h-5 w-5 text-primary shrink-0"
               />
             </div>
-            <p class="mt-2 text-sm text-muted-foreground">
+            <p class="mt-1.5 text-xs sm:text-sm text-muted-foreground">
               {{ t("tickets.refund.totalDesc") }}
             </p>
           </button>
 
           <button
             type="button"
-            class="rounded-xl border-2 p-4 text-left transition-colors"
+            class="rounded-xl border-2 p-3 sm:p-4 text-left transition-colors"
             :class="
               refundMode === 'partial'
                 ? 'border-primary bg-secondary'
@@ -153,26 +153,26 @@
             @click="refundMode = 'partial'"
           >
             <div class="flex items-center justify-between gap-3">
-              <span class="font-display text-foreground">{{
+              <span class="font-display text-sm sm:text-base text-foreground">{{
                 t("tickets.refund.partial")
               }}</span>
               <CheckCircle2
                 v-if="refundMode === 'partial'"
-                class="h-5 w-5 text-primary"
+                class="h-5 w-5 text-primary shrink-0"
               />
             </div>
-            <p class="mt-2 text-sm text-muted-foreground">
+            <p class="mt-1.5 text-xs sm:text-sm text-muted-foreground">
               {{ t("tickets.refund.partialDesc") }}
             </p>
           </button>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-2.5 sm:space-y-3">
           <button
             v-for="leg in refundTicketTarget.legs"
             :key="leg.ticketLegId"
             type="button"
-            class="flex w-full items-center gap-3 rounded-lg border p-3 text-left"
+            class="flex w-full items-center gap-2 sm:gap-3 rounded-lg border p-2.5 sm:p-3 text-left"
             :class="legSelectionClass(leg)"
             :disabled="refundMode === 'total' || !isRefundableLeg(leg)"
             @click="toggleLeg(leg)"
@@ -191,20 +191,20 @@
               />
             </span>
             <span class="min-w-0 flex-1">
-              <span class="block font-display text-foreground">{{
+              <span class="block font-display text-sm sm:text-base text-foreground truncate" :title="legLabel(leg)">{{
                 legLabel(leg)
               }}</span>
-              <span class="block truncate text-sm text-muted-foreground">
+              <span class="block truncate text-xs sm:text-sm text-muted-foreground" :title="`${leg.from?.name || t('tickets.start')} -> ${leg.to?.name || t('tickets.destination')}`">
                 {{ leg.from?.name || t("tickets.start") }} ->
                 {{ leg.to?.name || t("tickets.destination") }}
               </span>
             </span>
-            <span class="text-right">
-              <span class="block font-display text-foreground">{{
+            <span class="text-right shrink-0">
+              <span class="block font-display text-sm sm:text-base text-foreground">{{
                 money(leg.fareAmount, refundTicketTarget.payment.currency)
               }}</span>
               <span
-                class="block text-xs"
+                class="block text-[10px] sm:text-xs"
                 :class="legStatusTextClass(leg.status)"
                 >{{ t(`tickets.legStatus.${leg.status}`) }}</span
               >
@@ -212,21 +212,21 @@
           </button>
         </div>
 
-        <div class="rounded-lg border border-primary/30 bg-secondary p-4">
+        <div class="rounded-lg border border-primary/30 bg-secondary p-3.5 sm:p-4">
           <div class="flex items-center justify-between gap-3">
-            <span class="text-sm text-foreground">{{
+            <span class="text-xs sm:text-sm text-foreground">{{
               t("tickets.refund.amount")
             }}</span>
-            <strong class="font-display text-xl text-foreground">{{
+            <strong class="font-display text-lg sm:text-xl text-foreground">{{
               money(refundAmount, refundTicketTarget.payment.currency)
             }}</strong>
           </div>
-          <p class="mt-2 text-xs text-muted-foreground">
+          <p class="mt-1.5 text-[10px] sm:text-xs text-muted-foreground">
             {{ t("tickets.refund.note") }}
           </p>
         </div>
 
-        <div class="flex flex-col-reverse gap-3 sm:flex-row">
+        <div class="flex flex-col-reverse gap-2.5 sm:flex-row sm:gap-3">
           <AppButton
             variant="secondary"
             class="flex-1"
@@ -435,9 +435,7 @@ function refundableLegs(ticket: Ticket) {
   // refunded, as long as the ticket is paid, not expired, and not fully refunded.
   if (!isPaid || !isNotExpired || isFullyRefunded) return [];
 
-  return ticket.legs.filter(
-    (leg) => !isLegUsed(leg) && !isLegRefunded(leg),
-  );
+  return ticket.legs.filter((leg) => !isLegUsed(leg) && !isLegRefunded(leg));
 }
 
 function canFullyRefund(ticket: Ticket) {
@@ -554,9 +552,7 @@ function isLegUsed(leg: TicketLeg) {
 }
 
 function isLegRefunded(leg: TicketLeg) {
-  return Boolean(
-    leg.refunded || leg.refundedAt || leg.status === "refunded",
-  );
+  return Boolean(leg.refunded || leg.refundedAt || leg.status === "refunded");
 }
 
 function ticketHasUsedHistory(ticket: Ticket) {
@@ -579,7 +575,7 @@ const TicketSection = defineComponent({
       h("div", [
         h(
           "h2",
-          { class: "mb-6 font-display text-2xl text-foreground" },
+          { class: "mb-6 font-display text-xl sm:text-2xl text-foreground" },
           `${props.title} (${props.tickets.length})`,
         ),
         props.tickets.length === 0
@@ -587,7 +583,7 @@ const TicketSection = defineComponent({
               "div",
               {
                 class:
-                  "rounded-xl border-2 border-dashed border-border bg-card p-8 text-center text-muted-foreground",
+                  "rounded-xl border-2 border-dashed border-border bg-card p-6 sm:p-8 text-center text-xs sm:text-sm text-muted-foreground",
               },
               slots.empty?.(),
             )
@@ -606,20 +602,20 @@ const TicketSection = defineComponent({
                       "div",
                       {
                         class:
-                          "flex items-start justify-between gap-3 bg-secondary px-5 py-4",
+                          "flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3 bg-secondary px-4 py-3.5 sm:px-5 sm:py-4",
                       },
                       [
                         h("div", { class: "min-w-0" }, [
                           h(
                             "div",
-                            { class: "font-display text-lg text-foreground" },
+                            { class: "font-display text-base sm:text-lg text-foreground" },
                             t("tickets.digitalTicket"),
                           ),
                           h(
                             "div",
                             {
                               class:
-                                "truncate font-mono text-sm text-muted-foreground",
+                                "truncate font-mono text-xs sm:text-sm text-muted-foreground",
                             },
                             ticket.ticketId,
                           ),
@@ -628,7 +624,7 @@ const TicketSection = defineComponent({
                           "span",
                           {
                             class: [
-                              "shrink-0 rounded-full px-3 py-1 text-sm",
+                              "shrink-0 self-start sm:self-center rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-xs sm:text-sm",
                               statusClass(ticket),
                             ],
                           },
@@ -636,65 +632,85 @@ const TicketSection = defineComponent({
                         ),
                       ],
                     ),
-                    h("div", { class: "space-y-4 p-5" }, [
+                    h("div", { class: "space-y-4 p-4 sm:p-5" }, [
                       h("div", [
                         h(
                           "div",
-                          { class: "text-sm text-muted-foreground" },
+                          { class: "text-xs sm:text-sm text-muted-foreground" },
                           t("tickets.route"),
                         ),
                         h(
                           "div",
-                          { class: "font-display text-lg text-foreground" },
+                          {
+                            class: "font-display text-base sm:text-lg text-foreground truncate",
+                            title: ticketRoute(ticket),
+                          },
                           ticketRoute(ticket),
                         ),
                       ]),
                       h(
                         "div",
-                        { class: "flex flex-wrap gap-2" },
+                        { class: "flex flex-wrap gap-2 items-center" },
                         ticketModes(ticket).map((mode) =>
                           h(
                             "span",
                             {
                               class:
-                                "rounded-full border border-border bg-muted px-2.5 py-1 text-xs text-foreground",
+                                "rounded-full border border-border bg-muted px-2 py-0.5 sm:px-2.5 sm:py-1 text-xs text-foreground",
                             },
                             mode,
                           ),
                         ),
                       ),
-                      h("div", { class: "grid grid-cols-2 gap-3" }, [
-                        h("div", { class: "rounded-lg bg-secondary p-3" }, [
-                          h(
-                            "div",
-                            { class: "text-xs text-muted-foreground" },
-                            t("tickets.totalFare"),
-                          ),
-                          h(
-                            "div",
-                            { class: "font-display text-foreground" },
-                            money(
-                              ticket.payment.amount,
-                              ticket.payment.currency,
-                            ),
-                          ),
-                        ]),
-                        h("div", { class: "rounded-lg bg-secondary p-3" }, [
-                          h(
-                            "div",
-                            { class: "text-xs text-muted-foreground" },
-                            t("tickets.validUntil"),
-                          ),
-                          h(
-                            "div",
-                            { class: "font-display text-sm text-foreground" },
-                            dateLabel(ticket.expiresAt || ticket.expires_at),
-                          ),
-                        ]),
-                      ]),
                       h(
                         "div",
-                        { class: "text-sm text-muted-foreground" },
+                        { class: "grid grid-cols-1 sm:grid-cols-2 gap-3" },
+                        [
+                          h(
+                            "div",
+                            { class: "rounded-lg bg-secondary p-2.5 sm:p-3 min-w-0" },
+                            [
+                              h(
+                                "div",
+                                { class: "text-xs text-muted-foreground" },
+                                t("tickets.totalFare"),
+                              ),
+                              h(
+                                "div",
+                                { class: "font-display text-sm sm:text-base text-foreground" },
+                                money(
+                                  ticket.payment.amount,
+                                  ticket.payment.currency,
+                                ),
+                              ),
+                            ],
+                          ),
+                          h(
+                            "div",
+                            { class: "rounded-lg bg-secondary p-2.5 sm:p-3 min-w-0" },
+                            [
+                              h(
+                                "div",
+                                { class: "text-xs text-muted-foreground" },
+                                t("tickets.validUntil"),
+                              ),
+                              h(
+                                "div",
+                                {
+                                  class: "font-display text-xs sm:text-sm text-foreground truncate",
+                                  title: dateLabel(ticket.expiresAt || ticket.expires_at),
+                                },
+                                dateLabel(
+                                  ticket.expiresAt || ticket.expires_at,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      h(
+                        "div",
+                        { class: "text-xs sm:text-sm text-muted-foreground" },
                         t("tickets.legsAvailable", {
                           count: refundableLegs(ticket).length,
                           total: ticket.legs.length,

@@ -1,43 +1,53 @@
 <template>
   <main class="min-h-screen pb-20 bg-background">
-    <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">
+    <div
+      class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-5 sm:py-6 md:py-8"
+    >
       <button
-        class="flex items-center gap-2 text-foreground hover:text-primary mb-6 transition-colors"
+        class="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-muted-foreground hover:text-primary mb-4 sm:mb-6 transition-colors"
         @click="backToResults"
       >
-        <ArrowLeft class="w-5 h-5 rtl:rotate-180" />
+        <ArrowLeft class="w-4 h-4 rtl:rotate-180" />
         {{ t("routeDetails.backToResults") }}
       </button>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-        <div class="lg:col-span-2">
-          <section class="mb-6">
-            <h1 class="font-display text-2xl md:text-3xl text-foreground mb-2">
+        <div class="lg:col-span-2 order-last lg:order-first">
+          <section class="mb-4 sm:mb-6">
+            <h1
+              class="font-display text-xl sm:text-2xl md:text-3xl text-foreground mb-1.5"
+            >
               {{ t("routeDetails.title") }}
             </h1>
             <div
-              class="flex items-center gap-2 text-sm md:text-base text-muted-foreground"
+              class="flex items-start gap-1.5 text-xs sm:text-sm text-muted-foreground min-w-0"
             >
-              <MapPin class="w-4 h-4" /> {{ displayStart }} ->
-              {{ displayDestination }}
+              <MapPin class="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <span class="leading-tight whitespace-normal"
+                >{{ displayStart }} → {{ displayDestination }}</span
+              >
             </div>
           </section>
 
           <div
-            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary text-gradient-foreground rounded-xl p-4 md:p-6 mb-6 border-2 border-primary flex items-start gap-3"
+            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary text-gradient-foreground rounded-xl p-3.5 sm:p-5 mb-5 border-2 border-primary flex items-start gap-2.5"
           >
-            <Sparkles class="w-6 h-6 flex-shrink-0 mt-1" />
-            <div>
-              <h3 class="font-display text-lg mb-2">
+            <Sparkles class="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <div class="min-w-0">
+              <h3
+                class="font-display text-sm sm:text-base md:text-lg mb-1 font-semibold"
+              >
                 {{ t("routeDetails.aiExplanation") }}
               </h3>
-              <p class="text-sm md:text-base">
+              <p class="text-xs sm:text-sm leading-relaxed opacity-95">
                 {{ routeExplanation }}
               </p>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-6">
+          <div
+            class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-5 sm:mb-6"
+          >
             <Summary
               :icon="Clock"
               :label="t('routeDetails.duration')"
@@ -60,55 +70,97 @@
             />
           </div>
 
-          <section class="bg-card rounded-xl p-4 md:p-6 border-2 border-border">
-            <h3 class="font-display text-xl text-foreground mb-6">
+          <section
+            class="bg-card rounded-xl p-3.5 sm:p-5 md:p-6 border-2 border-border"
+          >
+            <h3
+              class="font-display text-lg sm:text-xl text-foreground mb-5 sm:mb-6 font-semibold"
+            >
               {{ t("routeDetails.stepByStep") }}
             </h3>
-            <div class="space-y-4">
+            <div class="relative pl-0.5">
               <div
                 v-for="(step, index) in displaySteps"
                 :key="step.instruction"
-                class="flex gap-4"
+                class="relative flex items-start gap-3 sm:gap-4 pb-5 sm:pb-6 last:pb-0"
               >
-                <div class="flex flex-col items-center">
-                  <div
-                    class="w-10 h-10 rounded-full flex items-center justify-center"
-                    :class="getStepColor(step.type)"
-                  >
-                    <component :is="getStepIcon(step.type)" class="w-5 h-5" />
-                  </div>
-                  <div
-                    v-if="index < steps.length - 1"
-                    class="w-0.5 h-14 bg-border my-2"
+                <!-- Vertical timeline line -->
+                <div
+                  v-if="index < displaySteps.length - 1"
+                  :class="[
+                    'absolute top-8 bottom-0 w-0.5 bg-border',
+                    locale === 'ar'
+                      ? 'right-4 sm:right-5 translate-x-1/2'
+                      : 'left-4 sm:left-5 -translate-x-1/2',
+                  ]"
+                />
+
+                <!-- Timeline Icon Circle -->
+                <div
+                  class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center z-10 shrink-0"
+                  :class="getStepColor(step.type)"
+                >
+                  <component
+                    :is="getStepIcon(step.type)"
+                    class="w-4 h-4 sm:w-5 sm:h-5"
                   />
                 </div>
-                <div class="flex-1 pb-4">
-                  <div class="font-display text-foreground mb-1">
+
+                <!-- Timeline Content -->
+                <div class="min-w-0 flex-1 overflow-hidden">
+                  <h4
+                    class="font-display text-sm sm:text-base text-foreground font-medium leading-snug break-words whitespace-normal"
+                  >
                     {{ step.instruction }}
-                  </div>
-                  <div class="text-sm text-muted-foreground">
-                    {{ step.duration
-                    }}<span v-if="step.distance"> - {{ step.distance }}</span
-                    ><span v-if="step.stops">
-                      -
-                      {{ t("routeDetails.stops", { count: step.stops }) }}</span
-                    >
+                  </h4>
+                  <div
+                    class="text-xs sm:text-sm text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5"
+                  >
+                    <span>{{ step.duration }}</span>
+                    <span v-if="step.distance" class="text-border">•</span>
+                    <span v-if="step.distance">{{ step.distance }}</span>
+                    <span v-if="step.stops" class="text-border">•</span>
+                    <span v-if="step.stops">{{
+                      t("routeDetails.stops", { count: step.stops })
+                    }}</span>
                   </div>
                   <div
                     v-if="step.from || step.to"
-                    class="text-sm text-muted-foreground mt-2"
+                    class="text-xs sm:text-sm text-muted-foreground mt-2 bg-secondary/60 rounded-lg p-2"
                   >
-                    {{ step.from }} -> {{ step.to }}
+                    <span
+                      class="font-medium break-words whitespace-normal"
+                      :title="step.from"
+                    >
+                      {{ step.from || t("routeDetails.start") }}
+                    </span>
+
+                    <span class="shrink-0 mx-2">
+                      {{ locale === "ar" ? "←" : "→" }}
+                    </span>
+
+                    <span
+                      class="font-medium break-words whitespace-normal"
+                      :title="step.to"
+                    >
+                      {{ step.to || t("routeDetails.destination") }}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
           </section>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mt-6">
+          <div
+            class="grid gap-2.5 sm:gap-4 mt-5 sm:mt-6"
+            :class="isWalkOnly ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3'"
+          >
             <AppButton
-              size="lg"
-              class="flex items-center justify-center gap-2"
+              size="md"
+              :class="[
+                isWalkOnly ? 'col-span-1' : 'col-span-2 sm:col-span-1',
+                'flex items-center justify-center gap-2',
+              ]"
               @click="
                 router.push({
                   path: '/live-navigation',
@@ -117,55 +169,67 @@
                 })
               "
             >
-              <Navigation class="w-5 h-5" />
-              {{ t("routeDetails.startNavigation") }}
+              <Navigation class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+              <span class="truncate">{{
+                t("routeDetails.startNavigation")
+              }}</span>
             </AppButton>
             <AppButton
               variant="outline"
-              size="lg"
-              class="flex items-center justify-center gap-2"
+              size="md"
+              :class="[
+                isWalkOnly ? 'col-span-1' : 'col-span-1',
+                'flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-sm',
+              ]"
               @click="saveModalOpen = true"
             >
-              <BookmarkPlus class="w-5 h-5" /> {{ t("routeDetails.saveRoute") }}
+              <BookmarkPlus class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+              <span class="truncate">{{ t("routeDetails.saveRoute") }}</span>
             </AppButton>
             <AppButton
               v-if="!isWalkOnly"
               variant="outline"
-              size="lg"
-              class="flex items-center justify-center gap-2"
+              size="md"
+              class="col-span-1 flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-sm"
               :disabled="!isOnline"
               @click="router.push('/booking')"
             >
-              <DollarSign class="w-5 h-5" /> {{ t("routeDetails.bookPay") }}
+              <DollarSign class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+              <span class="truncate">{{ t("routeDetails.bookPay") }}</span>
             </AppButton>
           </div>
 
           <p
             v-if="!isOnline || fromCache"
-            class="mt-3 flex items-center gap-2 text-sm text-warning"
+            class="mt-3 flex items-center gap-1.5 text-xs sm:text-sm text-warning"
           >
             <CloudOff class="h-4 w-4 flex-shrink-0" />
             {{ t("routeDetails.reconnectToBuy") }}
           </p>
         </div>
 
-        <aside class="lg:sticky lg:top-8 h-fit space-y-4 md:space-y-6">
-          <div class="bg-card rounded-xl p-6 border-2 border-border">
-            <h3 class="font-display text-xl text-foreground mb-4">
+        <aside
+          class="lg:sticky lg:top-8 h-fit space-y-4 md:space-y-6 order-last"
+        >
+          <div class="bg-card rounded-xl p-4 sm:p-6 border-2 border-border">
+            <h3
+              class="font-display text-lg sm:text-xl text-foreground mb-3 sm:mb-4 font-semibold"
+            >
               {{ t("routeDetails.routeMap") }}
             </h3>
             <div
-              class="h-64 sm:aspect-square overflow-hidden rounded-lg border-2 border-border"
+              class="h-56 sm:h-64 md:h-80 overflow-hidden rounded-xl border border-border bg-card shadow-sm"
             >
               <RoutePreviewMap :steps="steps" />
             </div>
           </div>
           <AppButton
             variant="outline"
+            size="md"
             class="w-full flex items-center justify-center gap-2"
             @click="savePlaceModalOpen = true"
           >
-            <BookmarkPlus class="w-5 h-5" />
+            <BookmarkPlus class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
             {{ t("routeDetails.saveDestination") }}
           </AppButton>
         </aside>
@@ -177,22 +241,23 @@
       :title="t('routeDetails.saveRoute')"
       @close="saveModalOpen = false"
     >
-      <div class="space-y-4">
-        <p class="text-muted-foreground">
+      <div class="space-y-3.5">
+        <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
           {{ t("routeDetails.saveRouteCopy") }}
         </p>
         <input
           v-model="routeName"
-          class="w-full px-4 py-2.5 bg-card border border-border rounded-lg"
+          class="w-full px-3 py-2 bg-card border border-border rounded-lg text-sm focus-ring"
           :placeholder="t('routeDetails.routeNamePlaceholder')"
         />
-        <div class="flex gap-3">
-          <AppButton class="flex-1" @click="saveCurrentRoute">{{
+        <div class="flex gap-3 mt-1">
+          <AppButton class="flex-1" size="md" @click="saveCurrentRoute">{{
             t("routeDetails.saveRoute")
           }}</AppButton>
           <AppButton
             variant="outline"
             class="flex-1"
+            size="md"
             @click="saveModalOpen = false"
             >{{ t("home.cancel") }}</AppButton
           >
@@ -205,12 +270,12 @@
       :title="t('routeDetails.saveDestination')"
       @close="closeSavePlace"
     >
-      <div class="space-y-4">
-        <p class="text-sm text-muted-foreground">
+      <div class="space-y-3.5">
+        <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
           {{ t("saved.places.modalCopy") }}
         </p>
         <div
-          class="flex items-center gap-2 rounded-lg bg-secondary p-3 text-sm text-foreground"
+          class="flex items-center gap-2 rounded-lg bg-secondary p-2.5 text-xs sm:text-sm text-foreground min-w-0"
         >
           <MapPin class="w-4 h-4 flex-shrink-0 text-primary" />
           <span class="truncate">{{ displayDestination }}</span>
@@ -228,16 +293,20 @@
         </div>
         <input
           v-model="newPlaceName"
-          class="w-full px-4 py-2.5 bg-card border border-border rounded-lg"
+          class="w-full px-3 py-2 bg-card border border-border rounded-lg text-sm focus-ring"
           :placeholder="t('saved.places.namePlaceholder')"
         />
-        <div class="flex gap-3">
-          <AppButton class="flex-1" @click="saveCurrentDestination">{{
+        <div class="flex gap-3 mt-1">
+          <AppButton class="flex-1" size="md" @click="saveCurrentDestination">{{
             t("saved.places.savePlace")
           }}</AppButton>
-          <AppButton variant="outline" class="flex-1" @click="closeSavePlace">{{
-            t("home.cancel")
-          }}</AppButton>
+          <AppButton
+            variant="outline"
+            class="flex-1"
+            size="md"
+            @click="closeSavePlace"
+            >{{ t("home.cancel") }}</AppButton
+          >
         </div>
       </div>
     </Modal>
@@ -366,9 +435,9 @@ const placeTypes = [
 
 function placeTypeClass(value: SavedPlaceType) {
   return [
-    "flex min-h-10 items-center justify-center rounded-lg border-2 px-3 py-2 text-sm transition-all",
+    "flex min-h-[36px] sm:min-h-10 items-center justify-center rounded-lg border-2 px-2.5 py-1.5 text-xs sm:text-sm transition-all cursor-pointer",
     newPlaceType.value === value
-      ? "border-primary bg-secondary text-primary"
+      ? "border-primary bg-secondary text-primary font-medium"
       : "border-border text-foreground hover:border-primary hover:bg-muted",
   ];
 }
@@ -469,15 +538,38 @@ const Summary = defineComponent({
   },
   setup(props) {
     return () =>
-      h("div", { class: "bg-card rounded-lg p-4 border-2 border-border" }, [
-        h(props.icon as any, { class: "w-5 h-5 text-muted-foreground mb-2" }),
-        h("div", { class: "text-sm text-muted-foreground" }, props.label),
-        h(
-          "div",
-          { class: "font-display text-xl text-foreground" },
-          props.value,
-        ),
-      ]);
+      h(
+        "div",
+        {
+          class:
+            "bg-card rounded-xl p-3 sm:p-4 border-2 border-border min-w-0 flex flex-col justify-between",
+        },
+        [
+          h("div", [
+            h(props.icon as any, {
+              class: "w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mb-1.5",
+            }),
+            h(
+              "div",
+              {
+                class:
+                  "text-[10px] sm:text-xs md:text-sm text-muted-foreground truncate",
+                title: props.label,
+              },
+              props.label,
+            ),
+          ]),
+          h(
+            "div",
+            {
+              class:
+                "font-display text-base sm:text-lg md:text-xl text-foreground mt-1 truncate",
+              title: props.value,
+            },
+            props.value,
+          ),
+        ],
+      );
   },
 });
 function getStepIcon(type: string) {

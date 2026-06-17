@@ -194,7 +194,10 @@
     "title": "تواصل معنا",
     "subtitle": "نحن هنا لمساعدتك. تواصل معنا وسيرد عليك فريقنا خلال ٢٤ ساعة.",
     "methods": {
-      "email": { "label": "راسلنا عبر البريد", "value": "support{'@'}mwasalaty.com" },
+      "email": {
+        "label": "راسلنا عبر البريد",
+        "value": "support{'@'}mwasalaty.com"
+      },
       "call": { "label": "اتصل بنا", "value": "+20 2 1234 5678" },
       "visit": { "label": "زُرنا", "value": "القرية الذكية، الجيزة" },
       "chat": { "label": "الدردشة المباشرة", "value": "متاح على مدار الساعة" }
@@ -748,6 +751,7 @@
     "digitalQrTicket": "تذكرة QR رقمية",
     "preparingCheckout": "جاري تجهيز الدفع الآمن…",
     "paySecurely": "ادفع بأمان - {total} {currency}",
+    "backToRouteDetails": "الرجوع لتفاصيل المسار",
     "loginRequiredTitle": "تسجيل الدخول مطلوب",
     "loginRequiredCopy": "يجب تسجيل الدخول أو إنشاء حساب قبل إتمام هذا الحجز والدفع. لقد حفظنا رحلتك المختارة وسنعيدك إلى هنا بعد المصادقة.",
     "login": "تسجيل الدخول",

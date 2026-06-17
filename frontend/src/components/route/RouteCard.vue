@@ -7,70 +7,94 @@
     @click="handleCardClick"
   >
     <!-- Badges -->
-    <div class="flex gap-2 mb-4">
+    <div class="flex flex-wrap gap-2 mb-4">
       <span
         v-if="isFastest"
-        class="flex items-center gap-2 px-5 py-3 rounded-full bg-red-200 text-red-900 text-xs font-semibold"
+        class="flex items-center gap-1.5 px-3 py-2 md:px-5 md:py-3 rounded-full bg-red-200 text-red-900 text-xs font-semibold"
       >
-        <Zap class="w-4 h-4" />
-        {{ t("routeResults.fastest") }}
+        <Zap class="w-3 h-3 md:w-4 md:h-4" />
+        <span class="hidden sm:inline">{{ t("routeResults.fastest") }}</span>
+        <span class="sm:hidden">Fastest</span>
       </span>
 
       <span
         v-if="isCheapest"
-        class="flex items-center gap-2 px-5 py-3 rounded-full bg-green-200 text-green-900 text-xs font-semibold"
+        class="flex items-center gap-1.5 px-3 py-2 md:px-5 md:py-3 rounded-full bg-green-200 text-green-900 text-xs font-semibold"
       >
-        <Wallet class="w-4 h-4" />
-        {{ t("routeResults.cheapest") }}
+        <Wallet class="w-3 h-3 md:w-4 md:h-4" />
+        <span class="hidden sm:inline">{{ t("routeResults.cheapest") }}</span>
+        <span class="sm:hidden">Cheap</span>
       </span>
       <span
         v-if="isComfortable"
-        class="flex items-center gap-2 px-5 py-3 rounded-full bg-blue-200 text-blue-900 text-xs font-semibold"
+        class="flex items-center gap-1.5 px-3 py-2 md:px-5 md:py-3 rounded-full bg-blue-200 text-blue-900 text-xs font-semibold"
       >
-        <Sofa class="w-4 h-4" />
-        {{ t("routeResults.mostComfortable") }}
+        <Sofa class="w-3 h-3 md:w-4 md:h-4" />
+        <span class="hidden sm:inline">{{
+          t("routeResults.mostComfortable")
+        }}</span>
+        <span class="sm:hidden">Comfy</span>
       </span>
     </div>
     <!-- Transport Steps -->
-    <div class="flex flex-wrap items-center gap-2 mb-5">
+    <div
+      class="flex flex-wrap items-center gap-1 md:gap-2 mb-4 md:mb-5 overflow-x-auto pb-2"
+    >
       <template v-for="(step, index) in route.steps" :key="index">
-        <div class="flex items-center gap-1">
-          <component :is="getIcon(step.type)" class="w-5 h-5 text-primary" />
+        <div class="flex items-center gap-0.5 md:gap-1 flex-shrink-0">
+          <component
+            :is="getIcon(step.type)"
+            class="w-4 h-4 md:w-5 md:h-5 text-primary flex-shrink-0"
+          />
 
-          <span class="text-sm font-medium text-foreground">
+          <span
+            class="text-xs md:text-sm font-medium text-foreground whitespace-nowrap"
+          >
             {{ formatStepLabel(step.label, step.type) }}
           </span>
         </div>
 
         <ChevronRight
           v-if="index < route.steps.length - 1"
-          class="w-4 h-4 text-muted-foreground rtl:rotate-180"
+          class="w-3 h-3 md:w-4 md:h-4 text-muted-foreground flex-shrink-0 rtl:rotate-180"
         />
       </template>
     </div>
 
     <!-- Route Stats -->
-    <div class="grid grid-cols-4 gap-4 mb-5">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-4 md:mb-5">
       <div>
-        <p class="text-xs text-muted-foreground">{{ t("routeResults.totalDuration") }}</p>
-        <p class="font-semibold text-lg">
+        <p class="text-xs text-muted-foreground truncate">
+          {{ t("routeResults.totalDuration") }}
+        </p>
+        <p class="font-semibold text-sm md:text-lg leading-tight">
           {{ formatUnit(route.duration) }}
         </p>
       </div>
 
       <div>
-        <p class="text-xs text-muted-foreground">{{ t("routeResults.totalCost") }}</p>
-        <p class="font-semibold text-lg">
+        <p class="text-xs text-muted-foreground truncate">
+          {{ t("routeResults.totalCost") }}
+        </p>
+        <p class="font-semibold text-sm md:text-lg leading-tight">
           {{ isFree ? t("routeResults.free") : formatUnit(route.cost) }}
         </p>
       </div>
       <div>
-        <p class="text-xs text-muted-foreground">{{ t("routeResults.transfers") }}</p>
-        <p class="font-semibold">{{ route.transfers }}</p>
+        <p class="text-xs text-muted-foreground truncate">
+          {{ t("routeResults.transfers") }}
+        </p>
+        <p class="font-semibold text-sm md:text-lg leading-tight">
+          {{ route.transfers }}
+        </p>
       </div>
       <div>
-        <p class="text-xs text-muted-foreground">{{ t("routeResults.walking") }}</p>
-        <p class="font-semibold">{{ formatUnit(route.walkingDistance) }}</p>
+        <p class="text-xs text-muted-foreground truncate">
+          {{ t("routeResults.walking") }}
+        </p>
+        <p class="font-semibold text-sm md:text-lg leading-tight">
+          {{ formatUnit(route.walkingDistance) }}
+        </p>
       </div>
     </div>
 
@@ -106,7 +130,10 @@ import {
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import AppButton from "../ui/AppButton.vue";
-import { localizeMode, localizeRouteInstruction } from "@/services/placeLocalization";
+import {
+  localizeMode,
+  localizeRouteInstruction,
+} from "@/services/placeLocalization";
 
 const emit = defineEmits(["select"]);
 const { locale, t } = useI18n();

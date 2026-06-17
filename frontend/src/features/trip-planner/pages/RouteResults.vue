@@ -1,39 +1,49 @@
 <template>
   <main class="min-h-screen pb-20 bg-background">
-    <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-4 md:py-8">
+    <div
+      class="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-8"
+    >
       <button
-        class="flex items-center gap-2 text-foreground hover:text-primary mb-6 transition-colors"
+        class="flex items-center gap-2 text-foreground hover:text-primary mb-4 sm:mb-6 transition-colors text-sm sm:text-base"
         @click="router.push('/')"
       >
-        <ArrowLeft class="w-5 h-5 rtl:rotate-180" /> {{ t("routeResults.backToSearch") }}
+        <ArrowLeft class="w-4 h-4 sm:w-5 sm:h-5 rtl:rotate-180 flex-shrink-0" />
+        {{ t("routeResults.backToSearch") }}
       </button>
 
-      <section class="mb-6">
-        <h1 class="font-display text-2xl md:text-3xl text-foreground mb-2">
+      <section class="mb-4 sm:mb-6">
+        <h1
+          class="font-display text-xl sm:text-2xl md:text-3xl text-foreground mb-1 sm:mb-2 break-words"
+        >
           {{ t("routeResults.title") }}
         </h1>
         <div
-          class="flex items-center gap-2 text-sm md:text-base text-muted-foreground"
+          class="flex items-center gap-2 text-xs sm:text-sm md:text-base text-muted-foreground overflow-hidden"
         >
           <MapPin class="w-4 h-4 flex-shrink-0" />
-          <span class="truncate">{{ displayStart }} -> {{ displayDestination }}</span>
+          <span class="truncate"
+            >{{ displayStart }} → {{ displayDestination }}</span
+          >
         </div>
       </section>
 
       <div
         v-if="bookingNotice"
-        class="mb-6 rounded-xl border-2 border-warning bg-warning-soft p-4 text-sm text-foreground"
+        class="mb-4 sm:mb-6 rounded-xl border-2 border-warning bg-warning-soft p-3 sm:p-4 text-xs sm:text-sm text-foreground"
         role="status"
       >
         {{ bookingNotice }}
       </div>
 
-      <div class="lg:hidden grid grid-cols-2 gap-3 mb-4">
+      <div class="lg:hidden grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-6">
         <Stat :label="t('routeResults.distance')" value="~28 km" />
-        <Stat :label="t('routeResults.routesFound')" :value="t('routeResults.optionsCount', { count: routes.length })" />
+        <Stat
+          :label="t('routeResults.routesFound')"
+          :value="t('routeResults.optionsCount', { count: routes.length })"
+        />
       </div>
 
-      <div class="mb-6 -mx-4 md:mx-0 px-4 md:px-0">
+      <div class="mb-4 sm:mb-6 -mx-3 sm:mx-0 px-3 sm:px-0">
         <div class="flex gap-2 md:gap-3 overflow-x-auto scrollbar-hide pb-2">
           <button
             v-for="tab in tabs"
@@ -44,33 +54,43 @@
             {{ t(tab.labelKey) }}
           </button>
           <button
-            class="px-3 py-2.5 rounded-lg bg-card border-2 border-border text-muted-foreground hover:border-primary transition-all flex-shrink-0"
+            class="px-2.5 sm:px-3 py-2 md:py-2.5 rounded-lg bg-card border-2 border-border text-muted-foreground hover:border-primary transition-all flex-shrink-0"
           >
-            <SlidersHorizontal class="w-5 h-5" />
+            <SlidersHorizontal class="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>
 
       <div
         v-if="isFromCache"
-        class="mb-6 rounded-xl border-2 border-warning bg-warning-soft p-4"
+        class="mb-4 sm:mb-6 rounded-xl border-2 border-warning bg-warning-soft p-3 sm:p-4"
         role="status"
       >
-        <div class="flex items-start gap-3">
-          <CloudOff class="mt-0.5 h-5 w-5 flex-shrink-0 text-warning" />
-          <div class="text-sm text-foreground">
+        <div class="flex items-start gap-2 sm:gap-3">
+          <CloudOff
+            class="mt-0.5 h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 text-warning"
+          />
+          <div class="text-xs sm:text-sm text-foreground min-w-0">
             <p class="font-display">
-              {{ isOnline ? t("routeResults.preview.staleTitle") : t("routeResults.preview.title") }}
+              {{
+                isOnline
+                  ? t("routeResults.preview.staleTitle")
+                  : t("routeResults.preview.title")
+              }}
             </p>
             <p class="mt-1 text-muted-foreground">
-              {{ isOnline ? t("routeResults.preview.staleSubtitle") : t("routeResults.preview.subtitle") }}
+              {{
+                isOnline
+                  ? t("routeResults.preview.staleSubtitle")
+                  : t("routeResults.preview.subtitle")
+              }}
             </p>
           </div>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-        <div class="lg:col-span-2 space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        <div class="lg:col-span-2 space-y-3 sm:space-y-4">
           <div
             v-if="loading"
             class="flex items-center justify-center gap-3 py-12 text-muted-foreground"
@@ -115,28 +135,45 @@
         </div>
 
         <aside class="hidden lg:block lg:sticky lg:top-8 h-fit">
-          <div class="bg-card rounded-xl p-6 border-2 border-border">
-            <h3 class="font-display text-xl text-foreground mb-4">
+          <div class="bg-card rounded-xl p-4 sm:p-6 border-2 border-border">
+            <h3
+              class="font-display text-lg sm:text-xl text-foreground mb-3 sm:mb-4"
+            >
               {{ t("routeResults.mapOverview") }}
             </h3>
             <div
               class="aspect-square overflow-hidden rounded-lg border-2 border-border"
             >
-              <RoutePreviewMap v-if="previewSteps.length" :key="previewRouteId" :steps="previewSteps" />
+              <RoutePreviewMap
+                v-if="previewSteps.length"
+                :key="previewRouteId"
+                :steps="previewSteps"
+              />
               <div
                 v-else
                 class="h-full w-full bg-gradient-to-br from-primary-soft to-warning-soft flex items-center justify-center"
               >
-                <div class="text-center">
-                  <MapPin class="w-16 h-16 text-primary mx-auto mb-2" />
-                  <p class="text-sm text-muted-foreground">{{ t("routeResults.interactiveMap") }}</p>
-                  <p class="text-xs text-muted-foreground">{{ t("routeResults.showingAllRoutes") }}</p>
+                <div class="text-center px-4">
+                  <MapPin
+                    class="w-12 h-12 sm:w-16 sm:h-16 text-primary mx-auto mb-2"
+                  />
+                  <p class="text-xs sm:text-sm text-muted-foreground">
+                    {{ t("routeResults.interactiveMap") }}
+                  </p>
+                  <p class="text-xs text-muted-foreground">
+                    {{ t("routeResults.showingAllRoutes") }}
+                  </p>
                 </div>
               </div>
             </div>
-            <div class="mt-6 space-y-3">
+            <div class="mt-4 sm:mt-6 space-y-2 sm:space-y-3">
               <Stat :label="t('routeResults.distance')" value="~28 km" />
-              <Stat :label="t('routeResults.routesFound')" :value="t('routeResults.optionsCount', { count: routes.length })" />
+              <Stat
+                :label="t('routeResults.routesFound')"
+                :value="
+                  t('routeResults.optionsCount', { count: routes.length })
+                "
+              />
             </div>
           </div>
         </aside>
@@ -199,13 +236,14 @@ const bookingNotice = computed(() =>
     : "",
 );
 
-const timeMode = ((queryString(currentRoute.query.timeMode) ??
+const timeMode = (queryString(currentRoute.query.timeMode) ??
   state.timeMode ??
-  "now") as TimeMode);
+  "now") as TimeMode;
 const tripDate = queryString(currentRoute.query.date) ?? state.date ?? "";
 const tripTime = queryString(currentRoute.query.time) ?? state.time ?? "";
 const parsedMaxDuration = Number(
-  queryString(currentRoute.query.maxDurationMinutes) ?? state.maxDurationMinutes,
+  queryString(currentRoute.query.maxDurationMinutes) ??
+    state.maxDurationMinutes,
 );
 const maxDurationMinutes =
   Number.isFinite(parsedMaxDuration) && parsedMaxDuration > 0
@@ -243,10 +281,7 @@ const emptyStateMessage = computed(() => {
       destination: displayDestination.value,
     });
   }
-  if (
-    message === "place_not_found_from" ||
-    /coordinates/i.test(message)
-  ) {
+  if (message === "place_not_found_from" || /coordinates/i.test(message)) {
     return t("routeResults.errors.placeNotFound", { place: start });
   }
   if (message === "place_not_found_to") {
@@ -330,20 +365,31 @@ const Stat = defineComponent({
   props: { label: String, value: String },
   setup(props) {
     return () =>
-      h("div", { class: "p-3 bg-card rounded-lg border-2 border-border" }, [
-        h("div", { class: "text-xs text-muted-foreground" }, props.label),
-        h(
-          "div",
-          { class: "font-display text-base text-foreground" },
-          props.value,
-        ),
-      ]);
+      h(
+        "div",
+        { class: "p-2 sm:p-3 bg-card rounded-lg border-2 border-border" },
+        [
+          h(
+            "div",
+            { class: "text-xs text-muted-foreground truncate" },
+            props.label,
+          ),
+          h(
+            "div",
+            {
+              class:
+                "font-display text-sm sm:text-base text-foreground truncate",
+            },
+            props.value,
+          ),
+        ],
+      );
   },
 });
 
 function tabClass(value: string) {
   return [
-    "px-4 md:px-6 py-2.5 md:py-3 rounded-lg transition-all text-sm whitespace-nowrap flex-shrink-0",
+    "px-3 sm:px-4 md:px-6 py-2 md:py-2.5 rounded-lg transition-all text-xs sm:text-sm whitespace-nowrap flex-shrink-0",
     sortBy.value === value
       ? "bg-primary text-primary-foreground"
       : "bg-card border-2 border-border text-muted-foreground hover:border-primary",
@@ -372,5 +418,4 @@ function selectRoute(route: ApiRouteOption) {
     },
   });
 }
-
 </script>

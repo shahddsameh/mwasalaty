@@ -1,6 +1,15 @@
 <template>
   <main class="min-h-screen pb-20 bg-background">
     <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-12">
+      <div class="flex items-center justify-between gap-4 mb-6">
+        <button
+          class="flex items-center gap-2 text-foreground hover:text-primary mb-4 sm:mb-6 transition-colors text-sm sm:text-base"
+          @click="returnToRouteDetails"
+        >
+          <ArrowLeft class="w-5 h-5" />
+          {{ t("booking.backToRouteDetails") }}
+        </button>
+      </div>
       <h1 class="font-display text-2xl sm:text-3xl text-foreground mb-3">
         {{ t("booking.title") }}
       </h1>
@@ -194,7 +203,13 @@
 import { computed, defineComponent, h, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { CloudOff, CreditCard, Loader2, ShieldCheck } from "@lucide/vue";
+import {
+  CloudOff,
+  CreditCard,
+  Loader2,
+  ShieldCheck,
+  ArrowLeft,
+} from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
 import type { ApiRouteOption, ApiLeg } from "@/services/api";
@@ -613,6 +628,24 @@ function savePendingBookingState() {
   } catch {
     // Existing routeSearch session state still preserves the selected trip.
   }
+}
+
+function returnToRouteDetails() {
+  router.push({
+    path: "/route-details",
+    query: {
+      start: fromLabel,
+      destination: toLabel,
+      filter,
+    },
+    state: {
+      route,
+      start: fromLabel,
+      destination: toLabel,
+      filter,
+      steps: route.detailSteps,
+    },
+  });
 }
 
 function redirectToAuth(path: "/login" | "/signup") {

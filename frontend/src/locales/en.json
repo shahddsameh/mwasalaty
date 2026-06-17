@@ -748,6 +748,7 @@
     "digitalQrTicket": "Digital QR ticket",
     "preparingCheckout": "Preparing secure checkout…",
     "paySecurely": "Pay securely - {total} {currency}",
+    "backToRouteDetails": "Back to route details",
     "loginRequiredTitle": "Login Required",
     "loginRequiredCopy": "You must log in or create an account before completing this booking and payment. We saved your selected trip and will bring you back here after authentication.",
     "login": "Login",

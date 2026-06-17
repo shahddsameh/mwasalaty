@@ -22,14 +22,38 @@
           </span>
         </RouterLink>
 
-        <RouterLink
-          to="/settings"
-          class="block lg:hidden"
-          :class="iconClass('/settings')"
-          :title="t('nav.settings')"
-        >
-          <Settings class="w-5 h-5" />
-        </RouterLink>
+        <div class="flex items-center gap-1 lg:hidden">
+          <button
+            type="button"
+            class="px-3 py-2 rounded-lg transition-colors text-sm hover:bg-sidebar-accent"
+            @click="toggleLanguage"
+          >
+            {{ t("language.toggle") }}
+          </button>
+
+          <button
+            type="button"
+            class="rounded-lg p-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
+            :aria-label="
+              theme === 'dark' ? t('nav.switchToLight') : t('nav.switchToDark')
+            "
+            :title="
+              theme === 'dark' ? t('nav.switchToLight') : t('nav.switchToDark')
+            "
+            @click="toggleTheme"
+          >
+            <Sun v-if="theme === 'dark'" class="h-5 w-5" />
+            <Moon v-else class="h-5 w-5" />
+          </button>
+          <RouterLink
+            to="/settings"
+            class="block lg:hidden"
+            :class="iconClass('/settings')"
+            :title="t('nav.settings')"
+          >
+            <Settings class="w-5 h-5" />
+          </RouterLink>
+        </div>
 
         <nav class="hidden lg:flex items-center gap-2">
           <RouterLink
@@ -95,24 +119,24 @@
             <Settings class="w-5 h-5" />
           </RouterLink>
         </nav>
-      </div>
 
-      <nav
-        class="lg:hidden fixed bottom-0 z-[9999] bg-sidebar border-t border-sidebar-border px-2 py-2"
-        style="inset-inline-start: 0; inset-inline-end: 0"
-      >
-        <div class="flex items-center justify-around">
-          <RouterLink
-            v-for="item in mobileLinks"
-            :key="item.to"
-            :to="item.to"
-            :class="mobileClass(item.to)"
-          >
-            <component :is="item.icon" class="w-5 h-5" />
-            <span>{{ t(item.labelKey) }}</span>
-          </RouterLink>
-        </div>
-      </nav>
+        <nav
+          class="lg:hidden fixed bottom-0 z-[9999] bg-sidebar border-t border-sidebar-border px-2 py-2"
+          style="inset-inline-start: 0; inset-inline-end: 0"
+        >
+          <div class="flex items-center justify-around">
+            <RouterLink
+              v-for="item in mobileLinks"
+              :key="item.to"
+              :to="item.to"
+              :class="mobileClass(item.to)"
+            >
+              <component :is="item.icon" class="w-5 h-5" />
+              <span>{{ t(item.labelKey) }}</span>
+            </RouterLink>
+          </div>
+        </nav>
+      </div>
     </div>
   </header>
 </template>
@@ -123,6 +147,7 @@ import { useI18n } from "vue-i18n";
 import { RouterLink, useRoute } from "vue-router";
 import {
   BookmarkCheck,
+  Globe,
   LogIn,
   MapPin,
   Moon,

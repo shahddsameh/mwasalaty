@@ -155,7 +155,7 @@
               {{ t("routeDetails.routeMap") }}
             </h3>
             <div
-              class="aspect-square overflow-hidden rounded-lg border-2 border-border"
+              class="h-64 sm:aspect-square overflow-hidden rounded-lg border-2 border-border"
             >
               <RoutePreviewMap :steps="steps" />
             </div>

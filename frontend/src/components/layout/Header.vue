@@ -98,7 +98,7 @@
       </div>
 
       <nav
-        class="lg:hidden fixed bottom-0 z-50 bg-sidebar border-t border-sidebar-border px-2 py-2"
+        class="lg:hidden fixed bottom-0 z-[9999] bg-sidebar border-t border-sidebar-border px-2 py-2"
         style="inset-inline-start: 0; inset-inline-end: 0"
       >
         <div class="flex items-center justify-around">

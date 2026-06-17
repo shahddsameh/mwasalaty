@@ -5,12 +5,12 @@
         :title="t('tickets.allTitle')"
         :subtitle="t('tickets.allSubtitle')"
       >
-        <template #icon><TicketIcon class="h-10 w-10 text-primary" /></template>
+        <template #icon><TicketIcon class="h-8 w-8 text-primary" /></template>
       </PageTitle>
 
       <div
         v-if="offlineNotice"
-        class="mb-6 flex items-center gap-3 rounded-xl border-2 border-warning bg-warning-soft p-4 text-sm text-foreground"
+        class="mb-6 flex items-center gap-3 rounded-xl border-2 border-warning bg-secondary p-4 text-sm text-foreground"
         role="status"
       >
         <CloudOff class="h-5 w-5 flex-shrink-0 text-warning" />
@@ -27,7 +27,12 @@
         "
       >
         <div class="min-w-0">
-          <div class="font-display text-sm sm:text-base truncate" :title="notice.title">{{ notice.title }}</div>
+          <div
+            class="font-display text-sm sm:text-base truncate"
+            :title="notice.title"
+          >
+            {{ notice.title }}
+          </div>
           <p class="mt-1 text-xs sm:text-sm">{{ notice.message }}</p>
         </div>
         <button
@@ -44,7 +49,9 @@
         class="rounded-2xl border-2 border-border bg-card p-6 sm:p-12 text-center"
       >
         <Loader2 class="mx-auto mb-4 h-8 w-8 animate-spin text-primary" />
-        <p class="text-sm sm:text-base text-muted-foreground">{{ t("tickets.loading") }}</p>
+        <p class="text-sm sm:text-base text-muted-foreground">
+          {{ t("tickets.loading") }}
+        </p>
       </section>
 
       <section
@@ -55,7 +62,9 @@
         <h2 class="font-display text-lg sm:text-xl text-foreground">
           {{ t("tickets.loadErrorTitle") }}
         </h2>
-        <p class="mx-auto mb-6 mt-2 max-w-lg text-xs sm:text-sm text-muted-foreground">
+        <p
+          class="mx-auto mb-6 mt-2 max-w-lg text-xs sm:text-sm text-muted-foreground"
+        >
           {{ errorMessage }}
         </p>
         <AppButton @click="loadTickets">{{ t("tickets.tryAgain") }}</AppButton>
@@ -101,10 +110,16 @@
     >
       <div v-if="refundTicketTarget" class="space-y-4 sm:space-y-5">
         <div class="rounded-lg bg-secondary p-3 sm:p-4">
-          <div class="font-mono text-xs sm:text-sm text-muted-foreground truncate" :title="refundTicketTarget.ticketId">
+          <div
+            class="font-mono text-xs sm:text-sm text-muted-foreground truncate"
+            :title="refundTicketTarget.ticketId"
+          >
             {{ refundTicketTarget.ticketId }}
           </div>
-          <div class="mt-1 font-display text-base sm:text-lg text-foreground truncate" :title="ticketRoute(refundTicketTarget)">
+          <div
+            class="mt-1 font-display text-base sm:text-lg text-foreground truncate"
+            :title="ticketRoute(refundTicketTarget)"
+          >
             {{ ticketRoute(refundTicketTarget) }}
           </div>
         </div>
@@ -191,18 +206,26 @@
               />
             </span>
             <span class="min-w-0 flex-1">
-              <span class="block font-display text-sm sm:text-base text-foreground truncate" :title="legLabel(leg)">{{
-                legLabel(leg)
-              }}</span>
-              <span class="block truncate text-xs sm:text-sm text-muted-foreground" :title="`${leg.from?.name || t('tickets.start')} -> ${leg.to?.name || t('tickets.destination')}`">
+              <span
+                class="block font-display text-sm sm:text-base text-foreground truncate"
+                :title="legLabel(leg)"
+                >{{ legLabel(leg) }}</span
+              >
+              <span
+                class="block truncate text-xs sm:text-sm text-muted-foreground"
+                :title="`${leg.from?.name || t('tickets.start')} -> ${leg.to?.name || t('tickets.destination')}`"
+              >
                 {{ leg.from?.name || t("tickets.start") }} ->
                 {{ leg.to?.name || t("tickets.destination") }}
               </span>
             </span>
             <span class="text-right shrink-0">
-              <span class="block font-display text-sm sm:text-base text-foreground">{{
-                money(leg.fareAmount, refundTicketTarget.payment.currency)
-              }}</span>
+              <span
+                class="block font-display text-sm sm:text-base text-foreground"
+                >{{
+                  money(leg.fareAmount, refundTicketTarget.payment.currency)
+                }}</span
+              >
               <span
                 class="block text-[10px] sm:text-xs"
                 :class="legStatusTextClass(leg.status)"
@@ -212,7 +235,9 @@
           </button>
         </div>
 
-        <div class="rounded-lg border border-primary/30 bg-secondary p-3.5 sm:p-4">
+        <div
+          class="rounded-lg border border-primary/30 bg-secondary p-3.5 sm:p-4"
+        >
           <div class="flex items-center justify-between gap-3">
             <span class="text-xs sm:text-sm text-foreground">{{
               t("tickets.refund.amount")
@@ -608,7 +633,10 @@ const TicketSection = defineComponent({
                         h("div", { class: "min-w-0" }, [
                           h(
                             "div",
-                            { class: "font-display text-base sm:text-lg text-foreground" },
+                            {
+                              class:
+                                "font-display text-base sm:text-lg text-foreground",
+                            },
                             t("tickets.digitalTicket"),
                           ),
                           h(
@@ -642,7 +670,8 @@ const TicketSection = defineComponent({
                         h(
                           "div",
                           {
-                            class: "font-display text-base sm:text-lg text-foreground truncate",
+                            class:
+                              "font-display text-sm sm:text-lg text-foreground",
                             title: ticketRoute(ticket),
                           },
                           ticketRoute(ticket),
@@ -668,7 +697,10 @@ const TicketSection = defineComponent({
                         [
                           h(
                             "div",
-                            { class: "rounded-lg bg-secondary p-2.5 sm:p-3 min-w-0" },
+                            {
+                              class:
+                                "rounded-lg bg-secondary p-2.5 sm:p-3 min-w-0",
+                            },
                             [
                               h(
                                 "div",
@@ -677,7 +709,10 @@ const TicketSection = defineComponent({
                               ),
                               h(
                                 "div",
-                                { class: "font-display text-sm sm:text-base text-foreground" },
+                                {
+                                  class:
+                                    "font-display text-sm sm:text-base text-foreground",
+                                },
                                 money(
                                   ticket.payment.amount,
                                   ticket.payment.currency,
@@ -687,7 +722,10 @@ const TicketSection = defineComponent({
                           ),
                           h(
                             "div",
-                            { class: "rounded-lg bg-secondary p-2.5 sm:p-3 min-w-0" },
+                            {
+                              class:
+                                "rounded-lg bg-secondary p-2.5 sm:p-3 min-w-0",
+                            },
                             [
                               h(
                                 "div",
@@ -697,8 +735,11 @@ const TicketSection = defineComponent({
                               h(
                                 "div",
                                 {
-                                  class: "font-display text-xs sm:text-sm text-foreground truncate",
-                                  title: dateLabel(ticket.expiresAt || ticket.expires_at),
+                                  class:
+                                    "font-display text-xs sm:text-sm text-foreground truncate",
+                                  title: dateLabel(
+                                    ticket.expiresAt || ticket.expires_at,
+                                  ),
                                 },
                                 dateLabel(
                                   ticket.expiresAt || ticket.expires_at,

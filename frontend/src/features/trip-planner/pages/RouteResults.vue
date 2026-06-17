@@ -29,7 +29,7 @@
 
       <div
         v-if="bookingNotice"
-        class="mb-4 sm:mb-6 rounded-xl border-2 border-warning bg-warning-soft p-3 sm:p-4 text-xs sm:text-sm text-foreground"
+        class="mb-4 sm:mb-6 rounded-xl border-2 border-warning bg-secondary p-3 sm:p-4 text-xs sm:text-sm text-foreground"
         role="status"
       >
         {{ bookingNotice }}
@@ -63,7 +63,7 @@
 
       <div
         v-if="isFromCache"
-        class="mb-4 sm:mb-6 rounded-xl border-2 border-warning bg-warning-soft p-3 sm:p-4"
+        class="mb-4 sm:mb-6 rounded-xl border-2 border-warning bg-secondary p-3 sm:p-4"
         role="status"
       >
         <div class="flex items-start gap-2 sm:gap-3">

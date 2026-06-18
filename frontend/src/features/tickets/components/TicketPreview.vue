@@ -5,7 +5,7 @@
     >
       <div>
         <div class="font-display text-lg">Mwasalaty</div>
-        <div class="text-sm">Digital Transport Ticket</div>
+        <div class="text-sm">{{ t("ticketView.digitalTransportTicket") }}</div>
       </div>
       <span
         class="flex items-center gap-1 rounded-full px-3 py-1 text-sm"
@@ -35,19 +35,19 @@
 
     <div class="grid grid-cols-2 gap-3">
       <PreviewField
-        label="Passenger"
-        :value="ticket.passenger?.name || 'Guest'"
+        :label="t('ticketView.passenger')"
+        :value="ticket.passenger?.name || t('ticketView.guest')"
       />
       <PreviewField
-        label="Total Fare"
+        :label="t('ticketView.totalFare')"
         :value="`${ticket.payment.amount} ${ticket.payment.currency}`"
       />
-      <PreviewField label="Payment" :value="paymentLabel" />
-      <PreviewField label="Valid Until" :value="validUntil" />
+      <PreviewField :label="t('ticketView.payment')" :value="paymentLabel" />
+      <PreviewField :label="t('ticketView.validUntil')" :value="validUntil" />
     </div>
 
     <div>
-      <h4 class="mb-2 font-display text-foreground">Trip legs</h4>
+      <h4 class="mb-2 font-display text-foreground">{{ t("ticketView.tripLegs") }}</h4>
       <div class="max-h-48 space-y-2 overflow-y-auto">
         <div
           v-for="leg in ticket.legs"
@@ -59,28 +59,30 @@
               {{ legLabel(leg) }}
             </div>
             <div class="truncate text-xs text-muted-foreground">
-              {{ leg.from?.name || "Start" }} ->
-              {{ leg.to?.name || "Destination" }}
+              {{ leg.from?.name || t("ticketView.start") }} ->
+              {{ leg.to?.name || t("ticketView.destination") }}
             </div>
           </div>
           <span
             class="whitespace-nowrap rounded-full px-2.5 py-1 text-xs capitalize"
             :class="legStatusClass(leg.status)"
           >
-            {{ leg.status }}
+            {{ t(`tickets.legStatus.${leg.status}`) }}
           </span>
         </div>
       </div>
     </div>
 
     <div class="flex gap-3">
-      <AppButton class="flex-1" @click="$emit('close')">Close</AppButton>
+      <AppButton class="flex-1" @click="$emit('close')">
+        {{ t("ticketView.close") }}
+      </AppButton>
       <AppButton
         variant="outline"
         class="flex-1"
         @click="router.push(`/ticket/${encodeURIComponent(ticket.ticketId)}`)"
       >
-        Full Details
+        {{ t("ticketView.fullDetails") }}
       </AppButton>
     </div>
   </div>
@@ -89,15 +91,21 @@
 <script setup lang="ts">
 import { computed, defineComponent, h, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import QRCode from "qrcode";
 import { Check, QrCode, RotateCcw, XCircle } from "@lucide/vue";
 import AppButton from "@/components/ui/AppButton.vue";
 import type { Ticket, TicketLeg, TicketLegStatus } from "@/services/api";
+import {
+  localizeMode,
+  localizeRouteName,
+} from "@/services/placeLocalization";
 
 const props = defineProps<{ ticket: Ticket }>();
 defineEmits<{ close: [] }>();
 
 const router = useRouter();
+const { locale, t } = useI18n();
 const qrDataUrl = ref("");
 
 watch(
@@ -120,15 +128,15 @@ watch(
 const statusLabel = computed(() => {
   switch (computedTicketStatus.value) {
     case "expired":
-      return "Expired";
+      return t("ticket.status.expired");
     case "used":
-      return "Used";
+      return t("ticketView.statusUsed");
     case "refunded":
-      return "Refunded";
+      return t("ticketView.statusRefunded");
     case "partially_refunded":
-      return "Partial refund";
+      return t("ticketView.statusPartialRefund");
     default:
-      return "Valid";
+      return t("ticketView.statusValid");
   }
 });
 
@@ -169,22 +177,25 @@ const computedTicketStatus = computed((): Ticket["status"] | "expired" => {
 const paymentLabel = computed(() => {
   const method =
     props.ticket.payment.method === "PAYMOB_TEST"
-      ? "PayMob (test)"
+      ? t("ticketView.paymentTest")
       : props.ticket.payment.method;
   return `${method} - ${props.ticket.payment.status}`;
 });
 
 const validUntil = computed(() => {
-  if (!props.ticket.expiresAt) return "24h from booking";
+  if (!props.ticket.expiresAt) return t("ticketView.validFallback");
   const date = new Date(props.ticket.expiresAt);
   return Number.isNaN(date.getTime())
-    ? "24h from booking"
+    ? t("ticketView.validFallback")
     : date.toLocaleString();
 });
 
 function legLabel(leg: TicketLeg) {
-  const name = leg.route?.shortName ?? leg.route?.longName;
-  const mode = leg.mode.charAt(0) + leg.mode.slice(1).toLowerCase();
+  const name = localizeRouteName(
+    leg.route?.shortName ?? leg.route?.longName,
+    locale.value,
+  );
+  const mode = localizeMode(leg.mode, locale.value);
   return name ? `${mode} ${name}` : mode;
 }
 

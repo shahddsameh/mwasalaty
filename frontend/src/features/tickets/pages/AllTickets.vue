@@ -298,6 +298,10 @@ import PageTitle from "@/components/shared/PageTitle.vue";
 import type { Ticket, TicketLeg, TicketLegStatus } from "@/services/api";
 import { getTicket, getTickets, refundTicket } from "@/services/api";
 import {
+  localizeMode,
+  localizeRouteName,
+} from "@/services/placeLocalization";
+import {
   readCurrentTicket,
   storeCurrentTicket,
 } from "@/services/currentTicket";
@@ -305,7 +309,7 @@ import { useAuthState } from "@/services/authState";
 import { db } from "@/db/appDb";
 
 const router = useRouter();
-const { t } = useI18n();
+const { locale, t } = useI18n();
 const { user, ensureAuthInitialized } = useAuthState();
 const tickets = ref<Ticket[]>([]);
 const loading = ref(true);
@@ -483,8 +487,11 @@ function ticketModes(ticket: Ticket) {
 }
 
 function legLabel(leg: TicketLeg) {
-  const route = leg.route?.shortName ?? leg.route?.longName;
-  const mode = leg.mode.charAt(0) + leg.mode.slice(1).toLowerCase();
+  const route = localizeRouteName(
+    leg.route?.shortName ?? leg.route?.longName,
+    locale.value,
+  );
+  const mode = localizeMode(leg.mode, locale.value);
   return route ? `${mode} ${route}` : mode;
 }
 

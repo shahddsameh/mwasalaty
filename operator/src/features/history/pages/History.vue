@@ -10,28 +10,51 @@
         icon="history"
       />
 
-      <p v-if="!isOnline" class="soft-alert border-border bg-muted text-muted-foreground"><AppIcon name="offline" class="h-5 w-5 shrink-0" />{{ $t("history.offline") }}</p>
+      <p
+        v-if="!isOnline"
+        class="soft-alert border-border bg-muted text-muted-foreground"
+      >
+        <AppIcon name="offline" class="h-5 w-5 shrink-0" />{{
+          $t("history.offline")
+        }}
+      </p>
 
-      <StateView :state="history.length ? 'ready' : 'empty'" :title="$t('history.empty')" :support="$t('history.partial')">
+      <StateView
+        :state="history.length ? 'ready' : 'empty'"
+        :title="$t('history.empty')"
+        :support="$t('history.partial')"
+      >
         <div class="grid gap-3 sm:grid-cols-2">
-          <RouterLink
+          <div
             v-for="item in history"
             :key="`${item.at}-${item.ticketId}-${item.kind}`"
-            :to="item.ticketId ? `/ticket/${item.ticketId}` : '/history'"
             :class="outcomeTone(item.kind)"
             class="tap-target rounded-2xl border border-border p-5 shadow-sm transition-colors hover:border-primary focus-ring"
           >
             <div class="flex flex-wrap items-start justify-between gap-3">
               <div class="min-w-0">
-                <p class="text-xs font-medium uppercase">{{ formatDateTime(item.at) }}</p>
-                <h2 class="mt-2 text-xl font-semibold">{{ $t(`dashboard.counts.${item.kind}`) }}</h2>
-                <p class="mt-2 truncate text-sm font-normal">{{ item.route ?? item.ticketLegId ?? $t("common.detailsUnavailable") }}</p>
+                <p class="text-xs font-medium uppercase">
+                  {{ formatDateTime(item.at) }}
+                </p>
+                <h2 class="mt-2 text-xl font-semibold">
+                  {{ $t(`dashboard.counts.${item.kind}`) }}
+                </h2>
+                <p class="mt-2 truncate text-sm font-normal">
+                  {{
+                    item.route ??
+                    item.ticketLegId ??
+                    $t("common.detailsUnavailable")
+                  }}
+                </p>
               </div>
-              <span v-if="item.kind === 'unverified'" class="rounded-full border border-border bg-card/80 px-3 py-1 text-xs font-medium text-foreground">
+              <span
+                v-if="item.kind === 'unverified'"
+                class="rounded-full border border-border bg-card/80 px-3 py-1 text-xs font-medium text-foreground"
+              >
                 {{ $t("history.scannedOffline") }}
               </span>
             </div>
-          </RouterLink>
+          </div>
         </div>
       </StateView>
     </section>

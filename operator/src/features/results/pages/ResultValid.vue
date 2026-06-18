@@ -9,13 +9,13 @@
     @primary="goNext"
     @auto-advance="goNext"
   >
-    <RouterLink
+    <!-- <RouterLink
       v-if="outcome?.ticketId"
       :to="{ name: 'ticket-detail', params: { id: outcome.ticketId } }"
       class="mt-6 rounded-lg border border-border bg-card px-4 py-3 font-bold text-foreground transition hover:border-primary hover:bg-secondary focus-ring"
     >
       {{ $t("ticket.title") }}
-    </RouterLink>
+    </RouterLink> -->
   </ResultScreen>
 </template>
 
@@ -34,7 +34,7 @@ const support = computed(() => {
   if (!outcome?.ticketLegId) return t("result.valid.partial");
   return t("result.valid.support", {
     leg: outcome.ticketLegId,
-    remaining: outcome.detail.remainingLegs ?? t("common.dash")
+    remaining: outcome.detail.remainingLegs ?? t("common.dash"),
   });
 });
 

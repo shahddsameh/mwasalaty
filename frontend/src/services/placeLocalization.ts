@@ -120,8 +120,16 @@ const PLACE_AR_LOOKUP: Record<string, string> = {
 export function localizePlaceName(value: string | null | undefined, language = getFallbackLanguage()) {
   if (!value || language === "en") return value ?? "";
 
-  const normalized = normalizePlace(value);
-  return PLACE_AR_LOOKUP[normalized] ?? value;
+  return localizeArabicLookup(value);
+}
+
+export function localizeRouteName(
+  value: string | null | undefined,
+  language = getFallbackLanguage(),
+) {
+  if (!value || language === "en") return value ?? "";
+
+  return localizeArabicLookup(value);
 }
 
 export function localizeRouteInstruction(
@@ -162,6 +170,11 @@ export function localizeMode(value: string, language: AppLanguage = getFallbackL
 
 function normalizePlace(value: string) {
   return value.trim().toLowerCase().replace(/[-_]+/g, " ").replace(/\s+/g, " ");
+}
+
+function localizeArabicLookup(value: string) {
+  const normalized = normalizePlace(value);
+  return PLACE_AR_LOOKUP[normalized] ?? value;
 }
 
 function normalizeSearchPlace(value: string) {

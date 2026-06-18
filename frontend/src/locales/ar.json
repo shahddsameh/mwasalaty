@@ -778,6 +778,8 @@
     "ticketId": "رقم التذكرة",
     "passenger": "الراكب",
     "guest": "زائر",
+    "start": "البداية",
+    "destination": "الوجهة",
     "totalFare": "إجمالي الأجرة",
     "payment": "الدفع",
     "paymentTest": "PayMob (تجريبي)",
@@ -794,7 +796,9 @@
     "step3FromBooking": "3. التذكرة صالحة لمدة 24 ساعة من وقت الحجز.",
     "step4": "4. تعمل دون اتصال — أبقِ هذه الشاشة جاهزة أثناء رحلتك.",
     "quickActions": "إجراءات سريعة",
-    "contactSupport": "تواصل مع الدعم"
+    "contactSupport": "تواصل مع الدعم",
+    "close": "إغلاق",
+    "fullDetails": "التفاصيل الكاملة"
   },
   "liveNav": {
     "liveNavigation": "الملاحة المباشرة",

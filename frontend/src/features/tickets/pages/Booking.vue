@@ -215,6 +215,10 @@ import Modal from "@/components/ui/Modal.vue";
 import type { ApiRouteOption, ApiLeg } from "@/services/api";
 import { createCheckoutSession, planRoute } from "@/services/api";
 import {
+  localizeMode,
+  localizeRouteName,
+} from "@/services/placeLocalization";
+import {
   getSelectedRoute,
   getPlaceCoords,
   normalizeFilter,
@@ -226,7 +230,7 @@ import { useNetworkStatus } from "@/core/offline/networkStatus";
 
 const router = useRouter();
 const currentRoute = useRoute();
-const { t } = useI18n();
+const { locale, t } = useI18n();
 const { user, isAuthenticated, ensureAuthInitialized } = useAuthState();
 const { isOnline } = useNetworkStatus();
 
@@ -416,7 +420,10 @@ const legGroups = computed<LegGroup[]>(() => {
     while (j < legs.length && legs[j].mode === "SUBWAY") {
       amount += legs[j].fare?.amount ?? 0;
       lineNames.push(
-        legs[j].route?.shortName ?? legs[j].route?.longName ?? "Metro",
+        localizeRouteName(
+          legs[j].route?.shortName ?? legs[j].route?.longName ?? "Metro",
+          locale.value,
+        ),
       );
       run.push(legs[j]);
       j += 1;
@@ -456,8 +463,11 @@ watch(isAuthenticated, (loggedIn) => {
 });
 
 function modeLabel(leg: ApiLeg) {
-  const name = leg.route?.shortName ?? leg.route?.longName;
-  const mode = leg.mode.charAt(0) + leg.mode.slice(1).toLowerCase();
+  const name = localizeRouteName(
+    leg.route?.shortName ?? leg.route?.longName,
+    locale.value,
+  );
+  const mode = localizeMode(leg.mode, locale.value);
   return name ? `${mode} ${name}` : mode;
 }
 

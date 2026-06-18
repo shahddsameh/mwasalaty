@@ -775,6 +775,8 @@
     "ticketId": "Ticket ID",
     "passenger": "Passenger",
     "guest": "Guest",
+    "start": "Start",
+    "destination": "Destination",
     "totalFare": "Total Fare",
     "payment": "Payment",
     "paymentTest": "PayMob (test)",
@@ -789,9 +791,11 @@
     "step2": "2. Each leg is marked as used after it is scanned.",
     "step3FromDeparture": "3. The ticket is valid for 24 hours from your scheduled departure.",
     "step3FromBooking": "3. The ticket is valid for 24 hours from booking.",
-    "step4": "4. Works offline — keep this screen handy during your trip.",
+    "step4": "4. Works offline - keep this screen handy during your trip.",
     "quickActions": "Quick Actions",
-    "contactSupport": "Contact Support"
+    "contactSupport": "Contact Support",
+    "close": "Close",
+    "fullDetails": "Full Details"
   },
   "liveNav": {
     "liveNavigation": "Live Navigation",

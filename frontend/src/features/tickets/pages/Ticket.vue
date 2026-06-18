@@ -225,12 +225,16 @@ import AppButton from "@/components/ui/AppButton.vue";
 import Modal from "@/components/ui/Modal.vue";
 import type { Ticket, TicketLeg, TicketLegStatus } from "@/services/api";
 import { getTicket, subscribeToTicket } from "@/services/api";
+import {
+  localizeMode,
+  localizeRouteName,
+} from "@/services/placeLocalization";
 import { readCurrentTicket, storeCurrentTicket } from "@/services/currentTicket";
 import { db } from "@/db/appDb";
 
 const route = useRoute();
 const router = useRouter();
-const { t } = useI18n();
+const { locale, t } = useI18n();
 
 const ticket = ref<Ticket | null>(null);
 const loading = ref(true);
@@ -388,8 +392,11 @@ const departsAt = computed(() => {
 });
 
 function legLabel(leg: TicketLeg) {
-  const name = leg.route?.shortName ?? leg.route?.longName;
-  const mode = leg.mode.charAt(0) + leg.mode.slice(1).toLowerCase();
+  const name = localizeRouteName(
+    leg.route?.shortName ?? leg.route?.longName,
+    locale.value,
+  );
+  const mode = localizeMode(leg.mode, locale.value);
   return name ? `${mode} ${name}` : mode;
 }
 

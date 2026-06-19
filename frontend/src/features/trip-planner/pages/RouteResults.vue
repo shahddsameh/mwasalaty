@@ -22,7 +22,7 @@
         >
           <MapPin class="w-4 h-4 flex-shrink-0" />
           <span class="truncate">
-            {{ displayStart }} {{ locale === "ar" ? "←" : "→" }}
+            {{ displayStart }} →
             {{ displayDestination }}
           </span>
         </div>

@@ -21,9 +21,10 @@
           class="flex items-center gap-2 text-xs sm:text-sm md:text-base text-muted-foreground overflow-hidden"
         >
           <MapPin class="w-4 h-4 flex-shrink-0" />
-          <span class="truncate"
-            >{{ displayStart }} → {{ displayDestination }}</span
-          >
+          <span class="truncate">
+            {{ displayStart }} {{ locale === "ar" ? "←" : "→" }}
+            {{ displayDestination }}
+          </span>
         </div>
       </section>
 
@@ -206,7 +207,7 @@ type TimeMode = "now" | "depart" | "arrive";
 
 const router = useRouter();
 const currentRoute = useRoute();
-const { t } = useI18n();
+const { locale, t } = useI18n();
 const { isOnline } = useNetworkStatus();
 
 const state = history.state ?? {};

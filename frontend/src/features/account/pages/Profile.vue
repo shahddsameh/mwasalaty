@@ -1,45 +1,54 @@
 <template>
   <main class="min-h-screen pb-20 bg-background">
-    <div class="max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-12">
-      <div class="flex flex-col sm:flex-row justify-between gap-4 mb-8">
+    <div
+      class="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 md:py-12"
+    >
+      <div
+        class="flex flex-col sm:flex-row justify-between gap-1 sm:gap-4 mb-4 md:mb-8"
+      >
         <div>
-          <h1 class="font-display text-3xl text-foreground mb-3">
+          <h1
+            class="font-display text-xl sm:text-xl md:text-3xl text-foreground mb-1 sm:mb-3"
+          >
             {{ t("account.profileTitle") }}
           </h1>
-          <p class="text-muted-foreground">
+          <p
+            class="text-xs sm:text-sm md:text-base leading-4 text-muted-foreground"
+          >
             {{ t("account.profileSubtitle") }}
           </p>
         </div>
-        <AppButton
+        <!-- <AppButton
           variant="outline"
-          class="flex items-center gap-2"
+          size="sm"
+          class="flex items-center gap-2 self-start sm:self-auto"
           @click="router.push('/settings')"
         >
-          <Settings class="w-5 h-5" /> {{ t("nav.settings") }}
-        </AppButton>
+          <Settings class="w-4 h-4 sm:w-5 sm:h-5" /> {{ t("nav.settings") }}
+        </AppButton> -->
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <aside class="space-y-6">
-          <section class="bg-card rounded-xl p-6 border-2 border-border">
-            <div class="flex items-center justify-between mb-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
+        <aside class="space-y-4 md:space-y-6">
+          <section class="bg-card rounded-xl p-4 md:p-6 border-2 border-border">
+            <div class="flex items-center justify-between mb-4 md:mb-6">
               <div
-                class="w-20 h-20 bg-primary-soft rounded-full flex items-center justify-center"
+                class="w-12 h-12 sm:w-20 sm:h-20 bg-primary-soft rounded-full flex items-center justify-center"
               >
-                <User class="w-10 h-10 text-primary" />
+                <User class="w-6 h-6 sm:w-10 sm:h-10 text-primary" />
               </div>
               <button
-                class="p-2 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                class="p-1.5 sm:p-2 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 :aria-label="t('account.editProfile')"
                 @click="openEditModal"
               >
-                <Edit class="w-5 h-5" />
+                <Edit class="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
-            <h2 class="font-display text-2xl text-foreground">
+            <h2 class="font-display text-lg sm:text-2xl text-foreground">
               {{ userInfo.name }}
             </h2>
-            <p class="text-sm text-muted-foreground mb-6">
+            <p class="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6">
               {{ t("account.memberSince", { date: userInfo.joined }) }}
             </p>
             <p class="text-sm text-foreground mb-3">{{ userInfo.email }}</p>
@@ -48,88 +57,94 @@
 
           <section class="bg-card rounded-xl p-4 md:p-6 border-2 border-border">
             <h2
-              class="font-display text-lg md:text-2xl text-foreground mb-4 md:mb-5"
+              class="font-display text-sm sm:text-base md:text-2xl text-foreground mb-4 md:mb-5"
             >
               {{ t("settings.account") }}
             </h2>
 
-            <div class="space-y-3 md:space-y-4">
+            <div class="space-y-1 md:space-y-4">
               <button
-                class="w-full min-h-14 flex items-center justify-between gap-3 p-3 rounded-lg hover:bg-muted text-start transition-colors text-foreground"
+                class="w-full min-h-12 md:min-h-14 flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-lg hover:bg-muted text-start transition-colors text-foreground"
                 @click="router.push('/profile')"
               >
                 <span class="min-w-0">
-                  <span class="block font-display">
+                  <span class="block font-display text-sm sm:text-base">
                     {{ t("settings.profileSettings") }}
                   </span>
-                  <span class="block text-sm text-muted-foreground">
+                  <span class="block text-xs sm:text-sm text-muted-foreground">
                     {{ t("settings.profileDescription") }}
                   </span>
                 </span>
 
                 <ChevronRight
-                  class="w-5 h-5 shrink-0 text-muted-foreground rtl:rotate-180"
+                  class="w-4 h-4 sm:w-5 sm:h-5 shrink-0 text-muted-foreground rtl:rotate-180"
                 />
               </button>
 
               <button
                 v-if="canChangePassword"
-                class="w-full min-h-14 flex items-center justify-between gap-3 p-3 rounded-lg hover:bg-muted text-start transition-colors text-foreground"
+                class="w-full min-h-12 md:min-h-14 flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-lg hover:bg-muted text-start transition-colors text-foreground"
                 @click="openPasswordModal"
               >
                 <span class="min-w-0">
-                  <span class="block font-display">
+                  <span class="block font-display text-sm sm:text-base">
                     {{ t("account.changePassword") }}
                   </span>
-                  <span class="block text-sm text-muted-foreground">
+                  <span class="block text-xs sm:text-sm text-muted-foreground">
                     {{ t("account.changePasswordDescription") }}
                   </span>
                 </span>
 
                 <ChevronRight
-                  class="w-5 h-5 shrink-0 text-muted-foreground rtl:rotate-180"
+                  class="w-4 h-4 sm:w-5 sm:h-5 shrink-0 text-muted-foreground rtl:rotate-180"
                 />
               </button>
 
               <button
-                class="w-full min-h-14 flex items-center justify-between gap-3 p-3 rounded-lg hover:bg-muted text-start transition-colors text-destructive"
+                class="w-full min-h-12 md:min-h-14 flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-lg hover:bg-muted text-start transition-colors text-destructive"
                 @click="logoutModalOpen = true"
               >
                 <span class="min-w-0">
-                  <span class="block font-display">{{
+                  <span class="block font-display text-sm sm:text-base">{{
                     t("settings.logout")
                   }}</span>
-                  <span class="block text-sm text-muted-foreground">
+                  <span class="block text-xs sm:text-sm text-muted-foreground">
                     {{ t("settings.logoutDescription") }}
                   </span>
                 </span>
 
                 <ChevronRight
-                  class="w-5 h-5 shrink-0 text-muted-foreground rtl:rotate-180"
+                  class="w-4 h-4 sm:w-5 sm:h-5 shrink-0 text-muted-foreground rtl:rotate-180"
                 />
               </button>
             </div>
           </section>
 
           <section
-            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary text-sidebar rounded-xl p-6 border-2 border-primary"
+            class="bg-gradient-to-br from-primary-soft via-warning-soft to-primary text-sidebar rounded-xl p-4 md:p-6 border-2 border-primary"
           >
-            <h3 class="font-display text-xl mb-4">
+            <h3 class="font-display text-base sm:text-lg mb-4">
               {{ t("account.yourStats") }}
             </h3>
             <div class="flex justify-between mb-3">
-              <span>{{ t("account.totalTrips") }}</span>
-              <strong class="text-3xl">{{ totalTrips }}</strong>
+              <span class="text-sm sm:text-base">{{
+                t("account.totalTrips")
+              }}</span>
+              <strong class="text-lg sm:text-2xl">{{ totalTrips }}</strong>
             </div>
             <div class="flex justify-between">
-              <span>{{ t("account.savedRoutes") }}</span>
-              <strong class="text-3xl">{{ savedRoutesCount }}</strong>
+              <span class="text-sm sm:text-base">{{
+                t("account.savedRoutes")
+              }}</span>
+              <strong class="text-lg sm:text-2xl">{{
+                savedRoutesCount
+              }}</strong>
             </div>
           </section>
         </aside>
 
         <section class="lg:col-span-2">
-          <div class="flex gap-3 mb-6 overflow-x-auto pb-2">
+          <div class="flex gap-2 mb-4 md:mb-6 overflow-x-auto pb-2">
             <button
               v-for="tab in tabs"
               :key="tab.value"
@@ -157,13 +172,15 @@
               {{ t("account.noTransactions") }}
             </p>
             <template v-else>
-              <div class="mb-4 space-y-3 border-b border-border pb-4">
+              <div
+                class="mb-4 space-y-2.5 md:space-y-3 border-b border-border pb-4"
+              >
                 <div class="flex flex-wrap gap-2">
                   <button
                     v-for="filter in transactionFilters"
                     :key="filter.value"
                     type="button"
-                    class="min-h-10 rounded-full border px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    class="min-h-10 rounded-full border px-4 py-2 text-xs sm:text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     :class="
                       transactionTypeFilter === filter.value
                         ? 'border-primary bg-primary text-primary-foreground'
@@ -180,22 +197,24 @@
                   class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
                 >
                   <label
-                    class="flex min-w-0 flex-1 flex-col gap-1.5 sm:max-w-xs"
+                    class="flex min-w-0 flex-1 flex-col gap-1 sm:gap-1.5 sm:max-w-xs"
                   >
-                    <span class="text-sm font-semibold text-foreground">
+                    <span
+                      class="text-xs sm:text-sm font-semibold text-foreground"
+                    >
                       {{ t("account.transactionFilters.date") }}
                     </span>
                     <input
                       v-model="transactionDateFilter"
                       type="date"
                       dir="ltr"
-                      class="min-h-10 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                      class="min-h-10 w-full rounded-lg border border-border bg-card px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                     />
                   </label>
                   <button
                     v-if="transactionDateFilter"
                     type="button"
-                    class="min-h-10 self-start rounded-lg px-3 py-2 text-sm font-semibold text-primary hover:bg-primary-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:self-auto"
+                    class="min-h-10 self-start rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold text-primary hover:bg-primary-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:self-auto"
                     @click="transactionDateFilter = ''"
                   >
                     {{ t("account.transactionFilters.clearDate") }}
@@ -214,7 +233,7 @@
 
               <p
                 v-if="filteredTransactions.length === 0"
-                class="rounded-lg border border-dashed border-border bg-muted p-5 text-center text-sm text-muted-foreground"
+                class="rounded-lg border border-dashed border-border bg-muted p-4 sm:p-5 text-center text-xs sm:text-sm text-muted-foreground"
               >
                 {{ t("account.transactionFilters.noMatches") }}
               </p>
@@ -223,17 +242,19 @@
                 <div
                   v-for="tx in visibleTransactions"
                   :key="tx.id"
-                  class="flex items-center justify-between gap-4 p-4 border-b border-border last:border-0"
+                  class="flex items-center justify-between gap-3 md:gap-4 p-3 md:p-4 border-b border-border last:border-0"
                 >
                   <div class="min-w-0">
-                    <div class="text-foreground">{{ tx.description }}</div>
-                    <div class="text-sm text-muted-foreground">
+                    <div class="text-xs sm:text-sm text-foreground">
+                      {{ tx.description }}
+                    </div>
+                    <div class="text-xs sm:text-sm text-muted-foreground">
                       {{ tx.date }}
                     </div>
                   </div>
                   <div
                     :class="[
-                      'shrink-0 font-display text-lg',
+                      'shrink-0 font-display text-base sm:text-lg',
                       tx.amount.startsWith('+')
                         ? 'text-success'
                         : 'text-foreground',
@@ -245,10 +266,11 @@
 
                 <div
                   v-if="hasMoreTransactions"
-                  class="border-t border-border pt-4 text-center"
+                  class="border-t border-border pt-3 md:pt-4 text-center"
                 >
                   <AppButton
                     variant="outline"
+                    size="sm"
                     @click="visibleTransactionCount += transactionPageSize"
                   >
                     {{ t("account.transactionFilters.showMore") }}
@@ -266,9 +288,9 @@
       :title="t('account.editProfile')"
       @close="editModalOpen = false"
     >
-      <div class="space-y-4">
-        <label class="flex flex-col gap-1.5">
-          <span class="text-sm text-foreground">{{
+      <div class="space-y-3 md:space-y-4">
+        <label class="flex flex-col gap-1">
+          <span class="text-[11px] sm:text-xs text-foreground">{{
             t("account.fullName")
           }}</span>
           <input
@@ -277,8 +299,10 @@
           />
         </label>
 
-        <label class="flex flex-col gap-1.5">
-          <span class="text-sm text-foreground">{{ t("account.email") }}</span>
+        <label class="flex flex-col gap-1">
+          <span class="text-[11px] sm:text-xs text-foreground">{{
+            t("account.email")
+          }}</span>
           <input
             v-model="editEmail"
             type="email"
@@ -289,8 +313,10 @@
           </span>
         </label>
 
-        <label class="flex flex-col gap-1.5">
-          <span class="text-sm text-foreground">{{ t("account.phone") }}</span>
+        <label class="flex flex-col gap-1">
+          <span class="text-[11px] sm:text-xs text-foreground">{{
+            t("account.phone")
+          }}</span>
           <input
             v-model="editPhone"
             type="tel"
@@ -312,7 +338,7 @@
         </p>
 
         <div
-          class="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-border pt-4"
+          class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 border-t border-border pt-3 md:pt-4"
         >
           <AppButton
             class="w-full"
@@ -338,9 +364,9 @@
       :title="t('account.changePassword')"
       @close="passwordModalOpen = false"
     >
-      <div class="space-y-4">
-        <label class="flex flex-col gap-1.5">
-          <span class="text-sm text-foreground">{{
+      <div class="space-y-3 md:space-y-4">
+        <label class="flex flex-col gap-1">
+          <span class="text-[11px] sm:text-xs text-foreground">{{
             t("account.currentPassword")
           }}</span>
           <input
@@ -351,8 +377,8 @@
           />
         </label>
 
-        <label class="flex flex-col gap-1.5">
-          <span class="text-sm text-foreground">{{
+        <label class="flex flex-col gap-1">
+          <span class="text-[11px] sm:text-xs text-foreground">{{
             t("account.newPassword")
           }}</span>
           <input
@@ -363,8 +389,8 @@
           />
         </label>
 
-        <label class="flex flex-col gap-1.5">
-          <span class="text-sm text-foreground">{{
+        <label class="flex flex-col gap-1">
+          <span class="text-[11px] sm:text-xs text-foreground">{{
             t("account.confirmPassword")
           }}</span>
           <input
@@ -389,7 +415,7 @@
         </p>
 
         <div
-          class="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-border pt-4"
+          class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 border-t border-border pt-3 md:pt-4"
         >
           <AppButton
             class="w-full"
@@ -417,7 +443,7 @@
       :title="t('settings.logout')"
       @close="logoutModalOpen = false"
     >
-      <div class="space-y-4">
+      <div class="space-y-3 md:space-y-4">
         <p class="text-muted-foreground">{{ t("settings.logoutConfirm") }}</p>
         <p
           v-if="logoutError"
@@ -425,7 +451,7 @@
         >
           {{ logoutError }}
         </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
           <AppButton
             variant="danger"
             class="w-full"
@@ -774,7 +800,7 @@ async function handleChangePassword() {
 
 function tabClass(value: string) {
   return [
-    "px-6 py-3 rounded-lg whitespace-nowrap transition-all",
+    "px-3 py-2 sm:px-6 sm:py-3 rounded-lg whitespace-nowrap transition-all text-xs sm:text-sm",
     activeTab.value === value
       ? "bg-primary text-primary-foreground"
       : "bg-card border-2 border-border text-muted-foreground hover:border-primary",
@@ -786,22 +812,37 @@ const Card = defineComponent({
   setup:
     (p, { slots }) =>
     () =>
-      h("section", { class: "bg-card rounded-xl p-6 border-2 border-border" }, [
-        h(
-          "h2",
-          { class: "font-display text-2xl text-foreground mb-6" },
-          p.title,
-        ),
-        slots.default?.(),
-      ]),
+      h(
+        "section",
+        { class: "bg-card rounded-xl p-4 md:p-6 border-2 border-border" },
+        [
+          h(
+            "h2",
+            {
+              class:
+                "font-display text-base sm:text-lg text-foreground mb-4 sm:mb-6",
+            },
+            p.title,
+          ),
+          slots.default?.(),
+        ],
+      ),
 });
 
 const Info = defineComponent({
   props: { label: String, value: String },
   setup: (p) => () =>
-    h("div", { class: "p-4 bg-muted rounded-lg mb-4" }, [
-      h("div", { class: "text-sm text-muted-foreground mb-1" }, p.label),
-      h("div", { class: "text-foreground break-all" }, p.value),
+    h("div", { class: "p-3 md:p-4 bg-muted rounded-lg mb-3 md:mb-4" }, [
+      h(
+        "div",
+        { class: "text-[11px] sm:text-xs text-muted-foreground mb-1" },
+        p.label,
+      ),
+      h(
+        "div",
+        { class: "text-sm sm:text-lg text-foreground break-all" },
+        p.value,
+      ),
     ]),
 });
 </script>

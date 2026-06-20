@@ -1,8 +1,11 @@
 import { defineConfig } from "vite";
 import path from "path";
+import { fileURLToPath } from "url";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
 import { VitePWA } from "vite-plugin-pwa";
+
+const operatorSrcDir = fileURLToPath(new URL("./src", import.meta.url));
 
 export default defineConfig({
   plugins: [
@@ -11,6 +14,7 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       injectRegister: "auto",
+      includeAssets: ["icons/*.png", "favicon.ico"],
       manifest: {
         name: "Mwasalaty Operator",
         short_name: "Operator",
@@ -21,34 +25,39 @@ export default defineConfig({
         theme_color: "#0f172a",
         icons: [
           {
-            src: "/icons/icon-192.svg",
+            src: "/icons/icon-192.png",
             sizes: "192x192",
-            type: "image/svg+xml",
-            purpose: "any maskable"
+            type: "image/png",
+            purpose: "any maskable",
           },
           {
-            src: "/icons/icon-512.svg",
+            src: "/icons/icon-512.png",
             sizes: "512x512",
-            type: "image/svg+xml",
-            purpose: "any maskable"
-          }
-        ]
+            type: "image/png",
+            purpose: "any maskable",
+          },
+        ],
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,woff2,svg,png}"]
-      }
-    })
+        globPatterns: ["**/*.{js,css,html,woff2,svg,png}"],
+      },
+    }),
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src")
-    }
+      "@": path.resolve(operatorSrcDir),
+    },
   },
   server: {
     port: 5174,
-    allowedHosts: [".ngrok-free.app", ".ngrok-free.dev", ".ngrok.app", ".ngrok.io"],
+    allowedHosts: [
+      ".ngrok-free.app",
+      ".ngrok-free.dev",
+      ".ngrok.app",
+      ".ngrok.io",
+    ],
     proxy: {
-      "/api": "http://localhost:3000"
-    }
-  }
+      "/api": "http://localhost:3000",
+    },
+  },
 });

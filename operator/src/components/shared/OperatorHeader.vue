@@ -1,7 +1,9 @@
 <template>
   <header class="operator-hero">
     <div class="operator-hero__glow" aria-hidden="true" />
-    <div class="relative flex flex-wrap items-start justify-between gap-2">
+    <div
+      class="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"
+    >
       <div class="min-w-0 flex-1">
         <div class="mb-4 flex items-center gap-2">
           <span
@@ -11,7 +13,7 @@
           </span>
           <div>
             <p
-              class="text-xs font-semibold uppercase tracking-[0.12em] text-primary-hover"
+              class="text-xs font-semibold tracking-[0.12em] text-primary-hover"
             >
               {{ eyebrow }}
             </p>
@@ -21,7 +23,7 @@
           </div>
         </div>
         <h1
-          class="max-w-3xl text-xl font-semibold leading-tight text-foreground sm:text-2xl"
+          class="max-w-3xl text-lg font-semibold leading-tight text-foreground sm:text-2xl"
         >
           {{ title }}
         </h1>

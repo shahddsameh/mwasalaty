@@ -24,16 +24,17 @@
 
       <RouterLink
         to="/scan"
-        class="group tap-target flex min-h-24 items-center justify-between gap-4 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary-soft via-warning-soft to-primary text-primary-hover p-5 shadow-sm transition-colors hover:bg-primary-hover hover:text-white focus-ring md:min-h-28 md:p-6"
+        class="group tap-target flex min-h-24 items-center justify-between gap-4 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary-soft via-warning-soft to-primary text-primary-hover p-5 shadow-sm transition-colors hover:border-primary-hover focus-ring md:min-h-28 md:p-6"
       >
         <span class="flex items-center gap-4 text-start"
-          ><span class="grid h-12 w-12 place-items-center rounded-xl bg-card/60"
+          ><span
+            class="grid h-12 w-12 place-items-center rounded-xl bg-primary-soft"
             ><AppIcon name="scan" class="h-6 w-6" /></span
           ><span
             ><small class="block text-xs font-medium uppercase opacity-70">{{
               $t("common.appName")
             }}</small
-            ><strong class="mt-1 block text-xl font-semibold md:text-2xl">{{
+            ><strong class="mt-1 block text-lg font-semibold md:text-2xl">{{
               $t("dashboard.scanCta")
             }}</strong></span
           ></span
@@ -65,7 +66,7 @@
       <div class="grid gap-3 sm:grid-cols-2">
         <RouterLink
           to="/sync"
-          class="field-panel group tap-target flex items-center gap-4 p-5 transition-colors hover:border-primary focus-ring"
+          class="field-panel group tap-target flex items-center gap-4 p-3 transition-colors hover:border-primary focus-ring"
         >
           <span
             class="grid h-11 w-11 place-items-center rounded-xl bg-primary-soft text-primary-hover"
@@ -74,14 +75,14 @@
             ><span class="text-sm font-medium text-muted-foreground">{{
               $t("common.queue")
             }}</span
-            ><strong class="mt-1 block text-2xl font-semibold">{{
+            ><strong class="mt-1 block text-xl font-semibold">{{
               queuedCount
             }}</strong></span
           >
         </RouterLink>
         <RouterLink
           to="/history"
-          class="field-panel group tap-target flex items-center gap-4 p-5 transition-colors hover:border-primary focus-ring"
+          class="field-panel group tap-target flex items-center gap-4 p-3 transition-colors hover:border-primary focus-ring"
         >
           <span
             class="grid h-11 w-11 place-items-center rounded-xl bg-muted text-foreground"
@@ -90,7 +91,7 @@
             ><span class="text-sm font-medium text-muted-foreground">{{
               $t("common.history")
             }}</span
-            ><strong class="mt-1 block text-2xl font-semibold">{{
+            ><strong class="mt-1 block text-xl font-semibold">{{
               totalScans
             }}</strong></span
           >

@@ -271,7 +271,7 @@
   }
 
   .outcome-card {
-    @apply relative flex min-h-28 items-center gap-3 overflow-hidden rounded-2xl border bg-card p-4 shadow-sm;
+    @apply relative flex min-h-20 items-center gap-4 overflow-hidden rounded-2xl border bg-card p-4 shadow-sm;
   }
 
   .outcome-card::after {

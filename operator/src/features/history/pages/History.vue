@@ -36,10 +36,10 @@
                 <p class="text-xs font-medium uppercase">
                   {{ formatDateTime(item.at) }}
                 </p>
-                <h2 class="mt-2 text-xl font-semibold">
+                <h2 class="mt-2 text-base md:text-xl font-semibold">
                   {{ $t(`dashboard.counts.${item.kind}`) }}
                 </h2>
-                <p class="mt-2 truncate text-sm font-normal">
+                <p class="mt-2 truncate text-xs md:text-sm font-normal">
                   {{
                     item.route ??
                     item.ticketLegId ??

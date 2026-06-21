@@ -4,8 +4,13 @@
       <AppIcon :name="icon" class="h-6 w-6" />
     </span>
     <div>
-      <p class="text-xs font-medium text-muted-foreground sm:text-sm">{{ label }}</p>
-      <strong class="mt-1 block text-2xl font-semibold leading-none text-foreground sm:text-3xl">{{ value }}</strong>
+      <p class="text-xs font-medium pb-1 text-muted-foreground sm:text-sm">
+        {{ label }}
+      </p>
+      <strong
+        class="mt-1 block text-lg font-semibold leading-none text-foreground sm:text-xl"
+        >{{ value }}</strong
+      >
     </div>
   </article>
 </template>
@@ -23,7 +28,7 @@ const map = {
   invalid: { classes: "outcome-card--danger", icon: "errorCircle" },
   no_match: { classes: "outcome-card--neutral", icon: "routeMismatch" },
   ambiguous: { classes: "outcome-card--primary", icon: "helpCircle" },
-  unverified: { classes: "outcome-card--slate", icon: "unverifiedStatus" }
+  unverified: { classes: "outcome-card--slate", icon: "unverifiedStatus" },
 } as const;
 
 const toneClasses = computed(() => map[props.outcome].classes);
